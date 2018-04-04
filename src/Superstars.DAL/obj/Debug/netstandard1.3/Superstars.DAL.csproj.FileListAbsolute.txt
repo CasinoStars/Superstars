@@ -1,0 +1,9 @@
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\bin\Debug\netstandard1.3\Superstars.DAL.deps.json
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\bin\Debug\netstandard1.3\Superstars.DAL.dll
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\obj\Debug\netstandard1.3\Superstars.DAL.csprojResolveAssemblyReference.cache
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\obj\Debug\netstandard1.3\Superstars.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\obj\Debug\netstandard1.3\Superstars.DAL.AssemblyInfoInputs.cache
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\obj\Debug\netstandard1.3\Superstars.DAL.AssemblyInfo.cs
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\bin\Debug\netstandard1.3\Superstars.DAL.pdb
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\obj\Debug\netstandard1.3\Superstars.DAL.dll
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.DAL\obj\Debug\netstandard1.3\Superstars.DAL.pdb

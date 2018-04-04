@@ -14,8 +14,10 @@
 
   <ItemGroup>
     <Folder Include="App\" />
-    <Folder Include="Authentication\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Superstars.DAL\Superstars.DAL.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,14 @@
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.csprojResolveAssemblyReference.cache
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.csproj.CoreCompileInputs.cache
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.AssemblyInfoInputs.cache
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.AssemblyInfo.cs
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.WebApp.deps.json
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.WebApp.runtimeconfig.json
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.WebApp.runtimeconfig.dev.json
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.WebApp.dll
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.WebApp.pdb
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.DAL.dll
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.0\Superstars.DAL.pdb
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.csproj.CopyComplete
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.dll
+C:\Users\Max\Desktop\CasinoSuperstars\src\Superstars.WebApp\obj\Debug\netcoreapp2.0\Superstars.WebApp.pdb
