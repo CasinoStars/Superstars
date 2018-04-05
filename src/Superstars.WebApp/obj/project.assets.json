@@ -12597,11 +12597,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.WebApp\\Superstars.WebApp.csproj",
+      "projectUniqueName": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.WebApp\\Superstars.WebApp.csproj",
       "projectName": "Superstars.WebApp",
-      "projectPath": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.WebApp\\Superstars.WebApp.csproj",
+      "projectPath": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.WebApp\\Superstars.WebApp.csproj",
       "packagesPath": "C:\\Users\\Max\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.WebApp\\obj\\",
+      "outputPath": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.WebApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12620,8 +12620,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.DAL\\Superstars.DAL.csproj": {
-              "projectPath": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.DAL\\Superstars.DAL.csproj"
+            "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.DAL\\Superstars.DAL.csproj": {
+              "projectPath": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.DAL\\Superstars.DAL.csproj"
             }
           }
         }

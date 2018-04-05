@@ -5079,11 +5079,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.DAL\\Superstars.DAL.csproj",
+      "projectUniqueName": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.DAL\\Superstars.DAL.csproj",
       "projectName": "Superstars.DAL",
-      "projectPath": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.DAL\\Superstars.DAL.csproj",
+      "projectPath": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.DAL\\Superstars.DAL.csproj",
       "packagesPath": "C:\\Users\\Max\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Max\\Desktop\\CasinoSuperstars\\src\\Superstars.DAL\\obj\\",
+      "outputPath": "C:\\Users\\Max\\Desktop\\All-In\\src\\Superstars.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
