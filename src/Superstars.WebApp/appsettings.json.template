@@ -1,0 +1,16 @@
+﻿{
+  "ConnectionStrings": {
+    "SuperstarsDB": "Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"
+  },
+  "JwtBearer": {
+    "SigningKey": "<Signing key>",
+    "Audience": "<audience>",
+    "Issuer": "<issuer>"
+  },
+  "Authentication": {
+    "Google": {
+      "ClientId": "<client id>",
+      "ClientSecret": "<client secret>"
+    }
+  }
+}
