@@ -13,7 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App\" />
+    <Folder Include="App\All%27In\src\components\" />
+    <Folder Include="App\All%27In\src\directives\" />
+    <Folder Include="App\All%27In\src\helpers\" />
+    <Folder Include="App\All%27In\src\styles\" />
+    <Folder Include="App\All%27In\src\store\" />
+    <Folder Include="App\All%27In\src\services\" />
   </ItemGroup>
 
   <ItemGroup>
