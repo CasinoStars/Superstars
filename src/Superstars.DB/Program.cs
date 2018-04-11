@@ -1,15 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
+using DbUp;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Superstars.DB
 {
     class Program
     {
-        static void Main(string[] args)
+        static IConfiguration _configuration;
+
+        public static int Main(string[] args)
         {
+            var connectionString = Configuration["ConnectionStrings:SuperstarsDB"];
+
+            EnsureDatabase.For.SqlDatabase(connectionString);
+
+            var upgrader =
+                DeployChanges.To
+                    .SqlDatabase(connectionString)
+                    .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+                    .LogToConsole()
+                    .Build();
+
+            var result = upgrader.PerformUpgrade();
+
+            if (!result.Successful)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(result.Error);
+                Console.ResetColor();
+                Console.ReadKey();
+
+                return -1;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Success!");
+            Console.ResetColor();
+            Console.Read();
+
+            return 0;
+        }
+
+        static IConfiguration Configuration
+        {
+            get
+            {
+                if (_configuration == null)
+                {
+                    _configuration = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", optional: false)
+                        .AddEnvironmentVariables()
+                        .Build();
+                }
+
+                return _configuration;
+            }
         }
     }
 }
