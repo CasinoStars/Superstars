@@ -1,4 +1,4 @@
-create view iti.vUser
+create view sp.vUser
 as
     select UserId = u.UserId,
            Email = u.Email,
