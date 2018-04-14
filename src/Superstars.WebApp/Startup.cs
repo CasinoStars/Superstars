@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -54,17 +53,6 @@ namespace Superstars.WebApp
                         NameClaimType = ClaimTypes.Email,
                         AuthenticationType = JwtBearerAuthentication.AuthenticationType
                     };
-                })
-                .AddGoogle(o =>
-                {
-                    o.SignInScheme = CookieAuthentication.AuthenticationScheme;
-                    o.ClientId = Configuration["Authentication:Google:ClientId"];
-                    o.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                    o.Events = new OAuthEvents
-                    {
-                        OnCreatingTicket = ctx => ctx.HttpContext.RequestServices.GetRequiredService<GoogleAuthentication>().OnCreatingTicket(ctx)
-                    };
-                    o.AccessType = "offline";
                 });
         }
 

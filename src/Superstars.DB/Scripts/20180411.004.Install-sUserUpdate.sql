@@ -1,7 +1,7 @@
 create procedure sp.sUserUpdate
 (
     @UserId int,
-	@UserPassword varbinary(68),
+	@UserPassword varbinary(128),
 	@UserName nvarchar(64),
     @Email  nvarchar(64)
 )

@@ -1,4 +1,4 @@
-create procedure sp.sUser
+create procedure sp.sUserCreate
 (
 	@UserId int out,
 	@UserName nvarchar(68),
@@ -10,7 +10,7 @@ begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	if exists(select * from sp.tUser u where u.Email = @Email)
+	if exists(select * from sp.tUser u where u.Email = @Email or u.UserName = @UserName)
 	begin
 		rollback;
 		return 1;

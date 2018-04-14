@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -21,8 +20,18 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GoogleRefreshToken, u.GoogleId from vUser u where u.UserId = @UserId",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword from vUser u where u.UserId = @UserId",
                     new { UserId = userId });
+            }
+        }
+
+        public async Task<UserData> FindByName(string pseudo)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<UserData>(
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword from vUser u where u.UserName = @UserName",
+                    new { UserName = pseudo });
             }
         }
 
@@ -31,58 +40,28 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GoogleRefreshToken, u.GoogleId from vUser u where u.Email = @Email",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword from vUser u where u.Email = @Email",
                     new { Email = email });
             }
         }
 
-        public async Task<UserData> FindByGoogleId(string googleId)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GoogleRefreshToken, u.GoogleId from vUser u where u.GoogleId = @GoogleId",
-                    new { GoogleId = googleId });
-            }
-        }
-
-        public async Task<Result<int>> CreatePasswordUser(string email, byte[] password)
+        public async Task<Result<int>> CreateUser(string email, string pseudo, byte[] password)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Email", email);
-                p.Add("@Password", password);
+                p.Add("@UserName", pseudo);
+                p.Add("@UserPassword", password);
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-                await con.ExecuteAsync("iti.sPasswordUserCreate", p, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("sp.sUserCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "An account with this email already exists.");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "An account with this email or this pseudo already exists.");
 
                 Debug.Assert(status == 0);
                 return Result.Success(p.Get<int>("@UserId"));
-            }
-        }
-
-        public async Task CreateOrUpdateGoogleUser(string email, string googleId, string refreshToken)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                await con.ExecuteAsync(
-                    "iti.sGoogleUserCreateOrUpdate",
-                    new { Email = email, GoogleId = googleId, RefreshToken = refreshToken },
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
-
-        public async Task<IEnumerable<string>> GetAuthenticationProviders(string userId)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryAsync<string>(
-                    "select p.ProviderName from iti.vAuthenticationProvider p where p.UserId = @UserId",
-                    new { UserId = userId });
             }
         }
 
@@ -90,7 +69,7 @@ namespace Superstars.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                await con.ExecuteAsync("iti.sUserDelete", new { UserId = userId }, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("sp.sUserDelete", new { UserId = userId }, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -99,8 +78,19 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 await con.ExecuteAsync(
-                    "iti.sUserUpdate",
+                    "sp.sUserUpdate",
                     new { UserId = userId, Email = email },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task UpdateName(int userId, string pseudo)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync(
+                    "sp.sUserUpdate",
+                    new { UserId = userId, UserName = pseudo },
                     commandType: CommandType.StoredProcedure);
             }
         }
@@ -110,8 +100,8 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 await con.ExecuteAsync(
-                    "iti.sPasswordUserUpdate",
-                    new { UserId = userId, Password = password },
+                    "sp.sUserUpdate",
+                    new { UserId = userId, UserPassword = password },
                     commandType: CommandType.StoredProcedure);
             }
         }
