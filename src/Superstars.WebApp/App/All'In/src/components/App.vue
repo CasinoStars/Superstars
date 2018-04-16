@@ -3,10 +3,6 @@
   <header >
       
 
-      <el-button >
-      trjcnzkcn
-      </el-button>
-
   </header> 
  </div>
 </template>

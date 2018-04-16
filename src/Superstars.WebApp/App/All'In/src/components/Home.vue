@@ -1,6 +1,6 @@
 <template>
 <header>
-
+  <el-button type="primary">Primary</el-button>
 </header>
 
 </template>
