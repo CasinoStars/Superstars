@@ -60,6 +60,7 @@
       "resolved": "https://registry.npmjs.org/process/-/process-0.5.2.tgz",
       "version": "0.5.2"
     },
+    "scripts": { "dev": "webpack-dev-server --progress --colors --inline --hot" },
     "tape": {
       "integrity": "sha1-4ujlxt0/AP3CpeRRT2L8Ih5Z+cQ=",
       "requires": {
