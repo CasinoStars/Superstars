@@ -1,10 +1,7 @@
 <template>
- <div>
-  <header >
-      
-
+  <header>
+    <title>SUPERSTARS</title>
   </header> 
- </div>
 </template>
 
 <script>
@@ -13,6 +10,6 @@ export default{
 }
 </script>
 
-<style lang = "scss">
+<style lang="scss">
 
 </style>
