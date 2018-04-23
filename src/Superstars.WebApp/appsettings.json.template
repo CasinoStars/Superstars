@@ -1,6 +1,6 @@
 ﻿{
   "ConnectionStrings": {
-    "SuperstarsDB": "Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"
+    "SuperstarsDB": "<connection string>"
   },
   "JwtBearer": {
     "SigningKey": "<Signing key>",

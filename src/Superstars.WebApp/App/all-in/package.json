@@ -2,7 +2,6 @@
   "name": "all-in",
   "version": "1.0.0",
   "description": "casino",
-  "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --hot",
     "start": "webpack --watch --progress",

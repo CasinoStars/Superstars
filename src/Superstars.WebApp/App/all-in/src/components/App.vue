@@ -1,7 +1,5 @@
 <template>
-  <header>
-    <title>SUPERSTARS</title>
-  </header> 
+<p> Ca marche </p>
 </template>
 
 <script>
