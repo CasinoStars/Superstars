@@ -88,8 +88,20 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Scripts\" />
+    <Content Include="Scripts\20180411.000.Create-Schema-sp.sql" />
+    <Content Include="Scripts\20180411.001.Install-tUser.sql" />
+    <Content Include="Scripts\20180411.002.Install-vUser.sql" />
+    <Content Include="Scripts\20180411.003.Install-sUserCreate.sql" />
+    <Content Include="Scripts\20180411.004.Install-sUserUpdate.sql" />
+    <Content Include="Scripts\20180411.005.Install-sUserDelete.sql" />
+    <Content Include="Scripts\20180411.006.Install-tGames.sql" />
+    <Content Include="Scripts\20180411.009.Install-tGamePoker.sql" />
+    <Content Include="Scripts\20180411.010.Install-tGameYams.sql" />
+    <Content Include="Scripts\20180411.012.Install-tYamsPlayer.sql" />
+    <Content Include="Scripts\20180411.013.Install-tPokerPlayer.sql" />
+    <Content Include="Scripts\20180411.014.Install-tElo.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
