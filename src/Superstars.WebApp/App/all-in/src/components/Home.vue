@@ -1,7 +1,5 @@
 <template>
-  <section class="jumbotron text-center">
-
-  </section>
+      <h1>Bienvenue sur ALL-IN</h1>
 </template>
 
 <script>
