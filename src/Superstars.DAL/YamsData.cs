@@ -7,5 +7,6 @@ namespace Superstars.DAL
     class YamsData
     {
 
+
     }
 }
