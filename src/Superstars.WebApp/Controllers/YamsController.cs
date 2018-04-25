@@ -81,12 +81,14 @@ namespace Superstars.WebApp.Controllers
 		
 		private void Reroll()
 		{
-			if(_IsIAturn == false)
-			for(int i = 0;i<6  ;i++ )
+			if (_IsIAturn == false)
 			{
-				if(_mydices[i]==0)
+				for (int i = 0; i < 6; i++)
 				{
-					_mydices[i] = RollDice();
+					if (_mydices[i] == 0)
+					{
+						_mydices[i] = RollDice();
+					}
 				}
 			}
 			else
@@ -113,7 +115,7 @@ namespace Superstars.WebApp.Controllers
 			int[] count = new int[5] {0,0,0,0,0};
 			for (int i=0; i<5;i++)
 			{
-				for (int z = 1; z < 6; z++)
+				for (int z = 1; z <= 6; z++)
 				{
 					if (hand[i] == z) count[z - 1]++; 
 				}
