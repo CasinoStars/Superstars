@@ -16,14 +16,14 @@ namespace Superstars.DAL
 			_connectionString = connectionString;
 		}
 
-		public async Task<IEnumerable<YamsData>>GetClassement()
-		{
-			using (SqlConnection con = new SqlConnection(_connectionString))
-			{
-				return await con.QueryAsync<>(
+		//public async Task<IEnumerable<YamsData>>GetClassement()
+		//{
+		//	using (SqlConnection con = new SqlConnection(_connectionString))
+		//	{
+		//		return await con.QueryAsync<>(
 
-					)
-			}
-		}
+		//			)
+		//	}
+		//}
     }
 }
