@@ -1,6 +1,6 @@
 create table sp.tGameType
 (
-	GameType int not null
+	GameType int not null,
 
-	constraint FK_tG foreign key(GameType) references t.Elo (GameTypeId)
-)
+	constraint PK_GameType primary key(GameType)
+);

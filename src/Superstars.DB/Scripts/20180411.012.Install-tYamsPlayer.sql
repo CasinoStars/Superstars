@@ -5,7 +5,6 @@ create table sp.tYamsPlayer
 	NbrRevives int,
 	DicesValue int,
 
-	constraint FK_tYamsPlayer foreign key (YamsPlayerId) references sp.tUser(UserId),
-	constraint FK_tYamsPlayer foreign key (YamsGameId) references sp.tGames(GameId)
-
+	constraint FK_tYamsPlayer_UserId foreign key (YamsPlayerId) references sp.tUser(UserId),
+	constraint FK_tYamsPlayer_GameId foreign key (YamsGameId) references sp.tGames(GameId)
 )
