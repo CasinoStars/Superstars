@@ -25,7 +25,7 @@ namespace Superstars.WebApp.Controllers
 			while(_MYturn<3)
 			{
 				FirstShot();
-				IndexChange();
+				//IndexChange();
 				Reroll();
 				_MYturn++;
 			}
@@ -33,7 +33,7 @@ namespace Superstars.WebApp.Controllers
 			while(_IAturn<3)
 			{
 				FirstShot();
-				IndexChange();
+				//IndexChange();
 				Reroll();
 				_IAturn++;
 			}

@@ -28,5 +28,10 @@ namespace Superstars.WebApp.Services
             }
             return null;
         }
+
+        public async Task<Result<int>> IdentityVerify(string pseudo, string password) 
+        {
+            return _userGateway.IdentityVerify(pseudo,_passwordHasher.HashPassword(password));
+        }
     }
 }
