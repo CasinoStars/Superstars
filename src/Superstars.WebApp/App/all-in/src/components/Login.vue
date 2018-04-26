@@ -2,14 +2,38 @@
   <div id="home">
     <h1>Bienvenue sur ALL-IN</h1>
 
-      <form id="login-form">
+      <form @submit="onSubmit($event)" id="login-form">
         <input type="text" placeholder="Username" v-model="username" id="login"></input>
         <input type="password" placeholder="Password" v-model="password" id="password"></input>
-        <button type="submit" id="login-button">Login</button>
+        <button type="submit" mode="login" id="login-button">Login</button>
       </form>
 </div>
 
 </template>
+
+<script>
+
+import UserApiService from '../services/UserApiService'
+
+export default {
+  
+  methods: {
+      async onSubmit(e) {
+          e.preventDefault();
+
+
+            try {
+                  if(this.mode == 'login') {
+                     await this.executeAsyncRequest(() => UserApiService.IdentityVerify(this.item));
+                      }
+                     this.$router.replace('/Home');
+                    }
+                catch(error) {
+                  }
+              }
+          }
+      }
+</script>
 
 <style lang="css">
   
