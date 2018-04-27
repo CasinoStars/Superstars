@@ -9,7 +9,7 @@ begin
        set transaction isolation level serializable;
        begin tran;
       
-       if exist(selec * from sp.tGames g where g.GameType = @GameType and g.StartDate = @StartDate)
+       if exists (select * from sp.tGames g where g.GameType = @GameType and g.StartDate = @StartDate)
        begin 
                rollback;
                return 1;
