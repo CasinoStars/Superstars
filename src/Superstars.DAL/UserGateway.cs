@@ -122,7 +122,7 @@ namespace Superstars.DAL
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "Wrong Username or Password");
 
                 Debug.Assert(status == 0);
-                return Result.Success(Status.Created, p.Get<int>("@UserId"));
+                return Result.Success(p.Get<int>("@UserId"));
             }
         }
     }

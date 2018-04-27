@@ -8,9 +8,9 @@ class UserApiService {
     }
     
     async  IdentityVerify() {
-        return await getAsync(endpoint);
+        return await postAsync(endpoint);
     }
 
 }
 
-export default new TeacherApiService()
+export default new UserApiService();
