@@ -14,9 +14,9 @@ namespace Superstars.WebApp.Services
             _passwordHasher = passwordHasher;
         }
 
-        public Task<Result<int>> CreateUser(string email, string pseudo, string password)
+        public Task<Result<int>> CreateUser(string pseudo, string password)
         {
-            return _userGateway.CreateUser(email, pseudo, _passwordHasher.HashPassword(password));
+            return _userGateway.CreateUser(pseudo, _passwordHasher.HashPassword(password));
         }
 
         public async Task<UserData> FindUser(string pseudo, string password)
@@ -29,9 +29,9 @@ namespace Superstars.WebApp.Services
             return null;
         }
 
-        public async Task<Result<int>> IdentityVerify(string pseudo, string password) 
-        {
-            return _userGateway.IdentityVerify(pseudo,_passwordHasher.HashPassword(password));
-        }
+        //public async Task<Result<int>> IdentityVerify(string pseudo, string password) 
+        //{
+        //    return _userGateway.IdentityVerify(pseudo,_passwordHasher.HashPassword(password));
+        //}
     }
 }

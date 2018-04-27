@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Superstars.WebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class UserController : Controller
     {
@@ -36,7 +36,7 @@ namespace Superstars.WebApp.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -63,14 +63,14 @@ namespace Superstars.WebApp.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Register")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Result<int> result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email);
+                Result<int> result = await _userService.CreateUser(model.Pseudo, model.Password);
                 if (result.HasError)
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorMessage);
@@ -103,6 +103,7 @@ namespace Superstars.WebApp.Controllers
             ViewData["Token"] = token;
             ViewData["Pseudo"] = pseudo;
             ViewData["NoLayout"] = true;
+            ViewData["Providers"] = "Superstars";
             return View();
         }
 

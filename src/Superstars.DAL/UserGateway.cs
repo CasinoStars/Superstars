@@ -45,12 +45,11 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateUser(string email, string pseudo, byte[] password)
+        public async Task<Result<int>> CreateUser(string pseudo, byte[] password)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Email", email);
                 p.Add("@UserName", pseudo);
                 p.Add("@UserPassword", password);
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
