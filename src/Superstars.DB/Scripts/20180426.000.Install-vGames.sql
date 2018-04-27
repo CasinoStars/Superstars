@@ -1,7 +1,7 @@
-create view sp.tGames
+create view sp.vGames
 as
     select
-       GameID = g.GameID,
+       GameId = g.GameId,
        GameType = g.GameType,
        StartDate = g.StartDate,
        EndDate = g.EndDate,

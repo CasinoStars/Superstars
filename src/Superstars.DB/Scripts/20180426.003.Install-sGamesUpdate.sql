@@ -11,13 +11,13 @@ begin
        set transaction isolation level serializable;
        begin tran;
 
-       if not exist(select* from sp.tGames g where g.EndDate = EndDate)
+       if not exist (select* from sp.tGames g where g.EndDate = EndDate)
        begin
              rollback;
              return 1;
        end;
 
-       if exist(select * from sp.tGames g where g.GameId = @GameId and g.GameType = @GameType and g.StartDate =@StartDate )
+       if exist (select * from sp.tGames g where g.GameId = @GameId and g.GameType = @GameType and g.StartDate =@StartDate )
        begin
               rollback
               return 2;
