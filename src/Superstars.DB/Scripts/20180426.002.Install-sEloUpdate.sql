@@ -9,12 +9,12 @@ begin
          set transaction isolation level serializable;
          begin tran;
 
-         if not exist (select * from sp.tElo e where e.Elo = @Elo)
+         if not exists (select * from sp.tElo e where e.Elo = @Elo)
          begin 
                  rollback;
                  return 1;
          end;
-         if exist (select * from sp.tElo e where e.Elo <> @Elo and e.UserId = @UserId and e.GameTypeId = @GameTypeId)
+         if exists (select * from sp.tElo e where e.Elo <> @Elo and e.UserId = @UserId and e.GameTypeId = @GameTypeId)
          begin
                   rollback;
                   return 2;
