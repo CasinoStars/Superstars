@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Superstars.DAL
 {
-    class GameData
+    public class GameData
     {
         public int GameID { get; set; }
 
@@ -15,6 +15,7 @@ namespace Superstars.DAL
         public DateTime EndDate { get; set; }
 
         public int ResultWinner { get; set; }
+
 
         //public gametype GameType { get; set; }
 
