@@ -13,26 +13,26 @@
 
 <script>
 
-import UserApiService from '../services/UserApiService'
+import UserApiService from '../services/UserApiService.js'
 
-export default {
+// export default {
   
-  methods: {
-      async onSubmit(e) {
-          e.preventDefault();
+//   methods: {
+//       async onSubmit(e) {
+//           e.preventDefault();
 
 
-            try {
-                  if(this.mode == 'login') {
-                     await this.executeAsyncRequest(() => UserApiService.IdentityVerify(this.item));
-                      }
-                     this.$router.replace('/Home');
-                    }
-                catch(error) {
-                  }
-              }
-          }
-      }
+//             try {
+//                   if(this.mode == 'login') {
+//                      await this.executeAsyncRequest(() => UserApiService.IdentityVerify(this.item));
+//                       }
+//                      this.$router.replace('/Home');
+//                     }
+//                 catch(error) {
+//                   }
+//               }
+//           }
+//       }
 </script>
 
 <style lang="css">
