@@ -1,16 +1,14 @@
-import { getAsync, postAsync, putAsync, deleteAsync } from '../helpers/apiHelper'
-
-const endpoint = "/api/user";
+import { getAsync, postAsync, putAsync, deleteAsync } from '../helpers/apiHelper.js';
 
 class UserApiService {
     constructor() {
-
+        const endpoint = "/api/user/";
     }
     
     async  IdentityVerify() {
-        return await getAsync(endpoint);
+        return await getAsync(this.endpoint);
     }
 
-}
+};
 
-export default new TeacherApiService()
+export default new UserApiService();
