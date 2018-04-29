@@ -1,12 +1,17 @@
-import { getAsync, postAsync, putAsync, deleteAsync } from '../helpers/apiHelper.js';
+import { getAsync, postAsync, putAsync, deleteAsync } from '../helpers/apiHelper';
+
+const endpoint = "/api/user";
 
 class UserApiService {
     constructor() {
-        const endpoint = "/api/user/";
     }
     
-    async  IdentityVerify() {
-        return await getAsync(this.endpoint);
+    async  Login() {
+        return await postAsync(`${endpoint}/login`);
+    }
+
+    async register(model) {
+        return await postAsync(`${endpoint}/Register`, model);
     }
 
 };

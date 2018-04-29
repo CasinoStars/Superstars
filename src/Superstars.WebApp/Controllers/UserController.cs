@@ -65,8 +65,7 @@ namespace Superstars.WebApp.Controllers
 
         [HttpPost(Name = "Register")]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
