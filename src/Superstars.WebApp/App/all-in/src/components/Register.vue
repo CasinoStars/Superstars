@@ -11,20 +11,14 @@
 
             <div class="form-group">
                 <label class="required">Pseudo : </label>
-<<<<<<< HEAD
                 <input type="text" v-model="item.Pseudo" class="form-control" required>
-=======
                 <input type="text" v-model='item.Pseudo' class="form-control" required>
->>>>>>> dev
             </div>
 
         <div class="form-group">
             <label class="required">Mot de passe : </label>
-<<<<<<< HEAD
             <input type="text" v-model="item.Password" class="form-control" required>
-=======
             <input type="text" v-model='item.Password' class="form-control" required>
->>>>>>> dev
             <span asp-validation-for="Password"></span>
         </div>
             <button type="submit" class="btn btn-dark btn-block">S'inscrire</button>
@@ -34,7 +28,6 @@
 </template>
 <script>
     import { mapActions } from 'vuex'
-<<<<<<< HEAD
     import UserApiService from '../services/UserApiService'
 
     export default {
@@ -58,7 +51,7 @@
 
                 //if(errors.length == 0) {
                     try {
-                        await this.executeAsyncRequest(() => UserApiService.registerAsync(this.item));
+                        await this.executeAsyncRequest(() => UserApiService.register(this.item));
                         this.$router.replace('/');
                     }
                     catch(error) {
@@ -73,7 +66,7 @@
 <style lang="scss">
 
 </style>
-=======
+
     import UserApiService from '../services/UserApiService.js'
     //import AuthService from '../services/UserApiService'
 
@@ -120,4 +113,3 @@
          }
     }
 </script>
->>>>>>> dev
