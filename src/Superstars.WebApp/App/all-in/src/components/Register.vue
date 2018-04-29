@@ -11,12 +11,12 @@
 
             <div class="form-group">
                 <label class="required">Pseudo : </label>
-                <input type="text" class="form-control" required>
+                <input type="text" v-model='item.Pseudo' class="form-control" required>
             </div>
 
         <div class="form-group">
             <label class="required">Mot de passe : </label>
-            <input type="text" class="form-control" required>
+            <input type="text" v-model='item.Password' class="form-control" required>
             <span asp-validation-for="Password"></span>
         </div>
 
@@ -29,52 +29,49 @@
 </template>
 <script>
     import { mapActions } from 'vuex'
+    import UserApiService from '../services/UserApiService.js'
     //import AuthService from '../services/UserApiService'
 
     export default {
-    //     data () {
-    //         return {
-    //             item: {},
-    //             mode: null,
-    //             id: null,
-    //             errors: []
-    //         }
-    //     },
+         data () {
+             return {
+                 item: {},
+                 mode: null,
+                 id: null,
+                 errors: []
+             }
+         },
 
-    //     async mounted() {
-    //         this.mode = this.$route.params.mode;
-    //         this.id = this.$route.params.id;
+         /*async mounted() {
+             this.mode = this.$route.params.mode;
+             this.id = this.$route.params.id;
 
-    //         try {
-    //             this.item = await this.executeAsyncRequest(() => UserApiService.login());
-    //         }
-    //         catch(error) {
-    //             this.$router.replace('/home');
-    //         }
-    //     },
+             try {
+                 this.item = await this.executeAsyncRequest(() => UserApiService.login());
+             }
+             catch(error) {
+                 this.$router.replace('/home');
+             }
+         },*/
 
-    //     methods: {
-    //         //...mapActions(['executeAsyncRequest']),
+         methods: {
+             async onSubmit(e) {
+                 e.preventDefault();
+                 var errors = [];
 
-    //         async onSubmit(e) {
-    //             e.preventDefault();
+                 this.errors = errors;
 
-    //             var errors = [];
-
-    //             if(!this.item.Pseudo) errors.push("Pseudo")
-    //             if(!this.item.Password) errors.push("Password")
-
-    //             this.errors = errors;
-
-    //             if(errors.length == 0) {
-    //                 try {
-    //                     await this.executeAsyncRequest(() => UserApiService.register(this.item));
-    //                     this.$router.replace('/home');
-    //                 }
-    //                 catch(error) {
-    //                 }
-    //             }
-    //         }
-    //     }
+                 if(errors.length == 0) {
+                     try {
+                         console.log(this.item);
+                         await this.executeAsyncRequest(() => UserApiService.register(this.item));
+                         
+                         this.$router.replace('/home');
+                     }
+                     catch(error) {
+                     }
+                 }
+             }
+         }
     }
 </script>
