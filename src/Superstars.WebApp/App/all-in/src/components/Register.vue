@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-
+ 
         <form @submit="onSubmit($event)">
             <!-- <div class="alert aler-danger" v-if="errors.length > 0">
                 <b>Les champs suivants sont invalides : </b>
@@ -8,22 +8,19 @@
                     <li v-for="e of errors">{{e}}</li>
                 </ul>
             </div>          -->
-
+ 
             <div class="form-group">
                 <label class="required">Pseudo : </label>
-                <input type="text" v-model='item.Pseudo' class="form-control" required>
+                <input type="text" v-model="item.Pseudo" class="form-control" required>
             </div>
-
+ 
         <div class="form-group">
             <label class="required">Mot de passe : </label>
-            <input type="text" v-model='item.Password' class="form-control" required>
+            <input type="text" v-model="item.Password" class="form-control" required>
             <span asp-validation-for="Password"></span>
         </div>
-
-        <div class="form-group">
             <button type="submit" class="btn btn-dark btn-block">S'inscrire</button>
-        </div>
-        </form>
+    </form>
 </div>
   
 </template>
@@ -79,3 +76,7 @@
          }
     }
 </script>
+ 
+<style lang="scss">
+ 
+</style>
