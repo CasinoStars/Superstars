@@ -29,7 +29,7 @@
 </template>
 <script>
     import { mapActions } from 'vuex'
-    import UserApiService from '../services/UserApiService.js'
+    import UserApiService from '../services/UserApiService'
     //import AuthService from '../services/UserApiService'
 
     export default {
@@ -55,6 +55,7 @@
          },*/
 
          methods: {
+            //...mapActions(['executeAsyncRequest']),
              async onSubmit(e) {
                  e.preventDefault();
                  var errors = [];
@@ -64,11 +65,14 @@
                  if(errors.length == 0) {
                      try {
                          console.log(this.item);
-                         await this.executeAsyncRequest(() => UserApiService.register(this.item));
-                         
-                         this.$router.replace('/home');
+                         console.log(UserApiService.register(this.item));
+                         //this.executeAsyncRequest(() =>)
+                         await UserApiService.register(this.item);
+
+                         this.$router.replace('');
                      }
                      catch(error) {
+                        console.log(error);
                      }
                  }
              }

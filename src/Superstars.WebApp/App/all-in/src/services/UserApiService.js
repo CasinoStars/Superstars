@@ -1,6 +1,6 @@
 import { getAsync, postAsync, putAsync, deleteAsync } from '../helpers/apiHelper';
 
-const endpoint = "/api/user";
+const endpoint = "api/user";
 
 class UserApiService {
     constructor() {
@@ -11,7 +11,7 @@ class UserApiService {
     }
 
     async register(model) {
-        return await postAsync(`${endpoint}/Register`, model);
+        return await postAsync("Register", model);
     }
 
 };

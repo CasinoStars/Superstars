@@ -17,6 +17,7 @@ async function toJSON(resp) {
 }
 
 export async function postAsync(url, data) {
+    console.log(data);
     return await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -24,8 +25,7 @@ export async function postAsync(url, data) {
             'Content-Type': 'application/json',
         }
     })
-    .then(checkErrors)
-    .then(toJSON);
+    .then(checkErrors);
 }
 
 export async function putAsync(url, data) {
