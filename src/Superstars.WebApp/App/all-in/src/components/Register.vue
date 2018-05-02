@@ -1,7 +1,7 @@
 <template>
     <div class="container">
  
-        <form @submit="onSubmit($event)">
+        <form @submit="onSubmit($event)" method="post">
             <!-- <div class="alert aler-danger" v-if="errors.length > 0">
                 <b>Les champs suivants sont invalides : </b>
                 <ul>
@@ -27,53 +27,36 @@
 <script>
     import { mapActions } from 'vuex'
     import UserApiService from '../services/UserApiService'
-    //import AuthService from '../services/UserApiService'
 
     export default {
-         data () {
-             return {
-                 item: {},
-                 mode: null,
-                 id: null,
-                 errors: []
-             }
-         },
+        data () {
+            return {
+                item: {},
+                errors: []
+            }
+        },
+        methods: {
+            ...mapActions(['executeAsyncRequest']),
 
-         /*async mounted() {
-             this.mode = this.$route.params.mode;
-             this.id = this.$route.params.id;
+            async onSubmit(e) {
+                e.preventDefault();
+                var errors = [];
 
-             try {
-                 this.item = await this.executeAsyncRequest(() => UserApiService.login());
-             }
-             catch(error) {
-                 this.$router.replace('/home');
-             }
-         },*/
+                this.errors = errors;
 
-         methods: {
-            //...mapActions(['executeAsyncRequest']),
-             async onSubmit(e) {
-                 e.preventDefault();
-                 var errors = [];
-
-                 this.errors = errors;
-
-                 if(errors.length == 0) {
-                     try {
-                         console.log(this.item);
-                         console.log(UserApiService.register(this.item));
-                         //this.executeAsyncRequest(() =>)
-                         await UserApiService.register(this.item);
-
-                         this.$router.replace('');
-                     }
-                     catch(error) {
-                        console.log(error);
-                     }
-                 }
-             }
-         }
+                if(errors.length == 0) {
+                    try {
+                        console.log(this.item);
+                        console.log(UserApiService.register(this.item));
+                        await this.executeAsyncRequest(() => UserApiService.register(this.item));
+                        this.$router.replace('');
+                    }
+                    catch(error) {
+                       console.log(error);
+                    }
+                }
+            }
+        }
     }
 </script>
  

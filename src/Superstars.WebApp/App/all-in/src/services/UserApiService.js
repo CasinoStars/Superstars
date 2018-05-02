@@ -11,7 +11,7 @@ class UserApiService {
     }
 
     async register(model) {
-        return await postAsync("Register", model);
+        return await postAsync(`${endpoint}/register`, model);
     }
 
 };

@@ -37,14 +37,21 @@
           </ul>
         </div>
       </nav>
+      <div class="progress" v-if="isLoading">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+      </div>
     </header>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default{
+import { mapGetters, mapActions } from 'vuex'
 
+export default{
+  computed: {
+    ...mapGetters(['isLoading'])
+  }
 }
 </script>
 
