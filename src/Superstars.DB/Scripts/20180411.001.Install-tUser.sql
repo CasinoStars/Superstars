@@ -3,7 +3,7 @@ create table sp.tUser
 	UserId int identity(0,1),
 	UserName nvarchar(64) not null,
 	UserPassword varbinary(128) not null,
-	Email nvarchar(64) default '',
+	Email nvarchar(64) not null,
 	IsConnected bit default 0,
 	FakeMoney int default 0,
 	RealMoney int default 0,

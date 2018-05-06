@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,7 +15,6 @@
 
   <ItemGroup>
     <Folder Include="App\all-in\src\directives\" />
-    <Folder Include="App\all-in\src\helpers\" />
     <Folder Include="App\all-in\src\styles\" />
     <Folder Include="App\all-in\src\store\" />
     <Folder Include="App\all-in\src\services\" />

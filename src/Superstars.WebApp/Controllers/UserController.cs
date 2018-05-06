@@ -12,18 +12,14 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Superstars.WebApp.Controllers
 {
-    [Route("api/user")]
-    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class UserController : Controller
     {
-        readonly UserGateway _userGateway;
         readonly UserService _userService;
         readonly TokenService _tokenService;
         readonly Random _random;
 
-        public UserController(UserGateway userGateway, UserService userService, TokenService tokenService)
+        public UserController(UserService userService, TokenService tokenService)
         {
-            _userGateway = userGateway;
             _userService = userService;
             _tokenService = tokenService;
             _random = new Random();
@@ -36,7 +32,7 @@ namespace Superstars.WebApp.Controllers
             return View();
         }
 
-        [HttpPost(Name = "Login")]
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -49,7 +45,7 @@ namespace Superstars.WebApp.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-                await SignIn(user.Pseudo, user.UserId.ToString());
+                await SignIn(user.UserName, user.UserId.ToString());
                 return RedirectToAction(nameof(Authenticated));
             }
 
@@ -63,19 +59,20 @@ namespace Superstars.WebApp.Controllers
             return View();
         }
 
-        [HttpPost(Name = "Register")]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Result<int> result = await _userService.CreateUser(model.Pseudo, model.Password);
+                Result result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email);
                 if (result.HasError)
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorMessage);
                     return View(model);
                 }
-                await SignIn(model.Pseudo, result.Content.ToString());
+                UserData user = await _userService.FindUser(model.Pseudo, model.Password);
+                await SignIn(model.Pseudo, user.UserId.ToString());
                 return RedirectToAction(nameof(Authenticated));
             }
 
@@ -102,7 +99,6 @@ namespace Superstars.WebApp.Controllers
             ViewData["Token"] = token;
             ViewData["Pseudo"] = pseudo;
             ViewData["NoLayout"] = true;
-            ViewData["Providers"] = "Superstars";
             return View();
         }
 

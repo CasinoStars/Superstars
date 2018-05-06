@@ -1,6 +1,5 @@
 create procedure sp.sUserCreate
 (
-	@UserId int out,
 	@UserName nvarchar(68),
 	@UserPassword varbinary(128),
 	@Email nvarchar(68)
@@ -10,16 +9,17 @@ begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	if exists(select * from sp.tUser u where u.Email = @Email or u.UserName = @UserName)
+	if exists(select * from sp.tUser u where u.UserName = @UserName)
 	begin
 		rollback;
 		return 1;
 	end;
+	if exists(select * from sp.tUser u where u.Email = @Email)
+	begin
+		rollback;
+		return 2;
+	end;
 
-    insert into sp.tUser(Email) values(@Email);
-    select @UserId = scope_identity();
-    insert into sp.tUser(UserId, UserName, UserPassword)
-                           values(@userId, @UserName, @UserPassword);
+    insert into sp.tUser(UserName, UserPassword, Email) values(@UserName, @UserPassword, (case when @Email is null then '' else @Email end));
 	commit;
-    return 0;
 end;

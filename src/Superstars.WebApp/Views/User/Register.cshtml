@@ -1,0 +1,42 @@
+﻿@model Superstars.WebApp.Models.AccountViewModels.RegisterViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center center-block">Créer un compte</h2>
+
+        <form asp-controller="User" asp-action="Register" method="post">
+            @if (!ViewContext.ViewData.ModelState.IsValid)
+            {
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            }
+            <div class="form-group">
+                <label asp-for="Pseudo" class="control-label"></label>
+                <input asp-for="Pseudo" class="form-control">
+                <span asp-validation-for="Pseudo"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <span class="glyphicon glyphicon-info-sign" title="Ce champ est utile si vous oublié votre pseudo ou password"></span>
+                <input asp-for="Email" placeholder="Optionnel" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <button type="submit" class="btn-btn-dark btn-block">S'inscrire</button>
+        </form>
+    </div>
+</body>
+</html>

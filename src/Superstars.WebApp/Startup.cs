@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Superstars.DAL;
 using Superstars.WebApp.Authentication;
+using Superstars.WebApp.Services;
 
 namespace Superstars.WebApp
 {
@@ -34,6 +36,11 @@ namespace Superstars.WebApp
                 o.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
 
+            services.AddSingleton<UserGateway>(x => new UserGateway("Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"));
+            services.AddSingleton<UserService>();
+            services.AddSingleton<TokenService>();
+            services.AddSingleton<PasswordHasher>();
+
             services.AddAuthentication(CookieAuthentication.AuthenticationScheme)
                 .AddCookie(CookieAuthentication.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerAuthentication.AuthenticationScheme,
@@ -50,7 +57,7 @@ namespace Superstars.WebApp
                         ValidateAudience = true,
                         ValidAudience = Configuration["JwtBearer:Audience"],
 
-                        NameClaimType = ClaimTypes.Email,
+                        NameClaimType = ClaimTypes.Name,
                         AuthenticationType = JwtBearerAuthentication.AuthenticationType
                     };
                 });

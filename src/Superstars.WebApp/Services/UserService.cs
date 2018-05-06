@@ -14,24 +14,19 @@ namespace Superstars.WebApp.Services
             _passwordHasher = passwordHasher;
         }
 
-        public Task<Result<int>> CreateUser(string pseudo, string password)
+        public Task<Result> CreateUser(string pseudo, string password, string email)
         {
-            return _userGateway.CreateUser(pseudo, _passwordHasher.HashPassword(password));
+            return _userGateway.CreateUser(pseudo, _passwordHasher.HashPassword(password), email);
         }
 
         public async Task<UserData> FindUser(string pseudo, string password)
         {
             UserData user = await _userGateway.FindByName(pseudo);
-            if (user != null && _passwordHasher.VerifyHashedPassword(user.Password, password) == PasswordVerificationResult.Success)
+            if (user != null && _passwordHasher.VerifyHashedPassword(user.UserPassword, password) == PasswordVerificationResult.Success)
             {
                 return user;
             }
             return null;
         }
-
-        //public async Task<Result<int>> IdentityVerify(string pseudo, string password) 
-        //{
-        //    return await _userGateway.IdentityVerify(pseudo,_passwordHasher.HashPassword(password));
-        //}
     }
 }

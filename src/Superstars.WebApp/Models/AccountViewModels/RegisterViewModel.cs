@@ -25,6 +25,7 @@ namespace Superstars.WebApp.Models.AccountViewModels
         public string ConfirmPassword { get; set; }
 
         [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 }
