@@ -50,6 +50,16 @@
       </div>
     </header>
     <router-view></router-view>
+      <div class="games">
+        <p class="font-weight-light" id="textyams">YAMS</p>     
+        <div id="yamsgame">
+            <img src="../img/LOGO1.png" alt="yams" id="imgyams">
+            <img src="../img/LOGO1.png" alt="poker" id="imgpoker">     
+            <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
+            <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
+            <img src="../img/LOGO1.png" alt="game4" id="imggame4">    
+        </div>
+      </div>
   </div>
 </template>
 
@@ -74,6 +84,10 @@ export default{
   },
 
   methods: {
+
+    zoom() {
+
+    },
     log(selectedBase) {
       UserApiService.log(selectedBase);
     },
@@ -85,6 +99,11 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+
+.app {
+    background-color: black;
+}
+
 .progress {
   margin: 0px;
   padding: 0px;
@@ -94,6 +113,62 @@ export default{
 a.router-link-active {
   font-weight: bold;
 }
+
+.games {
+  margin: 290px;
+  margin-left: 400px;
+}
+
+#imgyams {
+  transition: transform .4s;
+  height: 180px;
+  width: 215px;
+}
+
+#imgyams:hover {
+    transform: scale(1.4); 
+}
+
+#imgpoker {
+  transition: transform .4s;   
+  height: 180px;
+  width: 215px;
+}
+
+#imgpoker:hover {
+    transform: scale(1.4); 
+}
+
+#imgblackjack {
+  transition: transform .4s;   
+  height: 180px;
+  width: 215px;
+}
+
+#imgblackjack:hover {
+    transform: scale(1.4); 
+}
+
+#imggame3 {
+  transition: transform .4s;   
+  height: 180px;
+  width: 215px;
+}
+
+#imggame3:hover {
+    transform: scale(1.4); 
+}
+
+#imggame4 {
+  transition: transform .4s;   
+  height: 180px;
+  width: 215px;
+}
+
+#imggame4:hover {
+    transform: scale(1.4); 
+}
+
 </style>
 
 <style lang="scss">
