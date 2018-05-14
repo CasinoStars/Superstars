@@ -21,7 +21,7 @@ namespace Superstars.DAL
 		//	using (SqlConnection con = new SqlConnection(_connectionString))
 		//	{
 		//		return await con.QueryAsync<>(
-
+		//
 		//			)
 		//	}
 		//}
