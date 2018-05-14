@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Superstars.DAL
 {
-    class YamsData
+    class YamsGamesData
     {
+		public int YamsGameId { get; set; }
 
-
+		public int Pot { get; set; }
     }
 }
