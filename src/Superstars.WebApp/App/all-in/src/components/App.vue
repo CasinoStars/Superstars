@@ -51,14 +51,14 @@
     </header>
     <router-view></router-view>
       <div class="games">
-        <p class="font-weight-light" id="textyams">YAMS</p>     
-        <div id="yamsgame">
+          <div class="yams">
             <img src="../img/LOGO1.png" alt="yams" id="imgyams">
+            <img src="../img/LOGO2.png" alt="textyams" id="textyams">
+          </div>
             <img src="../img/LOGO1.png" alt="poker" id="imgpoker">     
             <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
             <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
-            <img src="../img/LOGO1.png" alt="game4" id="imggame4">    
-        </div>
+            <img src="../img/LOGO1.png" alt="game4" id="imggame4">
       </div>
   </div>
 </template>
@@ -117,7 +117,21 @@ a.router-link-active {
 .games {
   margin: 290px;
   margin-left: 400px;
+  display: -webkit-inline-box;
 }
+
+.textgames {
+  margin-top: 190px;
+  margin-left: 55px;
+}
+
+#textyams {
+  height: 35px;
+  width: 100px;
+  transition: transform .4s;
+  visibility: hidden;
+}
+
 
 #imgyams {
   transition: transform .4s;
@@ -125,8 +139,12 @@ a.router-link-active {
   width: 215px;
 }
 
-#imgyams:hover {
-    transform: scale(1.4); 
+#imgyams:hover{
+    transform: scale(1.4);
+}
+
+.yams:hover #textyams {
+visibility: visible;
 }
 
 #imgpoker {
