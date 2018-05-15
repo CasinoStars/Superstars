@@ -69,10 +69,9 @@ namespace bitcointest
             for (int i = 0; i < utxo.Count; i++)
             {
                 var trx = uint256.Parse(utxo[i].Hash.ToString());
-                //Transaction test = new Transaction(); // no more byte to read
                 GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
                 if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
-                Console.WriteLine(trxResponse.TransactionId + " Transaction ID" + trxResponse.Block.Confirmations + "  Confirmation");
+               // Console.WriteLine(trxResponse.TransactionId + " Transaction ID" + trxResponse.Block.Confirmations + "  Confirmation");
                 double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
                 UTXOs.Add(utxo[i], value);
             }
@@ -87,11 +86,6 @@ namespace bitcointest
             var me = privateKey.GetAddress();
             decimal total = 0;
 
-            foreach (var trx in UTXOS)
-            {
-                Console.WriteLine(trx.Value +  " VALUEE");
-                Console.WriteLine(trx.Key +  " KEYYY");
-            }
             List<decimal> dif = new List<decimal>();
             foreach (var item in UTXOS)
             {
@@ -99,20 +93,14 @@ namespace bitcointest
             }
 
             var sortedDict = from entry in UTXOS orderby entry.Value descending select entry;
-
-
             int index = 0;
             double value = 0;
+
             foreach (var item in sortedDict)
             {
                 value += item.Value;
-                Console.WriteLine(value + " TEST Value Variable");
-                Console.WriteLine(index + " TEST Indexx ");
                 if ((decimal)value > amountToSend) break;
                 index++;
-                Console.WriteLine(item.Key + " TEST KEY");
-                Console.WriteLine(item.Value + " TEST Value");
-          
             }
             int p = 0;
             foreach (var item in sortedDict)
@@ -125,9 +113,9 @@ namespace bitcointest
                 total += (decimal)item.Value;
                 if (p == index) break;
                 if (total > amountToSend + minerFee) break;
-                p++;
-                
+                p++;                
             }
+
             if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
 
             TxOut destinationTxOut = new TxOut()
