@@ -10,7 +10,7 @@
     </div>
 
     <div class="playerdices">
-      <img src="../img/dice1.png" alt="dice1" id="playerdice1">
+      <img  v-on:click.native="select(1)" src="../img/dice1.png" alt="dice1" id="playerdice1">
       <img src="../img/dice2.png" alt="dice2" id="playerdice2">
       <img src="../img/dice3.png" alt="dice3" id="playerdice3">
       <img src="../img/dice4.png" alt="dice4" id="playerdice4">
@@ -19,6 +19,35 @@
 
 </div>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+//import UserApiService from '../services/UserApiService';
+import Vue from 'vue';
+
+export default{
+  
+  computed: {
+    ...mapGetters(['isLoading']),
+    auth: () => UserApiService
+  },
+  
+  mounted() {
+    UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
+  },
+
+  beforeDestroy() {
+    UserApiService.removeAuthenticatedCallback(() => this.onAuthenticated());
+  },
+
+  methods: {
+
+    select(dice) {
+      UserApiService.log(selectedBase);
+    },
+  }
+}
+</script>
 
 <style>
   .iadices {
