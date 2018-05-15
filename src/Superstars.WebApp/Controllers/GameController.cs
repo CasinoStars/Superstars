@@ -1,39 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Superstars.DAL;
-using Superstars.WebApp.Authentication;
-using Superstars.WebApp.Models.AccountViewModels;
 using Superstars.WebApp.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
+using Superstars.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Superstars.WebApp.Authentication;
 
 namespace Superstars.WebApp.Controllers
 {
-    public class GameController : controller
+    [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+    public class GameController : Controller
     {
         readonly GameService _gameservice;
+        readonly GameGateway _gameGateway;
 
-        public GameController(GameService gameservice) {
+        public GameController(GameService gameservice)
+        {
             _gameservice = gameservice;
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> CreateGame(GameViewModel GameType) {
-        if (ModelState.IsValid)
-            {
-                Result result = await _gameService.CreateGame(model.GameType);
-                if (result.HasError)
-                {
-                    ModelState.AddModelError(string.Empty, result.ErrorMessage);
-                    return View(model);
-                }
-                GameData game = await _gameService.FindGameById(model.GameID);
-            }
-            return View(model);
 
+        [HttpPost]
+        public async Task<IActionResult> CreateGame(GameViewModel model)
+        {
+            Result result = await _gameGateway.CreateGame(model.GameType);
+            GameData game = await _gameservice.FindGameById(model.GameID);
+
+            return this.CreateResult(result);
         }
     }
 }
