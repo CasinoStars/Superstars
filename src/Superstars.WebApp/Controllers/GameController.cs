@@ -24,7 +24,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateGame(GameViewModel model)
         {
             Result result = await _gameGateway.CreateGame(model.GameType);
-            GameData game = await _gameservice.FindGameById(model.GameID);
+            //GameData game = await _gameservice.FindGameById(model.GameID);
 
             return this.CreateResult(result);
         }

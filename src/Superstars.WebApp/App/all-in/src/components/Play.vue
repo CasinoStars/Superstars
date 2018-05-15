@@ -2,7 +2,7 @@
     <div id="home">
       <div class="games">
           <div class="yams">
-            <router-link v-on:click.native="PlayYams()" to="/playyams">
+            <router-link v-on:click.native="Play('Yams')" to="/playyams">
             <img src="../img/LOGO1.png" alt="yams" id="imgyams">
             </router-link>
             <img src="../img/LOGO2.png" alt="textyams" id="textyams">
@@ -20,27 +20,28 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
+import GameApiService from '../services/GameApiService';
+
 import Vue from 'vue';
 
-export default{
+export default {
+ data() {
+   return {
+     item: {},
+     errors: []
+   }
+ },
   
   computed: {
     ...mapGetters(['isLoading']),
     auth: () => UserApiService
   },
   
-  mounted() {
-    UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
-  },
-
-  beforeDestroy() {
-    UserApiService.removeAuthenticatedCallback(() => this.onAuthenticated());
-  },
-
   methods: {
+...mapActions(['executeAsyncRequest']),
 
-    PlayYams() {
-      //
+    Play(gametype) {
+      await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
     },
   }
 }
