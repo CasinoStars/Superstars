@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="NBitcoin" Version="4.1.1.7" />
+    <PackageReference Include="QBitNinja.Client" Version="1.0.3.47" />
   </ItemGroup>
 
 </Project>
