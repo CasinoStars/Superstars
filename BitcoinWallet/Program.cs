@@ -23,7 +23,7 @@ namespace bitcointest
             var bitcoinPrivateKey2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm", Network.TestNet);
             var me2 = bitcoinPrivateKey2.GetAddress();
 
-            TransactionMaker.MakeATransaction(bitcoinPrivateKey, me2, 1.32m, 0.05m,3);
+            TransactionMaker.MakeATransaction(bitcoinPrivateKey, me2, 3.12m, 0.05m,3);
             Console.ReadKey();
         }
 
