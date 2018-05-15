@@ -28,7 +28,7 @@ namespace bitcointest
             return transactionsResponses;
         }
 
-        public static Dictionary<OutPoint, double> FindUtxo(List<GetTransactionResponse> responses, BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client)
+        public static Dictionary<OutPoint, double> FindUtxo(List<GetTransactionResponse> responses, BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
         {
             List<OutPoint> trxSignedWithOurSpk = new List<OutPoint>();
 
@@ -47,11 +47,6 @@ namespace bitcointest
                 }
             }
             List<GetTransactionResponse> ResponseSignWithOurPrivateKey = new List<GetTransactionResponse>();
-            foreach (var item in trxSignedWithOurSpk)
-            {
-                Console.WriteLine(item + " NEW TEST");
-            }
-
             List<OutPoint> prevouts = new List<OutPoint>();
 
 
@@ -59,12 +54,10 @@ namespace bitcointest
             {
                 foreach (var intput in item.Transaction.Inputs)
                 {
-                    Console.WriteLine(intput.PrevOut + " NEW TEST 22");
                     prevouts.Add(intput.PrevOut);
                 }
             }
             List<OutPoint> utxo = new List<OutPoint>();
-
 
             foreach (var item in trxSignedWithOurSpk)
             {
@@ -73,47 +66,58 @@ namespace bitcointest
 
             Dictionary<OutPoint, double> UTXOs = new Dictionary<OutPoint, double>();
 
-
             for (int i = 0; i < utxo.Count; i++)
             {
-                Console.WriteLine(utxo[i].Hash + "  FINAL TEST");
                 var trx = uint256.Parse(utxo[i].Hash.ToString());
-                Transaction test = new Transaction(); // no more byte to read
-                GetTransactionResponse okk = client.GetTransaction(trx).Result;
-
-                double value = double.Parse(okk.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
+                GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
+                if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
+               // Console.WriteLine(trxResponse.TransactionId + " Transaction ID" + trxResponse.Block.Confirmations + "  Confirmation");
+                double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
                 UTXOs.Add(utxo[i], value);
-
-            }
-            foreach (var item in UTXOs)
-            {
-                Console.WriteLine(item.Value + " VALUE");
-                Console.WriteLine(item.Key + " KEY");
             }
             return UTXOs;
         }
-        public static void MakeATransaction(BitcoinSecret privateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee)
+        public static void MakeATransaction(BitcoinSecret privateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee, int nbOfConfimationReq)
         {
             var client = new QBitNinjaClient(Network.TestNet);
             List<GetTransactionResponse> responses = FindCoinInAWallet(privateKey, client);
-            Dictionary<OutPoint, double> UTXOS = FindUtxo(responses, privateKey, client);
+            Dictionary<OutPoint, double> UTXOS = FindUtxo(responses, privateKey, client, nbOfConfimationReq);
             var transaction = new Transaction();
             var me = privateKey.GetAddress();
-            int i = 0;
             decimal total = 0;
-            foreach (var utxo in UTXOS)
 
+            List<decimal> dif = new List<decimal>();
+            foreach (var item in UTXOS)
+            {
+               if((decimal)item.Value - (amountToSend - minerFee) > 0) dif.Add((decimal)item.Value - (amountToSend - minerFee));           
+            }
+
+            var sortedDict = from entry in UTXOS orderby entry.Value descending select entry;
+            int index = 0;
+            double value = 0;
+
+            foreach (var item in sortedDict)
+            {
+                value += item.Value;
+                if ((decimal)value > amountToSend) break;
+                index++;
+            }
+            int p = 0;
+            foreach (var item in sortedDict)
             {
                 transaction.Inputs.Add(new TxIn()
                 {
-                    PrevOut = utxo.Key
+                    PrevOut = item.Key
                 });
-                transaction.Inputs[i].ScriptSig = me.ScriptPubKey;
-                total += (decimal)utxo.Value;
+                transaction.Inputs[p].ScriptSig = me.ScriptPubKey;
+                total += (decimal)item.Value;
+                if (p == index) break;
                 if (total > amountToSend + minerFee) break;
-                i++;
+                p++;                
             }
+
             if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
+
             TxOut destinationTxOut = new TxOut()
             {
                 Value = new Money(amountToSend, MoneyUnit.BTC),
@@ -128,7 +132,6 @@ namespace bitcointest
 
             transaction.Outputs.Add(destinationTxOut);
             transaction.Outputs.Add(changeBackTxOut);
-            Console.WriteLine(transaction);
             transaction.Sign(privateKey, false);
 
             BroadcastResponse broadcastResponse = client.Broadcast(transaction).Result;
