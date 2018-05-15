@@ -25,26 +25,13 @@ import { mapGetters, mapActions } from 'vuex';
 //import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 
-export default{
-  
-  computed: {
-    ...mapGetters(['isLoading']),
-    auth: () => UserApiService
-  },
-  
-  mounted() {
-    UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
-  },
-
-  beforeDestroy() {
-    UserApiService.removeAuthenticatedCallback(() => this.onAuthenticated());
-  },
+export default {
 
   methods: {
 
-    select(dice) {
-      UserApiService.log(selectedBase);
-    },
+    //select(dice) {
+      //UserApiService.log(selectedBase);
+    //}
   }
 }
 </script>

@@ -40,9 +40,9 @@ export default {
   methods: {
 ...mapActions(['executeAsyncRequest']),
 
-    Play(gametype) {
+   async Play(gametype) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-    },
+    }
   }
 }
 </script>

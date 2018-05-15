@@ -1,3 +1,4 @@
+import AuthService from '../services/UserApiService';
 
 async function checkErrors(resp) {
     if(resp.ok) return resp;
@@ -23,6 +24,7 @@ export async function postAsync(url, data) {
         body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AuthService.accessToken}`
         }
     })
     .then(checkErrors);

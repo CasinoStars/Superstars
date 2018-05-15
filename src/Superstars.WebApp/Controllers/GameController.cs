@@ -15,13 +15,15 @@ namespace Superstars.WebApp.Controllers
         readonly GameService _gameservice;
         readonly GameGateway _gameGateway;
 
-        public GameController(GameService gameservice)
+        public GameController(GameGateway gameGateway, GameService gameservice)
         {
             _gameservice = gameservice;
+            _gameGateway = gameGateway;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGame(GameViewModel model)
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateGame([FromBody] GameViewModel model)
         {
             Result result = await _gameGateway.CreateGame(model.GameType);
             //GameData game = await _gameservice.FindGameById(model.GameID);

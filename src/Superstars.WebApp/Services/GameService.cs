@@ -9,20 +9,20 @@ namespace Superstars.WebApp.Services
         readonly GameGateway _gamegateway;
         readonly PasswordHasher _passwordHasher;
 
-        public UserService(GameGateway gameGateway, PasswordHasher passwordHasher)
+        public GameService(GameGateway gameGateway, PasswordHasher passwordHasher)
         {
             _gamegateway = gameGateway;
             _passwordHasher = passwordHasher;
         }
 
-        public Task<Result> CreateGame(GamesTypes type )
+        public Task<Result<int>> CreateGame(GamesTypes type )
         {
             return _gamegateway.CreateGame(type);
         }
 
         public async Task<GameData> FindGameById(int GameID)
         {
-            GameData game = await _gameGateway.FindGameById(GameID);
+            GameData game = await _gamegateway.FindGameById(GameID);
             if (game != null)
             {
                 return game;
