@@ -131,7 +131,7 @@ namespace Superstars.WebApp.Controllers
 			int grandesuite = 0;
 
 			handcount = DicesValue(hand);
-			for (int i=0 ; i<5 ; i++)
+			for (int i = 0 ; i < 5 ; i++)
 			{
 				//yams
 				if (handcount[i]==5)
@@ -142,20 +142,20 @@ namespace Superstars.WebApp.Controllers
 				}
 
 				//carré
-				if(handcount[i]==4)
+				if( handcount[i] == 4)
 				{
 					for (int l = 0; l < 5; l++)
 					{
 						if (handcount[l] == 1)
 						{
-							points = points + 40 + (4 * (i + 1)) + l + 1;
+							points = points + 40 + (4 * (i + 1)) + (l + 1);
 							return points;
 						}
 					}
 				}
-
+			
 				// full
-				else if(handcount[i]==3)
+				else if( handcount[i] == 3 )
 				{
 					for (int l = 0; l < 5; l++)
 					{
