@@ -21,7 +21,7 @@ namespace Superstars.WebApp.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> CreateGame() {
+        public async Task<IActionResult> CreateGame(GameViewModel GameType) {
         if (ModelState.IsValid)
             {
                 Result result = await _gameService.CreateGame(model.GameType);
