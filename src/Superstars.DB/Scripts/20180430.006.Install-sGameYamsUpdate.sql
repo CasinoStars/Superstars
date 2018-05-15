@@ -1,7 +1,7 @@
 create proc sp.sGameYamsUpdate
 (
            @YamsGameId int,
-           @Pot int,
+           @Pot int
 )
 as
 begin

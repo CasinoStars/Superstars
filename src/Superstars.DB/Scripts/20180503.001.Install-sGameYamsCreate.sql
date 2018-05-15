@@ -1,7 +1,7 @@
 create proc sp.sGameYamsCreate
 (
 	@YamsGameId int out,
-	@Pot int,
+	@Pot int
 )
 as
 begin

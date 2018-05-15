@@ -2,7 +2,7 @@ create proc sp.sPokerPlayerUpdate
 (
 	@PokerPlayerId int,
 	@PokerGameId int,
-	@PlayerCards nvarchar(4),
+	@PlayerCards nvarchar(4)
 )
 as 
 begin
@@ -14,7 +14,7 @@ begin
 		rollback;
 		return 1;
       end;
-      if exists(select * from sp.tPokerPlayer p where c.PokerGameId <> @PokerGamesId and c.[PokerGameId] = @PokerGameId and c.[PlayerCards]=@PlayerCards)
+      if exists(select * from sp.tPokerPlayer p where p.PokerGameId <> @PokerGameId and p.[PokerGameId] = @PokerGameId and p.[PlayerCards]=@PlayerCards)
       begin
 		rollback;
 		return 2;

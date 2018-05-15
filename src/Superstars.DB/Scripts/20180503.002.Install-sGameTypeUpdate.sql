@@ -1,6 +1,6 @@
 create proc sp.sGameTypeCreate
 (
-	@GameType int,
+	@GameType int
 )
 as
 begin

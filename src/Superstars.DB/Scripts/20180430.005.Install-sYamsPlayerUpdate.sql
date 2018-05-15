@@ -10,7 +10,7 @@ begin
         set transaction isolation level serializable;
 	begin tran;
 
-        if not exists(select * from sp.tYamsPlayer y where y.YamsPlayerId = @YamsPlayerId and y.YamsGameId = @YamsGameId)  )
+        if not exists(select * from sp.tYamsPlayer y where y.YamsPlayerId = @YamsPlayerId and y.YamsGameId = @YamsGameId)
 	begin
 		rollback;
 		return 1;
