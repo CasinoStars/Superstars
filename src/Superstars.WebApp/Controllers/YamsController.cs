@@ -17,6 +17,7 @@ namespace Superstars.WebApp.Controllers
 		bool _IsIAturn;
 		int _IAturn,_MYturn;
 		#endregion
+
 		public YamsController()
 		{
 			_IsIAturn = false;
@@ -41,6 +42,7 @@ namespace Superstars.WebApp.Controllers
 			_IApoints = PointCount(_IAdices);
 			FindWinner();
 		}
+
 		#region méthodes
 		private void FirstShot()
 		{
@@ -222,4 +224,5 @@ namespace Superstars.WebApp.Controllers
 		}
     }
 	#endregion
+
 }
