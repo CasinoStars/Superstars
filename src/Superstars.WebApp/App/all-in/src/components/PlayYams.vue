@@ -1,22 +1,23 @@
 <template>
-<div class="game">
-
+<div class="page">
+  <div class="game">
     <div class="iadices">
-      <img src="../img/diceia1.png" alt="iadice1" id="iadice1">
-      <img src="../img/diceia2.png" alt="iadice2" id="iadice2">
-      <img src="../img/diceia3.png" alt="iadice3" id="iadice3">
-      <img src="../img/diceia4.png" alt="iadice4" id="iadice4">
-      <img src="../img/diceia5.png" alt="iadice5" id="iadice5">
+        <img src="../img/diceia1.png" alt="iadice1" id="iadice1">
+        <img src="../img/diceia2.png" alt="iadice2" id="iadice2">
+        <img src="../img/diceia3.png" alt="iadice3" id="iadice3">
+        <img src="../img/diceia4.png" alt="iadice4" id="iadice4">
+        <img src="../img/diceia5.png" alt="iadice5" id="iadice5">
     </div>
 
-    <div class="playerdices">
-      <img  v-on:click.native="select(1)" src="../img/dice1.png" alt="dice1" id="playerdice1">
-      <img src="../img/dice2.png" alt="dice2" id="playerdice2">
-      <img src="../img/dice3.png" alt="dice3" id="playerdice3">
-      <img src="../img/dice4.png" alt="dice4" id="playerdice4">
-      <img src="../img/dice5.png" alt="dice5" id="playerdice5">
-    </div>
-
+      <div class="playerdices">
+        <img  v-on:click.native="select(1)" src="../img/dice1.png" alt="dice1" id="playerdice1">
+        <img src="../img/dice2.png" alt="dice2" id="playerdice2">
+        <img src="../img/dice3.png" alt="dice3" id="playerdice3">
+        <img src="../img/dice4.png" alt="dice4" id="playerdice4">
+        <img src="../img/dice5.png" alt="dice5" id="playerdice5">
+      </div>
+  </div>
+  <a class="btn btn-outline-secondary btn-lg" id="throwbtn">ROLL</a>
 </div>
 </template>
 
@@ -59,6 +60,9 @@ export default {
   width: 100px;  
 }
 
+#throwbtn {
+  margin-left: 872px;
+}
 </style>
 
 
