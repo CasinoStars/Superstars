@@ -2,14 +2,14 @@ create procedure sp.sGamesCreate
 (
 	@GameId int out,
 	@GameType int,
-	@StartDate date
+	@StartDate datetime
 )
 as
 begin
        set transaction isolation level serializable;
        begin tran;
       
-       if exists (select * from sp.tGames g where g.GameType = @GameType and g.StartDate = @StartDate)
+       if exists (select * from sp.tGames g where g.StartDate = @StartDate)
        begin 
                rollback;
                return 1;
