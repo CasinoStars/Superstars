@@ -9,4 +9,5 @@ async createGame(gametype) {
     return await postAsync(endpoint, gametype);
 }
     }
+
 export default new GameApiService();
