@@ -20,6 +20,11 @@ namespace Superstars.WebApp.Services
             return _gamegateway.CreateGame(type);
         }
 
+        public Task<Result<int>> CreateYamsGame(int pot)
+        {
+            return _gamegateway.CreateYamsGame(pot);
+        }
+
         public async Task<GameData> FindGameById(int GameID)
         {
             GameData game = await _gamegateway.FindGameById(GameID);
