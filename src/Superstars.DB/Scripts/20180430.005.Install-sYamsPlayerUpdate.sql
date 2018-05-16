@@ -3,6 +3,7 @@ create proc sp.sYamsPlayerUpdate
 	@YamsPlayerId int,
 	@YamsGameId int,
 	@NbrRevives int,
+	@Dices varchar(6),
 	@DicesValue int
 )
 as 
@@ -22,7 +23,7 @@ begin
 		return 2;
 	end;
 
-    update sp.tYamsPlayer set [NbrRevives] = @NbrRevives, [DicesValue] = @DicesValue where YamsPlayerId = @YamsPlayerId and YamsGameId = @YamsGameId;
+    update sp.tYamsPlayer set [Dices] = @Dices, [NbrRevives] = @NbrRevives, [DicesValue] = @DicesValue where YamsPlayerId = @YamsPlayerId and YamsGameId = @YamsGameId;
         commit;
     return 0;
 end;
