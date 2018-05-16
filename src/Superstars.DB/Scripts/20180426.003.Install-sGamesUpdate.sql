@@ -2,8 +2,8 @@ create proc sp.sGamesUpdate
 (
      @GameId int,
      @GameType varchar,
-     @StartDate date,
-     @EndDate date,
+     @StartDate datetime,
+     @EndDate datetime,
      @Winner int	
 )
 as 

@@ -3,6 +3,7 @@ create proc sp.sYamsPlayerCreate
 	@YamsPlayerId int out,
 	@YamsGameId int,
 	@NbrRevives int,
+	@Dices varchar(6),
 	@DicesValue int
 )
 as
@@ -15,7 +16,7 @@ begin
 		rollback;
 		return 1;
 	end;
-    insert into sp.tYamsPlayer([NbrRevives], [DicesValue]) values(@NbrRevives, @DicesValue);
+    insert into sp.tYamsPlayer([Dices], [NbrRevives], [DicesValue]) values(@Dices, @NbrRevives, @DicesValue);
 	set @YamsPlayerId = scope_identity();
 	commit;
     return 0;
