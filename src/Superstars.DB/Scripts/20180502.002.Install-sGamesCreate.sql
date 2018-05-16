@@ -1,7 +1,7 @@
 create proc sp.tGamesCreate
 (
 	@GameId int out,
-	@GameType int,
+	@GameType varchar,
 	@StartDate date
 )
 as

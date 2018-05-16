@@ -1,6 +1,6 @@
 ﻿create proc sp.sEloCreate
 (
-	@GameTypeId int out,
+	@GameTypeId varchar out,
 	@UserId int,
 	@Elo int
 )

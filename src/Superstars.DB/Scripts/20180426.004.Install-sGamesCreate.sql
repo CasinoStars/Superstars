@@ -14,7 +14,14 @@ begin
                rollback;
                return 1;
        end
-       insert into sp.tGames(GameType,StartDate) values(@GameType,@StartDate)
-           set @GameId = scope_identity();
+		
+	   declare @v_gametype varchar(64)
+	   begin
+	   select @v_gametype = GameType from sp.tGameType with (INDEX(@GameType))
+	   end;
+
+       insert into sp.tGames(GameType,StartDate) values(@v_gametype,@StartDate)
+       set @GameId = scope_identity();
+	   commit;
        return 0;
 end;

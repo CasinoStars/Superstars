@@ -1,6 +1,6 @@
-create proc sp.sGameTypeCreate
+create proc sp.sGameTypeUpdate
 (
-	@GameType int
+	@GameType varchar
 )
 as
 begin

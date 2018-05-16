@@ -38,6 +38,8 @@ namespace Superstars.WebApp
 
             services.AddSingleton<UserGateway>(x => new UserGateway("Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"));
             services.AddSingleton<UserService>();
+            services.AddSingleton<GameGateway>(x => new GameGateway("Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"));
+            services.AddSingleton<GameService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();
 

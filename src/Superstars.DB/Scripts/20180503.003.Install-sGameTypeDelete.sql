@@ -1,6 +1,6 @@
 create proc sp.sGameTypeDelete
 (
-	@GameType int
+	@GameType varchar
 )
 as
 begin

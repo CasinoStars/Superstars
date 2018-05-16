@@ -1,6 +1,6 @@
 ﻿create proc sp.sEloUpdate
 (
-        @GameTypeId int,
+        @GameTypeId varchar,
         @UserId int,
         @Elo int
 )
