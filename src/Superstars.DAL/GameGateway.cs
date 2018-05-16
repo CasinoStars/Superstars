@@ -46,8 +46,24 @@ namespace Superstars.DAL
 
                 int status = p.Get<int>("@Status");
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game with this gametype and  start date already exists.");
-
+                
                 return Result.Success(p.Get<int>("@GameId"));
+            }
+        }
+
+        public async Task<Result<int>> CreateYamsGame(int pot)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@YamsGameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameYamsCreate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<int>("@YamsGameId"));
             }
         }
 
