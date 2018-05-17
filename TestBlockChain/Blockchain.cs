@@ -1,7 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
+using NBitcoin;
+using NBitcoin.DataEncoders;
+using NBitcoin.Protocol;
+using System.Threading;
+using QBitNinja.Client;
+using QBitNinja.Client.Models;
+using System.Linq;
+using System.Globalization;
 
 namespace TestBlockChain
 {
@@ -21,7 +30,7 @@ namespace TestBlockChain
 
         Block CreateGenesisBlock()
         {
-            return new Block(0, "01/12/2017", "Genesis block", "");
+            return new Block(0, "01/12/2017", new List<GetTransactionResponse>() , "");
         }
 
         public Block GetLatestBlock()

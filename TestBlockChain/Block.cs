@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using NBitcoin;
+using NBitcoin.DataEncoders;
+using NBitcoin.Protocol;
+using System.Threading;
+using QBitNinja.Client;
+using QBitNinja.Client.Models;
+using System.Linq;
+using System.Globalization;
 
 namespace TestBlockChain
 {
@@ -12,18 +20,24 @@ namespace TestBlockChain
         public int Index { get; set; }
         public string PreviousHash { get; set; }
         public string Timestamp { get; set; }
-        public string Data { get; set; }
+       // public string Data { get; set; }
+
+        public List<string> Data { get; set; } = new List<string>();
         public string Hash { get; set; }
         int _salt;
 
-        public Block(int index, string timestamp, string data, string previousHash = "")
+        public Block(int index, string timestamp, List<GetTransactionResponse> responses , string previousHash = "")
         {
-            this.Index = index;
-            this.PreviousHash = previousHash;
-            this.Timestamp = timestamp;
-            this.Data = data;
-            this.Hash = this.CalculateHash();
-            this._salt = 0;
+            Index = index;
+            PreviousHash = previousHash;
+            Timestamp = timestamp;
+            foreach (var trxResponse in responses)
+            {
+                Data.Add(trxResponse.TransactionId.ToString());
+            }
+
+            Hash = this.CalculateHash();
+            _salt = 0;
         }
 
 
