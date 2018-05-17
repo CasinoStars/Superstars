@@ -6,8 +6,8 @@ class YamsApiService {
         
     }
 
-async RollDices(selectedDices) {
-    return await postAsync(endpoint, selectedDices);
+async RollDices(myDices, selectedDices) {
+    return await postAsync(endpoint, myDices, selectedDices);
 }
 
 async CreateYamsPlayer(gameid, nbturn, dices, dicesvalue) {

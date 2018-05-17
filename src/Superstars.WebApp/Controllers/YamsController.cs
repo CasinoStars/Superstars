@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Superstars.WebApp.Services;
 
@@ -19,6 +18,7 @@ namespace Superstars.WebApp.Controllers
             _yamsService = yamsService;
         }
 
+        [HttpPost]
         public int[] RollDices(int[] mysdices, int[] selectedDices = null)
         {
             return _yamsService.RollDices(mysdices, selectedDices);

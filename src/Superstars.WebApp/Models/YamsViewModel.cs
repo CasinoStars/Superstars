@@ -2,10 +2,16 @@
 {
     public class YamsViewModel
     {
-        public int YamsGameID { get; set; }
+        public int YamsGameId { get; set; }
+
+        public int YamsPlayerId { get; set }
 
         public int Pot { get; set; }
-        //public string GameType { get; set; }
 
+        public int NbrRevives { get; set; }
+
+        public string Dices { get; set; }
+
+        public string DicesValue { get; set; }
     }
 }

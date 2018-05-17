@@ -64,6 +64,38 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> UpdateYamsPlayer(int gameid, int nbturn, string dices, int dicesvalue)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@YamsGameId", gameid);
+                p.Add("@NbrRevives", nbturn);
+                p.Add("@Dices", dices);
+                p.Add("@DicesValue", dicesvalue);
+                p.Add("@YamsPlayerId", dbType: DbType.Int32, direction: ParameterDirection.Input);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sYamsPlayerUpdate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "This game not exists");
+
+                return Result.Success(p.Get<int>("@YamsPlayerId"));
+            }
+        }
+
+        public async Task<Result<YamsData>> GetPlayer(int playerId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                YamsData data = await con.QueryFirstOrDefaultAsync<YamsData>(
+                    @"select t.YamsPlayerId, t.YamsGameId, t.NbrRevives, t.Dices, t.DicesValue from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId;",
+                    new { YamsPlayerId = playerId });
+                if (data == null) return Result.Failure<YamsData>(Status.NotFound, "Data not found.");
+                return Result.Success(data);
+            }
+        }
+
         #region méthodes
         private void FirstShot()
         {
