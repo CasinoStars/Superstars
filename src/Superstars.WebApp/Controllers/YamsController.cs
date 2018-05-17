@@ -12,15 +12,22 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class YamsController : Controller
     {
-        readonly _yamsService;
+        readonly YamsService _yamsService;
+
         public YamsController(YamsService yamsService)
         {
             _yamsService = yamsService;
         }
 
-        public async Task<IActionResult> RollDices(List<int> selectedDices = null)
+        public int[] RollDices(int[] mysdices, int[] selectedDices = null)
         {
-            Result result = await _yamsService.RollDices(selectedDices);
+            return _yamsService.RollDices(mysdices, selectedDices);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateYamsPlayer(int gameid, int nbturn, string dices, int dicesvalue)
+        {
+            Result result = await _yamsService.CreateYamsPlayer(gameid, nbturn, dices, dicesvalue);
             return this.CreateResult(result);
         }
     }

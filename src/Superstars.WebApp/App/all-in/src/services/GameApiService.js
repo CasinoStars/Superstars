@@ -8,6 +8,10 @@ const endpoint = "/api/game";
 async createGame(gametype) {
     return await postAsync(endpoint, gametype);
 }
+
+/*async CreateYamsGame(pot) {
+    return await postAsync(`${endpoint}/CreateYamsGame`, pot);
+}*/
     }
 
 export default new GameApiService();

@@ -6,9 +6,9 @@ using Dapper;
 
 namespace Superstars.DAL
 {
-    class YamsGateway
+    public class YamsGateway
     {
-		readonly string _connectionString;
+        readonly string _connectionString;
         #region Champs
         Random rdn = new Random();
         int[] _mydices = new int[5];
@@ -19,34 +19,12 @@ namespace Superstars.DAL
         #endregion
 
         public YamsGateway(string connectionString)
-		{
-			_connectionString = connectionString;
-		}
-
-        public async Task<Result<int>> CreateYamsGame(GamesTypes game)
         {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                var p = new DynamicParameters();
-                p.Add("@GameType", (int)game);
-                p.Add("@StartDate", DateTime.UtcNow);
-                p.Add("@GameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-                await con.ExecuteAsync("sp.sGamesCreate", p, commandType: CommandType.StoredProcedure);
-
-                int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game with this gametype and  start date already exists.");
-
-                return Result.Success(p.Get<int>("@GameId"));
-            }
-        }
-    }
-    #endregion
-}
+            _connectionString = connectionString;
             _IsIAturn = false;
             _IAturn = 0;
             _MYturn = 0;
-            while (_MYturn < 3)
+            /*while (_MYturn < 3)
             {
                 FirstShot();
                 //IndexChange();
@@ -60,30 +38,31 @@ namespace Superstars.DAL
                 //IndexChange();
                 Reroll();
                 _IAturn++;
-            }
+            }*/  
             _MYpoints = PointCount(_mydices);
             _IApoints = PointCount(_IAdices);
             FindWinner();
         }
 
-        public async Task<Result<int>> CreateYamsGame(GamesTypes game)
+        public async Task<Result<int>> CreateYamsPlayer(int gameid, int nbturn, string dices, int dicesvalue)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@GameType", (int)game);
-                p.Add("@StartDate", DateTime.UtcNow);
-                p.Add("@GameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@YamsGameId", gameid);
+                p.Add("@NbrRevives", nbturn);
+                p.Add("@Dices", dices);
+                p.Add("@DicesValue", dicesvalue);
+                p.Add("@YamsPlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-                await con.ExecuteAsync("sp.sGamesCreate", p, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("sp.sYamsPlayerCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game with this gametype and  start date already exists.");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game already exists.");
 
-                return Result.Success(p.Get<int>("@GameId"));
+                return Result.Success(p.Get<int>("@YamsPlayerId"));
             }
         }
-
 
         #region méthodes
         private void FirstShot()
@@ -104,46 +83,68 @@ namespace Superstars.DAL
             }
         }
 
-        private void IndexChange(int[] index)
+        //public void IndexChange(int[] index)
+        //{
+        //    if (_IsIAturn == true)
+        //    {
+        //        for (int i = 0; i < index.Length; i++)
+        //        {
+        //            _IAdices[index[i]] = 0;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < index.Length; i++)
+        //        {
+        //            _mydices[index[i]] = 0;
+        //        }
+        //    }
+        //}
+
+        public int[] IndexChange(int[] dices, int[] index)
         {
-            if (_IsIAturn == true)
-            {
                 for (int i = 0; i < index.Length; i++)
                 {
-                    _IAdices[index[i]] = 0;
+                    dices[index[i]] = 0;
                 }
-            }
-            else
-            {
-                for (int i = 0; i < index.Length; i++)
-                {
-                    _mydices[index[i]] = 0;
-                }
-            }
+            return dices;
         }
 
-        private void Reroll()
+
+        //public void Reroll()
+        //{
+        //    if (_IsIAturn == false)
+        //    {
+        //        for (int i = 0; i < 6; i++)
+        //        {
+        //            if (_mydices[i] == 0)
+        //            {
+        //                _mydices[i] = RollDice();
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < 6; i++)
+        //        {
+        //            if (_IAdices[i] == 0)
+        //            {
+        //                _IAdices[i] = RollDice();
+        //            }
+        //        }
+        //    }
+        //}
+
+        public int[] Reroll(int[] dices)
         {
-            if (_IsIAturn == false)
-            {
                 for (int i = 0; i < 6; i++)
                 {
-                    if (_mydices[i] == 0)
+                    if (dices[i] == 0)
                     {
-                        _mydices[i] = RollDice();
+                        dices[i] = RollDice();
                     }
                 }
-            }
-            else
-            {
-                for (int i = 0; i < 6; i++)
-                {
-                    if (_IAdices[i] == 0)
-                    {
-                        _IAdices[i] = RollDice();
-                    }
-                }
-            }
+            return dices;
         }
 
         private int RollDice()
@@ -264,3 +265,7 @@ namespace Superstars.DAL
                 return "Draw";
             }
         }
+        #endregion
+
+    }
+}
