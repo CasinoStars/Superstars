@@ -1,5 +1,3 @@
-using System;
-
 namespace Superstars.WebApp.Models
 {
     public class ErrorViewModel

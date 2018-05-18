@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using System.Threading.Tasks;
-using Superstars.WebApp.Services;
 using Superstars.WebApp.Models;
 
 namespace Superstars.WebApp.Controllers

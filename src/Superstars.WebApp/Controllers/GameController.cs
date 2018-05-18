@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Superstars.DAL;
-using Superstars.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Superstars.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -12,33 +11,33 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class GameController : Controller
     {
-        readonly GameService _gameservice;
-        //readonly GameGateway _gameGateway;
+        readonly GameGateway _gameGateway;
 
-        public GameController(GameService gameservice)
+        public GameController(GameGateway gameGateway)
         {
-            _gameservice = gameservice;
-           //_gameGateway = gameGateway;
+            _gameGateway = gameGateway;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateGame(GameViewModel model)
         {
-            Result result = await _gameservice.CreateGame(model.GameType);
-            //GameData game = await _gameservice.FindGameById(model.GameID);
-            Result result2 = await _gameservice.CreateYamsGame(0);
+            Result result = await _gameGateway.CreateGame(model.GameType);
             return this.CreateResult(result);
         }
 
-        /*[HttpPost("CreateYamsGame")]
+        [HttpPost]
         public async Task<IActionResult> CreateYamsGame(YamsViewModel model)
         {
-            Result result = await _gameservice.CreateYamsGame(model.Pot);
-            //GameData game = await _gameservice.FindGameById(model.GameID);
+            Result result = await _gameGateway.CreateYamsGame(model.Pot);
             return this.CreateResult(result);
-        }*/
+        }
 
-
-
+        [HttpGet]
+        public async Task<Result<GameData>> FindGameById(int GameID)
+        {
+            GameData game = await _gameGateway.FindGameById(GameID);
+            if (game == null) return Result.Failure<GameData>(Status.NotFound, "Game not found.");
+            return Result.Success(game);
+        }
     }
 }

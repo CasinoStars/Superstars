@@ -2,16 +2,16 @@ import { postAsync } from "../helpers/apiHelper";
 const endpoint = "/api/yams";
 
 class YamsApiService {
-    constructor() {
+    constructor(){
         
     }
 
-async RollDices(myDices, selectedDices) {
-    return await postAsync(endpoint, myDices, selectedDices);
-}
-
-async CreateYamsPlayer(gameid, nbturn, dices, dicesvalue) {
-    return await postAsync(endpoint,gameid, nbturn, dices, dicesvalue)
-}
+    async RollDices(model, myDices, selectedDices) {
+        return await postAsync(endpoint, model, myDices, selectedDices);
     }
+
+    async CreateYamsPlayer(model) {
+        return await postAsync(endpoint, model)
+    }
+}
 export default new YamsApiService();

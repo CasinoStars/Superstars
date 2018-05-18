@@ -17,7 +17,7 @@ begin
 		
 	   declare @v_gametype varchar(64)
 	   begin
-	   select @v_gametype = GameType from sp.tGameType with (INDEX(@GameType))
+	   select @v_gametype = GameType from sp.tGameType where GameType = @GameType
 	   end;
 
        insert into sp.tGames(GameType,StartDate) values(@v_gametype,@StartDate)

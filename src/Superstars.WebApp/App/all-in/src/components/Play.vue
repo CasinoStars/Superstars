@@ -2,7 +2,7 @@
   <div id="home">
     <div class="games">
       <div class="yams">
-        <router-link v-on:click.native="PlayYams('Yams')" to="/playyams">
+        <router-link v-on:click.native="PlayYams(1)" to="/playyams">
           <img src="../img/LOGO1.png" alt="yams" id="imgyams">
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" id="textyams">

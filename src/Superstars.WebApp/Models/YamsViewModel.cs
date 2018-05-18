@@ -4,7 +4,7 @@
     {
         public int YamsGameId { get; set; }
 
-        public int YamsPlayerId { get; set }
+        public int YamsPlayerId { get; set; }
 
         public int Pot { get; set; }
 

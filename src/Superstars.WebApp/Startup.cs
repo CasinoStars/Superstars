@@ -36,10 +36,10 @@ namespace Superstars.WebApp
                 o.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
 
-            services.AddSingleton<UserGateway>(x => new UserGateway("Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"));
+            services.AddSingleton<UserGateway>(x => new UserGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton<GameGateway>(x => new GameGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton<YamsGateway>(x => new YamsGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<UserService>();
-            services.AddSingleton<GameGateway>(x => new GameGateway("Server=.\\SQLEXPRESS;Database=Superstars;Trusted_Connection=True;"));
-            services.AddSingleton<GameService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();
 
