@@ -12,6 +12,6 @@
 
         public string Dices { get; set; }
 
-        public string DicesValue { get; set; }
+        public int DicesValue { get; set; }
     }
 }

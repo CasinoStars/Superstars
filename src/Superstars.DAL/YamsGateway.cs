@@ -44,7 +44,7 @@ namespace Superstars.DAL
             FindWinner();
         }
 
-        public async Task<Result<int>> CreateYamsPlayer(int gameid, int nbturn, string dices, int dicesvalue)
+        public async Task<Result<YamsData>> CreateYamsPlayer(int gameid, int nbturn, string dices, int dicesvalue)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
@@ -58,9 +58,9 @@ namespace Superstars.DAL
                 await con.ExecuteAsync("sp.sYamsPlayerCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game already exists.");
+                if (status == 1) return Result.Failure<YamsData>(Status.BadRequest, "A game already exists.");
 
-                return Result.Success(p.Get<int>("@YamsPlayerId"));
+                return Result.Success(p.Get<YamsData>("@YamsPlayerId"));
             }
         }
 
