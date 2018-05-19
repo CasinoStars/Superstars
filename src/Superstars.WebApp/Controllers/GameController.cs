@@ -19,18 +19,19 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGame(GameViewModel model)
+        public async Task<IActionResult> CreateGame(int gametype)
         {
-            Result result = await _gameGateway.CreateGame(model.GameType);
+            Result result = await _gameGateway.CreateGame(gametype);
+            Result result2 = await _gameGateway.CreateYamsGame(500);
             return this.CreateResult(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateYamsGame(YamsViewModel model)
-        {
-            Result result = await _gameGateway.CreateYamsGame(model.Pot);
-            return this.CreateResult(result);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> CreateYamsGame(YamsViewModel model)
+        //{
+        //    Result result = await _gameGateway.CreateYamsGame(model.Pot);
+        //    return this.CreateResult(result);
+        //}
 
         [HttpGet]
         public async Task<Result<GameData>> FindGameById(int GameID)

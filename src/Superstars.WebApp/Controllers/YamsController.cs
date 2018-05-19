@@ -19,7 +19,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RollDices(YamsViewModel model, int[] mydices, int[] selectedDices = null)
+        public async Task<IActionResult> RollDices(YamsPlayerViewModel model, int[] mydices, int[] selectedDices = null)
         {
             mydices = _yamsGateway.IndexChange(mydices, selectedDices);
             mydices = _yamsGateway.Reroll(mydices);
@@ -28,7 +28,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateYamsPlayer([FromBody] YamsViewModel model)
+        public async Task<IActionResult> CreateYamsPlayer([FromBody] YamsPlayerViewModel model)
         {
             Result result = await _yamsGateway.CreateYamsPlayer(model.YamsGameId, model.NbrRevives, model.Dices, model.DicesValue);
             return this.CreateResult(result);

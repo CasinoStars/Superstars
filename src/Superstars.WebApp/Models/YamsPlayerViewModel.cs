@@ -1,6 +1,6 @@
 ﻿namespace Superstars.WebApp.Models
 {
-    public class YamsViewModel
+    public class YamsPlayerViewModel
     {
         public int YamsGameId { get; set; }
 

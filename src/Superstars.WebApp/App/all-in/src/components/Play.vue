@@ -2,7 +2,7 @@
   <div id="home">
     <div class="games">
       <div class="yams">
-        <router-link v-on:click.native="PlayYams(1)" to="/playyams">
+        <router-link v-on:click.native="PlayYams(2)" to="/playyams">
           <img src="../img/LOGO1.png" alt="yams" id="imgyams">
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" id="textyams">
@@ -18,6 +18,7 @@
 <script>
 import { mapActions } from 'vuex';
 import GameApiService from '../services/GameApiService';
+import YamsApiService from '../services/YamsApiService';
 
 import Vue from 'vue';
 
@@ -27,6 +28,7 @@ export default {
 
    async PlayYams(gametype) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       //await this.executeAsyncRequest(() => GameApiService.CreateYamsGame(pot));
     }
   }
