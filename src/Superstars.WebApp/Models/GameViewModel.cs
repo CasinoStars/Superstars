@@ -4,7 +4,7 @@
     {
         public int GameID { get; set; }
 
-        public int GameType { get; set; }
+        public string GameType { get; set; }
         //public string GameType { get; set; }
 
     }

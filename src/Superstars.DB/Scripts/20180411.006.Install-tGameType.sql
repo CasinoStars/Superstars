@@ -1,6 +1,6 @@
 create table sp.tGameType
 (
-	GameType varchar(64) not null,
+	GameType nvarchar(64) not null,
 
 	constraint PK_GameType primary key(GameType)
 );

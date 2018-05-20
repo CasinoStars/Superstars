@@ -6,8 +6,7 @@ const endpoint = "/api/game";
 }
 
 async createGame(gametype) {
-    console.log(gametype);
-    return await postAsync(endpoint,gametype);
+    return await postAsync(`${endpoint}/${gametype}`);
 }
 
 

@@ -1,6 +1,6 @@
 ﻿create table sp.tElo
 (
-	GameTypeId varchar(64) not null,
+	GameTypeId nvarchar(64) not null,
 	UserId int not null,
 	Elo int,
 

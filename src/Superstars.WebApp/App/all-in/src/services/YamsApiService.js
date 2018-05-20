@@ -3,7 +3,7 @@ const endpoint = "/api/yams";
 
 class YamsApiService {
     constructor(){
-        
+
     }
 
     async RollDices(model, myDices, selectedDices) {
@@ -11,7 +11,7 @@ class YamsApiService {
     }
 
     async CreateYamsPlayer(model) {
-        return await postAsync(endpoint, model)
+        return await postAsync(`${endpoint}/createPlayer`, model)
     }
 }
 export default new YamsApiService();

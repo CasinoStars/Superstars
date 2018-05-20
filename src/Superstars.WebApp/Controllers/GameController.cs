@@ -18,8 +18,8 @@ namespace Superstars.WebApp.Controllers
             _gameGateway = gameGateway;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateGame(int gametype)
+        [HttpPost("{gametype}")]
+        public async Task<IActionResult> CreateGame(string gametype)
         {
             Result result = await _gameGateway.CreateGame(gametype);
             Result result2 = await _gameGateway.CreateYamsGame(500);

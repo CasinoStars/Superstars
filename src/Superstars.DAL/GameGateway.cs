@@ -30,7 +30,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateGame(int gameType)
+        public async Task<Result<int>> CreateGame(string gameType)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {

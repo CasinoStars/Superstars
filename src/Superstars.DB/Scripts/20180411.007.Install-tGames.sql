@@ -1,7 +1,7 @@
 create table sp.tGames
 (
 	GameId int identity(0,1),
-	GameType varchar(64) not null,
+	GameType nvarchar(64) not null,
 	StartDate datetime not null,
 	EndDate datetime,
 	Winner int,
