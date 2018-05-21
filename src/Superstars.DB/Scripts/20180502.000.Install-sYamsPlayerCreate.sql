@@ -1,23 +1,29 @@
 create proc sp.sYamsPlayerCreate
-(
-	@YamsPlayerId int out,
-	@YamsGameId int,
+(	
+	@PlayerId int out,
+	@Pseudo nvarchar(64) out,
 	@NbrRevives int,
 	@Dices varchar(6),
 	@DicesValue int
 )
 as
+	declare @YamsPlayerId int;
+	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = @Pseudo);
+	declare @GameId int;
+	set @GameId = (select top 1 GameId from sp.tGames order by StartDate desc);
+
 begin
     set transaction isolation level serializable;
 	begin tran;
 
-        if exists(select * from sp.tYamsPlayer y where y.[YamsGameId] = @YamsGameId)
+        if exists(select * from sp.tYamsPlayer y where y.[YamsGameId] = @GameId)
 	begin
 		rollback;
 		return 1;
 	end;
-    insert into sp.tYamsPlayer([Dices], [NbrRevives], [DicesValue]) values(@Dices, @NbrRevives, @DicesValue);
-	set @YamsPlayerId = scope_identity();
+
+    insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@YamsPlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);
+	set @PlayerId = @YamsPlayerId;
 	commit;
     return 0;
 end;

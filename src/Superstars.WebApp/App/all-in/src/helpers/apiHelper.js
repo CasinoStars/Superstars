@@ -18,7 +18,6 @@ async function toJSON(resp) {
 }
 
 export async function postAsync(url, data) {
-    console.log(data);
     return await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -36,6 +35,7 @@ export async function putAsync(url, data) {
         body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AuthService.accessToken}`
         }
     })
     .then(checkErrors)
@@ -46,6 +46,7 @@ export async function getAsync(url) {
     return await fetch(url, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${AuthService.accessToken}`
         }
     })
     .then(checkErrors)
@@ -56,6 +57,7 @@ export async function deleteAsync(url) {
     return await fetch(url, {
         method: 'DELETE',
         headers: {
+            'Authorization': `Bearer ${AuthService.accessToken}`
         }
     })
     .then(checkErrors)

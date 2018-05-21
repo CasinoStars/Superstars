@@ -24,6 +24,12 @@
     </div>
 
   <br><div style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
+
+  <strong> {{ dices }} </strong>
+  <li v-for="i of dices" :key="i">
+    <img v-bind:src='`/../img/dice${i}.png`' :alt='`dice${i}`'>
+  </li>
+
   <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg">ROLL</button></div>
   </form>
 </div>
@@ -32,19 +38,30 @@
 <script>
 import { mapActions } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
+import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 
 export default {
   data(){
     return {
-      selected: []
+      selected: [],
+      dices: []
     }
+  },
+
+  async mounted() {
+    await this.refreshDices();
   },
   
   methods: {
     ...mapActions(['executeAsyncRequest']),
+
+    async refreshDices() {
+      this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices(UserApiService.pseudo));
+    },
+
     async onSubmit(e) {
-      await this.executeAsyncRequest(() => YamsApiService.RollDices(selected));
+      await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, dices, selected));
     }
   }
 }

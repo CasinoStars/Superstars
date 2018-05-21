@@ -4,6 +4,7 @@ using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using System.Threading.Tasks;
 using Superstars.WebApp.Models;
+using System.Collections.Generic;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -12,25 +13,37 @@ namespace Superstars.WebApp.Controllers
     public class YamsController : Controller
     {
         readonly YamsGateway _yamsGateway;
+        readonly UserGateway _userGateway;
 
-        public YamsController(YamsGateway yamsGateway)
+        public YamsController(YamsGateway yamsGateway, UserGateway userGateway)
         {
             _yamsGateway = yamsGateway;
+            _userGateway = userGateway;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RollDices([FromBody] YamsPlayerViewModel model, int[] mydices, int[] selectedDices = null)
+        [HttpPost("{pseudo}/{myDices}/{selectedDices}")]
+        public async Task<IActionResult> RollDices(string pseudo, int[] myDices, int[] selectedDices = null)
         {
-            //mydices = _yamsGateway.IndexChange(mydices, selectedDices);
-            //mydices = _yamsGateway.Reroll(mydices);
-            Result result = await _yamsGateway.UpdateYamsPlayer(model.YamsGameId, model.NbrRevives, model.Dices, model.DicesValue);
+            UserData user = await _userGateway.FindByName(pseudo);
+            YamsData data = await _yamsGateway.GetPlayer(user.UserId);
+            myDices = _yamsGateway.IndexChange(myDices, selectedDices);
+            myDices = _yamsGateway.Reroll(myDices);
+            Result result = await _yamsGateway.UpdateYamsPlayer(data.YamsGameId, data.NbrRevives, data.Dices, data.DicesValue);
             return this.CreateResult(result);
         }
 
-        [HttpPost("createPlayer")]
-        public async Task<IActionResult> CreateYamsPlayer([FromBody] YamsPlayerViewModel model)
+        [HttpGet("{pseudo}")]
+        public async Task<IActionResult> GetPlayerDices(string pseudo)
         {
-            Result result = await _yamsGateway.CreateYamsPlayer(model.YamsGameId, model.NbrRevives, model.Dices, model.DicesValue);
+            UserData user = await _userGateway.FindByName(pseudo);
+            Result<string> result = await _yamsGateway.GetPlayerDices(user.UserId);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{pseudo}")]
+        public async Task<IActionResult> CreateYamsPlayer(string pseudo)
+        {
+            Result result = await _yamsGateway.CreateYamsPlayer(pseudo, 0, "12345", 0);
             return this.CreateResult(result);
         }
     }

@@ -19,6 +19,7 @@
 import { mapActions } from 'vuex';
 import GameApiService from '../services/GameApiService';
 import YamsApiService from '../services/YamsApiService';
+import UserApiService from '../services/UserApiService';
 
 import Vue from 'vue';
 
@@ -28,7 +29,7 @@ export default {
 
    async PlayYams(gametype) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer(UserApiService.pseudo));
       //await this.executeAsyncRequest(() => GameApiService.CreateYamsGame(pot));
     }
   }

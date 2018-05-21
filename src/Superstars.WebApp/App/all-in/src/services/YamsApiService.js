@@ -1,4 +1,4 @@
-import { postAsync } from "../helpers/apiHelper";
+import { postAsync, getAsync } from "../helpers/apiHelper";
 const endpoint = "/api/yams";
 
 class YamsApiService {
@@ -6,12 +6,18 @@ class YamsApiService {
 
     }
 
-    async RollDices(model, myDices, selectedDices) {
-        return await postAsync(endpoint, model, myDices, selectedDices);
+    async RollDices(pseudo, myDices, selectedDices) {
+        return await postAsync(`${endpoint}/${pseudo}/${myDices}/${selectedDices}`);
     }
 
-    async CreateYamsPlayer(model) {
-        return await postAsync(`${endpoint}/createPlayer`, model)
+    async CreateYamsPlayer(pseudo) {
+        return await postAsync(`${endpoint}/${pseudo}`);
+    }
+
+    async GetPlayerDices(pseudo){
+        var dices = await getAsync(`${endpoint}/${pseudo}`) + '';
+        var array = dices.split('');
+        return array;
     }
 }
 export default new YamsApiService();
