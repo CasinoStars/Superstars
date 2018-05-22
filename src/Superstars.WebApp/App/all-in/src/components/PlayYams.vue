@@ -8,7 +8,7 @@
     <img src="../img/diceia4.png" alt="iadice4" id="iadice4">
     <img src="../img/diceia5.png" alt="iadice5" id="iadice5">
   </div>
-
+  <br><br><br>
   <form @submit="onSubmit($event)">
     <div v-for="i of dices" :key="i" class="playerdices">
       <img v-if="i == 1" src="../img/dice1.png" id="playerdice1">
@@ -16,7 +16,7 @@
       <img v-if="i == 3" src="../img/dice3.png" id="playerdice3">
       <img v-if="i == 4" src="../img/dice4.png" id="playerdice3">
       <img v-if="i == 5" src="../img/dice5.png" id="playerdice3">
-    </div>
+    </div><br>
       <input type="checkbox" id="dice1" value="1" v-model="selected">        
       <input type="checkbox" id="dice2" value="2" v-model="selected">        
       <input type="checkbox" id="dice3" value="3" v-model="selected">        
@@ -77,11 +77,9 @@ export default {
 }
 
   .playerdices {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    width: 43%;
+    display: inline-block;
+    padding-left : 15%;
+    width: 5%;
 }
 
 .iadices > img {
