@@ -1,4 +1,4 @@
-create proc sp.tGamesCreate
+create proc sp.sGamesCreate
 (
 	@GameId int out,
 	@GameType int,
