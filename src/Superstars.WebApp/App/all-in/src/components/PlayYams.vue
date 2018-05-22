@@ -10,25 +10,23 @@
   </div>
 
   <form @submit="onSubmit($event)">
-    <div class="playerdices">
-      <input type="checkbox" id="dice1" value="1" v-model="selected">        
-      <img src="../img/dice1.png" alt="dice1" id="playerdice1">
-      <input type="checkbox" id="dice2" value="2" v-model="selected">        
-      <img src="../img/dice2.png" alt="dice2" id="playerdice2">
-      <input type="checkbox" id="dice3" value="3" v-model="selected">        
-      <img src="../img/dice3.png" alt="dice3" id="playerdice3">
-      <input type="checkbox" id="dice4" value="4" v-model="selected">        
-      <img src="../img/dice4.png" alt="dice4" id="playerdice4">
-      <input type="checkbox" id="dice5" value="5" v-model="selected">
-      <img src="../img/dice5.png" alt="dice5" id="playerdice5">
+    <div v-for="i of dices" :key="i" class="playerdices">
+      <img v-if="i == 1" src="../img/dice1.png" id="playerdice1">
+      <img v-if="i == 2" src="../img/dice2.png" id="playerdice2">
+      <img v-if="i == 3" src="../img/dice3.png" id="playerdice3">
+      <img v-if="i == 4" src="../img/dice4.png" id="playerdice3">
+      <img v-if="i == 5" src="../img/dice5.png" id="playerdice3">
     </div>
+      <input type="checkbox" id="dice1" value="1" v-model="selected">        
+      <input type="checkbox" id="dice2" value="2" v-model="selected">        
+      <input type="checkbox" id="dice3" value="3" v-model="selected">        
+      <input type="checkbox" id="dice4" value="4" v-model="selected">        
+      <input type="checkbox" id="dice5" value="5" v-model="selected">
 
   <br><div style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
 
   <strong> {{ dices }} </strong>
-  <li v-for="i of dices" :key="i">
-    <img v-bind:src='`/../img/dice${i}.png`' :alt='`dice${i}`'>
-  </li>
+
 
   <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg">ROLL</button></div>
   </form>
@@ -69,6 +67,7 @@ export default {
 </script>
 
 <style>
+
   .iadices {
     display: block;
     margin-left: auto;
