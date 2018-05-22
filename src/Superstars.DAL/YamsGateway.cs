@@ -97,13 +97,24 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<string>> GetPlayerDices(int PlayerId)
+        public async Task<YamsData> GetGameId(int playerId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<YamsData>(
+                    "select top 1 t.YamsGameId from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId order by YamsGameId desc",
+                    new { YamsPlayerId = playerId });
+            }
+        }
+
+
+        public async Task<Result<string>> GetPlayerDices(int userId, int gameId)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 string data = await con.QueryFirstOrDefaultAsync<string>(
-                    @"select t.Dices from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId;",
-                    new { YamsPlayerId =  PlayerId}); 
+                    @"select t.Dices from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId;",
+                    new { YamsPlayerId = userId, YamsGameId = gameId }); 
                 if (data == null) return Result.Failure<string>(Status.NotFound, "Data not found.");
                 return Result.Success(data);
             }

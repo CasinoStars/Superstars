@@ -51,7 +51,9 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetPlayerDices(string pseudo)
         {
             UserData user = await _userGateway.FindByName(pseudo);
-            Result<string> result = await _yamsGateway.GetPlayerDices(user.UserId);
+            YamsData data = await _yamsGateway.GetGameId(user.UserId);
+
+            Result<string> result = await _yamsGateway.GetPlayerDices(user.UserId, data.YamsGameId);
             return this.CreateResult(result);
         }
 
