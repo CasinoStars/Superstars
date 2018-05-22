@@ -5,6 +5,7 @@ using Superstars.WebApp.Authentication;
 using System.Threading.Tasks;
 using Superstars.WebApp.Models;
 using System.Collections.Generic;
+using System;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -19,6 +20,7 @@ namespace Superstars.WebApp.Controllers
         {
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
+
         }
 
         [HttpPost("{pseudo}/{myDices}/{selectedDices}")]
@@ -26,9 +28,22 @@ namespace Superstars.WebApp.Controllers
         {
             UserData user = await _userGateway.FindByName(pseudo);
             YamsData data = await _yamsGateway.GetPlayer(user.UserId);
+            data.NbrRevives = data.NbrRevives + 1;
+            int[] secondarray = new int[5];
+            string dices = data.Dices;
+            for (int i = 0; i < 5; i++)
+            {
+                secondarray[i] = (int)char.GetNumericValue(dices[i]);
+            }
+            myDices = secondarray;
             myDices = _yamsGateway.IndexChange(myDices, selectedDices);
             myDices = _yamsGateway.Reroll(myDices);
-            Result result = await _yamsGateway.UpdateYamsPlayer(data.YamsGameId, data.NbrRevives, data.Dices, data.DicesValue);
+            string des = null;
+            for (int i = 0; i < myDices.Length; i++)
+            {
+                des += myDices[i];
+            }
+            Result result = await _yamsGateway.UpdateYamsPlayer(user.UserId, data.YamsGameId, data.NbrRevives, des, data.DicesValue);
             return this.CreateResult(result);
         }
 

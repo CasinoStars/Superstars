@@ -61,7 +61,8 @@ export default {
     },
 
     async onSubmit(e) {
-      await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, dices, selected));
+      e.preventDefault();
+      await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, this.selected));
     }
   }
 }

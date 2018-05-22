@@ -67,16 +67,16 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateYamsPlayer(int gameid, int nbturn, string dices, int dicesvalue)
+        public async Task<Result<int>> UpdateYamsPlayer(int playerid, int gameid, int nbturn, string dices, int dicesvalue)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
+                p.Add("@YamsPlayerId", playerid);
                 p.Add("@YamsGameId", gameid);
                 p.Add("@NbrRevives", nbturn);
                 p.Add("@Dices", dices);
                 p.Add("@DicesValue", dicesvalue);
-                p.Add("@YamsPlayerId", dbType: DbType.Int32, direction: ParameterDirection.Input);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sYamsPlayerUpdate", p, commandType: CommandType.StoredProcedure);
 
@@ -92,7 +92,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<YamsData>(
-                    "select t.YamsPlayerId, t.YamsGameId, t.NbrRevives, t.Dices, t.DicesValue from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId",
+                    "select t.YamsPlayerId, t.YamsGameId, t.NbrRevives, t.Dices, t.DicesValue from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId",
                     new { YamsPlayerId = playerId });
             }
         }
@@ -182,7 +182,7 @@ namespace Superstars.DAL
 
         public int[] Reroll(int[] dices)
         {
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     if (dices[i] == 0)
                     {
