@@ -9,27 +9,31 @@ namespace TestBlockChain
 {
     class informationSeeker
     {
-        public static void SeekPendingTrx(BitcoinSecret privateKey)
+        public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey)
         {
             var client = new QBitNinjaClient(Network.TestNet);
             List<GetTransactionResponse> responses = TransactionMaker.FindCoinInAWallet(privateKey, client);
+            List<GetTransactionResponse> unconfirmedTrx = new List<GetTransactionResponse>(); 
 
             foreach (var response in responses)
             {
-                if (response.Block.Confirmations == 0) Console.WriteLine(response.TransactionId + " Transaction ID ");
+                if (response.Block.Confirmations == 0) unconfirmedTrx.Add(response);
             }
+            return unconfirmedTrx;
         }
 
-        public static void HowMuchCoinInWallet(BitcoinSecret privateKey)
-        {
-            QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
 
-            Money spentAmount = Money.Zero;
-            foreach (var spentCoin in spentCoins)
+        public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey)
+        {
+            var client = new QBitNinjaClient(Network.TestNet);
+            List<GetTransactionResponse> responses = TransactionMaker.FindCoinInAWallet(privateKey, client);
+            Dictionary<OutPoint, double> UTXOS = TransactionMaker.FindUtxo(responses, privateKey, client, 3);
+            decimal total = 0;
+            foreach (var item in UTXOS)
             {
-                spentAmount = (Money)spentCoin.Amount.Add(spentAmount);
+                total += (decimal)item.Value;
             }
-            Console.WriteLine(spentAmount.ToDecimal(MoneyUnit.BTC));
+            return total;
         }
     }
 }
