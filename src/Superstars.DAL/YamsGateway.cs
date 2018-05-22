@@ -150,7 +150,7 @@ namespace Superstars.DAL
         {
                 for (int i = 0; i < index.Length; i++)
                 {
-                    dices[index[i-1]] = 0;
+                    dices[index[i]-1] = 0;
                 }
             return dices;
         }
