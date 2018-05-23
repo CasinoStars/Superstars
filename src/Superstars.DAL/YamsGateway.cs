@@ -92,7 +92,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<YamsData>(
-                    "select t.YamsPlayerId, t.YamsGameId, t.NbrRevives, t.Dices, t.DicesValue from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId",
+                    "select top 1 t.YamsPlayerId, t.YamsGameId, t.NbrRevives, t.Dices, t.DicesValue from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId order by YamsGameId desc",
                     new { YamsPlayerId = playerId });
             }
         }
