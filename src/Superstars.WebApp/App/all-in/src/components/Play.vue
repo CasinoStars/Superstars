@@ -1,21 +1,40 @@
 <template>
-    <div id="home">
-      <div class="games">
-          <div class="yams">
-            <router-link to="/playyams">
-            <img src="../img/LOGO1.png" alt="yams" id="imgyams">
-            </router-link>
-            <img src="../img/LOGO2.png" alt="textyams" id="textyams">
-          </div>
-            <img src="../img/LOGO1.png" alt="poker" id="imgpoker">     
-            <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
-            <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
-            <img src="../img/LOGO1.png" alt="game4" id="imggame4">
+  <div id="home">
+    <div class="games">
+      <div class="yams">
+        <router-link v-on:click.native="PlayYams('Yams')" to="/playyams">
+          <img src="../img/LOGO1.png" alt="yams" id="imgyams">
+        </router-link>
+        <img src="../img/LOGO2.png" alt="textyams" id="textyams">
       </div>
-
+      <img src="../img/LOGO1.png" alt="poker" id="imgpoker">     
+      <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
+      <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
+      <img src="../img/LOGO1.png" alt="game4" id="imggame4">
     </div>
-
+  </div>
 </template>
+
+<script>
+import { mapActions } from 'vuex';
+import GameApiService from '../services/GameApiService';
+import YamsApiService from '../services/YamsApiService';
+import UserApiService from '../services/UserApiService';
+
+import Vue from 'vue';
+
+export default {
+  methods: {
+    ...mapActions(['executeAsyncRequest']),
+
+   async PlayYams(gametype) {
+      await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer(UserApiService.pseudo));
+      //await this.executeAsyncRequest(() => GameApiService.CreateYamsGame(pot));
+    }
+  }
+}
+</script>
 
 <style>
   .games {

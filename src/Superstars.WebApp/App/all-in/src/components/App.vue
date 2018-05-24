@@ -11,25 +11,39 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-bar-chart" style="font-size: 1.6rem;"></i> STATISTICS
+              <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTICS
             </router-link>
           </li>
-        </ul>
-        <div class="collapse navbar-collapse" id="navbarText" v-if="auth.isConnected">
-          <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <router-link class="nav-link" to="/playersStats">Classement</router-link>
+              <router-link class="nav-link" to="/playersStats" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-trophy" style="font-size: 1.4rem;"></i> CLASSEMENT
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/rule" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-info-circle" style="font-size: 1.4rem;"></i> RÈGLES
+              </router-link>
+            </li>
+        </ul>
+
+        <div class="collapse navbar-collapse" id="navbarText" v-if="auth.isConnected">
+          <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
+              </router-link>
             </li>
           </ul>
-          <ul class="navbar-nav my-2 my-md-0">
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
               <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ auth.pseudo }}
               </a>
-              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown">
-                <router-link class="dropdown-item" to="/wallet">Porte-feuille</router-link>
-                <router-link class="dropdown-item" to="/settings">Régagles</router-link>
-                <router-link class="dropdown-item" to="/logout">Se déconnecter</router-link>
+              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:130%; right:-35%">
+                <router-link class="dropdown-item" to="/wallet"><i class="fa fa-diamond"></i>     Porte-feuille</router-link>
+                <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"></i>     Régagles</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"></i>     Déconnexion</router-link>
               </div>
             </li>
           </ul>
