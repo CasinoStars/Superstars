@@ -14,74 +14,15 @@ namespace TestBlockChain
 {
     class TransactionMaker
     {
-        public static List<GetTransactionResponse> FindCoinInAWallet(BitcoinSecret key, QBitNinjaClient client)
+        /// <summary>
+        /// Cette classe a la responsabilité de crée des transaction et de les envoyer
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public static Transaction MakeATransaction(BitcoinSecret privateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee, int nbOfConfimationReq, QBitNinjaClient client)
         {
-            List<GetTransactionResponse> transactionsResponses = new List<GetTransactionResponse>();
-            var historyTransaction = client.GetBalance(key);
-            int i = 0;
-
-            foreach (var tx in historyTransaction.Result.Operations)
-            {
-                transactionsResponses.Add(client.GetTransaction(tx.TransactionId).Result);
-                i++;
-            }
-            return transactionsResponses;
-        }
-
-        public static Dictionary<OutPoint, double> FindUtxo(List<GetTransactionResponse> responses, BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
-        {
-            List<OutPoint> trxSignedWithOurSpk = new List<OutPoint>();
-
-            for (int i = 0; i < responses.Count; i++)
-            {
-                var receivedCoins = responses[i].ReceivedCoins;
-                OutPoint outPointToSpend = null;
-                foreach (var coin in receivedCoins)
-                {
-                    if (coin.TxOut.ScriptPubKey == bitcoinPrivateKey.ScriptPubKey)
-                    {
-                        trxSignedWithOurSpk.Add(coin.Outpoint);
-                        outPointToSpend = coin.Outpoint;
-
-                    }
-                }
-            }
-            List<GetTransactionResponse> ResponseSignWithOurPrivateKey = new List<GetTransactionResponse>();
-            List<OutPoint> prevouts = new List<OutPoint>();
-
-
-            foreach (var item in responses)
-            {
-                foreach (var intput in item.Transaction.Inputs)
-                {
-                    prevouts.Add(intput.PrevOut);
-                }
-            }
-            List<OutPoint> utxo = new List<OutPoint>();
-
-            foreach (var item in trxSignedWithOurSpk)
-            {
-                if (!prevouts.Contains(item)) utxo.Add(item);
-            }
-
-            Dictionary<OutPoint, double> UTXOs = new Dictionary<OutPoint, double>();
-
-            for (int i = 0; i < utxo.Count; i++)
-            {
-                var trx = uint256.Parse(utxo[i].Hash.ToString());
-                GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
-                if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
-               // Console.WriteLine(trxResponse.TransactionId + " Transaction ID" + trxResponse.Block.Confirmations + "  Confirmation");
-                double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
-                UTXOs.Add(utxo[i], value);
-            }
-            return UTXOs;
-        }
-        public static void MakeATransaction(BitcoinSecret privateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee, int nbOfConfimationReq)
-        {
-            var client = new QBitNinjaClient(Network.TestNet);
-            List<GetTransactionResponse> responses = FindCoinInAWallet(privateKey, client);
-            Dictionary<OutPoint, double> UTXOS = FindUtxo(responses, privateKey, client, nbOfConfimationReq);
+            Dictionary<OutPoint, double> UTXOS = informationSeeker.FindUtxo(privateKey, client, nbOfConfimationReq);
             var transaction = new Transaction();
             var me = privateKey.GetAddress();
             decimal total = 0;
@@ -134,6 +75,11 @@ namespace TestBlockChain
             transaction.Outputs.Add(changeBackTxOut);
             transaction.Sign(privateKey, false);
 
+            return transaction;         
+        }
+
+        public static void BroadCastTransaction(Transaction transaction, QBitNinjaClient client)
+        {
             BroadcastResponse broadcastResponse = client.Broadcast(transaction).Result;
 
             if (!broadcastResponse.Success)
@@ -147,6 +93,7 @@ namespace TestBlockChain
                 Console.WriteLine(transaction.GetHash());
             }
         }
+       
     }
 }
 
