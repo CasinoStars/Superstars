@@ -61,6 +61,45 @@ namespace Superstars.WebApp.Controllers
 			ChooseDicesForReroll();
 		}
 
+		// Espérance de Gain
+		// (Prob win) x (nb de point si win) - (Prob Lose) x (nb de point si lose)
+		
+		private void EsperanceGain()
+		{
+			float EspGain = 0;
+			float espg_actuel;
+			//_myhand = [x, j, z, k, m];
+			// si on reroll qu'un dé
+			for(int i =0;i<5;i++)
+			{
+				int[] _myhandtest = _myhand;
+				for(int j=0; j<5;j++)
+				{
+					if (j!=_myhand[i])
+					{
+						_myhandtest[i] =j;
+						int points = PointCount(_myhandtest);
+						espg_actuel = ((1/6) * (points)) - ((1/6) * (_mypoints));
+					}
+				}
+			}
+
+			// on prend 2 membre du tableau
+			for (int i = 0; i < 5; i++)
+			{
+				int[] _myhandtest = _myhand;
+				for (int j = 0; j < 5; j++)
+				{
+					if (j != _myhand[i])
+					{
+						_myhandtest[i] = j;
+						int points = PointCount(_myhandtest);
+						espg_actuel = ((1 / 6) * (points)) - ((1 / 6) * (_mypoints));
+					}
+				}
+			}
+		}
+
 		private int[] ChooseDicesForReroll()
 		{
 			SortHand(_myhand);
