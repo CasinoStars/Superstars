@@ -1,7 +1,7 @@
-create proc sp.sMoneyCreate
+create proc sp.sMoneyDelete
 (
 	@MoneyId int out,
-	@MoneyType varchar,
+	@MoneyType varchar
 )
 as
 begin
