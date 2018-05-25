@@ -17,12 +17,13 @@
       <img v-if="i == 4" src="../img/dice4.png" id="playerdice3">
       <img v-if="i == 5" src="../img/dice5.png" id="playerdice3">
     </div><br>
+    <div class="checkbox">
       <input type="checkbox" id="dice1" value="1" v-model="selected">        
-      <input type="checkbox" id="dice2" value="2" v-model="selected">        
+      <input type="checkbox" id="dice2" value="2" v-model="selected">
       <input type="checkbox" id="dice3" value="3" v-model="selected">        
       <input type="checkbox" id="dice4" value="4" v-model="selected">        
       <input type="checkbox" id="dice5" value="5" v-model="selected">
-
+    </div>
   <br><div style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
 
   <strong> {{ dices }} </strong>
@@ -77,10 +78,16 @@ export default {
 }
 
   .playerdices {
-    display: inline-block;
-    padding-left : 15%;
-    width: 5%;
+	display: inline-block;
+	position: relative;
+  width: 8%;
+	left: 30.2%
 }
+
+  .checkbox {
+    text-align: center;
+    letter-spacing: 100px;
+  }
 
 .iadices > img {
   height: 100px;
