@@ -13,8 +13,98 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class YamsController : Controller
     {
-        readonly YamsGateway _yamsGateway;
-        readonly UserGateway _userGateway;
+		#region Champs
+		Random rdn = new Random();
+		int[] _mydices = new int[5];
+		int[] _IAdices = new int[5];
+		int _IApoints,_MYpoints;
+		bool _IsIAturn;
+		int _IAturn,_MYturn;
+		#endregion
+		public YamsController()
+		{
+			_IsIAturn = false;
+			_IAturn = 0;
+			_MYturn = 0;
+			while(_MYturn<3)
+			{
+				FirstShot();
+				//IndexChange();
+				Reroll();
+				_MYturn++;
+			}
+			_IsIAturn = true;
+			while(_IAturn<3)
+			{
+				FirstShot();
+				//IndexChange();
+				Reroll();
+				_IAturn++;
+			}
+			_MYpoints = PointCount(_mydices);
+			_IApoints = PointCount(_IAdices);
+			FindWinner();
+		}
+		#region méthodes
+		private void FirstShot()
+		{
+			if(_IsIAturn==true)
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					_IAdices[i] = RollDice();
+				}
+			}
+		    else if(_IsIAturn== false)
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					_mydices[i] = RollDice();
+				}
+			}
+		}
+	
+	    private void IndexChange(int[] index)
+		{
+			if(_IsIAturn==true)
+			{
+				for (int i = 0; i < index.Length; i++)
+				{
+					_IAdices[index[i]] = 0;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < index.Length; i++)
+				{
+					_mydices[index[i]] = 0;
+				}
+			}
+		}
+		
+		private void Reroll()
+		{
+			if (_IsIAturn == false)
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					if (_mydices[i] == 0)
+					{
+						_mydices[i] = RollDice();
+					}
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					if (_IAdices[i] == 0)
+					{
+						_IAdices[i] = RollDice();
+					}
+				}
+			}
+		}
 
         public YamsController(YamsGateway yamsGateway, UserGateway userGateway)
         {
@@ -64,4 +154,8 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
     }
+	#endregion
 }
+
+        readonly YamsGateway _yamsGateway;
+        readonly UserGateway _userGateway;
