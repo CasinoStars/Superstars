@@ -26,7 +26,6 @@ namespace TestBlockChain
             return unconfirmedTrxs;
         }
 
-
         public static List<GetTransactionResponse> SeekAllTransaction(BitcoinSecret key, QBitNinjaClient client)
         {
             List<GetTransactionResponse> transactionsResponses = new List<GetTransactionResponse>();

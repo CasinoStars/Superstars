@@ -61,6 +61,9 @@ namespace TestBlockChain
              decimal totalCoinInWallet = informationSeeker.HowMuchCoinInWallet(bitcoinPrivateKey,client);
              List<GetTransactionResponse> alltrxPending = informationSeeker.SeekPendingTrx(bitcoinPrivateKey, client);
 
+            Transaction trx1 = TransactionMaker.MakeATransaction(bitcoinPrivateKey,publicAddress2, 0.7m, 0.05m, 0, client);
+
+            TransactionMaker.BroadCastTransaction(trx1,client);
 
             Console.WriteLine(totalCoinInWallet + " Btc In Wallet");
 
