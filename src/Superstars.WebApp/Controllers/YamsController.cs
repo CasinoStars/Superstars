@@ -24,8 +24,8 @@ namespace Superstars.WebApp.Controllers
 
         }
 
-        [HttpPost("{pseudo}/{myDices}/{selectedDices}")]
-        public async Task<IActionResult> RollDices(string pseudo, int[] myDices, int[] selectedDices = null)
+        [HttpPost("{pseudo}/{myDices}")]
+        public async Task<IActionResult> RollDices(string pseudo, int[] myDices, [FromBody] int[] selectedDices = null)
         {
             UserData user = await _userGateway.FindByName(pseudo);
             YamsData data = await _yamsGateway.GetPlayer(user.UserId);
