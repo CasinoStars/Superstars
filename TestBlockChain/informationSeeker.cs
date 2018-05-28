@@ -14,6 +14,7 @@ namespace TestBlockChain
         /// </summary>
         /// <param name="privateKey"></param>
         /// <returns></returns>
+        /// 
         public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -40,7 +41,6 @@ namespace TestBlockChain
             return transactionsResponses;
         }
 
-
         public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -53,9 +53,9 @@ namespace TestBlockChain
             return total;
         }
 
-
         public static Dictionary<OutPoint, double> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
         {
+
 
             List<GetTransactionResponse> responses = SeekAllTransaction(bitcoinPrivateKey, client);
             List<OutPoint> trxSignedWithOurSpk = new List<OutPoint>();
@@ -98,13 +98,10 @@ namespace TestBlockChain
                 var trx = uint256.Parse(utxo[i].Hash.ToString());
                 GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
                 if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
-                // Console.WriteLine(trxResponse.TransactionId + " Transaction ID" + trxResponse.Block.Confirmations + "  Confirmation");
                 double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
                 UTXOs.Add(utxo[i], value);
             }
             return UTXOs;
         }
-
-
     }
 }

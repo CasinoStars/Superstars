@@ -57,11 +57,20 @@ namespace TestBlockChain
 
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
 
-             List<GetTransactionResponse> alltrx = informationSeeker.SeekAllTransaction(bitcoinPrivateKey, client);
-             decimal totalCoinInWallet = informationSeeker.HowMuchCoinInWallet(bitcoinPrivateKey,client);
-             List<GetTransactionResponse> alltrxPending = informationSeeker.SeekPendingTrx(bitcoinPrivateKey, client);
+             List<GetTransactionResponse> alltrx = informationSeeker.SeekAllTransaction(bitcoinPrivateKey2, client);
+             decimal totalCoinInWallet = informationSeeker.HowMuchCoinInWallet(bitcoinPrivateKey2,client);
+             List<GetTransactionResponse> alltrxPending = informationSeeker.SeekPendingTrx(bitcoinPrivateKey2, client);
 
-            Transaction trx1 = TransactionMaker.MakeATransaction(bitcoinPrivateKey,publicAddress2, 0.7m, 0.05m, 0, client);
+             Dictionary<OutPoint,double> UTXOS =  informationSeeker.FindUtxo(bitcoinPrivateKey2, client, 3);
+
+            foreach (var item in UTXOS)
+            {
+                Console.WriteLine(item.Value +  "  TEST");
+                Console.WriteLine(item.Key + " TEST");
+            }
+
+
+            Transaction trx1 = TransactionMaker.MakeATransaction(bitcoinPrivateKey2,publicAddress, 3.7m, 0.05m, 6, client);
 
             TransactionMaker.BroadCastTransaction(trx1,client);
 
@@ -76,9 +85,7 @@ namespace TestBlockChain
             foreach (var item in alltrxPending)
             {
                 Console.WriteLine(item.TransactionId + " Pending");
-            }
-            
-       
+            }       
             Console.ReadKey();
         }
     }

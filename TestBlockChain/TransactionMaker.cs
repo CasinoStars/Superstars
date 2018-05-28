@@ -20,44 +20,30 @@ namespace TestBlockChain
         /// <param name="key"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static Transaction MakeATransaction(BitcoinSecret privateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee, int nbOfConfimationReq, QBitNinjaClient client)
+        public static Transaction MakeATransaction(BitcoinSecret senderPrivateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee, int nbOfConfimationReq, QBitNinjaClient client)
         {
-            Dictionary<OutPoint, double> UTXOS = informationSeeker.FindUtxo(privateKey, client, nbOfConfimationReq);
+            decimal total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
+            if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
+
+            Dictionary<OutPoint, double> UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client, nbOfConfimationReq);
             var transaction = new Transaction();
-            var me = privateKey.GetAddress();
-            decimal total = 0;
-
-            List<decimal> dif = new List<decimal>();
-            foreach (var item in UTXOS)
-            {
-               if((decimal)item.Value - (amountToSend - minerFee) > 0) dif.Add((decimal)item.Value - (amountToSend - minerFee));           
-            }
-
+            var senderScriptPubKey = senderPrivateKey.GetAddress().ScriptPubKey;
             var sortedDict = from entry in UTXOS orderby entry.Value descending select entry;
-            int index = 0;
-            double value = 0;
+            decimal totalToSend = amountToSend + minerFee;
 
-            foreach (var item in sortedDict)
-            {
-                value += item.Value;
-                if ((decimal)value > amountToSend) break;
-                index++;
-            }
             int p = 0;
-            foreach (var item in sortedDict)
+            decimal valueOfInputs = 0;
+            foreach (var utxo in sortedDict)
             {
                 transaction.Inputs.Add(new TxIn()
                 {
-                    PrevOut = item.Key
+                    PrevOut = utxo.Key
                 });
-                transaction.Inputs[p].ScriptSig = me.ScriptPubKey;
-                total += (decimal)item.Value;
-                if (p == index) break;
-                if (total > amountToSend + minerFee) break;
+                valueOfInputs += (decimal)utxo.Value;
+                transaction.Inputs[p].ScriptSig = senderScriptPubKey;
+                if (valueOfInputs > totalToSend) break;
                 p++;                
             }
-
-            if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
 
             TxOut destinationTxOut = new TxOut()
             {
@@ -67,13 +53,13 @@ namespace TestBlockChain
 
             TxOut changeBackTxOut = new TxOut()
             {
-                Value = new Money(total - amountToSend - minerFee, MoneyUnit.BTC),
-                ScriptPubKey = me.ScriptPubKey
+                Value = new Money(valueOfInputs - totalToSend, MoneyUnit.BTC),
+                ScriptPubKey = senderScriptPubKey
             };
 
             transaction.Outputs.Add(destinationTxOut);
             transaction.Outputs.Add(changeBackTxOut);
-            transaction.Sign(privateKey, false);
+            transaction.Sign(senderPrivateKey, false);
 
             return transaction;         
         }
@@ -92,8 +78,7 @@ namespace TestBlockChain
                 Console.WriteLine("Success! You can check out the hash of the transaciton in any block explorer:");
                 Console.WriteLine(transaction.GetHash());
             }
-        }
-       
+        }       
     }
 }
 
