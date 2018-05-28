@@ -120,6 +120,16 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> GetTurn(int playerId, int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                int data =  await con.QueryFirstOrDefaultAsync<int>(
+                    "select top 1 t.NbrRevives from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId order by YamsGameId desc",
+                    new { YamsPlayerId = playerId, YamsGameId = gameId });
+                return Result.Success(data);
+            }
+        }
         #region méthodes
         private void FirstShot()
         {

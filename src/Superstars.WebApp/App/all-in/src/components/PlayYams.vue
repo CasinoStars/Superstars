@@ -1,6 +1,6 @@
 <template>
 <div class="page">
-
+<div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;"> <h3> TOUR:{{nbTurn}} </h3></div>
   <div class="iadices">
     <img src="../img/diceia1.png" alt="iadice1" id="iadice1">
     <img src="../img/diceia2.png" alt="iadice2" id="iadice2">
@@ -11,13 +11,13 @@
   <br><br><br>
   <form @submit="onSubmit($event)">
     <div v-for="i of dices" class="playerdices">
-      <img v-if="i == 1" src="../img/dice1.png" id="playerdice1">
-      <img v-if="i == 2" src="../img/dice2.png" id="playerdice2">
-      <img v-if="i == 3" src="../img/dice3.png" id="playerdice3">
-      <img v-if="i == 4" src="../img/dice4.png" id="playerdice3">
-      <img v-if="i == 5" src="../img/dice5.png" id="playerdice3">
+      <img v-if="i == 1" src="../img/dice1.png">
+      <img v-if="i == 2" src="../img/dice2.png">
+      <img v-if="i == 3" src="../img/dice3.png">
+      <img v-if="i == 4" src="../img/dice4.png">
+      <img v-if="i == 5" src="../img/dice5.png">
     </div><br>
-    <div class="checkbox">
+    <div class="checkbox" v-if="nbTurn != 0">
       <input type="checkbox" id="dice1" value="1" v-model="selected">        
       <input type="checkbox" id="dice2" value="2" v-model="selected">
       <input type="checkbox" id="dice3" value="3" v-model="selected">        
@@ -27,7 +27,6 @@
   <br><div style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
 
   <strong> {{ dices }} </strong>
-
 
   <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg">ROLL</button></div>
   </form>
@@ -44,7 +43,8 @@ export default {
   data(){
     return {
       selected: [],
-      dices: []
+      dices: [],
+      nbTurn: 0,
     }
   },
 
@@ -59,10 +59,18 @@ export default {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices(UserApiService.pseudo));
     },
 
+    async changeTurn() {
+      this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn(UserApiService.pseudo))
+    },
+
     async onSubmit(e) {
       e.preventDefault();
-      await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, this.selected));
+      if(this.nbTurn === 0)
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, [1,2,3,4,5]))
+      else
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, this.selected));
       await this.refreshDices();
+      await this.changeTurn();
     }
   }
 }
