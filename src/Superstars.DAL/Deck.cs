@@ -10,55 +10,44 @@ namespace Superstars.DAL
 
         public int[] Valeur = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
-        public Card[] DeckCards { get; set; }
+        public List<Card> DeckCards { get; set; }
 
-
-
-        public Card[] CreateDeck()
+        public void CreateDeck()
         {
-            Card[] newDeck = new Card[52];
-            var x = 0;
+            List<Card> NewDeck = new List<Card>();
 
             for (int i = 0; i < Symbole.Length; i++)
             {
                 for (int j = 0; j < Valeur.Length; j++)
                 {
-                    newDeck[x] = new Card(Symbole[i], Valeur[j]);
-                    x = x + 1;
+                    NewDeck.Add(new Card(Symbole[i], Valeur[j]));
                 }
             }
-            DeckCards = newDeck;
-            return newDeck;
+            DeckCards = NewDeck;
         }
 
         public void Shuffle()
         {
-            Card[] newDeck = new Card[52];
             for (int i = 0; i < 52; i++)
             {
-                newDeck[i] = RandomDraw();
+                DeckCards.Add(RandomDraw());
             }
-            DeckCards = newDeck;
         }
 
         public Card RandomDraw()
         {
             Random rnd = new Random();
-            int random = rnd.Next(1, 52);
-            Card drawedCard = DeckCards[random];
-            var kk = new List<Card>(DeckCards);
-            kk.RemoveAt(random);
-            DeckCards = kk.ToArray();
+            int random = rnd.Next(1, DeckCards.Count);
+            var drawedCard = DeckCards.ElementAt(random);
+            DeckCards.RemoveAt(random);
             return drawedCard;
         }
 
         public Card Draw()
         {
-            int top = DeckCards.Length - 1;
-            var drawedcard = DeckCards[top];
-            var kk = new List<Card>(DeckCards);
-            kk.RemoveAt(top);
-            DeckCards = kk.ToArray();
+            int top = DeckCards.Count;
+            var drawedcard = DeckCards.ElementAt(top);
+            DeckCards.RemoveAt(top);
             return drawedcard;
         }
     }
