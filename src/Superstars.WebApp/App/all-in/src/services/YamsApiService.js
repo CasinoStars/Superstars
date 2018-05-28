@@ -7,8 +7,8 @@ class YamsApiService {
     }
 
     async RollDices(pseudo, myDices, selectedDices) {
-        console.log('RollDices');
-        return await postAsync(`${endpoint}/${pseudo}/${myDices}/${selectedDices}`);
+        console.log(selectedDices);
+        return await postAsync(`${endpoint}/${pseudo}/${myDices}`, selectedDices);
     }
 
     async CreateYamsPlayer(pseudo) {
