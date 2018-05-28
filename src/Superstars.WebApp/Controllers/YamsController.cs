@@ -58,6 +58,16 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        [HttpGet("{pseudo}/getTurn")]
+        public async Task<IActionResult> GetTurn(string pseudo)
+        {
+            UserData user = await _userGateway.FindByName(pseudo);
+            YamsData data = await _yamsGateway.GetGameId(user.UserId);
+
+            Result<int> result = await _yamsGateway.GetTurn(user.UserId, data.YamsGameId);
+            return this.CreateResult(result);
+        }
+
         [HttpPost("{pseudo}")]
         public async Task<IActionResult> CreateYamsPlayer(string pseudo)
         {

@@ -20,5 +20,9 @@ class YamsApiService {
         var array = dices.split('');
         return array;
     }
+
+    async GetTurn(pseudo){
+        return await getAsync(`${endpoint}/${pseudo}/getTurn`);
+    }
 }
 export default new YamsApiService();
