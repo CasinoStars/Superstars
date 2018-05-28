@@ -10,7 +10,7 @@
   </div>
   <br><br><br>
   <form @submit="onSubmit($event)">
-    <div v-for="i of dices" :key="i" class="playerdices">
+    <div v-for="i of dices" class="playerdices">
       <img v-if="i == 1" src="../img/dice1.png" id="playerdice1">
       <img v-if="i == 2" src="../img/dice2.png" id="playerdice2">
       <img v-if="i == 3" src="../img/dice3.png" id="playerdice3">
@@ -62,6 +62,7 @@ export default {
     async onSubmit(e) {
       e.preventDefault();
       await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, this.selected));
+      await this.refreshDices();
     }
   }
 }
