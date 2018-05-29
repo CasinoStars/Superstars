@@ -10,7 +10,6 @@ namespace Superstars.DAL
     {
         readonly string _sqlstring;
 
-
         public GameGateway(string sqlstring)
         {
             _sqlstring = sqlstring;
