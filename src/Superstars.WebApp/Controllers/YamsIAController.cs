@@ -58,64 +58,256 @@ namespace Superstars.WebApp.Controllers
 			_mypoints = mypoints;
 			_myhand = myhand;
 			FillPointArray();
-			ChooseDicesForReroll();
 		}
-
-		// Espérance de Gain
-		// (Prob win) x (nb de point si win) - (Prob Lose) x (nb de point si lose)
 		
-		private void EsperanceGain()
+		private int[][] ToRerollHands()
 		{
-			float EspGain = 0;
-			float espg_actuel;
-			//_myhand = [x, j, z, k, m];
+			int[][] handAndProba = new int[10000][];
+			int points =_mypoints;
+			int place = 0;
 			// si on reroll qu'un dé
 			for(int i =0;i<5;i++)
 			{
+
 				int[] _myhandtest = _myhand;
-				for(int j=0; j<5;j++)
+				for(int j=1; j<6;j++)
 				{
-					if (j!=_myhand[i])
+					int proba = 1/6;
+					int[] myhand = new int[6]; 
+					_myhandtest[i] =j;
+					points = PointCount(_myhandtest);
+
+					if(points >= _mypoints)
 					{
-						_myhandtest[i] =j;
-						int points = PointCount(_myhandtest);
-						espg_actuel = ((1/6) * (points)) - ((1/6) * (_mypoints));
+						_myhandtest[i] = 0;
+						for(int z=0; z<5; z++)
+						{
+							myhand[z] = _myhandtest[z]; 
+						}
+						myhand[6] = proba;
+						handAndProba[place] = myhand;
+						place++;
 					}
 				}
 			}
-
-			// on prend 2 membre du tableau
-			for (int i = 0; i < 5; i++)
+			
+			// on prend 2 membres du tableau
+			// premier dé
+			for (int i = 0; i < 5; i++) // i  est la place(index) du premier dé dans la main
 			{
 				int[] _myhandtest = _myhand;
-				for (int j = 0; j < 5; j++)
+				for (int j = 1; j < 6; j++) // j est la valeur probable du premier dé
 				{
-					if (j != _myhand[i])
+					// le deuxième dé
+					for(int k=0;k!=i && k<5;k++ ) // k est l'index du deuxième dé dans la main 
 					{
-						_myhandtest[i] = j;
-						int points = PointCount(_myhandtest);
-						espg_actuel = ((1 / 6) * (points)) - ((1 / 6) * (_mypoints));
+						for(int m =1; m<6; m++) // m est la valeur du deuxième dé 
+						{
+							int proba = 1;
+							int[] myhand = new int[6];
+							_myhandtest[i] = j;
+							_myhandtest[k] = m;
+						    points = PointCount(_myhandtest);
+
+							if (_enemypoints < points )
+							{
+								_myhand[i] = 0;
+								_myhand[k] = 0;
+								for (int z = 0; z < 5; z++)
+								{
+									myhand[z] = _myhandtest[z];
+								}
+								myhand[6] = proba;
+								handAndProba[place] = myhand;
+								place++;
+							}
+						}
 					}
 				}
 			}
+
+			// pour 3 dés
+			// 1er dé
+			for (int i = 0; i < 5; i++) // i index du dé 1
+			{
+				int[] _myhandtest = _myhand;
+				for (int j = 1; j < 6; j++) // j valeur du dé 1
+				{
+					// le deuxième dé
+					for (int k = 0; k != i && k < 5; k++) // k index du dé 2
+					{
+						for (int l = 1; l < 6; l++) // l valeur du dé 1 
+						{
+							// le troisième dé
+							for (int m = 0; m != i && m < 5; m++) // m index du dé 3 
+							{
+								for (int n = 1; n < 6; n++) // n valeur du dé 1 
+								{
+									int[] myhand = new int[6];
+									int proba = 1;
+
+									_myhandtest[i] = j;
+									_myhandtest[k] = l;
+									_myhandtest[m] = n;
+									points = PointCount(_myhandtest);
+									if (_enemypoints < points)
+									{
+										_myhand[i] = 0;
+										_myhand[k] = 0;
+										_myhand[m] = 0;
+										for (int z = 0; z < 5; z++)
+										{
+											myhand[z] = _myhandtest[z];
+										}
+										myhand[6] = proba;
+										handAndProba[place] = myhand;
+										place++;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// pour 4 dés
+			// 1er dé
+			for (int i = 0; i < 5; i++) // i index du dé 1
+			{
+				int[] _myhandtest = _myhand;
+				for (int j = 1; j < 6; j++) // j valeur du dé 1
+				{
+					// le deuxième dé
+					for (int k = 0; k != i && k < 5; k++) // k index du dé 2
+					{
+						for (int l = 1; l < 6; l++) // l valeur du dé 2
+						{
+							// le troisième dé
+							for (int m = 0;m!=k && m != i && m < 5; m++) // m index du dé 3 
+							{
+								for (int n = 1; n < 6; n++) // n valeur du dé 3 
+								{
+									// le quatrième dé
+									for (int p = 0;p!=k && p!=m && p != i && p < 5; p++) // p index du dé 4
+									{
+										for (int q = 1; q < 6; q++) // q valeur du dé 4 
+										{
+											_myhandtest[i] = j;
+											_myhandtest[k] = l;
+											_myhandtest[m] = n;
+											_myhandtest[p] =q;
+
+											int proba = 9;
+											int[] myhand = new int[6]; 
+											points = PointCount(_myhandtest);
+											if (points > _enemypoints)
+											{
+												_myhand[i] = 0;
+												_myhand[k] = 0;
+												_myhand[m] = 0;
+												_myhand[p] = 0;
+
+												for (int z = 0; z < 5; z++)
+												{
+													myhand[z] = _myhandtest[z];
+												}
+												myhand[6] = proba;
+												handAndProba[place] = myhand;
+												place++;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// pour 5 dés
+			// 1er dé
+			for (int i = 0; i < 5; i++) // i index du dé 1
+			{
+				int[] _myhandtest = _myhand;
+				for (int j = 1; j < 6; j++) // j valeur du dé 1
+				{
+					// le deuxième dé
+					for (int k = 0; k != i && k < 5; k++) // k index du dé 2
+					{
+						for (int l = 1; l < 6; l++) // l valeur du dé 2
+						{
+							// le troisième dé
+							for (int m = 0; m != k && m != i && m < 5; m++) // m index du dé 3 
+							{
+								for (int n = 1; n < 6; n++) // n valeur du dé 3 
+								{
+									// le quatrième dé
+									for (int p = 0; p != k && p != m && p != i && p < 5; p++) // p index du dé 4
+									{
+										for (int q = 1; q < 6; q++) // q valeur du dé 4 
+										{
+											// le cinquième dé
+											for (int r = 0;r!=p && r != k && r != m && r != i && r < 5; r++) // p index du dé 5
+											{
+												for (int s = 1; s < 6; s++) // s valeur du dé 5 
+												{
+													_myhandtest[i] = j;
+													_myhandtest[k] = l;
+													_myhandtest[m] = n;
+													_myhandtest[p] = q;
+													_myhandtest[r] = s;
+													int[] myhand = new int[6];
+													int proba = 1;
+													points = PointCount(_myhandtest);
+													if (points > _enemypoints)
+													{
+														_myhand[i] = 0;
+														_myhand[k] = 0;
+														_myhand[m] = 0;
+														_myhand[p] = 0;
+														_myhand[r] = 0;
+
+														for (int z = 0; z < 5; z++)
+														{
+															myhand[z] = _myhandtest[z];
+														}
+														myhand[6] = proba;
+														handAndProba[place] = myhand;
+														place++;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return handAndProba;
 		}
 
-		private int[] ChooseDicesForReroll()
+		private int[] ChooseHand()
 		{
-			SortHand(_myhand);
-			int[] _handPlusPoint = new int[6];
-			for(int i = 0; i<5; i++)
+			int[][] LECACA = ToRerollHands();     
+			int[] tab = new int[5];
+			int count = LECACA.Length;
+			for(int i =0;i<count;i++)
 			{
-				_handPlusPoint[i] = _myhand[i];
+				if(LECACA[0][6]>LECACA[1][6])
+				{
+					LECACA[0][6] = LECACA[1][6];
+				}
+				for (int j = 1; j < (LECACA.Length - i); j++)
+				{
+					LECACA[j] = LECACA[j + 1]; 
+				}
 			}
-			_handPlusPoint[5] = _mypoints;
-
-
-
-
-			return _myhand;
+			return tab = LECACA[0];
 		}
 
+		#region Inutile
 		private void SortHand(int[] hand) // Décroissant
 		{
 			bool tableenordre = false;
@@ -357,6 +549,8 @@ namespace Superstars.WebApp.Controllers
 			}
 			return count;
 		}
+		#endregion
+
 		private int PointCount(int[] hand)
 		{
 			int[] handcount = new int[5];

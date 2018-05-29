@@ -26,21 +26,6 @@ namespace Superstars.DAL
             _IsIAturn = false;
             _IAturn = 0;
             _MYturn = 0;
-            /*while (_MYturn < 3)
-            {
-                FirstShot();
-                //IndexChange();
-                Reroll();
-                _MYturn++;
-            }
-            _IsIAturn = true;
-            while (_IAturn < 3)
-            {
-                FirstShot();
-                //IndexChange();
-                Reroll();
-                _IAturn++;
-            }*/  
             _MYpoints = PointCount(_mydices);
             _IApoints = PointCount(_IAdices);
             FindWinner();
@@ -128,24 +113,6 @@ namespace Superstars.DAL
             }
         }
 
-        //public void IndexChange(int[] index)
-        //{
-        //    if (_IsIAturn == true)
-        //    {
-        //        for (int i = 0; i < index.Length; i++)
-        //        {
-        //            _IAdices[index[i]] = 0;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        for (int i = 0; i < index.Length; i++)
-        //        {
-        //            _mydices[index[i]] = 0;
-        //        }
-        //    }
-        //}
-
         public int[] IndexChange(int[] dices, int[] index)
         {
                 for (int i = 0; i < index.Length; i++)
@@ -154,31 +121,6 @@ namespace Superstars.DAL
                 }
             return dices;
         }
-
-
-        //public void Reroll()
-        //{
-        //    if (_IsIAturn == false)
-        //    {
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            if (_mydices[i] == 0)
-        //            {
-        //                _mydices[i] = RollDice();
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            if (_IAdices[i] == 0)
-        //            {
-        //                _IAdices[i] = RollDice();
-        //            }
-        //        }
-        //    }
-        //}
 
         public int[] Reroll(int[] dices)
         {
@@ -291,7 +233,6 @@ namespace Superstars.DAL
                     points = points + handcount[i - 1] * i;
                 }
             }
-
             return points;
         }
 
