@@ -63,5 +63,19 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> DeleteAis(string Pseudo)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pseudo", Pseudo);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sUserAIDelete", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<int>("@Status"));
+            }
+        }
     }
 }

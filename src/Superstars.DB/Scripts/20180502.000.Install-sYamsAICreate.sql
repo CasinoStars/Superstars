@@ -1,4 +1,4 @@
-create proc sp.sYamsPlayerCreate
+create proc sp.sYamsAICreate
 (	
 	@PlayerId int out,
 	@Pseudo nvarchar(64) out,
@@ -8,7 +8,7 @@ create proc sp.sYamsPlayerCreate
 )
 as
 	declare @YamsPlayerId int;
-	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = @Pseudo);
+	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = 'AI' + @Pseudo);
 	declare @GameId int;
 	set @GameId = (select top 1 GameId from sp.tGames order by StartDate desc);
 

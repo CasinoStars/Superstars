@@ -26,12 +26,13 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateYamsGame(YamsViewModel model)
-        //{
-        //    Result result = await _gameGateway.CreateYamsGame(model.Pot);
-        //    return this.CreateResult(result);
-        //}
+
+        [HttpDelete("{pseudo}/DeleteAis")]
+        public async Task<IActionResult> DeleteAI(string pseudo) 
+        {
+             Result result = await _gameGateway.DeleteAis(pseudo);
+             return this.CreateResult(result);
+        }
 
         [HttpGet]
         public async Task<Result<GameData>> FindGameById(int GameID)

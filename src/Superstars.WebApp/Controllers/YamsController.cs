@@ -16,16 +16,19 @@ namespace Superstars.WebApp.Controllers
 
         YamsGateway _yamsGateway;
         UserGateway _userGateway;
+        PasswordHasher _passwordHasher;
 
-        public YamsController(YamsGateway yamsGateway, UserGateway userGateway)
+
+        public YamsController(YamsGateway yamsGateway, UserGateway userGateway, PasswordHasher passwordHasher)
         {
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
+            _passwordHasher = passwordHasher;
 
         }
 
-        [HttpPost("{pseudo}/{myDices}")]
-        public async Task<IActionResult> RollDices(string pseudo, int[] myDices, [FromBody] int[] selectedDices = null)
+        [HttpPost("{pseudo}/Roll")]
+        public async Task<IActionResult> RollDices(string pseudo, [FromBody] int[] selectedDices = null)
         {
             UserData user = await _userGateway.FindByName(pseudo);
             YamsData data = await _yamsGateway.GetPlayer(user.UserId);
@@ -36,7 +39,7 @@ namespace Superstars.WebApp.Controllers
             {
                 secondarray[i] = (int)char.GetNumericValue(dices[i]);
             }
-            myDices = secondarray;
+            var myDices = secondarray;
             myDices = _yamsGateway.IndexChange(myDices, selectedDices);
             myDices = _yamsGateway.Reroll(myDices);
             string des = null;
@@ -68,10 +71,34 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("{pseudo}")]
+        [HttpPost("{pseudo}/createPlayer")]
         public async Task<IActionResult> CreateYamsPlayer(string pseudo)
         {
             Result result = await _yamsGateway.CreateYamsPlayer(pseudo, 0, "12345", 0);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{pseudo}/createAiUser")]
+        public async Task<IActionResult> createAiUser(string pseudo)
+        {   
+            UserData user = await _userGateway.FindByName(pseudo);
+
+
+            Result result = await _userGateway.CreateUser("AI" + pseudo, _passwordHasher.HashPassword(user.UserName), "");
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{pseudo}/createAI")]
+        public async Task<IActionResult> CreateYamsAiPlayer(string pseudo)
+        {
+            Result result = await _yamsGateway.CreateYamsAI(pseudo, 0, "12345", 0);
+            return this.CreateResult(result);
+        }
+
+        [HttpDelete("{pseudo}/deleteAI")]
+        public async Task<IActionResult> DeleteYamsAiPlayer(string pseudo) 
+        {
+            Result result = await _yamsGateway.DeleteYamsAi(pseudo);
             return this.CreateResult(result);
         }
     }

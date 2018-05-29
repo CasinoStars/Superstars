@@ -1,4 +1,4 @@
-import { postAsync } from "../helpers/apiHelper";
+import { postAsync, deleteAsync } from "../helpers/apiHelper";
 const endpoint = "/api/game";
 
  class GameApiService {
@@ -7,6 +7,10 @@ const endpoint = "/api/game";
 
 async createGame(gametype) {
     return await postAsync(`${endpoint}/${gametype}`);
+}
+
+async DeleteAis(pseudo) {
+    return await deleteAsync(`${endpoint}/${pseudo}/DeleteAis`);
 }
 
 
