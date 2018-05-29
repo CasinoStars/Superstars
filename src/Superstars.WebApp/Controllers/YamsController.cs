@@ -77,10 +77,3 @@ namespace Superstars.WebApp.Controllers
     }
 	
 }
-
-        [HttpPost("{pseudo}")]
-        public async Task<IActionResult> CreateYamsPlayer(string pseudo)
-        {
-            Result result = await _yamsGateway.CreateYamsPlayer(pseudo, 0, "12345", 0);
-            return this.CreateResult(result);
-        }
