@@ -290,21 +290,27 @@ namespace Superstars.WebApp.Controllers
 
 		private int[] ChooseHand()
 		{
-			int[][] LECACA = ToRerollHands();     
-			int[] tab = new int[5];
-			int count = LECACA.Length;
-			for(int i =0;i<count;i++)
+			int[][] LECACA = ToRerollHands();
+			List<int[]> Lepipi = new List<int[]>();
+			for (int i = 0; i < LECACA.Length; i++)
 			{
-				if(LECACA[0][6]>LECACA[1][6])
-				{
-					LECACA[0][6] = LECACA[1][6];
-				}
-				for (int j = 1; j < (LECACA.Length - i); j++)
-				{
-					LECACA[j] = LECACA[j + 1]; 
-				}
+				LECACA[i] = Lepipi[i];
 			}
-			return tab = LECACA[0];
+
+			for(int i = 0; i<Lepipi.Count-1;i++)
+			{
+				if(Lepipi[0][5]<Lepipi[1][5])
+				{
+					Lepipi[0] = Lepipi[1];
+				}
+				Lepipi.Remove(Lepipi[1]);
+			}
+			int[] tab = new int[5];
+			for(int i = 0;i<5;i++)
+			{
+				tab[i] = Lepipi[0][i];
+			}
+			return tab;
 		}
 
 		#region Inutile
