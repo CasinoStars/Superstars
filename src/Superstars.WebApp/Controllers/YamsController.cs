@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using System.Threading.Tasks;
-using Superstars.WebApp.Models;
-using System.Collections.Generic;
-using System;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -16,6 +13,7 @@ namespace Superstars.WebApp.Controllers
 
         YamsGateway _yamsGateway;
         UserGateway _userGateway;
+        YamsIAController _yamsIAController;
         PasswordHasher _passwordHasher;
 
 
@@ -24,7 +22,21 @@ namespace Superstars.WebApp.Controllers
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
             _passwordHasher = passwordHasher;
+        }
 
+
+        [HttpPost("{pseudo}/CreateAIYams")]
+        public async Task<IActionResult> CreateAIYams( string pseudo, [FromBody] int[][] dices)
+        {
+            var myhand = dices[1];
+            var ennemyhand = dices[0];
+            int mypts = _yamsGateway.PointCount(myhand);
+            int ennemypts = _yamsGateway.PointCount(ennemyhand);
+            _yamsIAController = new YamsIAController(ennemypts, mypts, ennemyhand); 
+            var rerollhand = _yamsIAController.ChooseHand();
+            var result = await RollDices("AI" + pseudo, rerollhand);
+            Console.Write("PUTE");
+            return result;
         }
 
         [HttpPost("{pseudo}/Roll")]

@@ -60,7 +60,9 @@ namespace Superstars.DAL
 
                 int status = p.Get<int>("@Status");
                 if (status == 1) return Result.Failure(Status.BadRequest, "An account with this pseudo already exists.");
+                if (status == 2) return Result.Failure(Status.BadRequest, "An account with this email already exists.");
 
+                Debug.Assert(status == 0);
                 return Result.Success();
             }
         }
@@ -128,3 +130,4 @@ namespace Superstars.DAL
         //}
     }
 }
+

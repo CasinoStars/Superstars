@@ -63,6 +63,7 @@ namespace Superstars.DAL
             }
         }
 
+
         public async Task<Result<int>> DeleteAis(string Pseudo)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
@@ -79,3 +80,4 @@ namespace Superstars.DAL
         }
     }
 }
+
