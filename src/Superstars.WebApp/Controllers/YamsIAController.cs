@@ -84,7 +84,7 @@ namespace Superstars.WebApp.Controllers
 						{
 							myhand[z] = _myhandtest[z]; 
 						}
-						myhand[6] = proba;
+						myhand[5] = proba;
 						handAndProba[place] = myhand;
 						place++;
 					}
@@ -288,27 +288,33 @@ namespace Superstars.WebApp.Controllers
 			return handAndProba;
 		}
 
-		private int[] ChooseHand()
-		{
-			int[][] LECACA = ToRerollHands();     
-			int[] tab = new int[5];
-			int count = LECACA.Length;
-			for(int i =0;i<count;i++)
-			{
-				if(LECACA[0][6]>LECACA[1][6])
-				{
-					LECACA[0][6] = LECACA[1][6];
-				}
-				for (int j = 1; j < (LECACA.Length - i); j++)
-				{
-					LECACA[j] = LECACA[j + 1]; 
-				}
-			}
-			return tab = LECACA[0];
-		}
+        public int[] ChooseHand()
+        {
+            int[][] LECACA = ToRerollHands();
+            List<int[]> Lepipi = new List<int[]>();
+            for (int i = 0; i < LECACA.Length-1; i++)
+            {
+                Lepipi.Add(LECACA[i]);
+            }
 
-		#region Inutile
-		private void SortHand(int[] hand) // Décroissant
+            for (int i = 0; i < Lepipi.Count - 1; i++)
+            {
+                if (Lepipi[0][5] < Lepipi[1][5])
+                {
+                    Lepipi[0] = Lepipi[1];
+                }
+                Lepipi.Remove(Lepipi[1]);
+            }
+            int[] tab = new int[5];
+            for (int i = 0; i < 5; i++)
+            {
+                tab[i] = Lepipi[0][i];
+            }
+            return tab;
+        }
+
+        #region Inutile
+        private void SortHand(int[] hand) // Décroissant
 		{
 			bool tableenordre = false;
 			int taille = hand.Length - 1;
@@ -601,7 +607,7 @@ namespace Superstars.WebApp.Controllers
 				}
 			}
 			// petite suite
-			if (handcount[0] == 1)
+			/*if (handcount[0] == 1)
 			{
 				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
 				{
@@ -610,7 +616,7 @@ namespace Superstars.WebApp.Controllers
 			}
 			else if (handcount[1] == 1)
 			{
-				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
+				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
 				{
 					points = points + 45;
 				}
@@ -620,7 +626,7 @@ namespace Superstars.WebApp.Controllers
 			if (grandesuite == 5)
 			{
 				points = points + 50;
-			}
+			}*/
 
 			// chance
 			if (points == 0)
