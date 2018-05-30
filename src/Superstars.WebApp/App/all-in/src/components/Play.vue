@@ -24,12 +24,23 @@ import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 
 export default {
+
+    async mounted() {
+    await this.DeleteAis();
+  },
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
+   async DeleteAis() {
+     await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer(UserApiService.pseudo));
+     await this.executeAsyncRequest(() => GameApiService.DeleteAis(UserApiService.pseudo));
+   },
+
    async PlayYams(gametype) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+      await this.executeAsyncRequest(() => YamsApiService.createAiUser(UserApiService.pseudo));
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer(UserApiService.pseudo));
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer(UserApiService.pseudo));
       this.$router.push({ path: 'playyams' });
     }
   }

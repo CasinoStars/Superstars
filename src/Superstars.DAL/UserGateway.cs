@@ -10,6 +10,8 @@ namespace Superstars.DAL
     {
         readonly string _connectionString;
 
+
+
         public UserGateway(string connectionString)
         {
             _connectionString = connectionString;
@@ -128,3 +130,4 @@ namespace Superstars.DAL
         //}
     }
 }
+

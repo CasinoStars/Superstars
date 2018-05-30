@@ -17,18 +17,17 @@
       <img v-if="i == 4" src="../img/dice4.png">
       <img v-if="i == 5" src="../img/dice5.png">
     </div><br>
-    <div class="checkbox" v-if="nbTurn != 0">
+    <div class="checkbox" v-if="nbTurn != 0 && nbTurn < 3">
       <input type="checkbox" id="dice1" value="1" v-model="selected">        
       <input type="checkbox" id="dice2" value="2" v-model="selected">
       <input type="checkbox" id="dice3" value="3" v-model="selected">        
       <input type="checkbox" id="dice4" value="4" v-model="selected">        
       <input type="checkbox" id="dice5" value="5" v-model="selected">
     </div>
-  <br><div style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
+  <br><div  style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
 
-  <strong> {{ dices }} </strong>
 
-  <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg">ROLL</button></div>
+  <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn < 3">ROLL</button></div>
   </form>
 </div>
 </template>
@@ -55,21 +54,25 @@ export default {
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
+
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices(UserApiService.pseudo));
     },
 
     async changeTurn() {
-      this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn(UserApiService.pseudo))
+      this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn(UserApiService.pseudo));
     },
 
     async onSubmit(e) {
       e.preventDefault();
+
       if(this.nbTurn === 0)
-        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, [1,2,3,4,5]))
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, [1,2,3,4,5]));
       else
-        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.dices, this.selected));
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.selected));
       await this.refreshDices();
+
+      if(this.nbTurn < 3)
       await this.changeTurn();
     }
   }
