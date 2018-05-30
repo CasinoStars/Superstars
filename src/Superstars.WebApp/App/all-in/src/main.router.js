@@ -10,12 +10,14 @@ import Home from './components/Home.vue';
 import Logout from './components/Logout.vue';
 import Play from './components/Play.vue';
 import PlayYams from './components/PlayYams.vue';
+import Wallet from './components/Wallet.vue';
 
 const routes = [
     { path: '', component: Home },
     { path: '/logout', component: Logout, beforeEnter: requireAuth },
     { path: '/play', component: Play, beforeEnter: requireAuth },
     { path: '/playyams', component: PlayYams, beforeEnter: requireAuth },
+    { path: '/wallet', component: Wallet, beforeEnter: requireAuth },
 ];
 
 export default new VueRouter({

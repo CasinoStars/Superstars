@@ -39,6 +39,7 @@ namespace Superstars.WebApp
             services.AddSingleton<UserGateway>(x => new UserGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<GameGateway>(x => new GameGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<YamsGateway>(x => new YamsGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton<WalletGateway>(x => new WalletGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();

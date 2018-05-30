@@ -62,6 +62,5 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@YamsGameId"));
             }
         }
-
     }
 }
