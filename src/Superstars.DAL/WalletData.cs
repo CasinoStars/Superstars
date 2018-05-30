@@ -2,7 +2,11 @@
 {
     public class WalletData
     {
-        public int UserId { get; set; }
+        public int MonneyId { get; set; }
+
+        public int Balance { get; set; }
+
+        public int MoneyType { get; set; }
 
         public double FakeAllInCoins { get; set; }
 

@@ -62,7 +62,7 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@YamsGameId"));
             }
         }
-        }
+
 
         public async Task<Result<int>> DeleteAis(string Pseudo)
         {
@@ -80,3 +80,4 @@ namespace Superstars.DAL
         }
     }
 }
+

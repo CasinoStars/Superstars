@@ -24,7 +24,7 @@ begin
 	begin
 		update sp.tMoney
 		set Balance += @Balance
-		where MoneyId = @MoneyId;
+		where MoneyId = @MoneyId and MoneyType = @MoneyType;
 	end;
 	commit;
     return 0;

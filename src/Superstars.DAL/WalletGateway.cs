@@ -31,5 +31,15 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@Balance"));
             }
         }
+
+        public async Task<WalletData> GetBalance(string pseudo, int moneyId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                return await con.QueryFirstOrDefaultAsync<WalletData>(
+                    "select m.MoneyId, m.MoneyType, m.Balance, from sp.vMonney m where m.MoneyId = @moneyId",
+                    new { MonneyId = moneyId });
+            }
+        }
     }
 }
