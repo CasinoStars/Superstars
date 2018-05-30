@@ -1,5 +1,9 @@
 create table sp.tMoney
 (
-	MoneyId int identity(0,1),
-	MoneyType varchar(64),
+	MoneyId int,
+	MoneyType varchar(5),
+	Balance int default 0,
+	Profit int default 0,
+
+	constraint FK_tMoney_UserId foreign key (MoneyId) references sp.tUser(UserId),
 );
