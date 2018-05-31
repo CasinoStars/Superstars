@@ -1,13 +1,16 @@
 <template>
 <div class="page">
 <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;"> <h3> TOUR:{{nbTurn}} </h3></div>
-  <div class="iadices">
-    <img src="../img/diceia1.png" alt="iadice1" id="iadice1">
-    <img src="../img/diceia2.png" alt="iadice2" id="iadice2">
-    <img src="../img/diceia3.png" alt="iadice3" id="iadice3">
-    <img src="../img/diceia4.png" alt="iadice4" id="iadice4">
-    <img src="../img/diceia5.png" alt="iadice5" id="iadice5">
-  </div>
+<form @submit="onSubmitAI($event)">
+    <div v-for="i of iadices" class="playerdices">
+      <img v-if="i == 1" src="../img/diceia1.png">
+      <img v-if="i == 2" src="../img/diceia2.png">
+      <img v-if="i == 3" src="../img/diceia3.png">
+      <img v-if="i == 4" src="../img/diceia4.png">
+      <img v-if="i == 5" src="../img/diceia5.png">
+    </div><br>
+    <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn >= 3">ROLL IA</button></div>
+</form>
   <br><br><br>
   <form @submit="onSubmit($event)">
     <div v-for="i of dices" class="playerdices">
@@ -28,6 +31,7 @@
 
 
   <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn < 3">ROLL</button></div>
+
   </form>
 </div>
 </template>
@@ -43,6 +47,7 @@ export default {
     return {
       selected: [],
       dices: [],
+      iadices: [],
       nbTurn: 0,
     }
   },
@@ -57,10 +62,21 @@ export default {
 
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices(UserApiService.pseudo));
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices("AI" + UserApiService.pseudo));
     },
 
     async changeTurn() {
       this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn(UserApiService.pseudo));
+    },
+
+    async onSubmitAI(e) {
+      e.preventDefault();
+      if(this.nbTurn == 3)
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices("AI" + UserApiService.pseudo));
+      let arraydice = [this.iadices, this.dices];
+      console.log(arraydice);
+      await this.executeAsyncRequest(() => YamsApiService.createAIYams(UserApiService.pseudo,arraydice));
+      await this.refreshDices();
     },
 
     async onSubmit(e) {

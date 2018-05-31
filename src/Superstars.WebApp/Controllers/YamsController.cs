@@ -13,6 +13,7 @@ namespace Superstars.WebApp.Controllers
 
         YamsGateway _yamsGateway;
         UserGateway _userGateway;
+        YamsIAController _yamsIAController;
         PasswordHasher _passwordHasher;
 
 
@@ -21,7 +22,20 @@ namespace Superstars.WebApp.Controllers
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
             _passwordHasher = passwordHasher;
+        }
 
+
+        [HttpPost("{pseudo}/CreateAIYams")]
+        public async Task<IActionResult> CreateAIYams( string pseudo, [FromBody] int[][] dices)
+        {
+            var myhand = dices[1];
+            var ennemyhand = dices[0];
+            int mypts = _yamsGateway.PointCount(myhand);
+            int ennemypts = _yamsGateway.PointCount(ennemyhand);
+            _yamsIAController = new YamsIAController(ennemypts, mypts, ennemyhand); 
+            var rerollhand = _yamsIAController.ChooseHand();
+            var result = await RollDices("AI" + pseudo, rerollhand);
+            return result;
         }
 
         [HttpPost("{pseudo}/Roll")]
@@ -72,16 +86,6 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateYamsPlayer(string pseudo)
         {
             Result result = await _yamsGateway.CreateYamsPlayer(pseudo, 0, "12345", 0);
-            return this.CreateResult(result);
-        }
-
-        [HttpPost("{pseudo}/createAiUser")]
-        public async Task<IActionResult> createAiUser(string pseudo)
-        {   
-            UserData user = await _userGateway.FindByName(pseudo);
-
-
-            Result result = await _userGateway.CreateUser("AI" + pseudo, _passwordHasher.HashPassword(user.UserName), "");
             return this.CreateResult(result);
         }
 

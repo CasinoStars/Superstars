@@ -22,27 +22,6 @@ namespace Superstars.DAL
         public YamsGateway(string connectionString)
         {
             _connectionString = connectionString;
-            _IsIAturn = false;
-            _IAturn = 0;
-            _MYturn = 0;
-            /*while (_MYturn < 3)
-            {
-                FirstShot();
-                //IndexChange();
-                Reroll();
-                _MYturn++;
-            }
-            _IsIAturn = true;
-            while (_IAturn < 3)
-            {
-                FirstShot();
-                //IndexChange();
-                Reroll();
-                _IAturn++;
-            }*/  
-            _MYpoints = PointCount(_mydices);
-            _IApoints = PointCount(_IAdices);
-            FindWinner();
         }
 
         public async Task<Result<int>> CreateYamsPlayer(string pseudo, int nbturn, string dices, int dicesvalue)
@@ -268,7 +247,7 @@ namespace Superstars.DAL
             return count;
         }
 
-        private int PointCount(int[] hand)
+        public int PointCount(int[] hand)
         {
             int[] handcount = new int[5];
             int points = 0;
