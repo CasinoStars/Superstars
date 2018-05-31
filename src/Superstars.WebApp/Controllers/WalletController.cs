@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
+using Superstars.WebApp.Models;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Superstars.WebApp.Controllers
@@ -11,10 +13,12 @@ namespace Superstars.WebApp.Controllers
     public class WalletController : Controller
     {
         WalletGateway _walletGateway;
+        UserGateway _userGateway;
 
-        public WalletController(WalletGateway walletGateway)
+        public WalletController(WalletGateway walletGateway, UserGateway userGateway)
         {
             _walletGateway = walletGateway;
+            _userGateway = userGateway;
         }
 
         /// <summary>
@@ -24,10 +28,32 @@ namespace Superstars.WebApp.Controllers
         /// <param name="coins">Number of coins want players</param>
         /// <param name="moneyType">Set 1 for RealCoins, 2 for FakeCoins</param>
         /// <returns></returns>
-        [HttpPost("{pseudo}/{coins}/{moneyType}/AddCoins")]
-        public async Task<IActionResult> AddCoins(string pseudo, int coins, int moneyType)
+        [HttpPost("{pseudo}")]
+        public async Task<IActionResult> AddCoins(string pseudo, [FromBody] WalletViewModel model)
         {
-            Result result = await _walletGateway.AddCoins(pseudo, coins, moneyType);
+            UserData user = await _userGateway.FindByName(pseudo);
+            if (model.FakeCoins != 0)
+            {
+                Result result1 = await _walletGateway.AddCoins(user.UserId, model.MoneyType, model.FakeCoins);
+                return this.CreateResult(result1);
+            }
+            Result result = await _walletGateway.AddCoins(user.UserId, model.MoneyType, model.RealCoins );
+            return this.CreateResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTrueBalance(string pseudo)
+        {
+            UserData user = await _userGateway.FindByName(pseudo);
+            Result<WalletData> result = await _walletGateway.GetTrueBalance(user.UserId);
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("{pseudo}/FakeBalance")]
+        public async Task<IActionResult> GetFakeBalance(string pseudo)
+        {
+            UserData user = await _userGateway.FindByName(pseudo);
+            Result<WalletData> result = await _walletGateway.GetFakeBalance(user.UserId);
             return this.CreateResult(result);
         }
     }

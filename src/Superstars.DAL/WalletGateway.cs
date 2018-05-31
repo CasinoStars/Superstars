@@ -14,12 +14,12 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<Result<int>> AddCoins(string pseudo, int coins, int moneyType)
+        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
-                p.Add("@Pseudo", pseudo);
+                p.Add("@MoneyId", moneyId);
                 p.Add("@Balance", coins);
                 p.Add("@MoneyType", moneyType);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
@@ -32,13 +32,27 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<WalletData> GetBalance(string pseudo, int moneyId)
+        public async Task<Result<WalletData>> GetTrueBalance(int moneyId)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                return await con.QueryFirstOrDefaultAsync<WalletData>(
-                    "select m.MoneyId, m.MoneyType, m.Balance, from sp.vMonney m where m.MoneyId = @moneyId",
-                    new { MonneyId = moneyId });
+                WalletData wallet =  await con.QueryFirstOrDefaultAsync<WalletData>(
+                    "select m.MoneyId, m.MoneyType, m.Balance from sp.vMoney m where m.MoneyId = @moneyId and m.MoneyType = 1",
+                    new { MoneyId = moneyId });
+                if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
+                return Result.Success(wallet);
+            }
+        }
+
+        public async Task<Result<WalletData>> GetFakeBalance(int moneyId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                WalletData wallet = await con.QueryFirstOrDefaultAsync<WalletData>(
+                    "select m.MoneyId, m.MoneyType, m.Balance from sp.vMoney m where m.MoneyId = @moneyId and m.MoneyType = 2",
+                    new { MoneyId = moneyId });
+                if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
+                return Result.Success(wallet);
             }
         }
     }

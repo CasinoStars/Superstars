@@ -1,12 +1,10 @@
 create proc sp.sMoneyCreateOrUpdate
 (
+	@MoneyId int,
 	@Balance int,
-	@MoneyType varchar(64),
-	@Pseudo nvarchar(64) out
+	@MoneyType varchar(64)
 )
 as
-	declare @MoneyId int;
-	set @MoneyId = (select t.UserId from sp.tUser t where t.UserName = @Pseudo);
 begin
 	set transaction isolation level serializable;
 	begin tran;
