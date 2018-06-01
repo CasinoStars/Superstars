@@ -12,10 +12,14 @@ namespace Superstars.WebApp.Controllers
     public class GameController : Controller
     {
         readonly GameGateway _gameGateway;
+        readonly UserGateway _userGateway;
+        readonly PasswordHasher _passwordHasher;
 
-        public GameController(GameGateway gameGateway)
+        public GameController(GameGateway gameGateway, UserGateway userGateway, PasswordHasher passwordHasher)
         {
             _gameGateway = gameGateway;
+            _userGateway = userGateway;
+            _passwordHasher = passwordHasher;
         }
 
         [HttpPost("{gametype}")]
@@ -26,6 +30,13 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        [HttpPost("{pseudo}/createAiUser")]
+        public async Task<IActionResult> createAiUser(string pseudo)
+        {   
+            UserData user = await _userGateway.FindByName(pseudo);
+            Result result = await _userGateway.CreateUser("AI" + pseudo, _passwordHasher.HashPassword(user.UserName), "");
+            return this.CreateResult(result);
+        }
 
         [HttpDelete("{pseudo}/DeleteAis")]
         public async Task<IActionResult> DeleteAI(string pseudo) 

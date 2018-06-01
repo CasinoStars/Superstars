@@ -38,7 +38,7 @@ export default {
 
    async PlayYams(gametype) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-      await this.executeAsyncRequest(() => YamsApiService.createAiUser(UserApiService.pseudo));
+      await this.executeAsyncRequest(() => GameApiService.createAiUser(UserApiService.pseudo));
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer(UserApiService.pseudo));
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer(UserApiService.pseudo));
       this.$router.push({ path: 'playyams' });

@@ -14,9 +14,6 @@ class YamsApiService {
         console.log(dices);
         return await postAsync(`${endpoint}/${pseudo}/CreateAIYams`, dices); 
     }
-    async createAiUser(pseudo) {
-        return await postAsync(`${endpoint}/${pseudo}/createAiUser`);
-    }
 
     async CreateYamsPlayer(pseudo) {
         return await postAsync(`${endpoint}/${pseudo}/createPlayer`);
