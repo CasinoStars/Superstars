@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Superstars.DAL
+namespace Superstars.WebApp.Controllers
 {
 
         public class Card
