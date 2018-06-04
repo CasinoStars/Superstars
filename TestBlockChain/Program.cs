@@ -26,35 +26,6 @@ namespace TestBlockChain
             var bitcoinPrivateKey2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm", Network.TestNet);
             var publicAddress2 = bitcoinPrivateKey2.GetAddress();
 
-
-            //  Blockchain myCoinBlockchain = new Blockchain();
-            //Blockchain myCoinBlockchain = TestSeria.ReadMyBlockChain("test4");
-            //  myCoinBlockchain.Difficulty = 1;
-
-            // Received a block from the P2P network.
-            // Validate 300 coins transfer.
-            // Console.WriteLine("Mining a block...");            
-
-            //  myCoinBlockchain.AddBlock(new Block(1, "03/12/2017", responses));
-
-            // this line below will cause the chain to be invalid.
-            //  myCoinBlockchain.GetLatestBlock().PreviousHash = "";
-
-            // Validate the chain
-            //   myCoinBlockchain.ValidateChain();
-            //foreach (var item in myCoinBlockchain._chain)
-            //{
-            //    foreach (var transaction in item.Data)
-            //    {
-            //        Console.WriteLine(transaction + " Transaction !" );
-
-            //    }
-            //}
-            //   TestSeria.SerializeMyBlockChain(myCoinBlockchain, "test4");
-
-            //    Console.WriteLine("Done");
-
-
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
 
              List<GetTransactionResponse> alltrx = informationSeeker.SeekAllTransaction(bitcoinPrivateKey2, client);
@@ -68,7 +39,6 @@ namespace TestBlockChain
                 Console.WriteLine(item.Value +  "  TEST");
                 Console.WriteLine(item.Key + " TEST");
             }
-
 
             Transaction trx1 = TransactionMaker.MakeATransaction(bitcoinPrivateKey2,publicAddress, 3.7m, 0.05m, 6, client);
 
