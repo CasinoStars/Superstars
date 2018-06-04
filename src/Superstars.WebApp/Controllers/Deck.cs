@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Superstars.DAL
+namespace Superstars.WebApp.Controllers
 {
     class Deck
     {
