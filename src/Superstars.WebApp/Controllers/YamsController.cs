@@ -13,7 +13,6 @@ namespace Superstars.WebApp.Controllers
 
         YamsGateway _yamsGateway;
         UserGateway _userGateway;
-        YamsIAController _yamsIAController;
         PasswordHasher _passwordHasher;
 
 
@@ -32,9 +31,7 @@ namespace Superstars.WebApp.Controllers
             var ennemyhand = dices[0];
             int mypts = _yamsGateway.PointCount(myhand);
             int ennemypts = _yamsGateway.PointCount(ennemyhand);
-            _yamsIAController = new YamsIAController(ennemypts, mypts, ennemyhand); 
-            var rerollhand = _yamsIAController.ChooseHand();
-            var result = await RollDices("AI" + pseudo, rerollhand);
+            var result = await RollDices("AI" + pseudo);
             return result;
         }
 
