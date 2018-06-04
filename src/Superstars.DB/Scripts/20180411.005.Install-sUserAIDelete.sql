@@ -1,6 +1,6 @@
 create procedure sp.sUserAIDelete
 (
-    @Pseudo varchar
+    @Pseudo varchar(66)
 )
 as
 begin
