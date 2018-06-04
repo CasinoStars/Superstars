@@ -1,14 +1,11 @@
 create proc sp.sYamsPlayerCreate
 (	
-	@PlayerId int out,
-	@Pseudo nvarchar(64) out,
+	@PlayerId int,
 	@NbrRevives int,
 	@Dices varchar(6),
 	@DicesValue int
 )
 as
-	declare @YamsPlayerId int;
-	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = @Pseudo);
 	declare @GameId int;
 	set @GameId = (select top 1 GameId from sp.tGames order by StartDate desc);
 
@@ -22,8 +19,7 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@YamsPlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);
-	set @PlayerId = @YamsPlayerId;
+    insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@PlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);
 	commit;
     return 0;
 end;

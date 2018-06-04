@@ -5,12 +5,12 @@ class WalletApiService {
     constructor() {
     }
 
-    async AddCoins(pseudo, model) {
-        return await postAsync(`${endpoint}/${pseudo}`, model);
+    async AddCoins(model) {
+        return await postAsync(endpoint, model);
     }
 
-    async GetFakeBalance(pseudo){
-        return await getAsync(`${endpoint}/${pseudo}/FakeBalance`);
+    async GetFakeBalance(){
+        return await getAsync(`${endpoint}/FakeBalance`);
     }
 }
 

@@ -1,9 +1,7 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Superstars.WebApp.Authentication;
-using Superstars.WebApp.Models;
 using Superstars.WebApp.Services;
 
 namespace Superstars.WebApp.Controllers

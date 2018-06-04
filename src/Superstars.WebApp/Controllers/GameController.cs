@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Superstars.DAL;
 using Microsoft.AspNetCore.Mvc;
-using Superstars.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Superstars.WebApp.Authentication;
 
@@ -31,18 +30,17 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{pseudo}/createAiUser")]
-        public async Task<IActionResult> createAiUser(string pseudo)
-        {   
-            UserData user = await _userGateway.FindByName(pseudo);
-            Result result = await _userGateway.CreateUser("AI" + pseudo, _passwordHasher.HashPassword(user.UserName), "");
+        public async Task<IActionResult> CreateAiUser(string pseudo)
+        {
+            Result result = await _userGateway.CreateUser("AI" + pseudo, _passwordHasher.HashPassword(pseudo), "");
             return this.CreateResult(result);
         }
 
         [HttpDelete("{pseudo}/DeleteAis")]
-        public async Task<IActionResult> DeleteAI(string pseudo) 
+        public async Task<IActionResult> DeleteAI(string pseudo)
         {
-             Result result = await _gameGateway.DeleteAis(pseudo);
-             return this.CreateResult(result);
+            Result result = await _gameGateway.DeleteAis(pseudo);
+            return this.CreateResult(result);
         }
 
         [HttpGet]
