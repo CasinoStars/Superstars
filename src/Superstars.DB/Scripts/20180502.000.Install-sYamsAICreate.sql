@@ -1,6 +1,5 @@
 create proc sp.sYamsAICreate
 (	
-	@PlayerId int out,
 	@Pseudo nvarchar(64) out,
 	@NbrRevives int,
 	@Dices varchar(6),
@@ -16,14 +15,13 @@ begin
     set transaction isolation level serializable;
 	begin tran;
 
-        if exists(select * from sp.tYamsPlayer y where y.[YamsPlayerId] = @PlayerId)
+        if exists(select * from sp.tYamsPlayer y where y.[YamsPlayerId] = @YamsPlayerId)
 	begin
 		rollback;
 		return 1;
 	end;
 
     insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@YamsPlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);
-	set @PlayerId = @YamsPlayerId;
 	commit;
     return 0;
 end;

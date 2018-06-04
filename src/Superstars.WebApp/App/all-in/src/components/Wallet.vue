@@ -42,7 +42,6 @@
 <script>
 import { mapActions } from 'vuex';
 import WalletApiService from '../services/WalletApiService';
-import UserApiService from '../services/UserApiService';
 
 export default {
     data(){
@@ -63,7 +62,7 @@ export default {
         ...mapActions(['executeAsyncRequest']),
 
         async refreshFakeCoins(){    
-            this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance(UserApiService.pseudo));
+            this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
         },
 
         async onSubmit(e) {
@@ -76,7 +75,7 @@ export default {
 
                 if(errors.length == 0) {
                     try {
-                        await this.executeAsyncRequest(() => WalletApiService.AddCoins(UserApiService.pseudo, this.item));
+                        await this.executeAsyncRequest(() => WalletApiService.AddCoins(this.item));
                         await this.refreshFakeCoins();
                     }
                     catch(error) {

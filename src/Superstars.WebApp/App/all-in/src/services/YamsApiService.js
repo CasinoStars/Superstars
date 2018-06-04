@@ -6,17 +6,17 @@ class YamsApiService {
 
     }
 
-    async RollDices(pseudo, selectedDices) {
-        return await postAsync(`${endpoint}/${pseudo}/Roll`, selectedDices);
+    async RollDices(selectedDices) {
+        return await postAsync(`${endpoint}/Roll`, selectedDices);
     }
 
-    async createAIYams(pseudo, dices) {
+    async createAIYams(dices) {
         console.log(dices);
-        return await postAsync(`${endpoint}/${pseudo}/CreateAIYams`, dices); 
+        return await postAsync(`${endpoint}/CreateAIYams`, dices); 
     }
 
-    async CreateYamsPlayer(pseudo) {
-        return await postAsync(`${endpoint}/${pseudo}/createPlayer`);
+    async CreateYamsPlayer() {
+        return await postAsync(`${endpoint}/createPlayer`);
     }
 
     async CreateYamsAiPlayer(pseudo) {
@@ -28,14 +28,14 @@ class YamsApiService {
         return await deleteAsync(`${endpoint}/${pseudo}/deleteAI`);
     }
 
-    async GetPlayerDices(pseudo){
-        var dices = await getAsync(`${endpoint}/${pseudo}`) + '';
+    async GetPlayerDices(){
+        var dices = await getAsync(endpoint) + '';
         var array = dices.split('');
         return array;
     }
 
-    async GetTurn(pseudo){
-        return await getAsync(`${endpoint}/${pseudo}/getTurn`);
+    async GetTurn(){
+        return await getAsync(`${endpoint}/getTurn`);
     }
 }
 export default new YamsApiService();

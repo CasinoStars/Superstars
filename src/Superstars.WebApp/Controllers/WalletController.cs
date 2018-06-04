@@ -13,47 +13,45 @@ namespace Superstars.WebApp.Controllers
     public class WalletController : Controller
     {
         WalletGateway _walletGateway;
-        UserGateway _userGateway;
 
-        public WalletController(WalletGateway walletGateway, UserGateway userGateway)
+        public WalletController(WalletGateway walletGateway)
         {
             _walletGateway = walletGateway;
-            _userGateway = userGateway;
         }
 
         /// <summary>
         /// Add Real or Fake Coins for player
         /// </summary>
-        /// <param name="pseudo">Name of player</param>
-        /// <param name="coins">Number of coins want players</param>
-        /// <param name="moneyType">Set 1 for RealCoins, 2 for FakeCoins</param>
         /// <returns></returns>
-        [HttpPost("{pseudo}")]
-        public async Task<IActionResult> AddCoins(string pseudo, [FromBody] WalletViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> AddCoins([FromBody] WalletViewModel model)
         {
-            UserData user = await _userGateway.FindByName(pseudo);
-            if (model.FakeCoins != 0)
+            Result result;
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (model.FakeCoins == 2)
             {
-                Result result1 = await _walletGateway.AddCoins(user.UserId, model.MoneyType, model.FakeCoins);
-                return this.CreateResult(result1);
+                result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins);
             }
-            Result result = await _walletGateway.AddCoins(user.UserId, model.MoneyType, model.RealCoins );
+            else
+            {
+                result = await _walletGateway.AddCoins(userId, model.MoneyType, model.RealCoins);
+            }
             return this.CreateResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTrueBalance(string pseudo)
+        public async Task<IActionResult> GetTrueBalance()
         {
-            UserData user = await _userGateway.FindByName(pseudo);
-            Result<WalletData> result = await _walletGateway.GetTrueBalance(user.UserId);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<WalletData> result = await _walletGateway.GetTrueBalance(userId);
             return this.CreateResult(result);
         }
 
-        [HttpGet("{pseudo}/FakeBalance")]
-        public async Task<IActionResult> GetFakeBalance(string pseudo)
+        [HttpGet("FakeBalance")]
+        public async Task<IActionResult> GetFakeBalance()
         {
-            UserData user = await _userGateway.FindByName(pseudo);
-            Result<WalletData> result = await _walletGateway.GetFakeBalance(user.UserId);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<WalletData> result = await _walletGateway.GetFakeBalance(userId);
             return this.CreateResult(result);
         }
     }

@@ -61,18 +61,18 @@ export default {
 
 
     async refreshDices() {
-      this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices(UserApiService.pseudo));
-      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices("AI" + UserApiService.pseudo));
+      this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
     },
 
     async changeTurn() {
-      this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn(UserApiService.pseudo));
+      this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
     },
 
     async onSubmitAI(e) {
       e.preventDefault();
       if(this.nbTurn == 3)
-      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices("AI" + UserApiService.pseudo));
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
       let arraydice = [this.iadices, this.dices];
       console.log(arraydice);
       await this.executeAsyncRequest(() => YamsApiService.createAIYams(UserApiService.pseudo,arraydice));
@@ -83,9 +83,9 @@ export default {
       e.preventDefault();
 
       if(this.nbTurn === 0)
-        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, [1,2,3,4,5]));
+        await this.executeAsyncRequest(() => YamsApiService.RollDices([1,2,3,4,5]));
       else
-        await this.executeAsyncRequest(() => YamsApiService.RollDices(UserApiService.pseudo, this.selected));
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
       await this.refreshDices();
 
       if(this.nbTurn < 3)

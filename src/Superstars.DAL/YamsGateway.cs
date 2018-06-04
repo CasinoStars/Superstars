@@ -24,17 +24,15 @@ namespace Superstars.DAL
             _connectionString = connectionString;
         }
 
-        public async Task<Result<int>> CreateYamsPlayer(string pseudo, int nbturn, string dices, int dicesvalue)
+        public async Task<Result<int>> CreateYamsPlayer(int userId, int nbturn, string dices, int dicesvalue)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Pseudo", pseudo);
+                p.Add("@PlayerId", userId);
                 p.Add("@NbrRevives", nbturn);
                 p.Add("@Dices", dices);
                 p.Add("@DicesValue", dicesvalue);
-                //p.Add("@YamsGameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                p.Add("@PlayerId",dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sYamsPlayerCreate", p, commandType: CommandType.StoredProcedure);
 
@@ -54,8 +52,6 @@ namespace Superstars.DAL
                 p.Add("@NbrRevives", nbturn);
                 p.Add("@Dices", dices);
                 p.Add("@DicesValue", dicesvalue);
-                //p.Add("@YamsGameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                p.Add("@PlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sYamsAICreate", p, commandType: CommandType.StoredProcedure);
 
