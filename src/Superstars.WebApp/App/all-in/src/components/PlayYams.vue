@@ -2,7 +2,7 @@
 <div class="page">
 <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;"> <h3> TOUR:{{nbTurn}} </h3></div>
 <form @submit="onSubmitAI($event)">
-    <div v-for="i of iadices" class="playerdices">
+    <div v-for="(i, index) of iadices" :key="index" class="playerdices">
       <img v-if="i == 1" src="../img/diceia1.png">
       <img v-if="i == 2" src="../img/diceia2.png">
       <img v-if="i == 3" src="../img/diceia3.png">
@@ -13,7 +13,7 @@
 </form>
   <br><br><br>
   <form @submit="onSubmit($event)">
-    <div v-for="i of dices" class="playerdices">
+    <div v-for="(i, index) of dices" :key="index" class="playerdices">
       <img v-if="i == 1" src="../img/dice1.png">
       <img v-if="i == 2" src="../img/dice2.png">
       <img v-if="i == 3" src="../img/dice3.png">
