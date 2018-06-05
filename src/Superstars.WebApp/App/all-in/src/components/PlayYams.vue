@@ -39,7 +39,6 @@
 <script>
 import { mapActions } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
-import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 
 export default {
@@ -59,10 +58,9 @@ export default {
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
-
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
-      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
     },
 
     async changeTurn() {
@@ -72,10 +70,10 @@ export default {
     async onSubmitAI(e) {
       e.preventDefault();
       if(this.nbTurn == 3)
-      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
       let arraydice = [this.iadices, this.dices];
       console.log(arraydice);
-      await this.executeAsyncRequest(() => YamsApiService.createAIYams(UserApiService.pseudo,arraydice));
+      await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
       await this.refreshDices();
     },
 
