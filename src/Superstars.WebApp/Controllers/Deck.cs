@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Superstars.WebApp.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Superstars.WebApp.Controllers
+namespace Superstars.WebApp
 {
-    class Deck
+    public class Deck
     {
         public string[] Symbole = new string[] { "Carreau", "Coeur", "Pique", "Trefle" };
 
