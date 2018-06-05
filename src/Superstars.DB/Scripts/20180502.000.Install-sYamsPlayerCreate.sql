@@ -15,8 +15,7 @@ begin
 
         if exists(select * from sp.tYamsPlayer y where y.[YamsPlayerId] = @PlayerId)
 	begin
-		rollback;
-		return 1;
+	delete sp.tYamsPlayer from sp.tYamsPlayer y where y.YamsPlayerId = @PlayerId;
 	end;
 
     insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@PlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);

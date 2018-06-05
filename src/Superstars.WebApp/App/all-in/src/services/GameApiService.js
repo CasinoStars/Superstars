@@ -9,12 +9,12 @@ async createGame(gametype) {
     return await postAsync(`${endpoint}/${gametype}`);
 }
 
-async DeleteAis(pseudo) {
-    return await deleteAsync(`${endpoint}/${pseudo}/DeleteAis`);
+async DeleteAis() {
+    return await deleteAsync(`${endpoint}/DeleteAis`);
 }
 
-async createAiUser(pseudo) {
-    return await postAsync(`${endpoint}/${pseudo}/createAiUser`);
+async createAiUser() {
+    return await postAsync(`${endpoint}/createAiUser`);
 }
 /*async CreateYamsGame(pot) {
     return await postAsync(`${endpoint}/CreateYamsGame`, pot);

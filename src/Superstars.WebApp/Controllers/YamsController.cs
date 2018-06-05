@@ -13,18 +13,20 @@ namespace Superstars.WebApp.Controllers
     {
 
         YamsGateway _yamsGateway;
+        UserGateway _userGateway;
         PasswordHasher _passwordHasher;
 
 
-        public YamsController(YamsGateway yamsGateway, PasswordHasher passwordHasher)
+        public YamsController(YamsGateway yamsGateway, UserGateway userGateway, PasswordHasher passwordHasher)
         {
             _yamsGateway = yamsGateway;
+            _userGateway = userGateway;
             _passwordHasher = passwordHasher;
         }
 
 
-        [HttpPost("CreateAIYams")]
-        public async Task<IActionResult> CreateAIYams([FromBody] int[][] dices)
+        [HttpPost("RollIa")]
+        public async Task<IActionResult> RollIaDices([FromBody] int[][] dices)
         {
             var myhand = dices[1];
             var ennemyhand = dices[0];
@@ -68,6 +70,17 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        [HttpGet("getIaDices")]
+        public async Task<IActionResult> GetIaDices()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData user = await _userGateway.FindByName("AI" + userId);
+            YamsData data = await _yamsGateway.GetGameId(userId);
+
+            Result<string> result = await _yamsGateway.GetIaDices(user.UserId, data.YamsGameId);
+            return this.CreateResult(result);
+        }
+
         [HttpGet("getTurn")]
         public async Task<IActionResult> GetTurn()
         {
@@ -86,17 +99,19 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("{pseudo}/createAI")]
-        public async Task<IActionResult> CreateYamsAiPlayer(string pseudo)
+        [HttpPost("createAI")]
+        public async Task<IActionResult> CreateYamsAiPlayer()
         {
-            Result result = await _yamsGateway.CreateYamsAI(pseudo, 0, "12345", 0);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _yamsGateway.CreateYamsAI(userId, 0, "12345", 0);
             return this.CreateResult(result);
         }
 
-        [HttpDelete("{pseudo}/deleteAI")]
-        public async Task<IActionResult> DeleteYamsAiPlayer(string pseudo)
+        [HttpDelete("deleteAI")]
+        public async Task<IActionResult> DeleteYamsAiPlayer()
         {
-            Result result = await _yamsGateway.DeleteYamsAi(pseudo);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _yamsGateway.DeleteYamsAi(userId);
             return this.CreateResult(result);
         }
     }

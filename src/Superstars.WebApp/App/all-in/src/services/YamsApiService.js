@@ -10,26 +10,32 @@ class YamsApiService {
         return await postAsync(`${endpoint}/Roll`, selectedDices);
     }
 
-    async createAIYams(dices) {
+    async RollIaDices(dices) {
         console.log(dices);
-        return await postAsync(`${endpoint}/CreateAIYams`, dices); 
+        return await postAsync(`${endpoint}/RollIa`, dices); 
     }
 
     async CreateYamsPlayer() {
         return await postAsync(`${endpoint}/createPlayer`);
     }
 
-    async CreateYamsAiPlayer(pseudo) {
-        return await postAsync(`${endpoint}/${pseudo}/createAI`);
+    async CreateYamsAiPlayer() {
+        return await postAsync(`${endpoint}/createAI`);
     }
 
-    async DeleteYamsAiPlayer(pseudo) 
+    async DeleteYamsAiPlayer() 
     {
-        return await deleteAsync(`${endpoint}/${pseudo}/deleteAI`);
+        return await deleteAsync(`${endpoint}/deleteAI`);
     }
 
     async GetPlayerDices(){
         var dices = await getAsync(endpoint) + '';
+        var array = dices.split('');
+        return array;
+    }
+
+    async GetIaDices(){
+        var dices = await getAsync(`${endpoint}/getIaDices`) + '';
         var array = dices.split('');
         return array;
     }
