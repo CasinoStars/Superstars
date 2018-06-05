@@ -43,15 +43,16 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateYamsAI(string pseudo, int nbturn, string dices, int dicesvalue)
+        public async Task<Result<int>> CreateYamsAI(int userId, int nbturn, string dices, int dicesvalue)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Pseudo", pseudo);
+                p.Add("@UserId", userId);
                 p.Add("@NbrRevives", nbturn);
                 p.Add("@Dices", dices);
                 p.Add("@DicesValue", dicesvalue);
+                p.Add("@PlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sYamsAICreate", p, commandType: CommandType.StoredProcedure);
 
@@ -62,12 +63,12 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> DeleteYamsAi(string pseudo)
+        public async Task<Result<int>> DeleteYamsAi(int userId)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Pseudo", pseudo);
+                p.Add("@UserId", userId);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sYamsAIDelete", p, commandType: CommandType.StoredProcedure);
 
@@ -124,7 +125,19 @@ namespace Superstars.DAL
             {
                 string data = await con.QueryFirstOrDefaultAsync<string>(
                     @"select t.Dices from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId;",
-                    new { YamsPlayerId = userId, YamsGameId = gameId }); 
+                    new { YamsPlayerId = userId, YamsGameId = gameId });
+                if (data == null) return Result.Failure<string>(Status.NotFound, "Data not found.");
+                return Result.Success(data);
+            }
+        }
+
+        public async Task<Result<string>> GetIaDices(int userId, int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string data = await con.QueryFirstOrDefaultAsync<string>(
+                    @"select t.Dices from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId;",
+                    new { YamsPlayerId = userId, YamsGameId = gameId });
                 if (data == null) return Result.Failure<string>(Status.NotFound, "Data not found.");
                 return Result.Success(data);
             }
@@ -134,7 +147,7 @@ namespace Superstars.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                int data =  await con.QueryFirstOrDefaultAsync<int>(
+                int data = await con.QueryFirstOrDefaultAsync<int>(
                     "select top 1 t.NbrRevives from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId order by YamsGameId desc",
                     new { YamsPlayerId = playerId, YamsGameId = gameId });
                 return Result.Success(data);
@@ -179,10 +192,10 @@ namespace Superstars.DAL
 
         public int[] IndexChange(int[] dices, int[] index)
         {
-                for (int i = 0; i < index.Length; i++)
-                {
-                    dices[index[i]-1] = 0;
-                }
+            for (int i = 0; i < index.Length; i++)
+            {
+                dices[index[i] - 1] = 0;
+            }
             return dices;
         }
 
@@ -213,13 +226,13 @@ namespace Superstars.DAL
 
         public int[] Reroll(int[] dices)
         {
-                for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
+            {
+                if (dices[i] == 0)
                 {
-                    if (dices[i] == 0)
-                    {
-                        dices[i] = RollDice();
-                    }
+                    dices[i] = RollDice();
                 }
+            }
             return dices;
         }
 

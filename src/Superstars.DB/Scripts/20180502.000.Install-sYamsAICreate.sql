@@ -1,13 +1,14 @@
 create proc sp.sYamsAICreate
 (	
-	@Pseudo nvarchar(64) out,
+	@PlayerId int out, 
+	@UserId int out,
 	@NbrRevives int,
 	@Dices varchar(6),
 	@DicesValue int
 )
 as
 	declare @YamsPlayerId int;
-	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = 'AI' + @Pseudo);
+	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = (select CONCAT('AI', @UserId) AS ConcatenatedString));
 	declare @GameId int;
 	set @GameId = (select top 1 GameId from sp.tGames order by StartDate desc);
 
@@ -22,6 +23,7 @@ begin
 	end;
 
     insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@YamsPlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);
+	set @PlayerId = @YamsPlayerId; 
 	commit;
     return 0;
 end;

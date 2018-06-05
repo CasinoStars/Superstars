@@ -1,9 +1,9 @@
 create procedure sp.sYamsAIDelete
 (
-    @Pseudo varchar
+    @UserId int out
 )
 as
 begin
-delete sp.tYamsPlayer from sp.tYamsPlayer t left JOIN sp.tUser u ON t.YamsPlayerId = u.UserId where u.UserName = 'AI' + @Pseudo;
+delete sp.tYamsPlayer from sp.tYamsPlayer t left JOIN sp.tUser u ON t.YamsPlayerId = u.UserId where u.UserName = (select CONCAT('AI', @UserId) AS ConcatenatedString);
     return 0;
 end;
