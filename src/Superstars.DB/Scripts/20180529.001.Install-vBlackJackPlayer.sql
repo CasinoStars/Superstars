@@ -1,7 +1,7 @@
 create view sp.vBlackJackPlayer
 as
    select
-     BlackJackPlayerId = bj.BlackJackPlayerIdId,
+     BlackJackPlayerId = bj.BlackJackPlayerId,
      BlackJackGameId = bj.BlackJackGameId,
      PlayerCards = bj.PlayerCards
    from sp.tBlackJackPlayer bj
