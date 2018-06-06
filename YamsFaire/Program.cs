@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 
 namespace YamsFaire
@@ -12,9 +13,14 @@ namespace YamsFaire
             dices.rolleDices();
 
             string ok = "oigroidjd";
-            SHA512 sha512 = new SHA512Managed();
-                Console.WriteLine(sha256.Hash);
-            sha512.ComputeHash(ok);
+            ok = HashManager.getHashSha256(ok);
+            Console.WriteLine(ok);
+
+            var rnd = new RNGCryptoServiceProvider();
+            var b = new byte[16];
+
+ 
+
 
             foreach (var dice in dices.dices)
             {
