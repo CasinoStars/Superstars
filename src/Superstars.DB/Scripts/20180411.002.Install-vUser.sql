@@ -3,5 +3,6 @@ as
     select UserId = u.UserId,
            Email = u.Email,
 		   UserName = u.UserName,
-		   UserPassword = u.UserPassword
+		   UserPassword = u.UserPassword,
+		   PrivateKey = u.PrivateKey
 	from sp.tUser u

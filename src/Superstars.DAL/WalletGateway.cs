@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using NBitcoin;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -32,17 +33,18 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<WalletData>> GetTrueBalance(int moneyId)
-        {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
-            {
-                WalletData wallet =  await con.QueryFirstOrDefaultAsync<WalletData>(
-                    "select m.MoneyId, m.MoneyType, m.Balance from sp.vMoney m where m.MoneyId = @moneyId and m.MoneyType = 1",
-                    new { MoneyId = moneyId });
-                if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
-                return Result.Success(wallet);
-            }
-        }
+        //public async Task<Result<WalletData>> GetTrueBalance(int moneyId)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_sqlstring))
+        //    {
+        //        WalletData wallet =  await con.QueryFirstOrDefaultAsync<WalletData>(
+        //            "select m.MoneyId, m.MoneyType, m.Balance from sp.vMoney m where m.MoneyId = @moneyId and m.MoneyType = 1",
+        //            new { MoneyId = moneyId });
+        //        if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
+        //        return Result.Success(wallet);
+        //    }
+        //}
+
 
         public async Task<Result<WalletData>> GetFakeBalance(int moneyId)
         {
@@ -53,6 +55,18 @@ namespace Superstars.DAL
                     new { MoneyId = moneyId });
                 if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
                 return Result.Success(wallet);
+            }
+        }
+
+        public async Task<Result<WalletData>> GetPrivateKey(int userId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                WalletData privateKey = await con.QueryFirstOrDefaultAsync<WalletData>(
+                    "select u.PrivateKey from sp.vUser u where u.UserId = @UserId",
+                    new { UserId = userId });
+                if (privateKey == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
+                return Result.Success(privateKey);
             }
         }
     }

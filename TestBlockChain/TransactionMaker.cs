@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace TestBlockChain
+namespace Superstars.Wallet
 {
-    class TransactionMaker
+    public class TransactionMaker
     {
         /// <summary>
         /// Cette classe a la responsabilité de crée des transaction et de les envoyer

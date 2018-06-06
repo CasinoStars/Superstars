@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TestBlockChain
+namespace Superstars.Wallet
 {
-    class informationSeeker
+    public class informationSeeker
     {
         /// <summary>
         /// cette classe a la responsabilité de trouver des information dans la blockchain
@@ -15,6 +15,20 @@ namespace TestBlockChain
         /// <param name="privateKey"></param>
         /// <returns></returns>
         /// 
+
+
+        public BitcoinSecret GetBitcoinSecretFromKey(Key key, Network network)
+        {
+            BitcoinSecret wallet = key.GetBitcoinSecret(network);
+            return wallet;
+        }
+
+        public BitcoinAddress GetBitcoinAdressFromSecret(BitcoinSecret secret, Network network)
+        {
+            BitcoinAddress address = secret.GetAddress();
+            return address;
+        }
+
         public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);

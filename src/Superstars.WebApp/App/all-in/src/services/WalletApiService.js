@@ -12,6 +12,14 @@ class WalletApiService {
     async GetFakeBalance(){
         return await getAsync(`${endpoint}/FakeBalance`);
     }
+
+    async GetTrueBalance(){
+        return await getAsync(`${endpoint}/TrueBalance`);
+    }
+
+    async GetWalletAddress(){
+        return await getAsync(`${endpoint}/GetAddress`);
+    }
 }
 
 export default new WalletApiService();

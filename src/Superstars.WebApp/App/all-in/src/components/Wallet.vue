@@ -17,7 +17,8 @@
 
         <!-- REALLY WALLET HERE -->
         <div style="text-align: center;" v-if="this.wallet == 'real'">
-            <h1>Solde du compte réel: </h1>
+            <h1> Adresse de dépots BTC: {{BTCAddress}} </h1>
+            <h1>Solde du compte réel: {{trueCoins}} </h1>
         </div>
 
         <!-- FAKE WALLET HERE -->
@@ -49,21 +50,35 @@ export default {
             item: {},
             wallet: '',
             fakeCoins: 0,
+            trueCoins: 'waiting...',
+            BTCAddress: '',
             errors: []
         };
     },
 
     mounted(){
         this.wallet = 'real';
+        this.refreshTrueCoins();
         this.refreshFakeCoins();
+        this.GetWalletAddress();
     },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
+        async GetWalletAddress(){
+          this.BTCAddress = await this.executeAsyncRequest(() => WalletApiService.GetWalletAddress());
+          console.log(this.BTCAddress);
+        },
+
         async refreshFakeCoins(){    
             this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
         },
+
+        async refreshTrueCoins(){
+            this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
+        },
+
 
         async onSubmit(e) {
             e.preventDefault();
