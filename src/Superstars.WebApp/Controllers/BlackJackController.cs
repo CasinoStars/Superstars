@@ -22,7 +22,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("CreatePlayer")]
-        public async Task<IActionResult> CreateYamsPlayer()
+        public async Task<IActionResult> CreateJackPlayer()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _blackJackGateway.CreateJackPlayer(userId);

@@ -1,15 +1,17 @@
-create proc sp.sBlackJackPlayerCreate
-(
-	@BlackJackPlayerId int out,
+create proc sp.sBlackJackAICreate
+(	
+	@PlayerId int out,
+	@UserId int,
 	@PlayerCards nvarchar(25)
 )
 as
-
+	declare @BlackJackPlayerId int;
+	set @BlackJackPlayerId = (select t.UserId from sp.tUser t where t.UserName = (select CONCAT('AI', @UserId) AS ConcatenatedString));
 	declare @BlackJackGameId int;
 	set @BlackJackGameId = (select top 1 GameId from sp.tGames order by StartDate desc);
 
 begin
-	set transaction isolation level serializable;
+    set transaction isolation level serializable;
 	begin tran;
 
 	if exists(select * from sp.tBlackJackPlayer bj where bj.BlackJackGameId = @BlackJackGameId)
@@ -19,7 +21,7 @@ begin
 	end;
 
     insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards) values(@BlackJackPlayerId, @BlackJackGameId, @PlayerCards);
-	set @BlackJackPlayerId = scope_identity();
+	set @PlayerId = @BlackJackPlayerId;
 	commit;
     return 0;
 end;
