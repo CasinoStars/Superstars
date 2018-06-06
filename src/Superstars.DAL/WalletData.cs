@@ -15,6 +15,5 @@
         public int Profit { get; set; }
 
         public string PrivateKey { get; set; }
-        public string WalletAddress { get; set; }
     }
 }
