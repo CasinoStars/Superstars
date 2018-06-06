@@ -9,14 +9,16 @@ import requireAuth from './helpers/requireAuth';
 import Home from './components/Home.vue';
 import Logout from './components/Logout.vue';
 import Play from './components/Play.vue';
-import PlayYams from './components/PlayYams.vue';
+import Yams from './components/Yams.vue';
+import BlackJack from './components/BlackJack.vue';
 import Wallet from './components/Wallet.vue';
 
 const routes = [
     { path: '', component: Home },
     { path: '/logout', component: Logout, beforeEnter: requireAuth },
     { path: '/play', component: Play, beforeEnter: requireAuth },
-    { path: '/playyams', component: PlayYams, beforeEnter: requireAuth },
+    { path: '/yams', component: Yams, beforeEnter: requireAuth },
+    { path: '/blackJack', component: BlackJack, beforeEnter: requireAuth },
     { path: '/wallet', component: Wallet, beforeEnter: requireAuth },
 ];
 

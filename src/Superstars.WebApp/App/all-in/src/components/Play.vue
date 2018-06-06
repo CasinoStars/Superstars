@@ -7,8 +7,10 @@
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" id="textyams">
       </div>
-      <img src="../img/LOGO1.png" alt="poker" id="imgpoker">     
-      <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
+      <router-link v-on:click.native="PlayBlackJack('BlackJack')" to="">
+        <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
+      </router-link>
+      <img src="../img/LOGO1.png" alt="poker" id="imgpoker">           
       <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
       <img src="../img/LOGO1.png" alt="game4" id="imggame4">
     </div>
@@ -19,28 +21,39 @@
 import { mapActions } from 'vuex';
 import GameApiService from '../services/GameApiService';
 import YamsApiService from '../services/YamsApiService';
+import BlackJackApiService from '../services/BlackJackApiService';
 
 import Vue from 'vue';
 
 export default {
 
-    async mounted() {
+  async mounted() {
     await this.DeleteAis();
   },
+
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
-   async DeleteAis() {
-     await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-     await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-   },
+    async DeleteAis() {
+      await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+    },
 
-   async PlayYams(gametype) {
+    async PlayYams(gametype) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
-      this.$router.push({ path: 'playyams' });
+      this.$router.push({ path: 'yams' });
+    },
+
+    async PlayBlackJack(gametype) {
+      await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+      await this.executeAsyncRequest(() => GameApiService.createAiUser());
+      await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
+      await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
+      this.$router.push({ path: 'blackJack' });
     }
   }
 }

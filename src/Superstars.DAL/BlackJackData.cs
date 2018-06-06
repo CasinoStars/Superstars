@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Superstars.DAL
+﻿namespace Superstars.DAL
 {
-	class BlackJackData
-	{
-		public int BlackJackGameID {get;set;}
-
+    public class BlackJackData
+    {
+        public int BlackJackGameID { get; set; }
 
     }
 }
