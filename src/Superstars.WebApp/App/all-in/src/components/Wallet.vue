@@ -18,7 +18,15 @@
         <!-- REALLY WALLET HERE -->
         <div style="text-align: center;" v-if="this.wallet == 'real'">
             <h1> Adresse de dépots BTC: {{BTCAddress}} </h1>
-            <h1>Solde du compte réel: {{trueCoins}} </h1>
+            <h1>Solde du compte réel: {{trueCoins}}  BTC </h1>
+          <form @submit="Withdraw($event)">
+            <div class="form-group">
+                <label style="text-align: left;">Retrait :</label>
+                <input type="number" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" class="form-control" required>
+                <input type="text" placeholder="Address" v-model="item.DestinationAddress" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary" @click="Withdraw" >Retrait</button>
+            </form>
         </div>
 
         <!-- FAKE WALLET HERE -->
@@ -68,7 +76,6 @@ export default {
 
         async GetWalletAddress(){
           this.BTCAddress = await this.executeAsyncRequest(() => WalletApiService.GetWalletAddress());
-          console.log(this.BTCAddress);
         },
 
         async refreshFakeCoins(){    
@@ -95,6 +102,18 @@ export default {
                     }
                     catch(error) {
                     }
+                }
+        },
+
+        async Withdraw(e) {
+            e.preventDefault();
+            console.log("Test");
+            var errors = [];
+                try {
+                    await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+                }
+                catch(error){
+
                 }
         },
 

@@ -46,4 +46,3 @@ namespace Superstars.WebApp.Controllers
         }
     }
 }
-}

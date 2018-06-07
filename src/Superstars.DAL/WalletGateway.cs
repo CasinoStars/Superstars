@@ -65,7 +65,7 @@ namespace Superstars.DAL
                 WalletData privateKey = await con.QueryFirstOrDefaultAsync<WalletData>(
                     "select u.PrivateKey from sp.vUser u where u.UserId = @UserId",
                     new { UserId = userId });
-                if (privateKey == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
+                if (privateKey == null) return Result.Failure<WalletData>(Status.NotFound, "Private key found.");
                 return Result.Success(privateKey);
             }
         }

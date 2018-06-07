@@ -69,6 +69,21 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret(result.Content.PrivateKey);
             string Address = privateKey.GetAddress().ToString();
             return Address;
+
         }
+
+        [HttpPost("Withdraw")]
+
+        public  async void Withdraw([FromBody] WalletViewModel WalletViewModel)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
+            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
+            QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
+            BitcoinAddress destinationAddress = BitcoinAddress.Create(WalletViewModel.DestinationAddress,Network.TestNet);
+            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, (decimal)0.05, 6, client);
+            TransactionMaker.BroadCastTransaction(transaction,client);
+        }
+
     }
 }
