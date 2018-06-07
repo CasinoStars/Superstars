@@ -51,15 +51,15 @@ namespace Superstars.Wallet
             }
         }
 
-        public void Serialize(string fileName)
+        public static void Serialize(string fileName, SerilalisableTrxWithAmountSend obj)
         {
             IFormatter formatter = new BinaryFormatter();
             Stream streamWriter = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(streamWriter, this);
+            formatter.Serialize(streamWriter, obj);
             streamWriter.Close();
         }
 
-        public SerilalisableTrxWithAmountSend Deserialize(string fileName)
+        public static SerilalisableTrxWithAmountSend Deserialize(string fileName)
         {
             IFormatter formatter = new BinaryFormatter();
             Stream streamReader = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);

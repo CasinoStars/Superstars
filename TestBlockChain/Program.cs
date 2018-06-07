@@ -37,7 +37,7 @@ namespace Superstars.Wallet
 
             // obj.Serialize("Ok");
 
-            obj.Deserialize("Ok");
+            SerilalisableTrxWithAmountSend.Deserialize("Ok");
 
             Console.WriteLine(obj.TransactionHash[0]);
             Console.WriteLine(obj.Amount[0]);
