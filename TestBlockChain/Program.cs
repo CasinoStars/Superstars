@@ -13,6 +13,7 @@ using QBitNinja.Client;
 using QBitNinja.Client.Models;
 using System.Linq;
 using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace Superstars.Wallet
 {
@@ -22,9 +23,24 @@ namespace Superstars.Wallet
         {
 
             var network = Network.TestNet;
-            BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
-            BitcoinSecret btcS = new BitcoinSecret("tkt");
-            Console.WriteLine(key.ToString());
+            QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
+           // BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
+            BitcoinSecret btcS = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
+
+            List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(btcS,client);
+
+         
+
+            SerilalisableTrxWithAmountSend obj = new SerilalisableTrxWithAmountSend();
+
+            obj.AddTrxAndAmount(pendingTrx[0].ToString(), 1);
+
+            // obj.Serialize("Ok");
+
+            obj.Deserialize("Ok");
+
+            Console.WriteLine(obj.TransactionHash[0]);
+            Console.WriteLine(obj.Amount[0]);
 
 
             //var bitcoinPrivateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup", network);

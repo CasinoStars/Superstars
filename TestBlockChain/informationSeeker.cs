@@ -36,7 +36,7 @@ namespace Superstars.Wallet
 
             foreach (var response in responses)
             {
-                if (response.Block.Confirmations == 0) unconfirmedTrxs.Add(response);
+                if (response.Block.Confirmations > 6) unconfirmedTrxs.Add(response);
             }
             return unconfirmedTrxs;
         }
