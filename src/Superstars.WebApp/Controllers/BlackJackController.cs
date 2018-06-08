@@ -11,13 +11,10 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class BlackJackController : Controller
     {
-        Deck _deck;
         BlackJackGateway _blackJackGateway;
 
         public BlackJackController(BlackJackGateway blackJackGateway)
         {
-            _deck = new Deck();
-            _deck.CreateDeck();
             _blackJackGateway = blackJackGateway;
         }
 
@@ -46,4 +43,4 @@ namespace Superstars.WebApp.Controllers
         }
     }
 }
-}
+
