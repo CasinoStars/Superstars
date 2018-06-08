@@ -93,15 +93,38 @@ namespace Superstars.WebApp
         }
 
 
-        public void PlayBlackJack(int bet)
+        public bool BlackJackCheck(List<Card> hand)
         {
-            _pot = 2 * bet;
-            _myhand = DrawCard(_myhand);
-            _myhand = DrawCard(_myhand);
-            int a = GetHandValue(_myhand);
-            bool choice = true;
-            _myhand = HitOrStand(_myhand, a, choice);
+            int blowjob = GetHandValue(hand);
+            if (blowjob == 21)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        public List<Card> PlayIA(List<Card> myhand, List<Card> ennemyhand)
+        {
+            if (BlackJackCheck(myhand))
+            {
+                // BLACKJACK
+                return myhand;
+            }
+
+            while (GetHandValue(myhand) < 17 && GetHandValue(ennemyhand) < GetHandValue(myhand))
+            {
+                DrawCard(myhand);
+
+                if (BlackJackCheck(myhand))
+                {
+                    // BLACKJACK
+                    return myhand;
+                }
+            }
+            return myhand;
         }
     }
 }
