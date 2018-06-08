@@ -34,7 +34,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateAiUser()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _userGateway.CreateUser("AI" + userId, _passwordHasher.HashPassword("azertyuiop"+userId), "");
+            Result result = await _userGateway.CreateUser("AI" + userId, _passwordHasher.HashPassword("azertyuiop"+userId), "","");
             return this.CreateResult(result);
         }
 

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\TestBlockChain\Superstars.Wallet.csproj" />
     <ProjectReference Include="..\Superstars.DAL\Superstars.DAL.csproj" />
   </ItemGroup>
 

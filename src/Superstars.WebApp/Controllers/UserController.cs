@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Superstars.DAL;
+using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models.AccountViewModels;
 using Superstars.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using NBitcoin;
+
 
 namespace Superstars.WebApp.Controllers
 {
@@ -17,7 +20,6 @@ namespace Superstars.WebApp.Controllers
         readonly UserService _userService;
         readonly TokenService _tokenService;
         readonly Random _random;
-
         public UserController(UserService userService, TokenService tokenService)
         {
             _userService = userService;
@@ -65,7 +67,9 @@ namespace Superstars.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                Result result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email);
+                BitcoinSecret privateKey = new Key().GetBitcoinSecret(Network.TestNet);
+                string privateKeyString = privateKey.ToString();
+                Result result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email, privateKeyString);
                 if (result.HasError)
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorMessage);
