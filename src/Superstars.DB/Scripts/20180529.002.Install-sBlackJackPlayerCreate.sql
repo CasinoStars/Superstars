@@ -1,5 +1,6 @@
 create proc sp.sBlackJackPlayerCreate
 (
+	@UserId int,
 	@BlackJackPlayerId int out,
 	@PlayerCards nvarchar(25)
 )
@@ -18,8 +19,8 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards) values(@BlackJackPlayerId, @BlackJackGameId, @PlayerCards);
-	set @BlackJackPlayerId = scope_identity();
+    insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards) values(@UserId, @BlackJackGameId, @PlayerCards);
+	set @BlackJackPlayerId = @UserId;
 	commit;
     return 0;
 end;
