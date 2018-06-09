@@ -1,6 +1,7 @@
 <template>
 <div>
     <img src="../img/back.png" id="deck">
+
 </div>
 </template>
 
@@ -13,12 +14,23 @@ import Vue from 'vue';
 export default {
     data() {
         return {
-
+            playercards: [],
         }
     },
 
+  async mounted() {
+    await this.refreshCards();
+  },
+
     methods: {
         ...mapActions(['executeAsyncRequest']),
+
+    
+    async refreshCards() {
+      this.playercards = await this.executeAsyncRequest(() => BlackJackApiService.GetPlayerCards());
+      //this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
+    },
+
     }
 }
 </script>

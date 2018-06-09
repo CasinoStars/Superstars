@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -45,8 +46,8 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("PlayerDrawCard")]
-        public async Task<IActionResult> DrawCard()
+        [HttpPost("PlayerDraw2Card")]
+        public async Task<IActionResult> Draw2Card()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
@@ -61,7 +62,13 @@ namespace Superstars.WebApp.Controllers
             data.PlayerCards = _cards;
 
             Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards);
-            return this.CreateResult(result);
+            return this.CreateResult(result); 
+        }
+
+        [HttpPost("GetPlayerCards")]
+        public List<Card> GetPlayerCards()
+        {
+            return _blackJackService._ennemyhand;
         }
     }
 }

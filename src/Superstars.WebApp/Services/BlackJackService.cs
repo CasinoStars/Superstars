@@ -11,7 +11,7 @@ namespace Superstars.WebApp
     {
         Deck _deck;
         public List<Card> _myhand { get; set; }
-        public List<Card> _ennemyhand = new List<Card>();
+        public List<Card> _ennemyhand { get; set; }
         public int _pot;
         public bool _hit;
         public bool _stand;

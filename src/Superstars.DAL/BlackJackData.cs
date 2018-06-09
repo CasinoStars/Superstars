@@ -1,4 +1,7 @@
-﻿namespace Superstars.DAL
+﻿using System.Collections.Generic;
+
+
+namespace Superstars.DAL
 {
     public class BlackJackData
     {

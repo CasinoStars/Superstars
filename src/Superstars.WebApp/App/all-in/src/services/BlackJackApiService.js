@@ -1,4 +1,4 @@
-import { postAsync, deleteAsync } from "../helpers/apiHelper";
+import { postAsync, getAsync, deleteAsync } from "../helpers/apiHelper";
 const endpoint = "/api/blackJack";
 
 class BlackJackApiService {
@@ -17,8 +17,13 @@ class BlackJackApiService {
         await deleteAsync(`${endpoint}/DeleteAi`);
     }
     
-    async DrawCard() {
-        await deleteAsync(`${endpoint}/DrawCard`);
+    async DrawCardPlayer() {
+        await postAsync(`${endpoint}/PlayerDraw2Card`);
+    }
+
+    async GetPlayerCards() {
+        var cards = await getAsync(`${endpoint}/GetPlayerCards`) + '';
+        return cards;
     }
 }
 
