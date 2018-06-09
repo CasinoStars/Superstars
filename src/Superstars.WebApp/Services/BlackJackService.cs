@@ -10,11 +10,11 @@ namespace Superstars.WebApp
     public class BlackJackService
     {
         Deck _deck;
-        List<Card> _myhand = new List<Card>();
-        List<Card> _ennemyhand = new List<Card>();
-        int _pot;
-        bool _hit;
-        bool _stand;
+        public List<Card> _myhand { get; set; }
+        public List<Card> _ennemyhand = new List<Card>();
+        public int _pot;
+        public bool _hit;
+        public bool _stand;
 
         Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
@@ -114,7 +114,7 @@ namespace Superstars.WebApp
                 return myhand;
             }
 
-            while (GetHandValue(myhand) < 17 && GetHandValue(ennemyhand) < GetHandValue(myhand))
+            while (GetHandValue(myhand) < 17 && GetHandValue(ennemyhand) > GetHandValue(myhand))
             {
                 DrawCard(myhand);
 

@@ -15,7 +15,11 @@ class BlackJackApiService {
 
     async DeleteJackAiPlayer() {
         await deleteAsync(`${endpoint}/DeleteAi`);
-    } 
+    }
+    
+    async DrawCard() {
+        await deleteAsync(`${endpoint}/DrawCard`);
+    }
 }
 
 export default new BlackJackApiService();
