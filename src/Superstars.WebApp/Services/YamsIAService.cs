@@ -7,12 +7,11 @@ namespace Superstars.WebApp.Services
 {
     public class YamsIAService
     {
-		int[] _actualBestHand = new int[5] { 0,0,0,0,0}; // on met à 0 comme ça le nombre de points de cette mmain est à 0 et la probabilité de cette main est la plus haute
+		int[] _actualBestHand = new int[5] { 0, 0, 0, 0, 0 }; // on met à 0 comme ça le nombre de points de cette mmain est à 0 et la probabilité de cette main est la plus haute
 		int[] _myHand = new int[5];
 		int _enemyPoints;
-		int _handPoints;
 
-		public YamsIAService( int[] myHand, int enemyHand)
+		public YamsIAService(int[] myHand, int enemyHand)
 		{
 			_enemyPoints = enemyHand;
 			_myHand = myHand;
@@ -21,15 +20,15 @@ namespace Superstars.WebApp.Services
 		public void ChangeOneDice()
 		{
 			int[] testHand = new int[5];
-			Array.Copy(_myHand, testHand, 5);
-			for(int index = 0 ; index <5 ; index ++ )
+			for (int index = 0; index < 5; index++)
 			{
-				for(int diceValue = 1 ; diceValue <= 6 ; diceValue++ )
+				for (int diceValue = 1; diceValue <= 6; diceValue++)
 				{
+					Array.Copy(_myHand, testHand, 5);
 					testHand[index] = diceValue;
-					if( HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) < _enemyPoints)
+					if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && (PointCount(testHand) > _enemyPoints))
 					{
-						_actualBestHand = testHand; 
+						_actualBestHand = testHand;
 					}
 				}
 			}
@@ -38,20 +37,24 @@ namespace Superstars.WebApp.Services
 		public void ChangeTwoDices()
 		{
 			int[] testHand = new int[5];
-			Array.Copy(_myHand, testHand, 5);
-			for(int indexDice1 = 0; indexDice1 < 5; indexDice1++) // index of the first dice we change in the hand
+
+			for (int indexDice1 = 0; indexDice1 < 5; indexDice1++) // index of the first dice we change in the hand
 			{
-				for(int valueDiceOne = 1 ; valueDiceOne <= 6 ; valueDiceOne++) // value of the first dice we change in the hand
+				for (int valueDiceOne = 1; valueDiceOne <= 6; valueDiceOne++) // value of the first dice we change in the hand
 				{
-					for (int indexDice2 = 0; (indexDice2 < 5) && (indexDice2!=indexDice1) ; indexDice2++) // index of the first dice we change in the hand
+					for (int indexDice2 = 0; (indexDice2 < 5) && (indexDice2 != indexDice1); indexDice2++) // index of the first dice we change in the hand
 					{
 						for (int valueDice2 = 1; valueDice2 <= 6; valueDice2++) // value of the first dice we change in the hand
 						{
+							Array.Copy(_myHand, testHand, 5);
 							testHand[indexDice1] = valueDiceOne;
 							testHand[indexDice2] = valueDice2;
-							if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) < _enemyPoints)
+							if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)))
 							{
-								_actualBestHand = testHand;
+								if (PointCount(testHand) > _enemyPoints)
+								{
+									_actualBestHand = testHand;
+								}
 							}
 						}
 					}
@@ -62,23 +65,23 @@ namespace Superstars.WebApp.Services
 		public void ChangeThreeDices()
 		{
 			int[] testHand = new int[5];
-			Array.Copy(_myHand, testHand, 5);
-			for (int indexDice1 = 0 ; indexDice1 < 5 ; indexDice1++ )
+			for (int indexDice1 = 0; indexDice1 < 5; indexDice1++)
 			{
-				for(int indexDice2 = 0; indexDice2 < 5; indexDice2++)
+				for (int indexDice2 = 0; indexDice2 < 5; indexDice2++)
 				{
-					for(int indexDice3 = 0; indexDice3 < 5; indexDice3++ )
+					for (int indexDice3 = 0; indexDice3 < 5; indexDice3++)
 					{
-						for(int valueDice1 = 1; valueDice1 <= 6; valueDice1++)
+						for (int valueDice1 = 1; valueDice1 <= 6; valueDice1++)
 						{
 							for (int valueDice2 = 1; valueDice2 <= 6; valueDice2++)
 							{
 								for (int valueDice3 = 1; valueDice3 <= 6; valueDice3++)
 								{
+									Array.Copy(_myHand, testHand, 5);
 									testHand[indexDice1] = valueDice1;
 									testHand[indexDice2] = valueDice2;
 									testHand[indexDice3] = valueDice3;
-									if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) < _enemyPoints)
+									if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) > _enemyPoints)
 									{
 										_actualBestHand = testHand;
 									}
@@ -93,11 +96,10 @@ namespace Superstars.WebApp.Services
 		public void ChangeFourDices()
 		{
 			int[] testHand = new int[5];
-			Array.Copy(_myHand, testHand, 5);
 
-			for(int indexUnchangedDice=0; indexUnchangedDice<5; indexUnchangedDice++) // index of the unchanged dice in the hand
+			for (int indexUnchangedDice = 0; indexUnchangedDice < 5; indexUnchangedDice++) // index of the unchanged dice in the hand
 			{
-				for(int valueDice1 = 1; valueDice1<=6;valueDice1++) // value of the first dice we change 
+				for (int valueDice1 = 1; valueDice1 <= 6; valueDice1++) // value of the first dice we change 
 				{
 					for (int valueDice2 = 1; valueDice2 <= 6; valueDice2++) // value of the second dice we change
 					{
@@ -105,13 +107,14 @@ namespace Superstars.WebApp.Services
 						{
 							for (int valueDice4 = 1; valueDice4 <= 6; valueDice4++) // value of the forth dice we change
 							{
-								List<int> values = new List<int> {valueDice1,valueDice2,valueDice3,valueDice4 };
+								Array.Copy(_myHand, testHand, 5);
+								List<int> values = new List<int> { valueDice1, valueDice2, valueDice3, valueDice4 };
 								values.Insert(indexUnchangedDice, testHand[indexUnchangedDice]);
-							    for(int i = 0; i<5;i++)
+								for (int i = 0; i < 5; i++)
 								{
 									testHand[i] = values[i];
 								}
-								if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) < _enemyPoints)
+								if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) > _enemyPoints)
 								{
 									_actualBestHand = testHand;
 								}
@@ -121,62 +124,29 @@ namespace Superstars.WebApp.Services
 				}
 			}
 		}
-
-		/*
-		public void ChangeFiveDices()
-		{
-			int[] testHand = new int[5];
-			Array.Copy(_myHand, testHand, 5);
-			for(int valueDice1=1; valueDice1<=6;valueDice1++) // value of the first dice in the hand
-			{
-				for(int valueDice2 = 1; valueDice2 <= 6; valueDice2++) // value of the second dice in the hand
-				{
-					for(int valueDice3 = 1; valueDice3 <= 6; valueDice3++) // value of the third dice in the hand
-					{
-						for(int valueDice4 = 1; valueDice4 <= 6; valueDice4++) // value of the fourth dice in the hand
-						{
-							for (int valueDice5 = 1; valueDice5 <= 6; valueDice5++) // value of the fifth dice in the hand
-							{
-								testHand[0] = valueDice1;
-								testHand[1] = valueDice2;
-								testHand[2] = valueDice3;
-								testHand[3] = valueDice4;
-								testHand[4] = valueDice5;
-								if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) < _enemyPoints)
-								{
-									_actualBestHand = testHand;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		*/
 
 		public int[] GiveRerollHand()
 		{
-			int[] nullHand = new int[5] {0,0,0,0,0};
+			int[] nullHand = new int[5] { 0, 0, 0, 0, 0 };
 			ChangeOneDice();
-			if (_actualBestHand == nullHand)
+			if (!HandNotNice(_actualBestHand))
 			{
 				ChangeTwoDices();
-				if (_actualBestHand == nullHand)
-				{
-					ChangeThreeDices();
-					if (_actualBestHand == nullHand)
-					{
-						ChangeFourDices();
-					}
-				}
 			}
-
+			if (!HandNotNice(_actualBestHand))
+			{
+				ChangeThreeDices();
+			}
+			if (!HandNotNice(_actualBestHand))
+			{
+				ChangeFourDices();
+			}
 			int[] toRerollHand = new int[5];
 			Array.Copy(_myHand, toRerollHand, 5);
 
-			for(int i = 0 ; i < 5 ; i++)
+			for (int i = 0; i < 5; i++)
 			{
-				if(_actualBestHand[i] != toRerollHand[i])
+				if (_actualBestHand[i] != toRerollHand[i])
 				{
 					toRerollHand[i] = 0;
 				}
@@ -185,13 +155,29 @@ namespace Superstars.WebApp.Services
 		}
 
 		#region Tolls methodes
+
+		private bool HandNotNice(int[] hand)
+		{
+			int k = 0;
+			foreach (int i in hand)
+			{
+				if (i != 0) { k++; }
+			}
+
+			if (k == 5)
+			{
+				return true;
+			}
+			return false;
+		}
+
 		private int PointCount(int[] hand)
 		{
 			int[] handcount = new int[6];
 			int points = 0;
 
 			handcount = DicesValue(hand);
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 6; i++)
 			{
 				//yams
 				if (handcount[i] == 5)
@@ -245,12 +231,11 @@ namespace Superstars.WebApp.Services
 			// chance
 			if (points == 0)
 			{
-				for (int i = 1; i < 6; i++)
+				for (int i = 1; i <= 6; i++)
 				{
 					points = points + handcount[i - 1] * i;
 				}
 			}
-
 			return points;
 		}
 
@@ -272,6 +257,9 @@ namespace Superstars.WebApp.Services
 			float proba;
 			switch (diceRerollNumber)
 			{
+				case 0:
+					proba = 1;
+					break;
 				case 1:
 					proba = ((float)1 / (float)6);
 					break;
@@ -288,23 +276,24 @@ namespace Superstars.WebApp.Services
 					proba = ((float)120 / (float)(6 * 6 * 6 * 6 * 6));
 					break;
 				default:
-					throw new NotImplementedException("bad numberofdices");
+					throw new NotImplementedException("bad number of dices");
 			}
 			return proba;
 		} // give proba according to the number of dices we reroll in the same time
 
 		private int NumberRerollDice(int[] handAfterReroll)
 		{
-			int numberOfDiceReroll = 0 ;
-			for(int i =0; i<_myHand.Length;i++)
+			int numberOfDiceReroll = 0;
+			for (int i = 0; i < _myHand.Length; i++)
 			{
-				if(_myHand[i]!=handAfterReroll[i])
+				if (_myHand[i] != handAfterReroll[i])
 				{
 					numberOfDiceReroll++;
 				}
 			}
 			return numberOfDiceReroll;
 		}
-		#endregion  
+		#endregion
 	}
 }
+
