@@ -11,10 +11,8 @@ namespace Superstars.WebApp.Services
 		int[] _myHand = new int[5];
 		int _enemyPoints;
 
-		public YamsIAService(int[] myHand, int enemyHand)
+		public YamsIAService()
 		{
-			_enemyPoints = enemyHand;
-			_myHand = myHand;
 		}
 
 		public void ChangeOneDice()
@@ -125,8 +123,10 @@ namespace Superstars.WebApp.Services
 			}
 		}
 
-		public int[] GiveRerollHand()
+		public int[] GiveRerollHand(int[] hand, int enemypoints)
 		{
+			_myHand = hand;
+			_enemyPoints = enemypoints;
 			int[] nullHand = new int[5] { 0, 0, 0, 0, 0 };
 			ChangeOneDice();
 			if (!HandNotNice(_actualBestHand))
