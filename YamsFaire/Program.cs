@@ -12,21 +12,23 @@ namespace YamsFaire
             Dices dices = new Dices();
             dices.rolleDices();
 
-            string ok = "oigroidjd";
-            ok = HashManager.getHashSha256(ok);
-            Console.WriteLine(ok);
+            //string ok = "oigroidjd";
+         // Console.WriteLine(ok);
 
             var rnd = new RNGCryptoServiceProvider();
             var b = new byte[16];
 
- 
 
+            HashManager.Hash("ok", "ok", 6);
 
-            foreach (var dice in dices.dices)
+            for (int i = 0; i < 1000; i++)
             {
-                Console.Write(dice + " ");
+                HashManager.Hash("ok", "ok", i);
             }
+
+
             Console.ReadKey();
+
         }
     }
 }
