@@ -19,13 +19,17 @@ export default {
     },
 
   async mounted() {
+    await this.initplayer();
     await this.refreshCards();
   },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
-    
+    async initplayer() {
+        await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
+    },
+
     async refreshCards() {
       this.playercards = await this.executeAsyncRequest(() => BlackJackApiService.GetPlayerCards());
       //this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());

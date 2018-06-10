@@ -9,7 +9,7 @@ begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	     if not exists(select * from sp.tBlackJackGame bj where bj.[BlackJackPlayerId] = @BlackJackPlayerId)
+	     if not exists(select * from sp.tBlackJackPlayer bj where bj.[BlackJackGameId] = @BlackJackGameId)
 	begin
 		rollback;
 		return 1;

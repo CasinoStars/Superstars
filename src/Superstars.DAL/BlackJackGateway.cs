@@ -70,7 +70,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<BlackJackData>(
-                    "select top 1 t.BlackJackPlayerId, t.BlackJackGameId, PlayerCards from sp.vBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId order by BlackJackPlayerId desc",
+                    "select top 1 t.BlackJackPlayerId, t.BlackJackGameId, t.PlayerCards from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId order by BlackJackPlayerId desc",
                     new { BJPlayerId = playerId });
             }
         }
@@ -86,17 +86,16 @@ namespace Superstars.DAL
         }
 
 
-        public async Task<Result<string>> GetPlayerCards(int userId, int gameId)
+        public async Task<string> GetPlayerCards(int userId, int gameId)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string data = await con.QueryFirstOrDefaultAsync<string>(
+                return await con.QueryFirstOrDefaultAsync<string>(
                     @"select t.PlayerCards from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
                     new { BJPlayerId = userId, BJGameId = gameId });
-                if (data == null) return Result.Failure<string>(Status.NotFound, "Data not found.");
-                return Result.Success(data);
             }
         }
+
 
         public async Task<Result<int>> UpdateBlackJackPlayer(int playerid, int gameid,  string cards)
         {
@@ -113,7 +112,7 @@ namespace Superstars.DAL
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "This game doesn't exist");
                 if (status == 2) return Result.Failure<int>(Status.BadRequest, "This player id doesnt correspond to the game");
 
-                return Result.Success(p.Get<int>("@YamsPlayerId"));
+                return Result.Success(p.Get<int>("@BlackJackPlayerId"));
             }
         }
 

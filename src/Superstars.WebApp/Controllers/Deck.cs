@@ -9,7 +9,7 @@ namespace Superstars.WebApp
 {
     public class Deck
     {
-        public string[] Symbole = new string[] { "Carreau", "Coeur", "Pique", "Trefle" };
+        public string[] Symbole = new string[] { "c", "h", "p", "t" };
 
         public int[] Valeur = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
@@ -49,8 +49,8 @@ namespace Superstars.WebApp
         public Card Draw()
         {
             int top = DeckCards.Count;
-            var drawedcard = DeckCards.ElementAt(top);
-            DeckCards.RemoveAt(top);
+            var drawedcard = DeckCards.ElementAt(top - 1);
+            DeckCards.RemoveAt(top - 1);
             return drawedcard;
         }
     }

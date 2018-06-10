@@ -17,11 +17,12 @@ class BlackJackApiService {
         await deleteAsync(`${endpoint}/DeleteAi`);
     }
     
-    async DrawCardPlayer() {
-        await postAsync(`${endpoint}/PlayerDraw2Card`);
+    async InitPlayer() {
+        await postAsync(`${endpoint}/InitPlayer`);
     }
 
     async GetPlayerCards() {
+        console.log('ich');
         var cards = await getAsync(`${endpoint}/GetPlayerCards`) + '';
         return cards;
     }

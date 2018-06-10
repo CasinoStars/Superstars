@@ -24,6 +24,8 @@ namespace Superstars.WebApp
             _deck.CreateDeck();
             _values = Valueforcards(_values);
             _deck.Shuffle();
+            _myhand = new List<Card>();
+            _ennemyhand = new List<Card>();
             _hit = false;
             _stand = false;
         }
