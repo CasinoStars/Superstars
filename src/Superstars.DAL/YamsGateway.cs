@@ -114,7 +114,7 @@ namespace Superstars.DAL
             {
                 return await con.QueryFirstOrDefaultAsync<YamsData>(
                     "select top 1 t.YamsGameId from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId order by YamsGameId desc",
-                    new { YamsPlayerId = playerId });
+                    new { YamsPlayerId = playerId, });
             }
         }
 

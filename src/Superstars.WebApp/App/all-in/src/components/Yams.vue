@@ -53,6 +53,7 @@ export default {
 
   async mounted() {
     await this.refreshDices();
+    await this.refreshIaDices();
   },
   
   methods: {
@@ -60,6 +61,9 @@ export default {
 
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
+    },
+    
+    async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
     },
 
@@ -69,25 +73,21 @@ export default {
 
     async onSubmitAI(e) {
       e.preventDefault();
-      if(this.nbTurn == 3)
-      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
       let arraydice = [this.iadices, this.dices];
       console.log(arraydice);
       await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-      await this.refreshDices();
+      await this.refreshIaDices();
     },
 
     async onSubmit(e) {
       e.preventDefault();
-
       if(this.nbTurn === 0)
         await this.executeAsyncRequest(() => YamsApiService.RollDices([1,2,3,4,5]));
       else
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
       await this.refreshDices();
-
       if(this.nbTurn < 3)
-      await this.changeTurn();
+        await this.changeTurn();
     }
   }
 }

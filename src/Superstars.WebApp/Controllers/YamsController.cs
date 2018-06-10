@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
+using Superstars.WebApp.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -14,13 +15,15 @@ namespace Superstars.WebApp.Controllers
 
         YamsGateway _yamsGateway;
         UserGateway _userGateway;
+        YamsIAService _yamsIAService;
         PasswordHasher _passwordHasher;
 
 
-        public YamsController(YamsGateway yamsGateway, UserGateway userGateway, PasswordHasher passwordHasher)
+        public YamsController(YamsGateway yamsGateway, YamsIAService yamsIAService, UserGateway userGateway, PasswordHasher passwordHasher)
         {
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
+            _yamsIAService = yamsIAService;
             _passwordHasher = passwordHasher;
         }
 
@@ -28,12 +31,23 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("RollIa")]
         public async Task<IActionResult> RollIaDices([FromBody] int[][] dices)
         {
-            var myhand = dices[1];
-            var ennemyhand = dices[0];
-            int mypts = _yamsGateway.PointCount(myhand);
-            int ennemypts = _yamsGateway.PointCount(ennemyhand);
-            var result = await RollDices();
-            return result;
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData IA = await _userGateway.FindByName("AI" + userId);
+            YamsData data = await _yamsGateway.GetPlayer(IA.UserId);
+
+            int[] playerHand = dices[1];
+            int[] IaHand = dices[0];
+            int playerPts = _yamsGateway.PointCount(playerHand);
+            int IaPts = _yamsGateway.PointCount(IaHand);
+            int[] IaDicesForReRoll = _yamsIAService.GiveRerollHand(IaHand, playerPts);
+            int[] IaFinalDices = _yamsGateway.Reroll(IaDicesForReRoll);
+            string IaStringDices = null;
+            for(int i = 0; i < IaHand.Length; i++)
+            {
+                IaStringDices += IaFinalDices[i];
+            }
+            Result result = await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
+            return this.CreateResult(result);
         }
 
         [HttpPost("Roll")]
@@ -60,12 +74,11 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpGet]
+        [HttpGet("getPlayerDices")]
         public async Task<IActionResult> GetPlayerDices()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             YamsData data = await _yamsGateway.GetGameId(userId);
-
             Result<string> result = await _yamsGateway.GetPlayerDices(userId, data.YamsGameId);
             return this.CreateResult(result);
         }

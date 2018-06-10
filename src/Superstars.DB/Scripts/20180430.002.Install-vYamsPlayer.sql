@@ -6,5 +6,4 @@ as
 	NbrRevives = y.NbrRevives,
 	Dices = y.Dices,
 	DicesValue = y.DicesValue
-from sp.tYamsPlayer y
- where y.YamsGameId <> 0;
+from sp.tYamsPlayer y;

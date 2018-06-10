@@ -42,6 +42,7 @@ namespace Superstars.WebApp
             services.AddSingleton<WalletGateway>(x => new WalletGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<BlackJackGateway>(w => new BlackJackGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<BlackJackService>();
+            services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();
