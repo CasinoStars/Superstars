@@ -8,7 +8,6 @@ namespace YamsFaire
 {
     class HashManager
     {
-
         public static string getHashSha512(string text)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(text);
@@ -22,36 +21,59 @@ namespace YamsFaire
             return hashString;
         }
 
-        public static void Hash(string serverSeed, string clientSeed, int nonce)
+        public static List<int> GetDicesFromHash(string cryptedServeurSeed, string clientSeedWithNonce)
         {
-            string[] results = new string[3];
-            string hashResult = getHashSha512(serverSeed + clientSeed + nonce.ToString());
-            string fromResult = "";
-            for (int p = 0; p < results.Length; p++)
+            //string[] results = new string[3];
+            //SHA512Managed hashManager = new SHA512Managed();
+            //var concatened = new byte[cryptedServeurSeed.Length + clientSeedWithNonce.Length];
+            //cryptedServeurSeed.CopyTo(concatened, 0);
+            //clientSeedWithNonce.CopyTo(concatened, cryptedServeurSeed.Length);
+            string hash = getHashSha512(cryptedServeurSeed + clientSeedWithNonce);
+
+            // byte[] fromResult = new byte[10];
+            // int[] decimalResults = new int[3];
+            int i = 0;
+            string[] results = new string[hash.Length/4];
+            int z = 0;
+            for (int p = 0; p < hash.Length/4; p++)
             {
-                int z = 0;
-                fromResult = "";
-                for (int i = 0; i < 6; i++)
+                z += 4;
+                while (i < z)
                 {
-                    if (p == 1) z = 6;
-                    if (p == 2) z = 12;
-                    fromResult += hashResult[i+z];
+                    results[p] += hash[i];
+                    i++;
                 }
-                results[p] = fromResult;
             }
 
-            int[] decimalResults = new int[3];
-            for (int i = 0; i < results.Length; i++)
+            List<int> IntFromResults = new List<int>();
+
+            foreach (var item in results)
             {
-                decimalResults[i] = int.Parse(results[i], System.Globalization.NumberStyles.HexNumber);
-                string test = decimalResults[i].ToString();
-                if (test.Length < 6) throw new Exception("Length to short");
+                if(int.Parse(item, System.Globalization.NumberStyles.HexNumber) < 59999)
+                IntFromResults.Add(int.Parse(item, System.Globalization.NumberStyles.HexNumber));
             }
 
-            foreach (var result in decimalResults)
+            List<int> dicesFromHash = new List<int>();
+
+            foreach (var item in IntFromResults)
             {
-                Console.WriteLine(result);
+                if (item < 10000) dicesFromHash.Add(1);
+                if (item < 20000) dicesFromHash.Add(2);
+                if (item < 30000) dicesFromHash.Add(3);
+                if (item < 40000) dicesFromHash.Add(4);
+                if (item < 50000) dicesFromHash.Add(5);
+                if (item < 60000) dicesFromHash.Add(6);
             }
+            if (dicesFromHash.Count < 15) throw new ArgumentException(" Length to short");
+
+            return dicesFromHash; 
+         }
+
+
+        public static void get ()
+        {
+
         }
+
     }
 }
