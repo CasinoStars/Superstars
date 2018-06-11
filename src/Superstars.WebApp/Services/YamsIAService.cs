@@ -26,7 +26,7 @@ namespace Superstars.WebApp.Services
 					testHand[index] = diceValue;
 					if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && (PointCount(testHand) > _enemyPoints))
 					{
-						_actualBestHand = testHand;
+						Array.Copy(testHand, _actualBestHand, 5);
 					}
 				}
 			}
@@ -51,7 +51,7 @@ namespace Superstars.WebApp.Services
 							{
 								if (PointCount(testHand) > _enemyPoints)
 								{
-									_actualBestHand = testHand;
+									Array.Copy(testHand, _actualBestHand, 5);
 								}
 							}
 						}
@@ -81,7 +81,7 @@ namespace Superstars.WebApp.Services
 									testHand[indexDice3] = valueDice3;
 									if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) > _enemyPoints)
 									{
-										_actualBestHand = testHand;
+										Array.Copy(testHand, _actualBestHand, 5);
 									}
 								}
 							}
@@ -114,7 +114,7 @@ namespace Superstars.WebApp.Services
 								}
 								if (HandProba(NumberRerollDice(testHand)) >= HandProba(NumberRerollDice(_actualBestHand)) && PointCount(testHand) > _enemyPoints)
 								{
-									_actualBestHand = testHand;
+									Array.Copy(testHand, _actualBestHand, 5);
 								}
 							}
 						}
@@ -127,17 +127,16 @@ namespace Superstars.WebApp.Services
 		{
 			_myHand = hand;
 			_enemyPoints = enemypoints;
-			int[] nullHand = new int[5] { 0, 0, 0, 0, 0 };
 			ChangeOneDice();
-			if (!HandNotNice(_actualBestHand))
+			if (HandNotNice(_actualBestHand))
 			{
 				ChangeTwoDices();
 			}
-			if (!HandNotNice(_actualBestHand))
+			if (HandNotNice(_actualBestHand))
 			{
 				ChangeThreeDices();
 			}
-			if (!HandNotNice(_actualBestHand))
+			if (HandNotNice(_actualBestHand))
 			{
 				ChangeFourDices();
 			}
@@ -161,7 +160,7 @@ namespace Superstars.WebApp.Services
 			int k = 0;
 			foreach (int i in hand)
 			{
-				if (i != 0) { k++; }
+				if (i == 0) { k++; }
 			}
 
 			if (k == 5)
