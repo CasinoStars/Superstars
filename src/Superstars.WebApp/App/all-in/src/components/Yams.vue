@@ -8,8 +8,9 @@
       <img v-if="i == 3" src="../img/diceia3.png">
       <img v-if="i == 4" src="../img/diceia4.png">
       <img v-if="i == 5" src="../img/diceia5.png">
+      <img v-if="i == 6" src="../img/diceia6.png">
     </div><br>
-    <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn >= 3">ROLL IA</button></div>
+    <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn >= 3 && nbTurnIa <3">ROLL IA</button></div>
 </form>
   <br><br><br>
   <form @submit="onSubmit($event)">
@@ -19,6 +20,7 @@
       <img v-if="i == 3" src="../img/dice3.png">
       <img v-if="i == 4" src="../img/dice4.png">
       <img v-if="i == 5" src="../img/dice5.png">
+      <img v-if="i == 6" src="../img/dice6.png">
     </div><br>
     <div class="checkbox" v-if="nbTurn != 0 && nbTurn < 3">
       <input type="checkbox" id="dice1" value="1" v-model="selected">        
@@ -26,19 +28,31 @@
       <input type="checkbox" id="dice3" value="3" v-model="selected">        
       <input type="checkbox" id="dice4" value="4" v-model="selected">        
       <input type="checkbox" id="dice5" value="5" v-model="selected">
+      
     </div>
   <br><div  style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
 
 
   <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn < 3">ROLL</button></div>
-
+  <div style="text-align:center;"><p v-if="nbTurnIa == 3">{{winOrLose}} <br>L'ordi a : {{IaFigure}} <br>Vous avez: {{playerFigure}}</p></div>
   </form>
+
+  <div style="text-align:center;" v-if="nbTurn == 3 && nbTurnIa == 3">
+    <router-link v-on:click.native="RePlay()" to="">
+      <br><button class="btn btn-light">REJOUER</button>
+    </router-link>
+    <router-link to="/play">
+      <br><button class="btn btn-dark">QUITTER</button>
+    </router-link>
+  </div>
+
 </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
+import GameApiService from '../services/GameApiService';
 import Vue from 'vue';
 
 export default {
@@ -48,6 +62,10 @@ export default {
       dices: [],
       iadices: [],
       nbTurn: 0,
+      nbTurnIa: 0,
+      winOrLose: '',
+      playerFigure: '',
+      IaFigure: '',
     }
   },
 
@@ -71,11 +89,32 @@ export default {
       this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
     },
 
+    async getFinalResult() {
+      let tableResult = await this.executeAsyncRequest(() => YamsApiService.GetFinalResult());
+      this.IaFigure = tableResult[0];
+      this.playerFigure = tableResult[1];
+      this.winOrLose = tableResult[2];
+    },
+
+    async RePlay() {
+      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+      await this.executeAsyncRequest(() => GameApiService.createGame('Yams'));
+      await this.executeAsyncRequest(() => GameApiService.createAiUser());
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
+      //this.$router.push({ path: 'yams' });
+      this.$router.go(this.$router.history);
+    },
+
     async onSubmitAI(e) {
       e.preventDefault();
       let arraydice = [this.iadices, this.dices];
       console.log(arraydice);
       await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
+      this.nbTurnIa = this.nbTurnIa + 1;
+      if(this.nbTurnIa === 3)
+        await this.getFinalResult();
       await this.refreshIaDices();
     },
 
