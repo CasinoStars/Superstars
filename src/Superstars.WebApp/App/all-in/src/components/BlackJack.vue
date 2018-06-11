@@ -1,6 +1,6 @@
 <template>
 <div>
-    <!-- <div v-for="(i, index) of playercards" :key="index" class="playercards">
+    <div v-for="(i, index) of playercards" :key="index" class="playercards">
       <img v-if="i == '2p'" src="../img/2p.png">
       <img v-if="i == '3p'" src="../img/3p.png">
       <img v-if="i == '4p'" src="../img/4p.png">
@@ -116,9 +116,9 @@
       <img v-if="i == '13c'" src="../img/13c.png">
       <img v-if="i == '14c'" src="../img/1c.png">
 
-    </div> -->
+    </div>
 
-    <!-- <img src="../img/back.png" id="deck"/> -->
+    <img src="../img/back.png" id="deck"/>
 
        <!-- <img v-bind:src="'../../../../wwwroot/images/' + playercards[0] + '.png'" id="firstcard"/> -->
        <!-- <img v-bind:src="'../../../../wwwroot/images/' + playercards[1] + '.png'" id="firstcard"/> -->
@@ -127,7 +127,7 @@
    <a>{{playercards[1]}}</a>
    <a>{{playercards[2]}}</a>
    <a>{{playercards[3]}}</a> -->
-    <a> {{ handvalue}}</a>
+
    <form @submit="hitorstand($event)">
    <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" >HIT</button></div>
    </form>
@@ -155,7 +155,6 @@ export default {
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
     await this.refreshCards();
     this.handvalue = this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
-    console.log("pute" + this.handvalue);
   },
 
     methods: {
