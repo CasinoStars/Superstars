@@ -22,9 +22,13 @@ class BlackJackApiService {
     }
 
     async GetPlayerCards() {
-        console.log('ich');
         var cards = await getAsync(`${endpoint}/GetPlayerCards`) + '';
+        console.log(cards);
         return cards;
+    }
+
+    async GetTurn() {
+        return await getAsync(`${endpoint}/getTurn`);
     }
 }
 
