@@ -56,6 +56,7 @@ namespace Superstars.WebApp.Controllers
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
+            _blackJackService.InitGame();
             _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
             _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
             string _cards = "";
@@ -76,7 +77,7 @@ namespace Superstars.WebApp.Controllers
 
         [HttpPost("InitAI")]
         public async Task<IActionResult> InitAi()
-        {
+        {   
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
@@ -98,32 +99,49 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        //[HttpPost("HitPlayer")]
-        //public async Task<List<Card>> HitPlayer()
-        //{
+        [HttpPost("HitPlayer")]
+        public async Task<IActionResult> HitPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BlackJackData data = await _blackJackGateway.GetPlayer(userId);
+            _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
+            string _cards = "";
+            int i = 0;
+            foreach (var item in _blackJackService._ennemyhand)
+            {
+                _cards += item.Value;
+                _cards += item.Symbol;
+                i++;
 
-        //}
+                if (i > 0)
+                    _cards += ",";
+            }
+            data.PlayerCards = _cards;
+            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1);
+            return this.CreateResult(result);
+
+        }
 
         [HttpGet("GetPlayerCards")]
-        public async Task<string[]> GetPlayerCards()
+        public async Task<string> GetPlayerCards()
         {
             List<Card> cards = _blackJackService._ennemyhand;
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
             string playercards = await _blackJackGateway.GetPlayerCards(userId, data.BlackJackGameId);
-            string[]finalcards = playercards.Split(',');
-            return finalcards;
+            //string finalcards = playercards.Split(',');
+            return playercards;
         }
 
         [HttpGet("GetAiCards")]
-        public async Task<string[]> GetAiCards()
+        public async Task<string> GetAiCards()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
             string playercards = await _blackJackGateway.GetPlayerCards(user.UserId, data.BlackJackGameId);
-            string[] finalcards = playercards.Split(',');
-            return finalcards;
+            //string[] finalcards = playercards.Split(',');
+            return playercards;
         }
 
         [HttpGet("getTurn")]
@@ -133,6 +151,14 @@ namespace Superstars.WebApp.Controllers
             BlackJackData data = await _blackJackGateway.GetGameId(userId);
             Result<int> result = await _blackJackGateway.GetTurn(data.BlackJackPlayerID, data.BlackJackGameId);
             return this.CreateResult(result);
+        }
+
+        [HttpGet("getplayerHandValue")]
+        public int GetPlayerHandValue()
+        {
+           
+           int a = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+           return a;
         }
     }
 }

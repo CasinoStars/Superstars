@@ -18,6 +18,11 @@ namespace Superstars.WebApp
 
         public BlackJackService()
         {
+            InitGame();
+        }
+
+        public void InitGame()
+        {
             _deck = new Deck();
             _deck.CreateDeck();
             _values = Valueforcards(_values);
