@@ -41,10 +41,20 @@ namespace Superstars.WebApp.Controllers
             int[] IaHand = dices[0];
             int playerPts = _yamsService.PointCount(playerHand);
             int IaPts = _yamsService.PointCount(IaHand);
-            int[] IaDicesForReRoll = _yamsIAService.GiveRerollHand(IaHand, playerPts);
-            int[] IaFinalDices = _yamsService.Reroll(IaDicesForReRoll);
+            int[] IaFinalDices;
+            if (data.NbrRevives != 0)
+            {
+                int[] IaDicesForReRoll = _yamsIAService.GiveRerollHand(IaHand, playerPts);
+                IaFinalDices = _yamsService.Reroll(IaDicesForReRoll);
+                data.NbrRevives = data.NbrRevives + 1;
+            }
+            else
+            {
+                IaFinalDices = _yamsService.Reroll(new int[] { 0, 0, 0, 0, 0 });
+                data.NbrRevives = data.NbrRevives + 1;
+            }
             string IaStringDices = null;
-            for(int i = 0; i < IaHand.Length; i++)
+            for (int i = 0; i < IaHand.Length; i++)
             {
                 IaStringDices += IaFinalDices[i];
             }
@@ -79,6 +89,29 @@ namespace Superstars.WebApp.Controllers
 
             Result result = await _yamsGateway.UpdateYamsPlayer(userId, data.YamsGameId, data.NbrRevives, playerStringDices, playerPts);
             return this.CreateResult(result);
+        }
+
+        [HttpGet("GetFinalResult")]
+        public async Task<string[]> GetResultGame()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData Ia = await _userGateway.FindByName("AI" + userId);
+            YamsData playerData = await _yamsGateway.GetPlayer(userId);
+            YamsData IaData = await _yamsGateway.GetPlayer(Ia.UserId);
+
+
+            int[] IaDices = new int[5];
+            int[] playerDices = new int[5];
+            string stringIaDices = IaData.Dices;
+            string stringPlayerDices = playerData.Dices;
+
+            for (int i = 0; i < 5; i++)
+            {
+                IaDices[i] = (int)char.GetNumericValue(stringIaDices[i]);
+                playerDices[i] = (int)char.GetNumericValue(stringPlayerDices[i]);
+            }
+            string[] result = _yamsService.TabFiguresAndWinner(IaDices, playerDices);
+            return result;
         }
 
         [HttpGet("getPlayerDices")]

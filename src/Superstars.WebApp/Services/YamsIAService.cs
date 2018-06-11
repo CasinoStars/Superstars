@@ -7,15 +7,19 @@ namespace Superstars.WebApp.Services
 {
     public class YamsIAService
     {
-		int[] _actualBestHand = new int[5] { 0, 0, 0, 0, 0 }; // on met à 0 comme ça le nombre de points de cette mmain est à 0 et la probabilité de cette main est la plus haute
+        YamsService _yamsService;
+        int[] _actualBestHand = new int[5] { 0, 0, 0, 0, 0 }; // on met à 0 comme ça le nombre de points de cette mmain est à 0 et la probabilité de cette main est la plus haute
 		int[] _myHand = new int[5];
 		int _enemyPoints;
 
-		public YamsIAService()
+		public YamsIAService(YamsService yamsService)
 		{
+            _yamsService = yamsService;
 		}
 
-		private void ChangeOneDice()
+        private int PointCount(int[] hand) => _yamsService.PointCount(hand);
+
+        private void ChangeOneDice()
 		{
 			int[] testHand = new int[5];
 			for (int index = 0; index < 5; index++)
@@ -168,74 +172,6 @@ namespace Superstars.WebApp.Services
 				return true;
 			}
 			return false;
-		}
-
-		private int PointCount(int[] hand)
-		{
-			int[] handcount = new int[6];
-			int points = 0;
-
-			handcount = DicesValue(hand);
-			for (int i = 0; i < 6; i++)
-			{
-				//yams
-				if (handcount[i] == 5)
-				{
-					points = points + 50 + (5 * (i + 1));
-					return points;
-				}
-
-				//carré
-				if (handcount[i] == 4)
-				{
-					for (int l = 0; l < 5; l++)
-					{
-						if (handcount[l] == 1)
-						{
-							points = points + 40 + (4 * (i + 1)) + (l + 1);
-							return points;
-						}
-					}
-				}
-
-				// full
-				else if (handcount[i] == 3)
-				{
-					for (int l = 0; l < 5; l++)
-					{
-						if (handcount[l] == 2)
-						{
-							points = points + 30 + (3 * (i + 1)) + (2 * (l + 1));
-							return points;
-						}
-					}
-				}
-			}
-			// petite suite
-			if (handcount[0] == 1)
-			{
-				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
-				{
-					points = points + 45;
-				}
-			}//grade suite
-			else if (handcount[1] == 1)
-			{
-				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
-				{
-					points = points + 50;
-				}
-			}
-
-			// chance
-			if (points == 0)
-			{
-				for (int i = 1; i <= 6; i++)
-				{
-					points = points + handcount[i - 1] * i;
-				}
-			}
-			return points;
 		}
 
 		private int[] DicesValue(int[] hand)

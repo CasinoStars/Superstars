@@ -42,5 +42,9 @@ class YamsApiService {
     async GetTurn() {
         return await getAsync(`${endpoint}/getTurn`);
     }
+
+    async GetFinalResult() {
+        return await getAsync(`${endpoint}/GetFinalResult`);
+    }
 }
 export default new YamsApiService();
