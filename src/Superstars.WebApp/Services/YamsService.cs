@@ -36,15 +36,12 @@ namespace Superstars.WebApp.Services
             return value;
         }
 
-        private int[] DicesValue(int[] hand)
+        private int[] DicesValue(int[] hand) // hand[ 1,2,1,1,6 ]
         {
             int[] count = new int[6] { 0, 0, 0, 0, 0, 0 };
             for (int i = 0; i < 5; i++)
             {
-                for (int z = 1; z <= 6; z++)
-                {
-                    if (hand[i] == z) count[z - 1]++;
-                }
+				count[hand[i]-1] ++;
             }
             return count;
         }
@@ -67,7 +64,7 @@ namespace Superstars.WebApp.Services
                 //carré
                 if (handcount[i] == 4)
                 {
-                    for (int l = 0; l < 5; l++)
+                    for (int l = 0; l < 6; l++)
                     {
                         if (handcount[l] == 1)
                         {
@@ -80,7 +77,7 @@ namespace Superstars.WebApp.Services
                 // full
                 else if (handcount[i] == 3)
                 {
-                    for (int l = 0; l < 5; l++)
+                    for (int l = 0; l < 6; l++)
                     {
                         if (handcount[l] == 2)
                         {
@@ -120,10 +117,10 @@ namespace Superstars.WebApp.Services
         private string FindFigureName(int[] hand)
 		{
 			string figureName;
-			int[] handcount = new int[5];
+			int[] handcount = new int[6];
 
 			handcount = DicesValue(hand);
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 6; i++)
 			{
 				//yams
 				if (handcount[i] == 5)
@@ -134,7 +131,7 @@ namespace Superstars.WebApp.Services
 				//carré
 				if (handcount[i] == 4)
 				{
-					for (int l = 0; l < 5; l++)
+					for (int l = 0; l < 6; l++)
 					{
 						if (handcount[l] == 1)
 						{
@@ -146,7 +143,7 @@ namespace Superstars.WebApp.Services
 				// full
 				else if (handcount[i] == 3)
 				{
-					for (int l = 0; l < 5; l++)
+					for (int l = 0; l < 6; l++)
 					{
 						if (handcount[l] == 2)
 						{
