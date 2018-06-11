@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Superstars.WebApp.Controllers
+namespace Superstars.WebApp.Services
 {
-    public class EloController
-    {
+	public class EloService
+	{
+		#region fields
 		int _firstPlayerElo;
 		int _secondPlayerElo;
 		double prob_first;
@@ -14,8 +15,10 @@ namespace Superstars.WebApp.Controllers
 		bool _winner; // true if fist player win // false if second player win
 
 		int K;
+		#endregion
 
-		public EloController ()
+		// contructor
+		public EloService()
 		{
 
 
@@ -24,15 +27,16 @@ namespace Superstars.WebApp.Controllers
 		private void Proba()
 		{
 			int d = _firstPlayerElo - _secondPlayerElo;
-			prob_first = 1/(  1+ Math.Pow(10,(-d/400))) ;//+d
+			prob_first = 1 / (1 + Math.Pow(10, (-d / 400)));//+d
 			prob_second = 1 / (1 + Math.Pow(10, (d / 400)));//-d
 		}
 
 		private void NewElo()
 		{
+			Proba();
 			int W_first;
 			int W_second;
-			if(_winner)
+			if (_winner)
 			{
 				W_first = 1;
 				W_second = 0;
@@ -48,5 +52,5 @@ namespace Superstars.WebApp.Controllers
 			}
 		}
 
-    }
+	}
 }

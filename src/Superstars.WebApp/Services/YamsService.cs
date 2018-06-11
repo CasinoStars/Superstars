@@ -132,7 +132,7 @@ namespace Superstars.WebApp.Services
             return points;
         }
 
-        public string FindFigureName(int[] hand)
+        private string FindFigureName(int[] hand)
 		{
 			string figureName;
 			int[] handcount = new int[5];
@@ -188,6 +188,22 @@ namespace Superstars.WebApp.Services
 
 			// chance
 			return figureName = "chance";
+		}
+
+		public string[] TabFiguresAndWinner(int[] handIA,int[] handPlayer)
+		{
+			string[] figuresAndWinnnerNames = new string[3];
+			figuresAndWinnnerNames[0] = FindFigureName(handIA);
+			figuresAndWinnnerNames[1] = FindFigureName(handPlayer);
+			if(PointCount(handIA)>=PointCount(handPlayer))
+			{
+				figuresAndWinnnerNames[2] = "You Lose";
+			}
+			else
+			{
+				figuresAndWinnnerNames[2] = "You Win";
+			}
+			return figuresAndWinnnerNames;
 		}
     }
 }
