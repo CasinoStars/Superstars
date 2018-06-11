@@ -15,7 +15,7 @@ namespace Superstars.WebApp.Services
 		{
 		}
 
-		public void ChangeOneDice()
+		private void ChangeOneDice()
 		{
 			int[] testHand = new int[5];
 			for (int index = 0; index < 5; index++)
@@ -32,7 +32,7 @@ namespace Superstars.WebApp.Services
 			}
 		}
 
-		public void ChangeTwoDices()
+		private void ChangeTwoDices()
 		{
 			int[] testHand = new int[5];
 
@@ -60,7 +60,7 @@ namespace Superstars.WebApp.Services
 			}
 		}
 
-		public void ChangeThreeDices()
+		private void ChangeThreeDices()
 		{
 			int[] testHand = new int[5];
 			for (int indexDice1 = 0; indexDice1 < 5; indexDice1++)
@@ -91,7 +91,7 @@ namespace Superstars.WebApp.Services
 			}
 		}
 
-		public void ChangeFourDices()
+		private void ChangeFourDices()
 		{
 			int[] testHand = new int[5];
 
