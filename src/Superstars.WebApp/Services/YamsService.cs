@@ -132,20 +132,62 @@ namespace Superstars.WebApp.Services
             return points;
         }
 
-        public string FindWinner(int IaPts, int PlayerPts)
-        {
-            if (IaPts < PlayerPts)
-            {
-                return "You Win";
-            }
-            else if (IaPts > PlayerPts)
-            {
-                return "You Lost";
-            }
-            else
-            {
-                return "Draw";
-            }
-        }
+        public string FindFigureName(int[] hand)
+		{
+			string figureName;
+			int[] handcount = new int[5];
+
+			handcount = DicesValue(hand);
+			for (int i = 0; i < 5; i++)
+			{
+				//yams
+				if (handcount[i] == 5)
+				{
+					return figureName = ("yams de " + (i+1));
+				}
+
+				//carré
+				if (handcount[i] == 4)
+				{
+					for (int l = 0; l < 5; l++)
+					{
+						if (handcount[l] == 1)
+						{
+							return figureName = ("carré de " + (i + 1));
+						}
+					}
+				}
+
+				// full
+				else if (handcount[i] == 3)
+				{
+					for (int l = 0; l < 5; l++)
+					{
+						if (handcount[l] == 2)
+						{
+							return figureName = "full " + (i + 1) + "-" + (l + 1);
+						}
+					}
+			    }
+		    }
+			// petite suite
+			if (handcount[0] == 1)
+			{
+				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
+				{
+					return figureName = "petite suite";
+				}
+			}
+			else if (handcount[1] == 1)
+			{
+				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
+				{
+					return figureName = "grande suite";
+				}
+			}
+
+			// chance
+			return figureName = "chance";
+		}
     }
 }
