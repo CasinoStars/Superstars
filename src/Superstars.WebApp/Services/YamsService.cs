@@ -32,13 +32,13 @@ namespace Superstars.WebApp.Services
         {
             Random rdn = new Random();
             int value;
-            value = rdn.Next(1, 6);
+            value = rdn.Next(1, 7);
             return value;
         }
 
         private int[] DicesValue(int[] hand)
         {
-            int[] count = new int[5] { 0, 0, 0, 0, 0 };
+            int[] count = new int[6] { 0, 0, 0, 0, 0, 0 };
             for (int i = 0; i < 5; i++)
             {
                 for (int z = 1; z <= 6; z++)
@@ -51,18 +51,16 @@ namespace Superstars.WebApp.Services
 
         public int PointCount(int[] hand)
         {
-            int[] handcount = new int[5];
+            int[] handcount = new int[6];
             int points = 0;
-            int grandesuite = 0;
 
             handcount = DicesValue(hand);
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 //yams
                 if (handcount[i] == 5)
                 {
-                    points = points + 50;
-                    points = 5 * (i + 1);
+                    points = points + 50 + (5 * (i + 1));
                     return points;
                 }
 
@@ -73,7 +71,7 @@ namespace Superstars.WebApp.Services
                     {
                         if (handcount[l] == 1)
                         {
-                            points = points + 40 + (4 * (i + 1)) + l + 1;
+                            points = points + 40 + (4 * (i + 1)) + (l + 1);
                             return points;
                         }
                     }
@@ -91,12 +89,6 @@ namespace Superstars.WebApp.Services
                         }
                     }
                 }
-
-                // grande suite
-                else if (handcount[i] == 1)
-                {
-                    grandesuite++;
-                }
             }
             // petite suite
             if (handcount[0] == 1)
@@ -105,30 +97,23 @@ namespace Superstars.WebApp.Services
                 {
                     points = points + 45;
                 }
-            }
+            }//grade suite
             else if (handcount[1] == 1)
             {
                 if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
                 {
-                    points = points + 45;
+                    points = points + 50;
                 }
-            }
-
-            // grande suite
-            if (grandesuite == 5)
-            {
-                points = points + 50;
             }
 
             // chance
             if (points == 0)
             {
-                for (int i = 1; i < 6; i++)
+                for (int i = 1; i <= 6; i++)
                 {
                     points = points + handcount[i - 1] * i;
                 }
             }
-
             return points;
         }
 
