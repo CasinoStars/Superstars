@@ -34,6 +34,7 @@ class BlackJackApiService {
     async GetAiCards() {
         var cards = await getAsyncNoJSON(`${endpoint}/GetAiCards`) + '';
         var array = cards.split(',');
+        console.log("IIIIIIIIIIIIIIIIIIIIIICIIIIIIIIIIIII" + array);
         return array;
     }
 
@@ -41,13 +42,29 @@ class BlackJackApiService {
         await postAsync(`${endpoint}/HitPlayer`);
     }
 
+    refreshAiturn() {
+        return getAsyncNoJSON(`${endpoint}/refreshAiturn`);
+    }
+
+     StandPlayer() {
+        return getAsyncNoJSON(`${endpoint}/StandPlayer`);
+    }
+
+    async PlayAI() {
+        await postAsync(`${endpoint}/PlayAi`);
+    }
+
     async GetTurn() {
         return await getAsync(`${endpoint}/getTurn`);
     }
 
-    getplayerHandValue() {
-        var value = getAsyncNoJSON(`${endpoint}/getplayerHandValue`);
-        console.log("ici" + value)
+    async getplayerHandValue() {
+        var value = await getAsyncNoJSON(`${endpoint}/getplayerHandValue`);
+        return value;
+    }
+
+    async getAiHandValue() {
+        var value = await getAsyncNoJSON(`${endpoint}/getAiHandValue`);
         return value;
     }
 }

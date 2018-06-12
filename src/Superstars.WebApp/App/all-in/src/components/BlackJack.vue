@@ -118,7 +118,9 @@
 
     </div>
 
-    <img src="../img/back.png" id="deck"/>
+<div>
+        <img src="../img/back.png" id="deck"/>
+</div>
 
        <!-- <img v-bind:src="'../../../../wwwroot/images/' + playercards[0] + '.png'" id="firstcard"/> -->
        <!-- <img v-bind:src="'../../../../wwwroot/images/' + playercards[1] + '.png'" id="firstcard"/> -->
@@ -128,10 +130,26 @@
    <a>{{playercards[2]}}</a>
    <a>{{playercards[3]}}</a> -->
 
-   <form @submit="hitorstand($event)">
-   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" >HIT</button></div>
+    <a> Your hand value : {{handvalue}} </a>
+    <a> Dealer hand value : {{dealerhandvalue}} </a>
+    <a> isiaturn : {{iaturn}} </a>
+    <a> RESULT : {{winnerlooser}} </a>
+
+   <form @submit="hit($event)">
+   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false ">HIT</button></div>
+   </form>
+
+   <form @submit="stand($event)">
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false">STAND</button></div>
+   </form>
+
+   <form @submit="playdealer($event)">
+   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true">PLAY AI</button></div>
    </form>
    
+    <router-link to="/play">
+      <br><button class="btn btn-dark" v-if="gameend == true">QUITTER</button>
+    </router-link>
    </div>
 </template>
 
@@ -146,7 +164,11 @@ export default {
         return {
             playercards: [],
             dealercards: [],
-            handvalue: 1,
+            handvalue: 0,
+            dealerhandvalue: 0,
+            iaturn : false,
+            gameend: false,
+            winnerlooser: '',
             nbturn: 0,
         }
     },
@@ -154,24 +176,72 @@ export default {
   async mounted() {
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
     await this.refreshCards();
-    this.handvalue = this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
+    await this.refreshHandValue();
+    this.CheckWinner();
   },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
 
-    async hitorstand() {
+    async hit(e) {
+
         await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
+        if(this.handvalue > 21) {
+            this.gameend = true;
+        }
+    },
+
+     stand(e) {
+        e.preventDefault();
+        this.iaturn =  BlackJackApiService.StandPlayer();
+        this.iaturn = true;
+        this.refreshCards();
+        this.refreshHandValue();
+    },
+
+    refreshiaturn() {
+        this.iaturn = BlackJackApiService.refreshAiturn();
+    },
+
+    async playdealer(e) {
+        e.preventDefault();
+        await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
+        await this.refreshCards();
+        await this.refreshHandValue();
+        this.CheckWinner();
+        this.gameend = true;
+    },
+
+     CheckWinner() {
+        if(this.gameend == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
+        if(this.handvalue > 21 ) {
+            this.winnerlooser = 'You loose';
+        } else if(this.dealerhandvalue > 21) {
+            this.winnerlooser = 'You win'
+        } else if(this.dealerhandvalue == 21) {
+            this.winnerlooser = 'BLACKJACK! You loose'
+        } else if(this.handvalue == 21) {
+            this.winnerlooser = 'BLACKJACK ! You win';
+        } else if(this.handvalue < this.dealerhandvalue ) {
+            this.winnerlooser = 'You loose';
+        }  else if(this.handvalue > this.dealerhandvalue) {
+            this.winnerlooser = 'You win';
+        } else if(this.handvalue == this.dealerhandvalue) {
+            this.winnerlooser = "Draw";
+        }
+         this.gameend = true;
+        }
     },
 
     async refreshHandValue() {
-        this.handvalue = BlackJackApiService.getplayerHandValue();
+        this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
+        this.dealerhandvalue = await this.executeAsyncRequest(() => BlackJackApiService.getAiHandValue());
     },
 
     async refreshCards() {
       this.playercards = await this.executeAsyncRequest(() => BlackJackApiService.GetPlayerCards());
-      this.dealercards = await this.executeAsyncRequest(()=> BlackJackApiService.GetAiCards());
+      this.dealercards = await this.executeAsyncRequest(() => BlackJackApiService.GetAiCards());
     },
 
 
@@ -191,20 +261,21 @@ export default {
  }
 
  .playercards {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+	display: inline-block;
+	position: relative;
+	
  }
 
  .dealercards {
 	display: inline-block;
 	position: relative;
-	left: 30.2%
+	left: 2.2%
  }
 
  .dealercards > img {
      height: 205px;
      width: 125px;
+     left: 175%;
  }
 
 </style>

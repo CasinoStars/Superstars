@@ -71,7 +71,8 @@ namespace Superstars.WebApp.Controllers
                    _cards += ",";
             }
             data.PlayerCards = _cards;
-            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1);
+            data.HandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result); 
         }
 
@@ -95,7 +96,8 @@ namespace Superstars.WebApp.Controllers
                     _cards += ",";
             }
             data.PlayerCards = _cards;
-            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1);
+            data.HandValue = _blackJackService.GetHandValue(_blackJackService._myhand);
+            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1,data.HandValue);
             return this.CreateResult(result);
         }
 
@@ -117,7 +119,8 @@ namespace Superstars.WebApp.Controllers
                     _cards += ",";
             }
             data.PlayerCards = _cards;
-            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1);
+            data.HandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result);
 
         }
@@ -154,11 +157,65 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("getplayerHandValue")]
-        public int GetPlayerHandValue()
+        public async Task<int> GetPlayerHandValue()
         {
-           
-           int a = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
-           return a;
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BlackJackData data = await _blackJackGateway.GetGameId(userId);
+            int handv = await _blackJackGateway.GetPlayerHandValue(userId, data.BlackJackGameId);
+            return handv;
+        }
+
+        [HttpGet("getAiHandValue")]
+        public async Task<int> GetAiHandValue()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData user = await _userGateway.FindByName("AI" + userId);
+            BlackJackData data = await _blackJackGateway.GetGameId(user.UserId);
+            int handv = await _blackJackGateway.GetPlayerHandValue(user.UserId, data.BlackJackGameId);
+            return handv;
+        }
+
+        [HttpGet("StandPlayer")]
+        public IActionResult StandPlayer()
+        {
+            bool result = _blackJackService.FinishTurn();
+            return Ok(result);
+        }
+
+        [HttpGet("refreshAiturn")]
+        public IActionResult refreshAiturn()
+        {
+            bool result = _blackJackService._dealerTurn;
+            return Ok(result);
+        }
+
+        [HttpPost("PlayAi")]
+        public async Task<IActionResult> PlayAi()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData user = await _userGateway.FindByName("AI" + userId);
+            BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
+            
+            if (_blackJackService._dealerTurn)
+            {
+                _blackJackService._myhand = _blackJackService.PlayIA(_blackJackService._myhand, _blackJackService._ennemyhand);
+            }
+
+            string _cards = "";
+            int i = 0;
+            foreach (var item in _blackJackService._myhand)
+            {
+                _cards += item.Value;
+                _cards += item.Symbol;
+                i++;
+
+                if (i > 0)
+                    _cards += ",";
+            }
+            data.PlayerCards = _cards;
+            data.HandValue = _blackJackService.GetHandValue(_blackJackService._myhand);
+            Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
+            return this.CreateResult(result);
         }
     }
 }

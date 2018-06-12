@@ -22,6 +22,7 @@ namespace Superstars.DAL
                 p.Add("@UserId", userId);
                 p.Add("@PlayerCards",cards);
                 p.Add("@NbTurn", nbturn);
+                p.Add("@HandValue", 0);
                 p.Add("@BlackJackPlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sBlackJackPlayerCreate", p, commandType: CommandType.StoredProcedure);
@@ -41,6 +42,7 @@ namespace Superstars.DAL
                 p.Add("@UserId", userId);
                 p.Add("@PlayerCards", cards);
                 p.Add("@NbTurn", nbturn);
+                p.Add("@HandValue", 0);
                 p.Add("@PlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sBlackJackAICreate", p, commandType: CommandType.StoredProcedure);
@@ -72,7 +74,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<BlackJackData>(
-                    "select top 1 t.BlackJackPlayerId, t.BlackJackGameId, t.PlayerCards, t.NbTurn from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId order by BlackJackGameId desc",
+                    "select top 1 t.BlackJackPlayerId, t.BlackJackGameId, t.PlayerCards, t.NbTurn, t.HandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId order by BlackJackGameId desc",
                     new { BJPlayerId = playerId });
             }
         }
@@ -99,7 +101,7 @@ namespace Superstars.DAL
         }
 
 
-        public async Task<Result<int>> UpdateBlackJackPlayer(int playerid, int gameid, string cards, int nbturn)
+        public async Task<Result<int>> UpdateBlackJackPlayer(int playerid, int gameid, string cards, int nbturn, int handvalue)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
@@ -108,6 +110,7 @@ namespace Superstars.DAL
                 p.Add("@BlackJackGameId", gameid);
                 p.Add("@PlayerCards", cards);
                 p.Add("@NbTurn", nbturn);
+                p.Add("@HandValue", handvalue);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sBlackJackPlayerUpdate", p, commandType: CommandType.StoredProcedure);
 
@@ -127,6 +130,16 @@ namespace Superstars.DAL
                     "select top 1 t.NbTurn from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId order by BlackJackGameId desc",
                     new { BJPlayerId = playerId, BJGameId = gameId });
                 return Result.Success(data);
+            }
+        }
+
+        public async Task<int> GetPlayerHandValue(int userId, int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<int>(
+                    @"select t.HandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
+                    new { BJPlayerId = userId, BJGameId = gameId });
             }
         }
 
