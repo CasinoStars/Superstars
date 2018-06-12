@@ -74,7 +74,8 @@ export default {
     
     await this.refreshDices();
     await this.refreshIaDices();
-    GameApiService.Bet('fakeCoins');
+    var data = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+    GameApiService.Bet(data.balance);
   },
   
   methods: {

@@ -21,19 +21,26 @@ async createAiUser() {
     return await postAsync(`${endpoint}/createAiUser`);
 }
 
-async Bet(TrueOrFakeCoins) {
-    var bet = prompt("Please enter your bet:", "500");
+async Bet(balance) {
+    var bet = prompt("Montant du pari:", "500");
+    var betNumber = parseInt(bet);
     if(bet == null)
         return window.location.replace("/Home/play");
-    while (bet <= 0 || bet == ''){
-        bet = prompt("Please enter a correct bet !", "500");
+    else if(balance < bet || !betNumber){
+        bet = prompt("Une erreur s'est produite. Montant maximum possible: " + balance, "500");
+        betNumber = parseInt(bet);
+    }else if(bet > 0 && bet != ''){
+        window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
+        return await postAsync(`${endpoint}/${bet}/bet`);
+    }
+    while (bet <= 0 || bet == '' || bet > balance || !betNumber){
         if(bet == null)
             return window.location.replace("/Home/play");
-        else if (bet > 0 && bet != '') {
-            window.alert("You have bet " + bet + ' ' + TrueOrFakeCoins);
-            var result = await postAsync(`${endpoint}/${bet}/bet`);
-        }
+        bet = prompt("Une erreur s'est produite ! Montant disponible: " + balance, "500");
+        betNumber = parseInt(bet);
     }
+    window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
+    return await postAsync(`${endpoint}/${bet}/bet`);
 }
 /*async CreateYamsGame(pot) {
     return await postAsync(`${endpoint}/CreateYamsGame`, pot);
