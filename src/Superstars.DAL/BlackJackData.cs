@@ -11,5 +11,7 @@ namespace Superstars.DAL
 
         public string PlayerCards { get; set; }
 
+        public int NbTurn { get; set; }
+
     }
 }

@@ -1,4 +1,4 @@
-import { postAsync, getAsync, deleteAsync } from "../helpers/apiHelper";
+import { postAsync, getAsync, getAsyncNoJSON, deleteAsync } from "../helpers/apiHelper";
 const endpoint = "/api/blackJack";
 
 class BlackJackApiService {
@@ -21,10 +21,34 @@ class BlackJackApiService {
         await postAsync(`${endpoint}/InitPlayer`);
     }
 
+    async InitIa() {
+        await postAsync(`${endpoint}/InitAI`);
+    }
+
     async GetPlayerCards() {
-        console.log('ich');
-        var cards = await getAsync(`${endpoint}/GetPlayerCards`) + '';
-        return cards;
+        var cards = await getAsyncNoJSON(`${endpoint}/GetPlayerCards`) + '';
+        var array = cards.split(',');
+        return array;
+    }
+
+    async GetAiCards() {
+        var cards = await getAsyncNoJSON(`${endpoint}/GetAiCards`) + '';
+        var array = cards.split(',');
+        return array;
+    }
+
+    async HitPlayer() {
+        await postAsync(`${endpoint}/HitPlayer`);
+    }
+
+    async GetTurn() {
+        return await getAsync(`${endpoint}/getTurn`);
+    }
+
+    getplayerHandValue() {
+        var value = getAsyncNoJSON(`${endpoint}/getplayerHandValue`);
+        console.log("ici" + value)
+        return value;
     }
 }
 

@@ -53,6 +53,8 @@ export default {
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
       await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
+      await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
+      await this.executeAsyncRequest(() => BlackJackApiService.InitIa());
       this.$router.push({ path: 'blackJack' });
     }
   }

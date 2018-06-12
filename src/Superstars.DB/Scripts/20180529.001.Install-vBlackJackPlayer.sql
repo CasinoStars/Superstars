@@ -3,6 +3,7 @@ as
    select
      BlackJackPlayerId = bj.BlackJackPlayerId,
      BlackJackGameId = bj.BlackJackGameId,
-     PlayerCards = bj.PlayerCards
+     PlayerCards = bj.PlayerCards,
+	 NbTurn = bj.NbTurn
    from sp.tBlackJackPlayer bj
     where bj.BlackJackPlayerId <> 0;

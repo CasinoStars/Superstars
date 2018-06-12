@@ -2,7 +2,8 @@ create proc sp.sBlackJackAICreate
 (	
 	@PlayerId int out,
 	@UserId int,
-	@PlayerCards nvarchar(25)
+	@PlayerCards nvarchar(25),
+	@NbTurn int
 )
 as
 	declare @BlackJackPlayerId int;
@@ -20,7 +21,7 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards) values(@BlackJackPlayerId, @BlackJackGameId, @PlayerCards);
+    insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards,NbTurn) values(@BlackJackPlayerId, @BlackJackGameId, @PlayerCards, @NbTurn);
 	set @PlayerId = @BlackJackPlayerId;
 	commit;
     return 0;
