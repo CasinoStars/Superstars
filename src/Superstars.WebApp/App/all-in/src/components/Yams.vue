@@ -114,7 +114,6 @@ export default {
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
-      var bet = GameApiService.Bet('fakeCoins');
       this.$router.go(this.$router.history);
     },
 
