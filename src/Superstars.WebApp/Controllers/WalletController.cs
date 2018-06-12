@@ -29,11 +29,8 @@ namespace Superstars.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
-            Result result;
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            
-             result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins);            
-           
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);           
+            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins);                      
             return this.CreateResult(result);
         }
 
@@ -44,6 +41,21 @@ namespace Superstars.WebApp.Controllers
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
             return informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
+        }
+
+        [HttpPost("{pot}/creditPlayer")]
+        public async Task<IActionResult> CreditPlayersYamsPot(int pot)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _walletGateway.AddCoins(userId, 2, pot);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{pot}/withdraw")]
+        public async Task<IActionResult> WithdrawBankRoll(int pot)
+        {
+            Result result = await _walletGateway.InsertInBankRoll(0, -pot);
+            return this.CreateResult(result);
         }
 
         //public async Task<IActionResult> GetTrueBalance()
