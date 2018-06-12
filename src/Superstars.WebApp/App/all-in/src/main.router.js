@@ -12,6 +12,7 @@ import Play from './components/Play.vue';
 import Yams from './components/Yams.vue';
 import BlackJack from './components/BlackJack.vue';
 import Wallet from './components/Wallet.vue';
+import Rules from './components/Rules.vue';
 
 const routes = [
     { path: '', component: Home },
@@ -20,6 +21,7 @@ const routes = [
     { path: '/yams', component: Yams, beforeEnter: requireAuth },
     { path: '/blackJack', component: BlackJack, beforeEnter: requireAuth },
     { path: '/wallet', component: Wallet, beforeEnter: requireAuth },
+    { path: '/rule', component: Rules, beforeEnter: requireAuth},
 ];
 
 export default new VueRouter({

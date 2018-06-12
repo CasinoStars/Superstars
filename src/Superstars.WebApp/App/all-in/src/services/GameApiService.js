@@ -19,6 +19,6 @@ async createAiUser() {
 /*async CreateYamsGame(pot) {
     return await postAsync(`${endpoint}/CreateYamsGame`, pot);
 }*/
-    }
+}
 
 export default new GameApiService();
