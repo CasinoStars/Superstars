@@ -13,5 +13,7 @@ namespace Superstars.DAL
 
         public int NbTurn { get; set; }
 
+        public int HandValue { get; set; }
+
     }
 }

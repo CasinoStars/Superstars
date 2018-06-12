@@ -3,8 +3,8 @@ create proc sp.sBlackJackPlayerUpdate
 	@BlackJackPlayerId int out,
 	@BlackJackGameId int,
 	@PlayerCards nvarchar(25),
-	@NbTurn int
-
+	@NbTurn int,
+	@HandValue int
 )
 as
 begin
@@ -23,7 +23,7 @@ begin
 	   return 2;
 	end;
 
-	    update sp.tBlackJackPlayer set [PlayerCards] = @PlayerCards, [NbTurn] = @NbTurn where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;
+	    update sp.tBlackJackPlayer set [PlayerCards] = @PlayerCards, [NbTurn] = @NbTurn, [HandValue] = @HandValue where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;
         commit;
     return 0;
 end;

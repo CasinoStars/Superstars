@@ -4,6 +4,7 @@ as
      BlackJackPlayerId = bj.BlackJackPlayerId,
      BlackJackGameId = bj.BlackJackGameId,
      PlayerCards = bj.PlayerCards,
-	 NbTurn = bj.NbTurn
+	 NbTurn = bj.NbTurn,
+	 HandValue = bj.HandValue
    from sp.tBlackJackPlayer bj
     where bj.BlackJackPlayerId <> 0;

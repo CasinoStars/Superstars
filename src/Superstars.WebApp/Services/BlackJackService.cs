@@ -13,6 +13,7 @@ namespace Superstars.WebApp
         public List<Card> _myhand { get; set; }
         public List<Card> _ennemyhand { get; set; }
         public int _pot;
+        public bool _dealerTurn;
 
         Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
@@ -29,6 +30,7 @@ namespace Superstars.WebApp
             _deck.Shuffle();
             _myhand = new List<Card>();
             _ennemyhand = new List<Card>();
+            _dealerTurn = false;
         }
 
         internal Dictionary<Card, int> Valueforcards(Dictionary<Card, int> valuesdic)
@@ -81,17 +83,10 @@ namespace Superstars.WebApp
             return valeur;
         }
 
-        public List<Card> HitOrStand(List<Card> hand, int value)
+      public bool FinishTurn()
         {
-            if (value < 21)
-            {
-                hand = DrawCard(hand);
-                return hand;
-            }
-            else
-            {
-                return hand;
-            }
+            _dealerTurn = true;
+            return _dealerTurn;
         }
 
 
@@ -116,7 +111,7 @@ namespace Superstars.WebApp
                 return myhand;
             }
 
-            while (GetHandValue(myhand) < 17 && GetHandValue(ennemyhand) > GetHandValue(myhand))
+            while (GetHandValue(myhand) < 17 && GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn == true)
             {
                 DrawCard(myhand);
 
