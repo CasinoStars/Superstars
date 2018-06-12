@@ -33,6 +33,18 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result> InsertInBankRoll(int trueCoins, int fakeCoins)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@RealCoins", trueCoins);
+                p.Add("@FakeCoins", fakeCoins);
+                await con.ExecuteAsync("sp.sBankRollUpdate", p, commandType: CommandType.StoredProcedure);
+                return Result.Success(p);
+            }
+        }
+
         //public async Task<Result<WalletData>> GetTrueBalance(int moneyId)
         //{
         //    using (SqlConnection con = new SqlConnection(_sqlstring))

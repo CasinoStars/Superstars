@@ -47,6 +47,17 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> GetYamsPot(int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select g.Pot from sp.vGameYams g where g.YamsGameId = @YamsGameId",
+                    new { YamsGameId = gameId });
+                return Result.Success(data);
+            }
+        }
+
         public async Task<Result<int>> CreateYamsGame(int pot)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
@@ -62,7 +73,6 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@YamsGameId"));
             }
         }
-
 
         public async Task<Result<int>> DeleteAis(int userId)
         {

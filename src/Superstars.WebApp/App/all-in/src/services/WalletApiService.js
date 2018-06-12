@@ -9,6 +9,14 @@ class WalletApiService {
         return await postAsync(endpoint, model);
     }
 
+    async CreditPlayer(pot) {
+        return await postAsync(`${endpoint}/${pot}/creditPlayer`);
+    }
+
+    async WithdrawInBankRoll(pot){
+        return await postAsync(`${endpoint}/${pot}/withdraw`);
+    }
+
     async GetFakeBalance(){
         return await getAsync(`${endpoint}/FakeBalance`);
     }

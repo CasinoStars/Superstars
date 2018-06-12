@@ -53,6 +53,7 @@
 import { mapActions } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
 import GameApiService from '../services/GameApiService';
+import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 
 export default {
@@ -70,8 +71,10 @@ export default {
   },
 
   async mounted() {
+    
     await this.refreshDices();
     await this.refreshIaDices();
+    GameApiService.Bet('fakeCoins');
   },
   
   methods: {
@@ -94,6 +97,14 @@ export default {
       this.IaFigure = tableResult[0];
       this.playerFigure = tableResult[1];
       this.winOrLose = tableResult[2];
+      var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+      if(this.winOrLose == "You Lose"){
+
+      }
+      else if(this.winOrLose == "You Win"){
+        await this.executeAsyncRequest(() => WalletApiService.WithdrawInBankRoll(pot));
+        await this.executeAsyncRequest(() => WalletApiService.CreditPlayer(pot));
+      }
     },
 
     async RePlay() {
@@ -103,7 +114,6 @@ export default {
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
-      //this.$router.push({ path: 'yams' });
       this.$router.go(this.$router.history);
     },
 

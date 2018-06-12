@@ -12,13 +12,17 @@ namespace Superstars.WebApp.Controllers
     public class GameController : Controller
     {
         readonly GameGateway _gameGateway;
+        readonly YamsGateway _yamsGateway;
         readonly UserGateway _userGateway;
+        readonly WalletGateway _walletGateway;
         readonly PasswordHasher _passwordHasher;
 
-        public GameController(GameGateway gameGateway, UserGateway userGateway, PasswordHasher passwordHasher)
+        public GameController(GameGateway gameGateway, YamsGateway yamsGateway, UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher)
         {
             _gameGateway = gameGateway;
+            _yamsGateway = yamsGateway;
             _userGateway = userGateway;
+            _walletGateway = walletGateway;
             _passwordHasher = passwordHasher;
         }
 
@@ -26,7 +30,25 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateGame(string gametype)
         {
             Result result = await _gameGateway.CreateGame(gametype);
-            Result result2 = await _gameGateway.CreateYamsGame(500);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{bet}/bet")]
+        public async Task<IActionResult> Bet(int bet)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _gameGateway.CreateYamsGame(bet * 2);
+            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
+            Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
+            return this.CreateResult(result3);
+        }
+
+        [HttpGet("getYamsPot")]
+        public async Task<IActionResult> GetYamsPot()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            YamsData yams = await _yamsGateway.GetPlayer(userId);
+            Result<int> result = await _gameGateway.GetYamsPot(yams.YamsGameId);
             return this.CreateResult(result);
         }
 
@@ -34,7 +56,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateAiUser()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _userGateway.CreateUser("AI" + userId, _passwordHasher.HashPassword("azertyuiop"+userId), "","");
+            Result result = await _userGateway.CreateUser("AI" + userId, _passwordHasher.HashPassword("azertyuiop" + userId), "", "");
             return this.CreateResult(result);
         }
 
