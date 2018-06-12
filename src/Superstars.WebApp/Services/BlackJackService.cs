@@ -111,7 +111,7 @@ namespace Superstars.WebApp
                 return myhand;
             }
 
-            while (GetHandValue(myhand) < 17 && GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn == true)
+            while (GetHandValue(myhand) < 17 || GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn == true)
             {
                 DrawCard(myhand);
 
