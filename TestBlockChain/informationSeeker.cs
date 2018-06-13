@@ -36,7 +36,7 @@ namespace Superstars.Wallet
 
             foreach (var response in responses)
             {
-                if (response.Block.Confirmations > 6) unconfirmedTrxs.Add(response);
+                if (response.Block == null || response.Block.Confirmations < 6) unconfirmedTrxs.Add(response);
             }
             return unconfirmedTrxs;
         }
@@ -111,7 +111,7 @@ namespace Superstars.Wallet
             {
                 var trx = uint256.Parse(utxo[i].Hash.ToString());
                 GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
-                if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
+                if (trxResponse.Block == null ||  trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
                 double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
                 UTXOs.Add(utxo[i], value);
             }

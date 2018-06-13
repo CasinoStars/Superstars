@@ -24,61 +24,41 @@ namespace Superstars.Wallet
 
             var network = Network.TestNet;
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
-           // BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
+            // BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
             BitcoinSecret btcS = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
-
-            List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(btcS,client);
-
-         
-
-            SerilalisableTrxWithAmountSend obj = new SerilalisableTrxWithAmountSend();
-
-            obj.AddTrxAndAmount(pendingTrx[0].ToString(), 1);
-
-            // obj.Serialize("Ok");
-
-            SerilalisableTrxWithAmountSend.Deserialize("Ok");
-
-            Console.WriteLine(obj.TransactionHash[0]);
-            Console.WriteLine(obj.Amount[0]);
+            BitcoinSecret btcS2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
 
 
-            //var bitcoinPrivateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup", network);
-            //var publicAddress = BitcoinAddress.Create("mzRnZHJodRUmE6cSPvGrhtcsgvhdVFYroa", network);
+           //  Transaction trxx = TransactionMaker.MakeATransaction(btcS, btcS2.GetAddress(), (decimal)0.3,(decimal)0.05, 6,client);
+            //TransactionMaker.BroadCastTransaction(trxx,client);
 
-            //var bitcoinPrivateKey2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm", network);
-            //var publicAddress2 = bitcoinPrivateKey2.GetAddress();
-
-            //QBitNinjaClient client = new QBitNinjaClient(network);
-
-            // List<GetTransactionResponse> alltrx = informationSeeker.SeekAllTransaction(bitcoinPrivateKey2, client);
-            // decimal totalCoinInWallet = informationSeeker.HowMuchCoinInWallet(bitcoinPrivateKey2,client);
-            // List<GetTransactionResponse> alltrxPending = informationSeeker.SeekPendingTrx(bitcoinPrivateKey2, client);
-
-            // Dictionary<OutPoint,double> UTXOS =  informationSeeker.FindUtxo(bitcoinPrivateKey2, client, 3);
-
-            //foreach (var item in UTXOS)
-            //{
-            //    Console.WriteLine(item.Value +  "  TEST");
-            //    Console.WriteLine(item.Key + " TEST");
-            //}
-
-            //Transaction trx1 = TransactionMaker.MakeATransaction(bitcoinPrivateKey2,publicAddress, 3.7m, 0.05m, 6, client);
-
-            //TransactionMaker.BroadCastTransaction(trx1,client);
-
-            //Console.WriteLine(totalCoinInWallet + " Btc In Wallet");
+            List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(btcS, client);
 
 
-            //foreach (var item in alltrx)
-            //{
-            //    Console.WriteLine(item.TransactionId + " AllTrx");
-            //}
+            
+            List<OutPoint> Outpoints = new List<OutPoint>();
+            foreach (var trx in pendingTrx)
+             {
+                foreach (var input in trx.Transaction.Inputs)
+                {
+                    Console.WriteLine(input.ScriptSig.GetSignerAddress(network) + "   TEST");
+                    if (input.ScriptSig.GetSignerAddress(network) == btcS.GetAddress())
+                    {
+                        for (int i = 0; i < trx.Transaction.Outputs.Count; i++)
+                        {
+                            if (trx.Transaction.Outputs[i].ScriptPubKey.GetDestinationAddress(network) == btcS.GetAddress())
+                                if(!Outpoints.Contains(new OutPoint(trx.TransactionId, i)))
+                                 Outpoints.Add(new OutPoint(trx.TransactionId, i));
+                        }
+                       
+                    }
+                }
+            }
 
-            //foreach (var item in alltrxPending)
-            //{
-            //    Console.WriteLine(item.TransactionId + " Pending");
-            //}       
+            foreach (var outpoint in Outpoints)
+            {
+                Console.WriteLine(outpoint);
+            }
             Console.ReadKey();
         }
     }
