@@ -114,6 +114,25 @@ namespace Superstars.WebApp.Services
                         }
                     }
                 }
+
+				// brelan
+				else if(handcount[i]==3)
+				{
+					for(int l = 0; l <6; l++)
+					{
+						if(handcount[l]==1)
+						{
+							for(int k =0;k<6 && k!=l;k++)
+							{
+								if(handcount[k]==1)
+								{
+									points = points + 20 + 3 * (i + 1) + (k + 1) + (l + 1);
+									return points;
+								}
+							}
+						}
+					}
+				}
             }
             // petite suite
             if (handcount[0] == 1)
@@ -179,7 +198,24 @@ namespace Superstars.WebApp.Services
 						}
 					}
 			    }
-		    }
+				// brelan
+				else if (handcount[i] == 3)
+				{
+					for (int l = 0; l < 6; l++)
+					{
+						if (handcount[l] == 1)
+						{
+							for (int k = 0; k < 6 && k != l; k++)
+							{
+								if (handcount[k] == 1)
+								{
+									return figureName = "Brelan de " + (i + 1);
+								}
+							}
+						}
+					}
+				}
+			}
 			// petite suite
 			if (handcount[0] == 1)
 			{
