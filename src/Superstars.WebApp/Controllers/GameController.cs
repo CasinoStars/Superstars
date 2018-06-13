@@ -29,7 +29,9 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("{gametype}")]
         public async Task<IActionResult> CreateGame(string gametype)
         {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _gameGateway.CreateGame(gametype);
+            int result2 = await _userGateway.CreateStats(userId, gametype);
             return this.CreateResult(result);
         }
 
@@ -84,6 +86,17 @@ namespace Superstars.WebApp.Controllers
             GameData game = await _gameGateway.FindGameById(GameID);
             if (game == null) return Result.Failure<GameData>(Status.NotFound, "Game not found.");
             return Result.Success(game);
+        }
+
+        [HttpPost("{gametype}/UpdateStats")]
+        public async Task UpdateStats(string gametype)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
+            Result<int> result2 = await _gameGateway.GetLosses(userId, gametype);
+            int wins = result1.Content;
+            int losses = result2.Content;
+            await _gameGateway.UpdateStats(userId, gametype, wins, losses);
         }
     }
 }

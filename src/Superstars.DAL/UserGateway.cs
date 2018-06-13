@@ -108,6 +108,24 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<int> CreateStats(int userid, string gametype)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@GameTypeId", gametype);
+                p.Add("@UserId", userid);
+                p.Add("@Wins", 0);
+                p.Add("@Losses", 0);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sStatsCreate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+
+                return status;
+            }
+        }
+
         //public async Task<Result<int>> IdentityVerify(string pseudo, byte[] password)
         //{
         //    using (SqlConnection con = new SqlConnection(_connectionString))

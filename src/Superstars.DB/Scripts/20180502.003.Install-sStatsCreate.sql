@@ -1,6 +1,6 @@
 ﻿create proc sp.sStatsCreate
 (
-	    @GameTypeId varchar,
+	    @GameTypeId varchar(25),
         @UserId int,
 		@Wins int,
 		@Losses int

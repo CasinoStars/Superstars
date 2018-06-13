@@ -104,6 +104,48 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@Status"));
             }
         }
+
+        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@GameTypeId", gametype);
+                p.Add("@UserId", userid);
+                p.Add("@Wins", wins);
+                p.Add("@Losses", losses);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "This player doesn't exist.");
+
+                return Result.Success(p.Get<int>("@Status"));
+            }
+        }
+
+        public async Task<Result<int>> GetWins(int userId, string gameType)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select s.Wins from sp.tStats s where s.userid = @userid and s.GameTypeId = @gametype",
+                    new { userid = userId, gametype =  gameType});
+                return Result.Success(data);
+            }
+        }
+
+        public async Task<Result<int>> GetLosses(int userId, string gameType)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select s.Losses from sp.tStats s where s.userid = @userid and s.GameTypeId = @gametype",
+                    new { userid = userId, gametype = gameType });
+                return Result.Success(data);
+            }
+        }
+
     }
 }
 
