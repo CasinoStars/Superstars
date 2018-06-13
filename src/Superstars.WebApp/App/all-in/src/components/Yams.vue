@@ -67,6 +67,7 @@ export default {
       winOrLose: '',
       playerFigure: '',
       IaFigure: '',
+      playerwin: false,
     }
   },
 
@@ -93,6 +94,10 @@ export default {
       this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
     },
 
+    async updateStats() {
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
+    },
+
     async getFinalResult() {
       let tableResult = await this.executeAsyncRequest(() => YamsApiService.GetFinalResult());
       this.IaFigure = tableResult[0];
@@ -100,9 +105,11 @@ export default {
       this.winOrLose = tableResult[2];
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
       if(this.winOrLose == "You Lose"){
-
+          await this.updateStats();
       }
       else if(this.winOrLose == "You Win"){
+        this.playerwin = true;
+        await this.updateStats();
         await this.executeAsyncRequest(() => WalletApiService.WithdrawInBankRoll(pot));
         await this.executeAsyncRequest(() => WalletApiService.CreditPlayer(pot));
       }
