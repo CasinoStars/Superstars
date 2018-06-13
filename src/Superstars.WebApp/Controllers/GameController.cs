@@ -89,7 +89,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{gametype}/UpdateStats")]
-        public async Task UpdateStats(string gametype, [FromBody] bool win)
+        public async Task<Result> UpdateStats(string gametype, [FromBody] bool win)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
@@ -104,7 +104,41 @@ namespace Superstars.WebApp.Controllers
             {
                 losses = losses + 1;
             }
-            await _gameGateway.UpdateStats(userId, gametype, wins, losses);
+            Result<int> result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses);
+            return Result.Success(result3);
+        }
+
+
+        [HttpGet("getwinsBlackJackPlayer")]
+        public async Task<IActionResult> GetWinsBlackJackPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _gameGateway.GetWins(userId, "BlackJack");
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("getlossesBlackJackPlayer")]
+        public async Task<IActionResult> GetLossesBlackJackPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _gameGateway.GetLosses(userId, "BlackJack");
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("getwinsYamsPlayer")]
+        public async Task<IActionResult> GetWinsYamsPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _gameGateway.GetWins(userId, "Yams");
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("getlossesYamsPlayer")]
+        public async Task<IActionResult> GetLossesYamsPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _gameGateway.GetLosses(userId, "Yams");
+            return this.CreateResult(result);
         }
     }
 }

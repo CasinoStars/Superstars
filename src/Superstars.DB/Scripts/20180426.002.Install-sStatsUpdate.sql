@@ -1,6 +1,6 @@
 ﻿create proc sp.sStatsUpdate
 (
-        @GameTypeId varchar,
+        @GameTypeId varchar(25),
         @UserId int,
 		@Wins int,
 		@Losses int
@@ -14,8 +14,9 @@ begin
          begin 
                  rollback;
                  return 1;
-         end;        
-      update sp.tStats set [Wins] = @Wins, [Losses] = @Losses where UserId = @UserId and GameTypeId = @GameTypeId;
+         end;  
+		 
+      update sp.tStats  set Wins = @Wins, Losses = @Losses where UserId = @UserId and GameTypeId = @GameTypeId;
          commit;
       return 0;
 end;

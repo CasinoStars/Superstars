@@ -144,7 +144,7 @@
    </form>
 
    <form @submit="playdealer($event)">
-   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true">PLAY AI</button></div>
+   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
    
     <router-link to="/play">

@@ -60,30 +60,59 @@ namespace Superstars.WebApp
             return hand;
         }
 
+        //public int GetHandValue(List<Card> hand)
+        //{
+        //    int valeur = 0;
+        //    foreach (Card carte in hand)
+        //    {
+        //        foreach (KeyValuePair<Card, int> item in _values)
+        //        {
+        //            if (carte == item.Key)
+        //            {
+        //                if (item.Key.Value == 14 && valeur + item.Value > 21)
+        //                {
+        //                    valeur += 1;
+        //                }
+        //                else
+        //                {
+        //                    valeur += item.Value;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return valeur;
+        //}
+
+
         public int GetHandValue(List<Card> hand)
         {
             int valeur = 0;
+            int nbraces = 0;
             foreach (Card carte in hand)
             {
                 foreach (KeyValuePair<Card, int> item in _values)
                 {
                     if (carte == item.Key)
                     {
-                        if (item.Key.Value == 14 && valeur + item.Value > 21)
+                        if (item.Key.Value == 14)
                         {
-                            valeur += 1;
+                            nbraces = nbraces + 1;
                         }
-                        else
-                        {
-                            valeur += item.Value;
-                        }
+                        valeur += item.Value;
+                       
                     }
                 }
+            }
+
+            while(valeur > 21 && nbraces > 0)
+            {
+                valeur = valeur - 10;
+                nbraces = nbraces - 1;
             }
             return valeur;
         }
 
-      public bool FinishTurn()
+        public bool FinishTurn()
         {
             _dealerTurn = true;
             return _dealerTurn;
