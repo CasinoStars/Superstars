@@ -23,12 +23,6 @@ namespace Superstars.Wallet
             return wallet;
         }
 
-        public BitcoinAddress GetBitcoinAdressFromSecret(BitcoinSecret secret, Network network)
-        {
-            BitcoinAddress address = secret.GetAddress();
-            return address;
-        }
-
         public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -66,6 +60,35 @@ namespace Superstars.Wallet
             }
             return total;
         }
+
+        public static List<string> GetPendingTrxWithAmntAndNbOfConf(BitcoinSecret privateKey,QBitNinjaClient client)
+        {
+            List<string> PendingTrxWithAmountAndNbOfConf = new List<string>();
+
+           List<GetTransactionResponse> pendingTrx = SeekPendingTrx(privateKey, client);
+            foreach (var trxResp in pendingTrx)
+            {
+                foreach (var input in trxResp.Transaction.Inputs)
+                {
+                    if (input.ScriptSig.GetSignerAddress(Network.TestNet) != privateKey.GetAddress())
+                        foreach (var output in trxResp.Transaction.Outputs)
+                        {
+                            if (output.ScriptPubKey == privateKey.ScriptPubKey)
+                            {
+                                PendingTrxWithAmountAndNbOfConf.Add(trxResp.TransactionId.ToString());
+                                PendingTrxWithAmountAndNbOfConf.Add("   "  + output.Value.ToString());
+                                if (trxResp.Block == null) PendingTrxWithAmountAndNbOfConf.Add(" 0 ");
+
+                                else
+                                    PendingTrxWithAmountAndNbOfConf.Add(" " + trxResp.Block.Confirmations.ToString() + " ");
+                            }
+                        }
+                }
+            }
+            return PendingTrxWithAmountAndNbOfConf;
+        }
+       
+
 
         public static Dictionary<OutPoint, double> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
         {
@@ -113,8 +136,30 @@ namespace Superstars.Wallet
                 GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
                 if (trxResponse.Block == null ||  trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
                 double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
+                if(value != 0)
                 UTXOs.Add(utxo[i], value);
             }
+
+            List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(bitcoinPrivateKey, client);
+
+
+            foreach (var trx in pendingTrx)
+            {
+                foreach (var input in trx.Transaction.Inputs)
+                {
+                    if (input.ScriptSig.GetSignerAddress(Network.TestNet) == bitcoinPrivateKey.GetAddress())
+                    {
+                        for (int i = 0; i < trx.Transaction.Outputs.Count; i++)
+                        {
+                            if (trx.Transaction.Outputs[i].ScriptPubKey.GetDestinationAddress(Network.TestNet) == bitcoinPrivateKey.GetAddress())
+                                if (!UTXOs.ContainsKey(new OutPoint(trx.TransactionId, i)))
+                                    UTXOs.Add(new OutPoint(trx.TransactionId, i),(double)trx.Transaction.Outputs[i].Value.Satoshi/100000000);
+                        }
+                    }
+                }
+            }
+
+
             return UTXOs;
         }
     }

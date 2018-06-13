@@ -34,31 +34,20 @@ namespace Superstars.Wallet
 
             List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(btcS, client);
 
+            Dictionary<OutPoint, double> utxos = informationSeeker.FindUtxo(btcS, client, 6);
 
-            
-            List<OutPoint> Outpoints = new List<OutPoint>();
-            foreach (var trx in pendingTrx)
-             {
-                foreach (var input in trx.Transaction.Inputs)
-                {
-                    Console.WriteLine(input.ScriptSig.GetSignerAddress(network) + "   TEST");
-                    if (input.ScriptSig.GetSignerAddress(network) == btcS.GetAddress())
-                    {
-                        for (int i = 0; i < trx.Transaction.Outputs.Count; i++)
-                        {
-                            if (trx.Transaction.Outputs[i].ScriptPubKey.GetDestinationAddress(network) == btcS.GetAddress())
-                                if(!Outpoints.Contains(new OutPoint(trx.TransactionId, i)))
-                                 Outpoints.Add(new OutPoint(trx.TransactionId, i));
-                        }
-                       
-                    }
-                }
-            }
+            List<string> PendingTrxWithAmountAndNbOfConf = informationSeeker.GetPendingTrxWithAmntAndNbOfConf(btcS,client);
 
-            foreach (var outpoint in Outpoints)
+
+            foreach (var trx in PendingTrxWithAmountAndNbOfConf)
             {
-                Console.WriteLine(outpoint);
+                Console.WriteLine(trx);
             }
+
+            decimal coinInWallet = informationSeeker.HowMuchCoinInWallet(btcS, client);
+
+            Console.WriteLine(coinInWallet + " TEST");
+
             Console.ReadKey();
         }
     }
