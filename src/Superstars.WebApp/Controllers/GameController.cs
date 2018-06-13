@@ -31,7 +31,6 @@ namespace Superstars.WebApp.Controllers
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _gameGateway.CreateGame(gametype);
-            int result2 = await _userGateway.CreateStats(userId, gametype);
             return this.CreateResult(result);
         }
 

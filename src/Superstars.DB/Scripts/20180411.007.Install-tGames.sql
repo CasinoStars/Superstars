@@ -7,5 +7,5 @@ create table sp.tGames
 	Winner int,
 
 	constraint PK_tGames primary key(GameId),
-	constraint FK_tGameType foreign key(GameType) references sp.tGameType(GameType)
+	constraint FK_tGames_GameType foreign key(GameType) references sp.tGameType(GameType)
 );
