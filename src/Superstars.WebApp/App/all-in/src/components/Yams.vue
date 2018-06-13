@@ -1,7 +1,9 @@
 <template>
 <div class="page">
-<div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;"> <h3> TOUR:{{nbTurn}} </h3></div>
-<form @submit="onSubmitAI($event)">
+  
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
+  
+  <form @submit="onSubmitAI($event)" id="PlayAI">
     <div v-for="(i, index) of iadices" :key="index" class="playerdices">
       <img v-if="i == 1" src="../img/diceia1.png">
       <img v-if="i == 2" src="../img/diceia2.png">
@@ -9,11 +11,12 @@
       <img v-if="i == 4" src="../img/diceia4.png">
       <img v-if="i == 5" src="../img/diceia5.png">
       <img v-if="i == 6" src="../img/diceia6.png">
-    </div><br>
-    <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn >= 3 && nbTurnIa <3">ROLL IA</button></div>
-</form>
-  <br><br><br>
-  <form @submit="onSubmit($event)">
+    </div>
+  </form>
+  
+  <br><br><br><br>
+  
+  <form @submit="onSubmit($event)" id="PlayPlayer">
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
       <img v-if="i == 1" src="../img/dice1.png">
       <img v-if="i == 2" src="../img/dice2.png">
@@ -21,31 +24,41 @@
       <img v-if="i == 4" src="../img/dice4.png">
       <img v-if="i == 5" src="../img/dice5.png">
       <img v-if="i == 6" src="../img/dice6.png">
-    </div><br>
+    </div>
+    <br>
     <div class="checkbox" v-if="nbTurn != 0 && nbTurn < 3">
       <input type="checkbox" id="dice1" value="1" v-model="selected">        
       <input type="checkbox" id="dice2" value="2" v-model="selected">
       <input type="checkbox" id="dice3" value="3" v-model="selected">        
       <input type="checkbox" id="dice4" value="4" v-model="selected">        
-      <input type="checkbox" id="dice5" value="5" v-model="selected">
-      
+      <input type="checkbox" id="dice5" value="5" v-model="selected">     
     </div>
-  <br><div  style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
-
-
-  <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn < 3">ROLL</button></div>
-  <div style="text-align:center;"><p v-if="nbTurnIa == 3">{{winOrLose}} <br>L'ordi a : {{IaFigure}} <br>Vous avez: {{playerFigure}}</p></div>
   </form>
 
-  <div style="text-align:center;" v-if="nbTurn == 3 && nbTurnIa == 3">
-    <router-link v-on:click.native="RePlay()" to="">
-      <br><button class="btn btn-light">REJOUER</button>
-    </router-link>
-    <router-link to="/play">
-      <br><button class="btn btn-dark">QUITTER</button>
-    </router-link>
+  <br>
+  <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
+    <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER</div>
+    <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA</div>
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ</div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ</div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ</div>
+    <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div> 
+    <br>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0">RELANCER</button>
+    <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
+    <div v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE: <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
   </div>
 
+  <br>
+  <div style="text-align:center;" v-if="nbTurn == 3 && nbTurnIa == 3">
+    <router-link v-on:click.native="RePlay()" to="">
+      <button class="btn btn-light">REJOUER</button>
+    </router-link>
+    <router-link to="/play">
+      <button class="btn btn-dark">QUITTER</button>
+    </router-link>
+  </div>
 </div>
 </template>
 
@@ -127,13 +140,14 @@ export default {
 
     async onSubmitAI(e) {
       e.preventDefault();
-      let arraydice = [this.iadices, this.dices];
-      console.log(arraydice);
-      await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-      this.nbTurnIa = this.nbTurnIa + 1;
+      while(this.nbTurnIa < 3) {
+        let arraydice = [this.iadices, this.dices];
+        this.nbTurnIa = this.nbTurnIa + 1;
+        await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
+        await this.refreshIaDices();
+      }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
-      await this.refreshIaDices();
     },
 
     async onSubmit(e) {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Services;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -59,6 +60,12 @@ namespace Superstars.WebApp.Controllers
                 IaStringDices += IaFinalDices[i];
             }
             Result result = await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            while (timer.Elapsed.TotalSeconds < 3)
+            {
+                //Waitting for Ia RollDices
+            }
             return this.CreateResult(result);
         }
 
