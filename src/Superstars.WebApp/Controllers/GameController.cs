@@ -89,13 +89,21 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{gametype}/UpdateStats")]
-        public async Task UpdateStats(string gametype)
+        public async Task UpdateStats(string gametype, [FromBody] bool win)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
             Result<int> result2 = await _gameGateway.GetLosses(userId, gametype);
             int wins = result1.Content;
             int losses = result2.Content;
+            if (win)
+            {
+                wins = wins + 1;
+            }
+            else
+            {
+                losses = losses + 1;
+            }
             await _gameGateway.UpdateStats(userId, gametype, wins, losses);
         }
     }
