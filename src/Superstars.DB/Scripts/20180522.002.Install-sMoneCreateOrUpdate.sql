@@ -18,7 +18,7 @@ begin
 		insert into sp.tMoneyType(FakeCoins) values(2);
 	end;
 
-	else if exists(select * from sp.tMoney m where m.MoneyId = @MoneyId and m.MoneyType = @MoneyType)
+	if exists(select * from sp.tMoney m where m.MoneyId = @MoneyId and m.MoneyType = @MoneyType)
 	begin
 		update sp.tMoney
 		set Balance += @Balance
