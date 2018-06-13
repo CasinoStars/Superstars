@@ -29,15 +29,27 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("{gametype}")]
         public async Task<IActionResult> CreateGame(string gametype)
         {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _gameGateway.CreateGame(gametype);
+            int result2 = await _userGateway.CreateStats(userId, gametype);
             return this.CreateResult(result);
         }
 
         [HttpPost("{bet}/bet")]
-        public async Task<IActionResult> Bet(int bet)
+        public async Task<IActionResult> BetYams(int bet)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _gameGateway.CreateYamsGame(bet * 2);
+            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
+            Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
+            return this.CreateResult(result3);
+        }
+
+        [HttpPost("{bet}/betBlackJack")]
+        public async Task<IActionResult> BetBlackJack(int bet)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _gameGateway.CreateBlackJackGame(bet * 2);
             Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
             Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
@@ -74,6 +86,25 @@ namespace Superstars.WebApp.Controllers
             GameData game = await _gameGateway.FindGameById(GameID);
             if (game == null) return Result.Failure<GameData>(Status.NotFound, "Game not found.");
             return Result.Success(game);
+        }
+
+        [HttpPost("{gametype}/UpdateStats")]
+        public async Task UpdateStats(string gametype, [FromBody] bool win)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
+            Result<int> result2 = await _gameGateway.GetLosses(userId, gametype);
+            int wins = result1.Content;
+            int losses = result2.Content;
+            if (win)
+            {
+                wins = wins + 1;
+            }
+            else
+            {
+                losses = losses + 1;
+            }
+            await _gameGateway.UpdateStats(userId, gametype, wins, losses);
         }
     }
 }

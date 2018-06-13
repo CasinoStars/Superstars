@@ -157,6 +157,7 @@
 import { mapActions } from 'vuex';
 import BlackJackApiService from '../services/BlackJackApiService';
 import Vue from 'vue';
+import GameApiService from '../services/GameApiService';
 
 
 export default {
@@ -169,6 +170,7 @@ export default {
             iaturn : false,
             gameend: false,
             winnerlooser: '',
+            playerwin: false,
             nbturn: 0,
         }
     },
@@ -185,7 +187,6 @@ export default {
 
 
     async hit(e) {
-
         await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
         if(this.handvalue > 21) {
             this.gameend = true;
@@ -219,19 +220,27 @@ export default {
             this.winnerlooser = 'You loose';
         } else if(this.dealerhandvalue > 21) {
             this.winnerlooser = 'You win'
+            this.playerwin = true;
         } else if(this.dealerhandvalue == 21) {
             this.winnerlooser = 'BLACKJACK! You loose'
         } else if(this.handvalue == 21) {
             this.winnerlooser = 'BLACKJACK ! You win';
+            this.playerwin = true;
         } else if(this.handvalue < this.dealerhandvalue ) {
             this.winnerlooser = 'You loose';
         }  else if(this.handvalue > this.dealerhandvalue) {
             this.winnerlooser = 'You win';
+            this.playerwin = true;
         } else if(this.handvalue == this.dealerhandvalue) {
             this.winnerlooser = "Draw";
         }
          this.gameend = true;
+         this.updateStats();
         }
+    },
+
+    async updateStats() {
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats('BlackJack',this.playerwin));
     },
 
     async refreshHandValue() {

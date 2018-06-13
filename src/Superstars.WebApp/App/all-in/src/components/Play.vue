@@ -1,15 +1,21 @@
 <template>
   <div id="home">
     <div class="games">
+
       <div class="yams">
         <router-link v-on:click.native="PlayYams('Yams')" to="">
           <img src="../img/LOGO1.png" alt="yams" id="imgyams">
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" id="textyams">
       </div>
+
+      <div class="blackjack">
       <router-link v-on:click.native="PlayBlackJack('BlackJack')" to="">
-        <img src="../img/LOGO1.png" alt="blackjack" id="imgblackjack">
+        <img src="../img/LOGO3.png" alt="blackjack" id="imgblackjack">
       </router-link>
+      <img src="../img/LOGO4.png" alt="textbj" id="textbj">
+      </div>
+
       <img src="../img/LOGO1.png" alt="poker" id="imgpoker">           
       <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
       <img src="../img/LOGO1.png" alt="game4" id="imggame4">
@@ -113,6 +119,17 @@ visibility: visible;
 
 #imgblackjack:hover {
     transform: scale(1.4); 
+}
+
+.blackjack:hover #textbj {
+visibility: visible;
+}
+
+#textbj {
+  height: 170px;
+  width: 210px;
+  transition: transform .4s;
+  visibility: hidden;
 }
 
 #imggame3 {

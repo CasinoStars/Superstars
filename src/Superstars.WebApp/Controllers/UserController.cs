@@ -19,11 +19,13 @@ namespace Superstars.WebApp.Controllers
     {
         readonly UserService _userService;
         readonly TokenService _tokenService;
+        readonly UserGateway _userGateway;
         readonly Random _random;
-        public UserController(UserService userService, TokenService tokenService)
+        public UserController(UserService userService, TokenService tokenService, UserGateway userGateway)
         {
             _userService = userService;
             _tokenService = tokenService;
+            _userGateway = userGateway;
             _random = new Random();
         }
 
