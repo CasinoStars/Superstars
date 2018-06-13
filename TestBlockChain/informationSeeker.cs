@@ -16,13 +16,18 @@ namespace Superstars.Wallet
         /// <returns></returns>
         /// 
 
-
+         
         public BitcoinSecret GetBitcoinSecretFromKey(Key key, Network network)
         {
             BitcoinSecret wallet = key.GetBitcoinSecret(network);
             return wallet;
         }
-
+        /// <summary>
+        /// Get the pending transactino linkind to a wallet address
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -35,6 +40,12 @@ namespace Superstars.Wallet
             return unconfirmedTrxs;
         }
 
+        /// <summary>
+        /// get all transaction associate to a wallet address
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<GetTransactionResponse> SeekAllTransaction(BitcoinSecret key, QBitNinjaClient client)
         {
             List<GetTransactionResponse> transactionsResponses = new List<GetTransactionResponse>();
@@ -49,6 +60,12 @@ namespace Superstars.Wallet
             return transactionsResponses;
         }
 
+        /// <summary>
+        /// return the amount of spendable coin in the wallet
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -61,6 +78,12 @@ namespace Superstars.Wallet
             return total;
         }
 
+        /// <summary>
+        /// Get Pending Transactin ID with Amount of confirmation and the Value of the coin that the wallet with receive 
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<string> GetPendingTrxWithAmntAndNbOfConf(BitcoinSecret privateKey,QBitNinjaClient client)
         {
             List<string> PendingTrxWithAmountAndNbOfConf = new List<string>();
@@ -87,9 +110,15 @@ namespace Superstars.Wallet
             }
             return PendingTrxWithAmountAndNbOfConf;
         }
-       
 
 
+        /// <summary>
+        /// Get all the Unspend transaction outpoint associated to an address
+        /// </summary>
+        /// <param name="bitcoinPrivateKey"></param>
+        /// <param name="client"></param>
+        /// <param name="nbOfConfirmationReq"></param>
+        /// <returns></returns>
         public static Dictionary<OutPoint, double> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
         {
 
