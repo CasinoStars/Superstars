@@ -16,19 +16,18 @@ namespace Superstars.Wallet
         /// <returns></returns>
         /// 
 
-
+         
         public BitcoinSecret GetBitcoinSecretFromKey(Key key, Network network)
         {
             BitcoinSecret wallet = key.GetBitcoinSecret(network);
             return wallet;
         }
-
-        public BitcoinAddress GetBitcoinAdressFromSecret(BitcoinSecret secret, Network network)
-        {
-            BitcoinAddress address = secret.GetAddress();
-            return address;
-        }
-
+        /// <summary>
+        /// Get the pending transactino linkind to a wallet address
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -36,11 +35,17 @@ namespace Superstars.Wallet
 
             foreach (var response in responses)
             {
-                if (response.Block.Confirmations > 6) unconfirmedTrxs.Add(response);
+                if (response.Block == null || response.Block.Confirmations < 6) unconfirmedTrxs.Add(response);
             }
             return unconfirmedTrxs;
         }
 
+        /// <summary>
+        /// get all transaction associate to a wallet address
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<GetTransactionResponse> SeekAllTransaction(BitcoinSecret key, QBitNinjaClient client)
         {
             List<GetTransactionResponse> transactionsResponses = new List<GetTransactionResponse>();
@@ -55,6 +60,12 @@ namespace Superstars.Wallet
             return transactionsResponses;
         }
 
+        /// <summary>
+        /// return the amount of spendable coin in the wallet
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -67,6 +78,47 @@ namespace Superstars.Wallet
             return total;
         }
 
+        /// <summary>
+        /// Get Pending Transactin ID with Amount of confirmation and the Value of the coin that the wallet with receive 
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public static List<string> GetPendingTrxWithAmntAndNbOfConf(BitcoinSecret privateKey,QBitNinjaClient client)
+        {
+            List<string> PendingTrxWithAmountAndNbOfConf = new List<string>();
+
+           List<GetTransactionResponse> pendingTrx = SeekPendingTrx(privateKey, client);
+            foreach (var trxResp in pendingTrx)
+            {
+                foreach (var input in trxResp.Transaction.Inputs)
+                {
+                    if (input.ScriptSig.GetSignerAddress(Network.TestNet) != privateKey.GetAddress())
+                        foreach (var output in trxResp.Transaction.Outputs)
+                        {
+                            if (output.ScriptPubKey == privateKey.ScriptPubKey)
+                            {
+                                PendingTrxWithAmountAndNbOfConf.Add(trxResp.TransactionId.ToString());
+                                PendingTrxWithAmountAndNbOfConf.Add("   "  + output.Value.ToString());
+                                if (trxResp.Block == null) PendingTrxWithAmountAndNbOfConf.Add(" 0 ");
+
+                                else
+                                    PendingTrxWithAmountAndNbOfConf.Add(" " + trxResp.Block.Confirmations.ToString() + " ");
+                            }
+                        }
+                }
+            }
+            return PendingTrxWithAmountAndNbOfConf;
+        }
+
+
+        /// <summary>
+        /// Get all the Unspend transaction outpoint associated to an address
+        /// </summary>
+        /// <param name="bitcoinPrivateKey"></param>
+        /// <param name="client"></param>
+        /// <param name="nbOfConfirmationReq"></param>
+        /// <returns></returns>
         public static Dictionary<OutPoint, double> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
         {
 
@@ -111,10 +163,32 @@ namespace Superstars.Wallet
             {
                 var trx = uint256.Parse(utxo[i].Hash.ToString());
                 GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
-                if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
+                if (trxResponse.Block == null ||  trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
                 double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
+                if(value != 0)
                 UTXOs.Add(utxo[i], value);
             }
+
+            List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(bitcoinPrivateKey, client);
+
+
+            foreach (var trx in pendingTrx)
+            {
+                foreach (var input in trx.Transaction.Inputs)
+                {
+                    if (input.ScriptSig.GetSignerAddress(Network.TestNet) == bitcoinPrivateKey.GetAddress())
+                    {
+                        for (int i = 0; i < trx.Transaction.Outputs.Count; i++)
+                        {
+                            if (trx.Transaction.Outputs[i].ScriptPubKey.GetDestinationAddress(Network.TestNet) == bitcoinPrivateKey.GetAddress())
+                                if (!UTXOs.ContainsKey(new OutPoint(trx.TransactionId, i)))
+                                    UTXOs.Add(new OutPoint(trx.TransactionId, i),(double)trx.Transaction.Outputs[i].Value.Satoshi/100000000);
+                        }
+                    }
+                }
+            }
+
+
             return UTXOs;
         }
     }
