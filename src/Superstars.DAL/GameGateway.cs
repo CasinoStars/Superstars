@@ -74,6 +74,22 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> CreateBlackJackGame(int pot)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@BlackJackGameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameBlackJackCreate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<int>("@BlackJackGameId"));
+            }
+        }
+
         public async Task<Result<int>> DeleteAis(int userId)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))

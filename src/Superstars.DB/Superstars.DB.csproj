@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\20180503.001.Install-sGameBlackJackUpdate.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

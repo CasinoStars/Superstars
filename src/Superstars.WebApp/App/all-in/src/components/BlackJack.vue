@@ -185,7 +185,6 @@ export default {
 
 
     async hit(e) {
-
         await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
         if(this.handvalue > 21) {
             this.gameend = true;
