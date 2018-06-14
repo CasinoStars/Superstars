@@ -46,6 +46,14 @@ class BlackJackApiService {
         return getAsyncNoJSON(`${endpoint}/refreshAiturn`);
     }
 
+    CanSplitPlayer() {
+        return getAsyncNoJSON(`${endpoint}/canSplitPlayer`);
+    }
+
+    CanSplitAi() {
+        return getAsyncNoJSON(`${endpoint}/canSplitAi`);
+    }
+
      StandPlayer() {
         return getAsyncNoJSON(`${endpoint}/StandPlayer`);
     }

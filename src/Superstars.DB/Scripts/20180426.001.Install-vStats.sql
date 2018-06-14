@@ -1,7 +1,7 @@
 ﻿create view sp.vStats
 as
      select
-          GameTypeID = e.GameTypeID,
+          GameType = e.GameType,
           UserID = e.UserID,
           Wins = e.Wins,
 		  Losses = e.Losses
