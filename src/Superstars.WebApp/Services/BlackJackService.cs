@@ -140,7 +140,6 @@ namespace Superstars.WebApp
             return _dealerTurn;
         }
 
-
         public bool BlackJackCheck(List<Card> hand)
         {
             int blowjob = GetHandValue(hand);
