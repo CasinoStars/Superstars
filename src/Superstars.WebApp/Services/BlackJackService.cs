@@ -112,6 +112,28 @@ namespace Superstars.WebApp
             return valeur;
         }
 
+        public bool CanSplit(List<Card> hand)
+        {
+            int [] doubletab = new int[hand.Capacity];
+            int a = 0;
+            foreach (Card carte in hand)
+            {
+                doubletab[a] = carte.Value;
+                a++;
+            }
+
+            //for (int i = 0; i < doubletab.Length; i++)
+            //{
+            //    for (int j = i + 1; j < doubletab.Length; j++)
+            //    {
+            //        if (doubletab[i] == doubletab[j]) return true;
+            //    }
+            //}
+
+            bool ish = doubletab.Distinct().Count() != doubletab.Length;
+            return ish;
+        }
+
         public bool FinishTurn()
         {
             _dealerTurn = true;
