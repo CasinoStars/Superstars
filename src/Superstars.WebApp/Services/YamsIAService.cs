@@ -31,7 +31,7 @@ namespace Superstars.WebApp.Services
 						{
 							var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0]).First());
 							// var indexQuery = _indexDice.IndexOf(_indexDice.Where((int[] array) => array[0] == result[0] && array[1] == result[1]).First());
-							_indexDice[indexQuery][_indexDice[indexQuery].Length]++;
+							_indexDice[indexQuery][_indexDice[indexQuery].Length-1]++;
 						}
 						else
 						{

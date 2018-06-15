@@ -193,13 +193,19 @@ namespace Superstars.WebApp.Controllers
             bool result = _blackJackService.CanSplit(_blackJackService._ennemyhand);
             return Ok(result);
         }
-
-        [HttpGet("canSplitAi")]
-        public IActionResult CanSplitAi()
+        
+        [HttpPost("SplitPlayer")]
+        public IActionResult SplitPlayer()
         {
-            bool result = _blackJackService.CanSplit(_blackJackService._myhand);
+            bool result = _blackJackService.SplitHand();
             return Ok(result);
         }
+        //[HttpGet("canSplitAi")]
+        //public IActionResult CanSplitAi()
+        //{
+        //    bool result = _blackJackService.CanSplit(_blackJackService._myhand);
+        //    return Ok(result);
+        //}
 
         [HttpPost("PlayAi")]
         public async Task<IActionResult> PlayAi()

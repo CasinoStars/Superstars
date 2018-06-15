@@ -143,6 +143,10 @@
    <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false">STAND</button></div>
    </form>
 
+   <form @submit="split($event)">
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true">STAND</button></div>
+   </form>
+
    <form @submit="playdealer($event)">
    <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
@@ -172,7 +176,7 @@ export default {
             winnerlooser: '',
             playerwin: false,
             cansplitplayer: false,
-            cansplitia: false,
+            //cansplitia: false,
             nbturn: 0,
         }
     },
@@ -211,9 +215,9 @@ export default {
         this.cansplitplayer = BlackJackApiService.CanSplitPlayer();
     },
 
-    CanSplitIa() {
-        this.cansplitia = BlackJackApiService.CanSplitAi();
-    },
+    // CanSplitIa() {
+    //     this.cansplitia = BlackJackApiService.CanSplitAi();
+    // },
 
     async playdealer(e) {
         e.preventDefault();

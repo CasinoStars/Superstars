@@ -12,6 +12,7 @@ namespace Superstars.WebApp
         Deck _deck;
         public List<Card> _myhand { get; set; }
         public List<Card> _ennemyhand { get; set; }
+        public List<Card> _ennemysecondhand { get; set; }
         public int _pot;
         public bool _dealerTurn;
 
@@ -29,7 +30,9 @@ namespace Superstars.WebApp
             _values = Valueforcards(_values);
             _deck.Shuffle();
             _myhand = new List<Card>();
+            _ennemysecondhand = new List<Card>();
             _ennemyhand = new List<Card>();
+
             _dealerTurn = false;
         }
 
@@ -60,6 +63,30 @@ namespace Superstars.WebApp
             return hand;
         }
 
+        public bool SplitHand()
+        {
+            bool hassplit = false;
+            if (CanSplit(_ennemyhand))
+            {
+                List<Card> copylist = new List<Card>();
+                copylist = _ennemyhand;
+                _ennemyhand.Clear();
+                int i = 0;
+                foreach (var item in copylist)
+                {
+                    if (i == 0)
+                    {
+                        _ennemyhand.Add(item);
+                    } else
+                    {
+                        _ennemysecondhand.Add(item);
+                    }
+                    i++;
+                }
+                hassplit = true;
+            }
+            return hassplit;
+        }
         //public int GetHandValue(List<Card> hand)
         //{
         //    int valeur = 0;
