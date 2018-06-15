@@ -11,9 +11,13 @@ namespace Superstars.DAL
 
         public string PlayerCards { get; set; }
 
+        public string SecondPlayerCards { get; set; }
+
         public int NbTurn { get; set; }
 
         public int HandValue { get; set; }
+
+        public int SecondHandValue { get; set; }
 
     }
 }
