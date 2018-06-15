@@ -132,7 +132,6 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
             string playercards = await _blackJackGateway.GetPlayerCards(userId, data.BlackJackGameId);
-            //string finalcards = playercards.Split(',');
             return playercards;
         }
 
@@ -143,7 +142,6 @@ namespace Superstars.WebApp.Controllers
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
             string playercards = await _blackJackGateway.GetPlayerCards(user.UserId, data.BlackJackGameId);
-            //string[] finalcards = playercards.Split(',');
             return playercards;
         }
 
@@ -186,6 +184,20 @@ namespace Superstars.WebApp.Controllers
         public IActionResult refreshAiturn()
         {
             bool result = _blackJackService._dealerTurn;
+            return Ok(result);
+        }
+
+        [HttpGet("canSplitPlayer")]
+        public IActionResult CanSplitPlayer()
+        {
+            bool result = _blackJackService.CanSplit(_blackJackService._ennemyhand);
+            return Ok(result);
+        }
+
+        [HttpGet("canSplitAi")]
+        public IActionResult CanSplitAi()
+        {
+            bool result = _blackJackService.CanSplit(_blackJackService._myhand);
             return Ok(result);
         }
 
