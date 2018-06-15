@@ -122,14 +122,6 @@ namespace Superstars.WebApp
                 a++;
             }
 
-            //for (int i = 0; i < doubletab.Length; i++)
-            //{
-            //    for (int j = i + 1; j < doubletab.Length; j++)
-            //    {
-            //        if (doubletab[i] == doubletab[j]) return true;
-            //    }
-            //}
-
             bool ish = doubletab.Distinct().Count() != doubletab.Length;
             return ish;
         }

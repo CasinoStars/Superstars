@@ -7,15 +7,12 @@ namespace Superstars.WebApp.Services
 {
     public class YamsIAService
 	{
-		int[] _actualBestHand = new int[5] { 0, 0, 0, 0, 0 }; // on met à 0 comme ça le nombre de points de cette mmain est à 0 et la probabilité de cette main est la plus haute
 		int[] _myHand = new int[5];
 		int _enemyPoints;
 		List<float[]> _indexDice = new List<float[]>();
 
-		public YamsIAService(int[] myHand, int enemyHand)
+		public YamsIAService()
 		{
-			_enemyPoints = enemyHand;
-			_myHand = myHand;
 		}
 
 		private void ChangeOneDice()
@@ -236,8 +233,10 @@ namespace Superstars.WebApp.Services
 			return toRerollIndex;
 		}
 
-		public int[] GiveRerollHand()
+		public int[] GiveRerollHand(int[] myhand,int enemypoint)
 		{
+            _myHand = myhand;
+            _enemyPoints = enemypoint;
 			ChangeOneDice();
 			ChangeTwoDices();
 			ChangeThreeDices();
