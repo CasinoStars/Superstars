@@ -4,7 +4,7 @@
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
   
   <form @submit="onSubmitAI($event)" id="PlayAI">
-    <div v-for="(i, index) of iadices" :key="index" class="playerdices">
+    <div v-for="(i, index) of iadices" :key="index" class="iadices">
       <img v-if="i == 1" src="../img/diceia1.png">
       <img v-if="i == 2" src="../img/diceia2.png">
       <img v-if="i == 3" src="../img/diceia3.png">
@@ -18,20 +18,15 @@
   
   <form @submit="onSubmit($event)" id="PlayPlayer">
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
-      <img v-if="i == 1" src="../img/dice1.png">
-      <img v-if="i == 2" src="../img/dice2.png">
-      <img v-if="i == 3" src="../img/dice3.png">
-      <img v-if="i == 4" src="../img/dice4.png">
-      <img v-if="i == 5" src="../img/dice5.png">
-      <img v-if="i == 6" src="../img/dice6.png">
-    </div>
-    <br>
-    <div class="checkbox" v-if="nbTurn != 0 && nbTurn < 3">
-      <input type="checkbox" id="dice1" value="1" v-model="selected">        
-      <input type="checkbox" id="dice2" value="2" v-model="selected">
-      <input type="checkbox" id="dice3" value="3" v-model="selected">        
-      <input type="checkbox" id="dice4" value="4" v-model="selected">        
-      <input type="checkbox" id="dice5" value="5" v-model="selected">     
+      <label :title="i" class="image-checkbox">
+        <img v-if="i == 1" src="../img/dice1.png">
+        <img v-if="i == 2" src="../img/dice2.png">
+        <img v-if="i == 3" src="../img/dice3.png">
+        <img v-if="i == 4" src="../img/dice4.png">
+        <img v-if="i == 5" src="../img/dice5.png">
+        <img v-if="i == 6" src="../img/dice6.png">
+        <input type="checkbox" name="dices[]" :value="index+1" checked="checked" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
+      </label>
     </div>
   </form>
 
@@ -50,8 +45,8 @@
     <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE: <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
   </div>
 
-  <br>
   <div style="text-align:center;" v-if="nbTurnIa == 3 && winOrLose != ''">
+    <br>
     <router-link v-on:click.native="RePlay()" to="">
       <button class="btn btn-light">REJOUER</button>
     </router-link>
@@ -59,6 +54,7 @@
       <button class="btn btn-dark">QUITTER</button>
     </router-link>
   </div>
+
 </div>
 </template>
 
@@ -85,8 +81,8 @@ export default {
     }
   },
 
+
   async mounted() {
-    
     await this.refreshDices();
     await this.refreshIaDices();
     var data = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
@@ -186,33 +182,48 @@ export default {
 </script>
 
 <style>
-
-  .iadices {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 8%;
-    width: 36%;
+.nopad {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
-  .playerdices {
-	display: inline-block;
-	position: relative;
-  width: 8%;
-	left: 30.2%
-}
-
-  .checkbox {
-    text-align: center;
-    letter-spacing: 100px;
-  }
-
-.iadices > img {
+.image-checkbox > img {
+	cursor: pointer;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 4px solid transparent;
+	margin-bottom: 0;
+	outline: 0;
   height: 100px;
   width: 100px;  
 }
 
-.playerdices > img {
+.image-checkbox input[type="checkbox"] {
+	display: none;
+}
+
+.playerdices {
+	display: inline-block;
+	position: relative;
+  width: 8%; 
+	left: 30.2%;
+}
+
+.checkbox {
+  text-align: center;
+  letter-spacing: 100px;
+}
+
+.iadices {
+	display: inline-block;
+	position: relative;
+  width: 8%;
+	left: 30.2%;
+  margin-top: 8%;
+}
+
+.iadices > img {
   height: 100px;
   width: 100px;  
 }
