@@ -21,8 +21,10 @@ namespace Superstars.DAL
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
                 p.Add("@PlayerCards",cards);
+                p.Add("@SecondPlayerCards", null);
                 p.Add("@NbTurn", nbturn);
                 p.Add("@HandValue", 0);
+                p.Add("@SecondHandValue", 0);
                 p.Add("@BlackJackPlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sBlackJackPlayerCreate", p, commandType: CommandType.StoredProcedure);
@@ -41,8 +43,10 @@ namespace Superstars.DAL
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
                 p.Add("@PlayerCards", cards);
+                p.Add("@SecondPlayerCards", null);
                 p.Add("@NbTurn", nbturn);
                 p.Add("@HandValue", 0);
+                p.Add("@SecondHandValue", 0);
                 p.Add("@PlayerId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sBlackJackAICreate", p, commandType: CommandType.StoredProcedure);
@@ -74,7 +78,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<BlackJackData>(
-                    "select top 1 t.BlackJackPlayerId, t.BlackJackGameId, t.PlayerCards, t.NbTurn, t.HandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId order by BlackJackGameId desc",
+                    "select top 1 t.BlackJackPlayerId, t.BlackJackGameId, t.PlayerCards, t.SecondPlayerCards, t.NbTurn, t.HandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId order by BlackJackGameId desc",
                     new { BJPlayerId = playerId });
             }
         }
@@ -96,6 +100,16 @@ namespace Superstars.DAL
             {
                 return await con.QueryFirstOrDefaultAsync<string>(
                     @"select t.PlayerCards from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
+                    new { BJPlayerId = userId, BJGameId = gameId });
+            }
+        }
+
+        public async Task<string> GetPlayerSecondCards(int userId, int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<string>(
+                    @"select t.SecondPlayerCards from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
                     new { BJPlayerId = userId, BJGameId = gameId });
             }
         }
@@ -142,6 +156,37 @@ namespace Superstars.DAL
                     new { BJPlayerId = userId, BJGameId = gameId });
             }
         }
+
+        public async Task<int> GetPlayerSecondHandValue(int userId, int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<int>(
+                    @"select t.SecondHandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
+                    new { BJPlayerId = userId, BJGameId = gameId });
+            }
+        }
+
+        public async Task<Result> UpdatePlayerSecondHandValue(int userId, int gameId, int secondhandvalue)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result>(
+                    @" update sp.tBlackJackPlayer set [SecondHandValue] = @SecondHandValue where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
+                    new { SecondHandValue = secondhandvalue, BlackJackPlayerId = userId, BlackJackGameId = gameId });
+            }
+        }
+
+        public async Task<Result> UpdatePlayerSecondPlayerCards(int userId, int gameId, string secondplayercards)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result>(
+                    @" update sp.tBlackJackPlayer set [SecondPlayerCards] = @SecondPlayerCards where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
+                    new { SecondPlayerCards = secondplayercards, BlackJackPlayerId = userId, BlackJackGameId = gameId });
+            }
+        }
+
 
     }
 }

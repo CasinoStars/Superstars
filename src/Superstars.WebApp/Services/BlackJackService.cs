@@ -15,6 +15,7 @@ namespace Superstars.WebApp
         public List<Card> _ennemysecondhand { get; set; }
         public int _pot;
         public bool _dealerTurn;
+        public bool _hassplit;
 
         Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
@@ -32,7 +33,7 @@ namespace Superstars.WebApp
             _myhand = new List<Card>();
             _ennemysecondhand = new List<Card>();
             _ennemyhand = new List<Card>();
-
+            _hassplit = false;
             _dealerTurn = false;
         }
 
@@ -65,7 +66,7 @@ namespace Superstars.WebApp
 
         public bool SplitHand()
         {
-            bool hassplit = false;
+             _hassplit = false;
             if (CanSplit(_ennemyhand))
             {
                 List<Card> copylist = new List<Card>();
@@ -83,9 +84,9 @@ namespace Superstars.WebApp
                     }
                     i++;
                 }
-                hassplit = true;
+                _hassplit = true;
             }
-            return hassplit;
+            return _hassplit;
         }
         //public int GetHandValue(List<Card> hand)
         //{
