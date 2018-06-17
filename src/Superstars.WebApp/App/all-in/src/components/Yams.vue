@@ -18,14 +18,14 @@
   
   <form @submit="onSubmit($event)" id="PlayPlayer">
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
-      <label :title="i" class="image-checkbox">
+      <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
+      <label class="image-checkbox" :for="index+1">
         <img v-if="i == 1" src="../img/dice1.png">
         <img v-if="i == 2" src="../img/dice2.png">
         <img v-if="i == 3" src="../img/dice3.png">
         <img v-if="i == 4" src="../img/dice4.png">
         <img v-if="i == 5" src="../img/dice5.png">
         <img v-if="i == 6" src="../img/dice6.png">
-        <input type="checkbox" name="dices[]" :value="index+1" checked="checked" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
       </label>
     </div>
   </form>
@@ -174,6 +174,7 @@ export default {
       else
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
       await this.refreshDices();
+      this.selected = [];
       if(this.nbTurn < 3)
         await this.changeTurn();
     }
@@ -182,37 +183,26 @@ export default {
 </script>
 
 <style>
-.nopad {
-	padding-left: 0 !important;
-	padding-right: 0 !important;
-}
-
 .image-checkbox > img {
 	cursor: pointer;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	border: 4px solid transparent;
-	margin-bottom: 0;
-	outline: 0;
   height: 100px;
-  width: 100px;  
+  width: 100px;
 }
 
-.image-checkbox input[type="checkbox"] {
+input[type="checkbox"] {
 	display: none;
 }
+
+input[type=checkbox]:checked + label > img{
+  height: 120px;
+  width: 120px;
+} 
 
 .playerdices {
 	display: inline-block;
 	position: relative;
   width: 8%; 
 	left: 30.2%;
-}
-
-.checkbox {
-  text-align: center;
-  letter-spacing: 100px;
 }
 
 .iadices {

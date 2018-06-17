@@ -7,7 +7,7 @@ namespace Superstars.WebApp.Services
 {
     public class YamsService
     {
-		/*
+        /*
 		 Points:
 		  yams
           yams 6 = 80
@@ -35,7 +35,7 @@ namespace Superstars.WebApp.Services
          Petite Suite 45          
 		*/
 
-		public int[] IndexChange(int[] dices, int[] index)
+        public int[] IndexChange(int[] dices, int[] index)
         {
             for (int i = 0; i < index.Length; i++)
             {
@@ -69,7 +69,7 @@ namespace Superstars.WebApp.Services
             int[] count = new int[6] { 0, 0, 0, 0, 0, 0 };
             for (int i = 0; i < 5; i++)
             {
-				count[hand[i]-1] ++;
+                count[hand[i] - 1]++;
             }
             return count;
         }
@@ -115,24 +115,24 @@ namespace Superstars.WebApp.Services
                     }
                 }
 
-				// brelan
-				else if(handcount[i]==3)
-				{
-					for(int l = 0; l <6; l++)
-					{
-						if(handcount[l]==1)
-						{
-							for(int k =0;k<6 && k!=l;k++)
-							{
-								if(handcount[k]==1)
-								{
-									points = points + 20 + 3 * (i + 1) + (k + 1) + (l + 1);
-									return points;
-								}
-							}
-						}
-					}
-				}
+                // brelan
+                else if (handcount[i] == 3)
+                {
+                    for (int l = 0; l < 6; l++)
+                    {
+                        if (handcount[l] == 1)
+                        {
+                            for (int k = 0; k < 6; k++)
+                            {
+                                if (handcount[k] == 1 && k != l)
+                                {
+                                    points = points + 20 + 3 * (i + 1) + (k + 1) + (l + 1);
+                                    return points;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             // petite suite
             if (handcount[0] == 1)
@@ -162,94 +162,94 @@ namespace Superstars.WebApp.Services
         }
 
         private string FindFigureName(int[] hand)
-		{
-			string figureName;
-			int[] handcount = new int[6];
+        {
+            string figureName;
+            int[] handcount = new int[6];
 
-			handcount = DicesValue(hand);
-			for (int i = 0; i < 6; i++)
-			{
-				//yams
-				if (handcount[i] == 5)
-				{
-					return figureName = ("yams de " + (i+1));
-				}
+            handcount = DicesValue(hand);
+            for (int i = 0; i < 6; i++)
+            {
+                //yams
+                if (handcount[i] == 5)
+                {
+                    return figureName = ("yams de " + (i + 1));
+                }
 
-				//carré
-				if (handcount[i] == 4)
-				{
-					for (int l = 0; l < 6; l++)
-					{
-						if (handcount[l] == 1)
-						{
-							return figureName = ("carré de " + (i + 1));
-						}
-					}
-				}
+                //carré
+                if (handcount[i] == 4)
+                {
+                    for (int l = 0; l < 6; l++)
+                    {
+                        if (handcount[l] == 1)
+                        {
+                            return figureName = ("carré de " + (i + 1));
+                        }
+                    }
+                }
 
-				// full
-				else if (handcount[i] == 3)
-				{
-					for (int l = 0; l < 6; l++)
-					{
-						if (handcount[l] == 2)
-						{
-							return figureName = "full " + (i + 1) + "-" + (l + 1);
-						}
-					}
-			    }
-				// brelan
-				else if (handcount[i] == 3)
-				{
-					for (int l = 0; l < 6; l++)
-					{
-						if (handcount[l] == 1)
-						{
-							for (int k = 0; k < 6 && k != l; k++)
-							{
-								if (handcount[k] == 1)
-								{
-									return figureName = "Brelan de " + (i + 1);
-								}
-							}
-						}
-					}
-				}
-			}
-			// petite suite
-			if (handcount[0] == 1)
-			{
-				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
-				{
-					return figureName = "petite suite";
-				}
-			}
-			else if (handcount[1] == 1)
-			{
-				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
-				{
-					return figureName = "grande suite";
-				}
-			}
+                // full
+                else if (handcount[i] == 3)
+                {
+                    for (int l = 0; l < 6; l++)
+                    {
+                        if (handcount[l] == 2)
+                        {
+                            return figureName = "full " + (i + 1) + "-" + (l + 1);
+                        }
+                    }
+                }
+                // brelan
+                else if (handcount[i] == 3)
+                {
+                    for (int l = 0; l < 6; l++)
+                    {
+                        if (handcount[l] == 1)
+                        {
+                            for (int k = 0; k < 6; k++)
+                            {
+                                if (handcount[k] == 1 && k != l)
+                                {
+                                    return figureName = "Brelan de " + (i + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // petite suite
+            if (handcount[0] == 1)
+            {
+                if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
+                {
+                    return figureName = "petite suite";
+                }
+            }
+            else if (handcount[1] == 1)
+            {
+                if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
+                {
+                    return figureName = "grande suite";
+                }
+            }
 
-			// chance
-			return figureName = "chance";
-		}
+            // chance
+            return figureName = "chance";
+        }
 
-		public string[] TabFiguresAndWinner(int[] handIA,int[] handPlayer)
-		{
-			string[] figuresAndWinnnerNames = new string[3];
-			figuresAndWinnnerNames[0] = FindFigureName(handIA);
-			figuresAndWinnnerNames[1] = FindFigureName(handPlayer);
-			if(PointCount(handIA)>=PointCount(handPlayer))
-			{
-				figuresAndWinnnerNames[2] = "You Lose";
-			}
-			else
-			{
-				figuresAndWinnnerNames[2] = "You Win";
-			}
-			return figuresAndWinnnerNames;
-		}
+        public string[] TabFiguresAndWinner(int[] handIA, int[] handPlayer)
+        {
+            string[] figuresAndWinnnerNames = new string[3];
+            figuresAndWinnnerNames[0] = FindFigureName(handIA);
+            figuresAndWinnnerNames[1] = FindFigureName(handPlayer);
+            if (PointCount(handIA) >= PointCount(handPlayer))
+            {
+                figuresAndWinnnerNames[2] = "You Lose";
+            }
+            else
+            {
+                figuresAndWinnnerNames[2] = "You Win";
+            }
+            return figuresAndWinnnerNames;
+        }
     }
 }
