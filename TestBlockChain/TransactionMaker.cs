@@ -25,7 +25,7 @@ namespace Superstars.Wallet
             decimal total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
             if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
 
-            Dictionary<OutPoint, double> UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client, nbOfConfimationReq);
+            Dictionary<OutPoint, double> UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client, 1);
             var transaction = new Transaction();
             var senderScriptPubKey = senderPrivateKey.GetAddress().ScriptPubKey;
             var sortedDict = from entry in UTXOS orderby entry.Value descending select entry;
@@ -35,6 +35,7 @@ namespace Superstars.Wallet
             decimal valueOfInputs = 0;
             foreach (var utxo in sortedDict)
             {
+                if (utxo.Value == 0) continue;
                 transaction.Inputs.Add(new TxIn()
                 {
                     PrevOut = utxo.Key
