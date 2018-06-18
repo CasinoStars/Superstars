@@ -17,7 +17,7 @@ namespace YamsFaire
          // Console.WriteLine(ok);
 
             var rnd = new RNGCryptoServiceProvider();
-            int nonce = 100;
+            int nonce = 300;
             //      byte[] ServeurSeed = System.Text.Encoding.ASCII.GetBytes("MA CHAINE");
             //     byte[] clientSeedWithNonce = System.Text.Encoding.ASCII.GetBytes("MA CHAINE" + nonce);
 
@@ -36,8 +36,9 @@ namespace YamsFaire
                 {
                     Test[dicesFromHash[p]-1]++;
                 }
-                Console.WriteLine(dicesFromHash.Count + "   Nonce "  + i);
-                if (dicesFromHash.Count < 18) throw new ArgumentException(" Length to short");
+                //Console.WriteLine(dicesFromHash.Count + "   Nonce "  + i);
+
+             //   if (dicesFromHash.Count < 18) throw new ArgumentException(" Length to short");
             }
 
 
