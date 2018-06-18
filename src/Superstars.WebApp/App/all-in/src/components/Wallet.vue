@@ -1,5 +1,5 @@
 <template>
-    <div id="wallet">
+    <div class="wallet">
         <!-- errors of transactions !-->
         <div class="alert alert-danger" style="text-align: center;" v-if="errors.length > 0">
             <li v-for="e of errors" :key="e">{{e}}</li>
@@ -155,16 +155,16 @@ $br: 4px;
 //   box-sizing: border-box;
 // }
 
-html {
+.wallet html {
 	overflow-y: scroll; 
 }
 
-body {
+.wallet body {
   background:$body-bg;
   font-family: 'Titillium Web', sans-serif;
 }
 
-a {
+.wallet a {
   text-decoration:none;
   color:$main;
   transition:.5s ease;
@@ -219,13 +219,13 @@ a {
 }
 
 
-h5 {
+.wallet h5 {
   text-align:center;
   color:$white;
   font-weight:$thin;
 }
 
-label {
+.wallet label {
   position:absolute;
   transform:translateY(6px);
   left:13px;
@@ -240,7 +240,7 @@ label {
   }
 }
 
-input, textarea {
+.wallet input, textarea {
   font-size:22px;
   display:block;
   width:100%;
@@ -258,7 +258,7 @@ input, textarea {
   }
 }
 
-textarea {
+.wallet textarea {
   border:2px solid $gray-light;
   resize: vertical;
 }
