@@ -132,6 +132,8 @@
 
     <a> Your hand value : {{handvalue}} </a> <br>
     <a> Dealer hand value : {{dealerhandvalue}} </a> <br>
+    <a> CanSplit : {{cansplitplayer}} </a> <br>
+    <a> HasSplit : {{hasplitplayer}} </a> <br>
     <a> isiaturn : {{iaturn}} </a> <br>
     <a> RESULT : {{winnerlooser}} </a> <br>
 
@@ -144,7 +146,7 @@
    </form>
 
    <form @submit="split($event)">
-   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true">STAND</button></div>
+   <div style="text-align:center;"><button type="submit" value="split" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true">SPLIT</button></div>
    </form>
 
    <form @submit="playdealer($event)">
@@ -168,23 +170,27 @@ export default {
     data() {
         return {
             playercards: [],
+            playersecondcards: [],
             dealercards: [],
             handvalue: 0,
+            secondhandvalue: 0,
             dealerhandvalue: 0,
             iaturn : false,
             gameend: false,
             winnerlooser: '',
             playerwin: false,
             cansplitplayer: false,
-            //cansplitia: false,
+            hasplitplayer: false,
             nbturn: 0,
         }
     },
 
   async mounted() {
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
+    this.HasPlayerSplit();
     await this.refreshCards();
     await this.refreshHandValue();
+    await this.CanSplitPlayer();
     this.CheckWinner();
   },
 
@@ -207,17 +213,25 @@ export default {
         this.refreshHandValue();
     },
 
+    split(e) {
+        e.preventDefault();
+        if(this.cansplitplayer) {
+        BlackJackApiService.SplitPlayer();
+        }
+    },
+
     refreshiaturn() {
         this.iaturn = BlackJackApiService.refreshAiturn();
+    },
+
+    HasPlayerSplit() {
+        this.hasplitplayer = BlackJackApiService.HasSplit();
     },
 
     CanSplitPlayer() {
         this.cansplitplayer = BlackJackApiService.CanSplitPlayer();
     },
 
-    // CanSplitIa() {
-    //     this.cansplitia = BlackJackApiService.CanSplitAi();
-    // },
 
     async playdealer(e) {
         e.preventDefault();
@@ -260,11 +274,19 @@ export default {
     async refreshHandValue() {
         this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
         this.dealerhandvalue = await this.executeAsyncRequest(() => BlackJackApiService.getAiHandValue());
+
+        if(this.hasplitplayer) {
+          this.secondhandvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerSecondHandValue());
+      }
     },
 
     async refreshCards() {
       this.playercards = await this.executeAsyncRequest(() => BlackJackApiService.GetPlayerCards());
       this.dealercards = await this.executeAsyncRequest(() => BlackJackApiService.GetAiCards());
+
+      if(this.hasplitplayer) {
+          this.playersecondcards = await this.executeAsyncRequest(() => BlackJackApiService.GetSecondPlayerCards());
+      }
     },
 
 
