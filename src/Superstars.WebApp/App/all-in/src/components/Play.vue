@@ -1,7 +1,6 @@
 <template>
   <div id="home">
     <div class="games">
-
       <div class="yams">
         <router-link v-on:click.native="PlayYams('Yams')" to="">
           <img src="../img/LOGO1.png" alt="yams" id="imgyams">
@@ -67,6 +66,7 @@ export default {
 </script>
 
 <style>
+
   .games {
   margin: 290px;
   margin-left: 400px;

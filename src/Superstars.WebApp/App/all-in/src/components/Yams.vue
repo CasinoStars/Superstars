@@ -34,11 +34,12 @@
   <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
     <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER</div>
     <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA</div>
-    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ {{wait}}</div>  
-    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ {{wait}}</div>
-    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ {{wait}}</div>
-    <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div> 
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ <div class="loader"></div></div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ  <div class="loader"></div></div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ <div class="loader"></div></div>
+    <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     <br>
+
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0">RELANCER</button>
     <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
@@ -183,6 +184,31 @@ export default {
 </script>
 
 <style>
+
+.loader {
+  border: 2px solid #f3f3f3;
+  border-radius: 0%;
+  border-top: 3px solid 	rgb(160,160,160);
+  border-right: 3px solid 	rgb(128,128,128);
+  border-bottom: 3px solid 	rgb(190,190,190);
+  border-left: 3px solid 	rgb(96,96,96);
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .image-checkbox > img {
 	cursor: pointer;
   height: 100px;
