@@ -149,6 +149,11 @@
    <div style="text-align:center;"><button type="submit" value="split" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true">SPLIT</button></div>
    </form>
 
+   <!-- <form>
+   <div><button type="button" class="btn btn-lg btn-primary" disabled>Primary button</button></div>
+   <div><button type="button" class="btn btn-secondary btn-lg" disabled>Button</button></div>
+   </form> -->
+
    <form @submit="playdealer($event)">
    <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
@@ -288,8 +293,6 @@ export default {
           this.playersecondcards = await this.executeAsyncRequest(() => BlackJackApiService.GetSecondPlayerCards());
       }
     },
-
-
     }
 }
 </script>
