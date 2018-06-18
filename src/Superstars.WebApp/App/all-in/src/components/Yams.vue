@@ -32,11 +32,11 @@
 
   <br>
   <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-    <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER</div>
-    <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA</div>
-    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ <div class="loader"></div></div>  
-    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ  <div class="loader"></div></div>
-    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ <div class="loader"></div></div>
+    <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER </div>
+    <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA </div>
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ <div class="loader"></div> </div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ  <div class="loader"></div> </div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ <div class="loader"></div> </div>
     <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     <br>
 
@@ -115,7 +115,7 @@ export default {
       this.playerFigure = tableResult[1];
       this.winOrLose = tableResult[2];
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
-      if(this.winOrLose == "You Lose"){
+      if(this.winOrLose == "You Lose") {
           await this.updateStats();
       }
       else if(this.winOrLose == "You Win"){
@@ -193,6 +193,7 @@ export default {
   border-bottom: 3px solid 	rgb(190,190,190);
   border-left: 3px solid 	rgb(96,96,96);
   margin: auto;
+  margin-top: 50%;
   width: 8px;
   height: 8px;
   -webkit-animation: spin 1s linear infinite;
