@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 
 namespace Superstars.WebApp.Services
 {
-    public class YamsIAService
+	public class YamsIAService
 	{
-        YamsService _yamsService;
-        int[] _myHand = new int[5];
+		YamsService _yamsService;
+		int[] _myHand = new int[5];
 		int _enemyPoints;
 		List<float[]> _indexDice = new List<float[]>();
 
 		public YamsIAService(YamsService yamsService)
 		{
-            _yamsService = yamsService;
+			_yamsService = yamsService;
 		}
 
-        private int PointCount(int[] hand) => _yamsService.PointCount(hand);
+		private int PointCount(int[] hand) => _yamsService.PointCount(hand);
 
-        private void ChangeOneDice()
+		private void ChangeOneDice()
 		{
 			int[] testHand = new int[5];
 			for (int index = 0; index < 5; index++)
@@ -35,7 +35,7 @@ namespace Superstars.WebApp.Services
 						{
 							var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0]).First());
 							// var indexQuery = _indexDice.IndexOf(_indexDice.Where((int[] array) => array[0] == result[0] && array[1] == result[1]).First());
-							_indexDice[indexQuery][_indexDice[indexQuery].Length-1]++;
+							_indexDice[indexQuery][_indexDice[indexQuery].Length - 1]++;
 						}
 						else
 						{
@@ -237,24 +237,28 @@ namespace Superstars.WebApp.Services
 			return toRerollIndex;
 		}
 
-		public int[] GiveRerollHand(int[] myhand,int enemypoint)
+		public int[] GiveRerollHand(int[] myhand, int enemypoint)
 		{
-            _myHand = myhand;
-            _enemyPoints = enemypoint;
-			ChangeOneDice();
-			ChangeTwoDices();
-			ChangeThreeDices();
-			ChangeFourDices();
-			ChangeFiveDices();
-			MultiplyProbaAndNumber();
-			int[] indexes = TheBestIndexProba();
-			int[] toRerollHand = new int[5];
-			Array.Copy(_myHand, toRerollHand, 5);
-			for (int i = 0; i < indexes.Length; i++)
+			if (PointCount(myhand) <= enemypoint )
 			{
-				toRerollHand[indexes[i]] = 0;
+				_myHand = myhand;
+				_enemyPoints = enemypoint;
+				ChangeOneDice();
+				ChangeTwoDices();
+				ChangeThreeDices();
+				ChangeFourDices();
+				ChangeFiveDices();
+				MultiplyProbaAndNumber();
+				int[] indexes = TheBestIndexProba();
+				int[] toRerollHand = new int[5];
+				Array.Copy(_myHand, toRerollHand, 5);
+				for (int i = 0; i < indexes.Length; i++)
+				{
+					toRerollHand[indexes[i]] = 0;
+				}
+				return toRerollHand;
 			}
-			return toRerollHand;
+			return myhand;
 		}
 
 		#region Tolls methodes
@@ -344,19 +348,19 @@ namespace Superstars.WebApp.Services
 					proba = 1;
 					break;
 				case 1:
-					proba = ((float)1 / (float)6);
+					proba = ((float)(1) / (float)(6));
 					break;
 				case 2:
-					proba = ((float)1 / (float)(6 * 6));
+					proba = ((float)(2*1) / (float)(6 * 6));
 					break;
 				case 3:
-					proba = ((float)1 / (float)(6 * 6 * 6));
+					proba = ((float)(3*2*1) / (float)(6 * 6 * 6));
 					break;
 				case 4:
-					proba = ((float)1 / (float)(6 * 6 * 6 * 6));
+					proba = ((float)(1*2*3*4) / (float)(6 * 6 * 6 * 6));
 					break;
 				case 5:
-					proba = ((float)1 / (float)(6 * 6 * 6 * 6 * 6));
+					proba = ((float)(1*2*3*4*5) / (float)(6 * 6 * 6 * 6 * 6));
 					break;
 				default:
 					throw new NotImplementedException("bad number of dices");
