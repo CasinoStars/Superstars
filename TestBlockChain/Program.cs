@@ -1,19 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
 using NBitcoin;
-using NBitcoin.DataEncoders;
-using NBitcoin.Protocol;
-using System.Threading;
 using QBitNinja.Client;
-using QBitNinja.Client.Models;
-using System.Linq;
-using System.Globalization;
-using System.Runtime.Serialization;
+
 
 namespace Superstars.Wallet
 {
@@ -22,6 +11,8 @@ namespace Superstars.Wallet
         static void Main(string[] args)
         {
 
+            Console.WriteLine("test");
+
             var network = Network.TestNet;
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
             // BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
@@ -29,24 +20,51 @@ namespace Superstars.Wallet
             BitcoinSecret btcS2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
 
 
-           //  Transaction trxx = TransactionMaker.MakeATransaction(btcS, btcS2.GetAddress(), (decimal)0.3,(decimal)0.05, 6,client);
-            //TransactionMaker.BroadCastTransaction(trxx,client);
+    //        Transaction trxx = TransactionMaker.MakeATransaction(btcS2, btcS.GetAddress(), (decimal)4.1,(decimal)0.05, 6,client);
+      //      TransactionMaker.BroadCastTransaction(trxx,client);
+      
+      //      Transaction trxx2 = TransactionMaker.MakeATransaction(btcS, btcS2.GetAddress(), (decimal)3.54, (decimal)0.05, 6, client);
+        //    TransactionMaker.BroadCastTransaction(trxx2, client);
 
-            List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(btcS, client);
+          //  List<GetTransactionResponse> pendingTrx = informationSeeker.SeekPendingTrx(btcS, client);
 
-            Dictionary<OutPoint, double> utxos = informationSeeker.FindUtxo(btcS, client, 6);
+
+        
+            Dictionary<OutPoint, double> utxos = informationSeeker.FindUtxo(btcS, client, 0);
+
+            Dictionary<OutPoint, double> utxos2 = informationSeeker.FindUtxo(btcS2, client, 0);
+
 
             List<string> PendingTrxWithAmountAndNbOfConf = informationSeeker.GetPendingTrxWithAmntAndNbOfConf(btcS,client);
 
-
-            foreach (var trx in PendingTrxWithAmountAndNbOfConf)
+            foreach (var item in PendingTrxWithAmountAndNbOfConf)
             {
-                Console.WriteLine(trx);
+                Console.WriteLine(item + "  TEST PENDING TRX WITH CONF AND AMOUNT");
             }
 
-            decimal coinInWallet = informationSeeker.HowMuchCoinInWallet(btcS, client);
+            double totalUtxo = 0;
+            double totalUtxo2 = 0;
 
-            Console.WriteLine(coinInWallet + " TEST");
+            foreach (var item in utxos)
+            {
+                Console.WriteLine(item.Key +  " WALLET 1" );
+                Console.WriteLine(item.Value + "  WALLET 1");
+                totalUtxo += item.Value;
+            }
+
+            foreach (var item in utxos2)
+            {
+                Console.WriteLine(item.Key +  "  WALLET 2");
+                Console.WriteLine(item.Value + " WALLET 2");
+                totalUtxo2 += item.Value;
+            }
+
+
+            decimal coinInWallet = informationSeeker.HowMuchCoinInWallet(btcS2, client);
+
+            Console.WriteLine(totalUtxo2 + " Coin in wallet WALLET 2");
+            Console.WriteLine(totalUtxo + " Total  WALLET1");
+
 
             Console.ReadKey();
         }

@@ -68,8 +68,7 @@ namespace Superstars.Wallet
         /// <returns></returns>
         public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
-            List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
-            Dictionary<OutPoint, double> UTXOS = FindUtxo(privateKey, client, 3);
+            Dictionary<OutPoint, double> UTXOS = FindUtxo(privateKey, client, 0);
             decimal total = 0;
             foreach (var item in UTXOS)
             {
@@ -93,7 +92,7 @@ namespace Superstars.Wallet
             {
                 foreach (var input in trxResp.Transaction.Inputs)
                 {
-                    if (input.ScriptSig.GetSignerAddress(Network.TestNet) != privateKey.GetAddress())
+                    if (input.ScriptSig.GetSignerAddress(Network.TestNet) == privateKey.GetAddress())
                         foreach (var output in trxResp.Transaction.Outputs)
                         {
                             if (output.ScriptPubKey == privateKey.ScriptPubKey)
@@ -129,18 +128,18 @@ namespace Superstars.Wallet
             for (int i = 0; i < responses.Count; i++)
             {
                 var receivedCoins = responses[i].ReceivedCoins;
-                OutPoint outPointToSpend = null;
+               // OutPoint outPointToSpend = null;
                 foreach (var coin in receivedCoins)
                 {
                     if (coin.TxOut.ScriptPubKey == bitcoinPrivateKey.ScriptPubKey)
                     {
                         trxSignedWithOurSpk.Add(coin.Outpoint);
-                        outPointToSpend = coin.Outpoint;
+                      ///  outPointToSpend = coin.Outpoint;
 
                     }
                 }
             }
-            List<GetTransactionResponse> ResponseSignWithOurPrivateKey = new List<GetTransactionResponse>();
+          //  List<GetTransactionResponse> ResponseSignWithOurPrivateKey = new List<GetTransactionResponse>();
             List<OutPoint> prevouts = new List<OutPoint>();
 
             foreach (var trxResponse in responses)
@@ -154,7 +153,8 @@ namespace Superstars.Wallet
 
             foreach (var trx in trxSignedWithOurSpk)
             {
-                if (!prevouts.Contains(trx)) utxo.Add(trx);
+                if (!prevouts.Contains(trx))
+                    utxo.Add(trx);
             }
 
             Dictionary<OutPoint, double> UTXOs = new Dictionary<OutPoint, double>();
@@ -182,7 +182,7 @@ namespace Superstars.Wallet
                         {
                             if (trx.Transaction.Outputs[i].ScriptPubKey.GetDestinationAddress(Network.TestNet) == bitcoinPrivateKey.GetAddress())
                                 if (!UTXOs.ContainsKey(new OutPoint(trx.TransactionId, i)))
-                                    UTXOs.Add(new OutPoint(trx.TransactionId, i),(double)trx.Transaction.Outputs[i].Value.Satoshi/100000000);
+                                    UTXOs.Add(new OutPoint(trx.TransactionId, i), (double)trx.Transaction.Outputs[i].Value.Satoshi / 100000000);
                         }
                     }
                 }
