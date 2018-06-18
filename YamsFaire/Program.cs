@@ -17,24 +17,34 @@ namespace YamsFaire
          // Console.WriteLine(ok);
 
             var rnd = new RNGCryptoServiceProvider();
-            int nonce = 0;
+            int nonce = 100;
             //      byte[] ServeurSeed = System.Text.Encoding.ASCII.GetBytes("MA CHAINE");
             //     byte[] clientSeedWithNonce = System.Text.Encoding.ASCII.GetBytes("MA CHAINE" + nonce);
 
 
-          //  for (int i = 0; i < length; i++)
-           // {
+            //  for (int i = 0; i < length; i++)
+            // {
 
             //            }
 
-            for (int i = 0; i < 100000000; i++)
+            int[] Test = new int[] {0,0,0,0,0,0};
+
+            for (int i = 0; i < 100; i++)
             {
                 List<int> dicesFromHash = HashManager.GetDicesFromHash("ok", "ok" + i.ToString());
+                for (int p = 0; p < 6; p++)
+                {
+                    Test[dicesFromHash[p]-1]++;
+                }
                 Console.WriteLine(dicesFromHash.Count + "   Nonce "  + i);
                 if (dicesFromHash.Count < 18) throw new ArgumentException(" Length to short");
             }
 
-            
+
+            foreach (var item in Test)
+            {
+                Console.WriteLine(item);
+            }
 
             Console.ReadKey();
 
