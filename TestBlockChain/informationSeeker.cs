@@ -68,7 +68,7 @@ namespace Superstars.Wallet
         /// <returns></returns>
         public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
-            Dictionary<OutPoint, double> UTXOS = FindUtxo(privateKey, client, 0);
+            Dictionary<OutPoint, double> UTXOS = FindUtxo(privateKey, client, 1);
             decimal total = 0;
             foreach (var item in UTXOS)
             {
