@@ -34,11 +34,13 @@
   <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
     <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER </div>
     <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA </div>
-    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ <div class="loader"></div> </div>  
-    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ  <div class="loader"></div> </div>
-    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ <div class="loader"></div> </div>
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ  </div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ   </div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ  </div>
     <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     <br>
+
+    <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="loader"></div>
 
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0">RELANCER</button>
@@ -147,19 +149,19 @@ export default {
     async onSubmitAI(e) {
       e.preventDefault();
       while(this.nbTurnIa < 3) {
-        setTimeout(this.waiting, 400);
-        setTimeout(this.waiting, 800);
-        setTimeout(this.waiting, 1200);
-        setTimeout(this.waiting, 1600);
-        setTimeout(this.waiting, 2000);
-        setTimeout(this.waiting, 2400);
-        setTimeout(this.waiting, 2800);
-        setTimeout(this.waiting, 3200);      
+        // setTimeout(this.waiting, 400);
+        // setTimeout(this.waiting, 800);
+        // setTimeout(this.waiting, 1200);
+        // setTimeout(this.waiting, 1600);
+        // setTimeout(this.waiting, 2000);
+        // setTimeout(this.waiting, 2400);
+        // setTimeout(this.waiting, 2800);
+        // setTimeout(this.waiting, 3200);      
         let arraydice = [this.iadices, this.dices];
-        while(this.wait != '') {
-          //Wait end of dynamic '...' for roll dices
-          setTimeout(this.waiting, 400);
-        }
+        // while(this.wait != '') {
+        //   //Wait end of dynamic '...' for roll dices
+        //   setTimeout(this.waiting, 400);
+        // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
         await this.refreshIaDices();
@@ -188,14 +190,14 @@ export default {
 .loader {
   border: 2px solid #f3f3f3;
   border-radius: 0%;
-  border-top: 3px solid 	rgb(160,160,160);
-  border-right: 3px solid 	rgb(128,128,128);
-  border-bottom: 3px solid 	rgb(190,190,190);
-  border-left: 3px solid 	rgb(96,96,96);
+  border-top: 4px solid 	rgb(160,160,160);
+  border-right: 4px solid 	rgb(128,128,128);
+  border-bottom: 4px solid 	rgb(190,190,190);
+  border-left: 4px solid 	rgb(96,96,96);
   margin: auto;
-  margin-top: 50%;
-  width: 8px;
-  height: 8px;
+  width: 15px;
+  height: 15px;
+  display: -webkit-inline-box;
   -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
 }
