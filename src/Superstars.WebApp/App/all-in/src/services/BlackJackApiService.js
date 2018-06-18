@@ -25,6 +25,13 @@ class BlackJackApiService {
         await postAsync(`${endpoint}/InitAI`);
     }
 
+    async GetSecondPlayerCards() {
+        var cards = await getAsyncNoJSON(`${endpoint}/GetSecondPlayerCards`) + '';
+        var array = cards.split(',');
+        return array;
+    }
+
+
     async GetPlayerCards() {
         var cards = await getAsyncNoJSON(`${endpoint}/GetPlayerCards`) + '';
         var array = cards.split(',');
@@ -42,8 +49,28 @@ class BlackJackApiService {
         await postAsync(`${endpoint}/HitPlayer`);
     }
 
+    async HitPlayerSecondCards() {
+        await postAsync(`${endpoint}/HitPlayerSecondCards`);
+    }
+
     refreshAiturn() {
         return getAsyncNoJSON(`${endpoint}/refreshAiturn`);
+    }
+
+    CanSplitPlayer() {
+        return getAsyncNoJSON(`${endpoint}/canSplitPlayer`);
+    }
+
+    SplitPlayer() {
+        return getAsyncNoJSON(`${endpoint}/SplitPlayer`);
+    }
+
+    HasSplit() {
+        return getAsyncNoJSON(`${endpoint}/HasSplit`);
+    }
+
+    CanSplitAi() {
+        return getAsyncNoJSON(`${endpoint}/canSplitAi`);
     }
 
      StandPlayer() {
@@ -60,6 +87,11 @@ class BlackJackApiService {
 
     async getplayerHandValue() {
         var value = await getAsyncNoJSON(`${endpoint}/getplayerHandValue`);
+        return value;
+    }
+
+    async getplayerSecondHandValue() {
+        var value = await getAsyncNoJSON(`${endpoint}/getplayerSecondHandValue`);
         return value;
     }
 

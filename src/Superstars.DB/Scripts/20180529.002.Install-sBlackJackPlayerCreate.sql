@@ -3,8 +3,10 @@ create proc sp.sBlackJackPlayerCreate
 	@UserId int,
 	@BlackJackPlayerId int out,
 	@PlayerCards nvarchar(25),
+	@SecondPlayerCards nvarchar(25),
 	@NbTurn int,
-	@HandValue int
+	@HandValue int,
+	@SecondHandValue int
 )
 as
 
@@ -21,7 +23,7 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards,NbTurn,HandValue) values(@UserId, @BlackJackGameId, @PlayerCards, @NbTurn,@HandValue);
+    insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards,SecondPlayerCards,NbTurn,HandValue,SecondHandValue) values(@UserId, @BlackJackGameId, @PlayerCards,@SecondPlayerCards, @NbTurn,@HandValue,@SecondHandValue);
 	set @BlackJackPlayerId = @UserId;
 	commit;
     return 0;

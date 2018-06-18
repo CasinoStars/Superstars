@@ -1,48 +1,57 @@
 <template>
 <div class="page">
-<div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;"> <h3> TOUR:{{nbTurn}} </h3></div>
-<form @submit="onSubmitAI($event)">
-    <div v-for="(i, index) of iadices" :key="index" class="playerdices">
+  
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
+  
+  <form @submit="onSubmitAI($event)" id="PlayAI">
+    <div v-for="(i, index) of iadices" :key="index" class="iadices">
       <img v-if="i == 1" src="../img/diceia1.png">
       <img v-if="i == 2" src="../img/diceia2.png">
       <img v-if="i == 3" src="../img/diceia3.png">
       <img v-if="i == 4" src="../img/diceia4.png">
       <img v-if="i == 5" src="../img/diceia5.png">
       <img v-if="i == 6" src="../img/diceia6.png">
-    </div><br>
-    <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn >= 3 && nbTurnIa <3">ROLL IA</button></div>
-</form>
-  <br><br><br>
-  <form @submit="onSubmit($event)">
-    <div v-for="(i, index) of dices" :key="index" class="playerdices">
-      <img v-if="i == 1" src="../img/dice1.png">
-      <img v-if="i == 2" src="../img/dice2.png">
-      <img v-if="i == 3" src="../img/dice3.png">
-      <img v-if="i == 4" src="../img/dice4.png">
-      <img v-if="i == 5" src="../img/dice5.png">
-      <img v-if="i == 6" src="../img/dice6.png">
-    </div><br>
-    <div class="checkbox" v-if="nbTurn != 0 && nbTurn < 3">
-      <input type="checkbox" id="dice1" value="1" v-model="selected">        
-      <input type="checkbox" id="dice2" value="2" v-model="selected">
-      <input type="checkbox" id="dice3" value="3" v-model="selected">        
-      <input type="checkbox" id="dice4" value="4" v-model="selected">        
-      <input type="checkbox" id="dice5" value="5" v-model="selected">
-      
     </div>
-  <br><div  style="text-align:center;">relanceDice: <strong>{{ selected }}</strong></div>
-
-
-  <br><div style="text-align:center;"><button type="submit" class="btn btn-outline-secondary btn-lg" v-if="nbTurn < 3">ROLL</button></div>
-  <div style="text-align:center;"><p v-if="nbTurnIa == 3">{{winOrLose}} <br>L'ordi a : {{IaFigure}} <br>Vous avez: {{playerFigure}}</p></div>
+  </form>
+  
+  <br><br><br><br>
+  
+  <form @submit="onSubmit($event)" id="PlayPlayer">
+    <div v-for="(i, index) of dices" :key="index" class="playerdices">
+      <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
+      <label class="image-checkbox" :for="index+1">
+        <img v-if="i == 1" src="../img/dice1.png">
+        <img v-if="i == 2" src="../img/dice2.png">
+        <img v-if="i == 3" src="../img/dice3.png">
+        <img v-if="i == 4" src="../img/dice4.png">
+        <img v-if="i == 5" src="../img/dice5.png">
+        <img v-if="i == 6" src="../img/dice6.png">
+      </label>
+    </div>
   </form>
 
-  <div style="text-align:center;" v-if="nbTurn == 3 && nbTurnIa == 3">
+  <br>
+  <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
+    <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER</div>
+    <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA</div>
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ {{wait}}</div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ {{wait}}</div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ {{wait}}</div>
+    <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div> 
+    <br>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0">RELANCER</button>
+    <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
+    <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE: <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
+  </div>
+
+  <div style="text-align:center;" v-if="nbTurnIa == 3 && winOrLose != ''">
+    <br>
     <router-link v-on:click.native="RePlay()" to="">
-      <br><button class="btn btn-light">REJOUER</button>
+      <button class="btn btn-light">REJOUER</button>
     </router-link>
     <router-link to="/play">
-      <br><button class="btn btn-dark">QUITTER</button>
+      <button class="btn btn-dark">QUITTER</button>
     </router-link>
   </div>
 
@@ -67,11 +76,13 @@ export default {
       winOrLose: '',
       playerFigure: '',
       IaFigure: '',
+      wait: '',
+      playerwin: false,
     }
   },
 
+
   async mounted() {
-    
     await this.refreshDices();
     await this.refreshIaDices();
     var data = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
@@ -93,6 +104,10 @@ export default {
       this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
     },
 
+    async updateStats() {
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
+    },
+
     async getFinalResult() {
       let tableResult = await this.executeAsyncRequest(() => YamsApiService.GetFinalResult());
       this.IaFigure = tableResult[0];
@@ -100,9 +115,11 @@ export default {
       this.winOrLose = tableResult[2];
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
       if(this.winOrLose == "You Lose"){
-
+          await this.updateStats();
       }
       else if(this.winOrLose == "You Win"){
+        this.playerwin = true;
+        await this.updateStats();
         await this.executeAsyncRequest(() => WalletApiService.WithdrawInBankRoll(pot));
         await this.executeAsyncRequest(() => WalletApiService.CreditPlayer(pot));
       }
@@ -118,15 +135,36 @@ export default {
       this.$router.go(this.$router.history);
     },
 
+    waiting() {
+      if(this.wait == '...'){
+        this.wait = '';
+      }else{
+        this.wait += '.';
+      }
+    },
+
     async onSubmitAI(e) {
       e.preventDefault();
-      let arraydice = [this.iadices, this.dices];
-      console.log(arraydice);
-      await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-      this.nbTurnIa = this.nbTurnIa + 1;
+      while(this.nbTurnIa < 3) {
+        setTimeout(this.waiting, 400);
+        setTimeout(this.waiting, 800);
+        setTimeout(this.waiting, 1200);
+        setTimeout(this.waiting, 1600);
+        setTimeout(this.waiting, 2000);
+        setTimeout(this.waiting, 2400);
+        setTimeout(this.waiting, 2800);
+        setTimeout(this.waiting, 3200);      
+        let arraydice = [this.iadices, this.dices];
+        while(this.wait != '') {
+          //Wait end of dynamic '...' for roll dices
+          setTimeout(this.waiting, 400);
+        }
+        this.nbTurnIa = this.nbTurnIa + 1;
+        await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
+        await this.refreshIaDices();
+      }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
-      await this.refreshIaDices();
     },
 
     async onSubmit(e) {
@@ -136,6 +174,7 @@ export default {
       else
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
       await this.refreshDices();
+      this.selected = [];
       if(this.nbTurn < 3)
         await this.changeTurn();
     }
@@ -144,33 +183,37 @@ export default {
 </script>
 
 <style>
-
-  .iadices {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 8%;
-    width: 36%;
+.image-checkbox > img {
+	cursor: pointer;
+  height: 100px;
+  width: 100px;
 }
 
-  .playerdices {
+input[type="checkbox"] {
+	display: none;
+}
+
+input[type=checkbox]:checked + label > img{
+  height: 120px;
+  width: 120px;
+} 
+
+.playerdices {
+	display: inline-block;
+	position: relative;
+  width: 8%; 
+	left: 30.2%;
+}
+
+.iadices {
 	display: inline-block;
 	position: relative;
   width: 8%;
-	left: 30.2%
+	left: 30.2%;
+  margin-top: 8%;
 }
-
-  .checkbox {
-    text-align: center;
-    letter-spacing: 100px;
-  }
 
 .iadices > img {
-  height: 100px;
-  width: 100px;  
-}
-
-.playerdices > img {
   height: 100px;
   width: 100px;  
 }

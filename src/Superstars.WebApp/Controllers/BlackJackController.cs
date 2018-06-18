@@ -122,7 +122,29 @@ namespace Superstars.WebApp.Controllers
             data.HandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
             Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result);
+        }
 
+        [HttpPost("HitPlayerSecondCards")]
+        public async Task<IActionResult> HitPlayerSecondHand()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BlackJackData data = await _blackJackGateway.GetPlayer(userId);
+            _blackJackService._ennemysecondhand = _blackJackService.DrawCard(_blackJackService._ennemysecondhand);
+            string _cards = "";
+            int i = 0;
+            foreach (var item in _blackJackService._ennemysecondhand)
+            {
+                _cards += item.Value;
+                _cards += item.Symbol;
+                i++;
+
+                if (i > 0)
+                    _cards += ",";
+            }
+            data.SecondPlayerCards = _cards;
+            data.SecondHandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+            Result result = await _blackJackGateway.UpdatePlayerSecondPlayerCards(data.BlackJackPlayerID, data.BlackJackGameId, data.SecondPlayerCards);
+            return this.CreateResult(result);
         }
 
         [HttpGet("GetPlayerCards")]
@@ -132,7 +154,16 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
             string playercards = await _blackJackGateway.GetPlayerCards(userId, data.BlackJackGameId);
-            //string finalcards = playercards.Split(',');
+            return playercards;
+        }
+
+        [HttpGet("GetSecondPlayerCards")]
+        public async Task<string> GetSecondPlayerCards()
+        {
+            List<Card> cards = _blackJackService._ennemyhand;
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BlackJackData data = await _blackJackGateway.GetPlayer(userId);
+            string playercards = await _blackJackGateway.GetPlayerSecondCards(userId, data.BlackJackGameId);
             return playercards;
         }
 
@@ -143,7 +174,6 @@ namespace Superstars.WebApp.Controllers
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
             string playercards = await _blackJackGateway.GetPlayerCards(user.UserId, data.BlackJackGameId);
-            //string[] finalcards = playercards.Split(',');
             return playercards;
         }
 
@@ -162,6 +192,15 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetGameId(userId);
             int handv = await _blackJackGateway.GetPlayerHandValue(userId, data.BlackJackGameId);
+            return handv;
+        }
+
+        [HttpGet("getplayerSecondHandValue")]
+        public async Task<int> GetPlayerSecondHandValue()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BlackJackData data = await _blackJackGateway.GetGameId(userId);
+            int handv = await _blackJackGateway.GetPlayerSecondHandValue(userId, data.BlackJackGameId);
             return handv;
         }
 
@@ -188,6 +227,34 @@ namespace Superstars.WebApp.Controllers
             bool result = _blackJackService._dealerTurn;
             return Ok(result);
         }
+
+        [HttpGet("canSplitPlayer")]
+        public IActionResult CanSplitPlayer()
+        {
+            bool result = _blackJackService.CanSplit(_blackJackService._ennemyhand);
+            return Ok(result);
+        }
+        
+        [HttpPost("SplitPlayer")]
+        public IActionResult SplitPlayer()
+        {
+            bool result = _blackJackService.SplitHand();
+            return Ok(result);
+        }
+
+        [HttpGet("HasSplit")]
+        public IActionResult HasSplit()
+        {
+            bool result = _blackJackService._hassplit;
+            return Ok(result);
+        }
+
+        //[HttpGet("canSplitAi")]
+        //public IActionResult CanSplitAi()
+        //{
+        //    bool result = _blackJackService.CanSplit(_blackJackService._myhand);
+        //    return Ok(result);
+        //}
 
         [HttpPost("PlayAi")]
         public async Task<IActionResult> PlayAi()

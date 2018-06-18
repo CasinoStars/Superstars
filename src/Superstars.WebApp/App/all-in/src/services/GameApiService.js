@@ -68,9 +68,23 @@ async BetBlackJack(balance) {
     window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
     return await postAsync(`${endpoint}/${bet}/betBlackJack`);
 }
-/*async CreateYamsGame(pot) {
-    return await postAsync(`${endpoint}/CreateYamsGame`, pot);
-}*/
+
+async getWinsBlackJackPlayer() {
+    return await getAsync(`${endpoint}/getwinsBlackJackPlayer`);
+}
+
+async getLossesBlackJackPlayer() {
+    return await getAsync(`${endpoint}/getlossesBlackJackPlayer`);
+}
+
+async getWinsYamsPlayer() {
+    return await getAsync(`${endpoint}/getwinsYamsPlayer`);
+}
+
+async getLossesYamsPlayer() {
+    return await getAsync(`${endpoint}/getlossesYamsPlayer`);
+}
+
 }
 
 export default new GameApiService();

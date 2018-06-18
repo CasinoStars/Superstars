@@ -11,7 +11,6 @@ class YamsApiService {
     }
 
     async RollIaDices(dices) {
-        console.log(dices);
         return await postAsync(`${endpoint}/RollIa`, dices); 
     }
 

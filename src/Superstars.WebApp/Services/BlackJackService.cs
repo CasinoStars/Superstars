@@ -12,8 +12,10 @@ namespace Superstars.WebApp
         Deck _deck;
         public List<Card> _myhand { get; set; }
         public List<Card> _ennemyhand { get; set; }
+        public List<Card> _ennemysecondhand { get; set; }
         public int _pot;
         public bool _dealerTurn;
+        public bool _hassplit;
 
         Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
@@ -29,7 +31,9 @@ namespace Superstars.WebApp
             _values = Valueforcards(_values);
             _deck.Shuffle();
             _myhand = new List<Card>();
+            _ennemysecondhand = new List<Card>();
             _ennemyhand = new List<Card>();
+            _hassplit = false;
             _dealerTurn = false;
         }
 
@@ -60,35 +64,101 @@ namespace Superstars.WebApp
             return hand;
         }
 
+        public bool SplitHand()
+        {
+             _hassplit = false;
+            if (CanSplit(_ennemyhand))
+            {
+                List<Card> copylist = new List<Card>();
+                copylist = _ennemyhand;
+                _ennemyhand.Clear();
+                int i = 0;
+                foreach (var item in copylist)
+                {
+                    if (i == 0)
+                    {
+                        _ennemyhand.Add(item);
+                    } else
+                    {
+                        _ennemysecondhand.Add(item);
+                    }
+                    i++;
+                }
+                _hassplit = true;
+            }
+            return _hassplit;
+        }
+        //public int GetHandValue(List<Card> hand)
+        //{
+        //    int valeur = 0;
+        //    foreach (Card carte in hand)
+        //    {
+        //        foreach (KeyValuePair<Card, int> item in _values)
+        //        {
+        //            if (carte == item.Key)
+        //            {
+        //                if (item.Key.Value == 14 && valeur + item.Value > 21)
+        //                {
+        //                    valeur += 1;
+        //                }
+        //                else
+        //                {
+        //                    valeur += item.Value;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return valeur;
+        //}
+
+
         public int GetHandValue(List<Card> hand)
         {
             int valeur = 0;
+            int nbraces = 0;
             foreach (Card carte in hand)
             {
                 foreach (KeyValuePair<Card, int> item in _values)
                 {
                     if (carte == item.Key)
                     {
-                        if (item.Key.Value == 14 && valeur + item.Value > 21)
+                        if (item.Key.Value == 14)
                         {
-                            valeur += 1;
+                            nbraces = nbraces + 1;
                         }
-                        else
-                        {
-                            valeur += item.Value;
-                        }
+                        valeur += item.Value;
+                       
                     }
                 }
+            }
+
+            while(valeur > 21 && nbraces > 0)
+            {
+                valeur = valeur - 10;
+                nbraces = nbraces - 1;
             }
             return valeur;
         }
 
-      public bool FinishTurn()
+        public bool CanSplit(List<Card> hand)
+        {
+            int [] doubletab = new int[hand.Capacity];
+            int a = 0;
+            foreach (Card carte in hand)
+            {
+                doubletab[a] = carte.Value;
+                a++;
+            }
+
+            bool ish = doubletab.Distinct().Count() != doubletab.Length;
+            return ish;
+        }
+
+        public bool FinishTurn()
         {
             _dealerTurn = true;
             return _dealerTurn;
         }
-
 
         public bool BlackJackCheck(List<Card> hand)
         {

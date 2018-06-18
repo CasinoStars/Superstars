@@ -110,7 +110,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
-                p.Add("@GameTypeId", gametype);
+                p.Add("@GameType", gametype);
                 p.Add("@UserId", userid);
                 p.Add("@Wins", wins);
                 p.Add("@Losses", losses);
@@ -129,7 +129,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 int data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select s.Wins from sp.tStats s where s.userid = @userid and s.GameTypeId = @gametype",
+                    @"select s.Wins from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
                     new { userid = userId, gametype =  gameType});
                 return Result.Success(data);
             }
@@ -140,7 +140,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 int data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select s.Losses from sp.tStats s where s.userid = @userid and s.GameTypeId = @gametype",
+                    @"select s.Losses from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
                     new { userid = userId, gametype = gameType });
                 return Result.Success(data);
             }

@@ -130,10 +130,10 @@
    <a>{{playercards[2]}}</a>
    <a>{{playercards[3]}}</a> -->
 
-    <a> Your hand value : {{handvalue}} </a>
-    <a> Dealer hand value : {{dealerhandvalue}} </a>
-    <a> isiaturn : {{iaturn}} </a>
-    <a> RESULT : {{winnerlooser}} </a>
+    <a> Your hand value : {{handvalue}} </a> <br>
+    <a> Dealer hand value : {{dealerhandvalue}} </a> <br>
+    <a> isiaturn : {{iaturn}} </a> <br>
+    <a> RESULT : {{winnerlooser}} </a> <br>
 
    <form @submit="hit($event)">
    <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false ">HIT</button></div>
@@ -143,8 +143,12 @@
    <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false">STAND</button></div>
    </form>
 
+   <form @submit="split($event)">
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true">STAND</button></div>
+   </form>
+
    <form @submit="playdealer($event)">
-   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true">PLAY AI</button></div>
+   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
    
     <router-link to="/play">
@@ -171,6 +175,8 @@ export default {
             gameend: false,
             winnerlooser: '',
             playerwin: false,
+            cansplitplayer: false,
+            //cansplitia: false,
             nbturn: 0,
         }
     },
@@ -204,6 +210,14 @@ export default {
     refreshiaturn() {
         this.iaturn = BlackJackApiService.refreshAiturn();
     },
+
+    CanSplitPlayer() {
+        this.cansplitplayer = BlackJackApiService.CanSplitPlayer();
+    },
+
+    // CanSplitIa() {
+    //     this.cansplitia = BlackJackApiService.CanSplitAi();
+    // },
 
     async playdealer(e) {
         e.preventDefault();

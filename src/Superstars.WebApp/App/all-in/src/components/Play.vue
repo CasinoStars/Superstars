@@ -17,8 +17,7 @@
       </div>
 
       <img src="../img/LOGO1.png" alt="poker" id="imgpoker">           
-      <img src="../img/LOGO1.png" alt="game3" id="imggame3">     
-      <img src="../img/LOGO1.png" alt="game4" id="imggame4">
+
     </div>
   </div>
 </template>
@@ -132,25 +131,6 @@ visibility: visible;
   visibility: hidden;
 }
 
-#imggame3 {
-  transition: transform .4s;   
-  height: 180px;
-  width: 215px;
-}
-
-#imggame3:hover {
-    transform: scale(1.4); 
-}
-
-#imggame4 {
-  transition: transform .4s;   
-  height: 180px;
-  width: 215px;
-}
-
-#imggame4:hover {
-    transform: scale(1.4); 
-}
 
 </style>
 
