@@ -41,7 +41,6 @@ class BlackJackApiService {
     async GetAiCards() {
         var cards = await getAsyncNoJSON(`${endpoint}/GetAiCards`) + '';
         var array = cards.split(',');
-        console.log("IIIIIIIIIIIIIIIIIIIIIICIIIIIIIIIIIII" + array);
         return array;
     }
 
@@ -67,10 +66,6 @@ class BlackJackApiService {
 
     HasSplit() {
         return getAsyncNoJSON(`${endpoint}/HasSplit`);
-    }
-
-    CanSplitAi() {
-        return getAsyncNoJSON(`${endpoint}/canSplitAi`);
     }
 
      StandPlayer() {
