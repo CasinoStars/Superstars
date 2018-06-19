@@ -30,7 +30,8 @@ namespace Superstars.WebApp.Services
 					testHand[index] = diceValue;
 					if ((PointCount(testHand) > _enemyPoints))
 					{
-						float[] result = new float[2] { index, 1 };
+						float[] result = new float[1]{index};
+						/*
 						if (TabAlreadyExist(result))
 						{
 							var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0]).First());
@@ -40,7 +41,8 @@ namespace Superstars.WebApp.Services
 						else
 						{
 							_indexDice.Add(result);
-						}
+						}*/
+						_indexDice.Add(result);
 					}
 				}
 			}
@@ -63,9 +65,6 @@ namespace Superstars.WebApp.Services
 							testHand[indexDice2] = valueDice2;
 							if (PointCount(testHand) > _enemyPoints)
 							{
-								if (indexDice1 == 3 || indexDice2 == 3)
-								{
-								}
 								float[] result = new float[3] { indexDice1, indexDice2, 1 };
 								if (TabAlreadyExist(result))
 								{
@@ -256,9 +255,19 @@ namespace Superstars.WebApp.Services
 				{
 					toRerollHand[indexes[i]] = 0;
 				}
+				_indexDice.Clear();
 				return toRerollHand;
 			}
 			return myhand;
+		}
+
+		private void MultiplyProbaAndNumber()
+		{
+			for (int i = 0; i < _indexDice.Count; i++)
+			{
+				int m = _indexDice[i].Length - 1;
+				_indexDice[i][m] = _indexDice[i][m] * HandProba(m);
+			}
 		}
 
 		#region Tolls methodes
@@ -367,15 +376,6 @@ namespace Superstars.WebApp.Services
 			}
 			return proba;
 		} // give proba according to the number of dices we reroll in the same time
-
-		private void MultiplyProbaAndNumber()
-		{
-			for (int i = 0; i < _indexDice.Count; i++)
-			{
-				int m = _indexDice[i].Length - 1;
-				_indexDice[i][m] = _indexDice[i][m] * HandProba(m);
-			}
-		}
 		#endregion
 	}
 }

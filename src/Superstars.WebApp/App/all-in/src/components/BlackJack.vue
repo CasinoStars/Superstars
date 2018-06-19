@@ -187,6 +187,7 @@ export default {
             cansplitplayer: false,
             hasplitplayer: false,
             nbturn: 0,
+            nbhit: 0,
         }
     },
 
@@ -204,7 +205,19 @@ export default {
 
 
     async hit(e) {
-        await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
+        
+        if(this.HasSplit===true){
+            nbhit++;
+            if(this.nbhit%2===0){
+                await this.executeAsyncRequest(() =>BlackJackApiService.HitPlayerSecondCards());
+            }
+            else{
+                await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
+            }
+        }
+        else{
+            await this.executeAsyncRequest( ()=> BlackJackApiService.HitPlayer());
+        }
         if(this.handvalue > 21) {
             this.gameend = true;
         }
