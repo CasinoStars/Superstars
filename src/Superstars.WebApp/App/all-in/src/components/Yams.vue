@@ -43,7 +43,8 @@
     <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="loader"></div>
 
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
-    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0">RELANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0" @click="nbTurn = 3">GARDER MES DÉS</button>
     <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
     <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE: <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
   </div>
@@ -186,7 +187,6 @@ export default {
 </script>
 
 <style>
-
 .loader {
   border: 2px solid #f3f3f3;
   border-radius: 0%;
