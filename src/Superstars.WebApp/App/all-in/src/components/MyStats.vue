@@ -63,6 +63,9 @@ export default {
       this.playernbgamesbj = this.playerwinsbj + this.playerlossesbj;
       this.playerratiobj = this.playerwinsbj / (this.playerwinsbj + this.playerlossesbj);
       this.playerratiobj = this.playerratiobj.toFixed(4) * 100 + ' %';
+      if(this.playerratiobj == "NaN %") {
+        this.playerratiobj = "0 %";
+      }
     },
 
         async refreshYamsstats() {
@@ -71,6 +74,9 @@ export default {
       this.playernbgamesy = this.playerwinsy + this.playerlossesy;
       this.playerratioy = this.playerwinsy / (this.playerwinsy + this.playerlossesy);
       this.playerratioy = this.playerratioy.toFixed(4) * 100 + ' %';
+      if(this.playerratioy == "NaN %") {
+        this.playerratioy = "0 %";
+      }
     }
   }
 }
