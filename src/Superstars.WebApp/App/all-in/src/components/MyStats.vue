@@ -88,8 +88,14 @@ export default {
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
+    border-spacing: 0;
     width: 100%;
+    border: 1px solid #ddd;
 }
+
+tr:nth-child(even) { 
+  background-color: #f2f2f2;
+  }
 
 td, th {
     border: 1px solid #dddddd;
