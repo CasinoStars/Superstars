@@ -1,5 +1,5 @@
 <template>
-    <div id="wallet">
+    <div class="wallet">
         <!-- errors of transactions !-->
         <div class="alert alert-danger" style="text-align: center;" v-if="errors.length > 0">
             <li v-for="e of errors" :key="e">{{e}}</li>
@@ -25,7 +25,7 @@
                             <label>
                                 Montant<span class="req">*</span>
                             </label><br><br>
-                            <input  type="number" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off"/>
+                            <input  type="decimal" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off"/>
                         </div>
                     <div class="field-wrap">
                         <label>
@@ -44,7 +44,10 @@
                         <input type="number" min="0" max="1000000" placeholder="..." v-model="item.fakeCoins" required autocomplete="off"/>
                     </div><br>
                     <button type="submit" class="button button-block">Créditer</button>
+
                 </form>
+
+
         </div><!-- tab-content -->
         </div> <!-- /form -->
     </div>
@@ -66,7 +69,8 @@ export default {
             fakeCoins: 0,
             trueCoins: 'waiting...',
             BTCAddress: '',
-            errors: []
+            errors: [],
+            Responses : [],
         };
     },
 
@@ -116,7 +120,8 @@ export default {
             console.log("Test");
             var errors = [];
                 try {
-                    await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+                    this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+                    this.refreshTrueCoins();
                 }
                 catch(error){
 
@@ -155,16 +160,16 @@ $br: 4px;
 //   box-sizing: border-box;
 // }
 
-html {
+.wallet html {
 	overflow-y: scroll; 
 }
 
-body {
+.wallet body {
   background:$body-bg;
   font-family: 'Titillium Web', sans-serif;
 }
 
-a {
+.wallet a {
   text-decoration:none;
   color:$main;
   transition:.5s ease;
@@ -219,13 +224,13 @@ a {
 }
 
 
-h5 {
+.wallet h5 {
   text-align:center;
   color:$white;
   font-weight:$thin;
 }
 
-label {
+.wallet label {
   position:absolute;
   transform:translateY(6px);
   left:13px;
@@ -240,7 +245,7 @@ label {
   }
 }
 
-input, textarea {
+.wallet input, textarea {
   font-size:22px;
   display:block;
   width:100%;
@@ -258,7 +263,7 @@ input, textarea {
   }
 }
 
-textarea {
+.wallet textarea {
   border:2px solid $gray-light;
   resize: vertical;
 }

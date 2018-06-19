@@ -3,6 +3,7 @@ using QBitNinja.Client;
 using QBitNinja.Client.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Superstars.Wallet
@@ -16,19 +17,18 @@ namespace Superstars.Wallet
         /// <returns></returns>
         /// 
 
-
+         
         public BitcoinSecret GetBitcoinSecretFromKey(Key key, Network network)
         {
             BitcoinSecret wallet = key.GetBitcoinSecret(network);
             return wallet;
         }
-
-        public BitcoinAddress GetBitcoinAdressFromSecret(BitcoinSecret secret, Network network)
-        {
-            BitcoinAddress address = secret.GetAddress();
-            return address;
-        }
-
+        /// <summary>
+        /// Get the pending transactino linkind to a wallet address
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
@@ -36,11 +36,17 @@ namespace Superstars.Wallet
 
             foreach (var response in responses)
             {
-                if (response.Block.Confirmations > 6) unconfirmedTrxs.Add(response);
+                if (response.Block == null || response.Block.Confirmations < 6) unconfirmedTrxs.Add(response);
             }
             return unconfirmedTrxs;
         }
 
+        /// <summary>
+        /// get all transaction associate to a wallet address
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static List<GetTransactionResponse> SeekAllTransaction(BitcoinSecret key, QBitNinjaClient client)
         {
             List<GetTransactionResponse> transactionsResponses = new List<GetTransactionResponse>();
@@ -55,67 +61,42 @@ namespace Superstars.Wallet
             return transactionsResponses;
         }
 
+        /// <summary>
+        /// return the amount of spendable coin in the wallet
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
-            List<GetTransactionResponse> responses = SeekAllTransaction(privateKey, client);
-            Dictionary<OutPoint, double> UTXOS = FindUtxo(privateKey, client, 3);
+            ICoin[] Coins = FindUtxo(privateKey, client);
             decimal total = 0;
-            foreach (var item in UTXOS)
+            foreach (var coin in Coins)
             {
-                total += (decimal)item.Value;
+                decimal value = (decimal)double.Parse(coin.Amount.ToString().Replace(".", ","));
+                total += value;
             }
             return total;
         }
 
-        public static Dictionary<OutPoint, double> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client, int nbOfConfirmationReq)
+        /// <summary>
+        /// Get Pending Transactin ID with Amount of confirmation and the Value of the coin that the wallet with receive 
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="client"></param>
+        /// <returns></returns>
+
+        /// <summary>
+        /// Get all the Unspend transaction outpoint associated to an address
+        /// </summary>
+        /// <param name="bitcoinPrivateKey"></param>
+        /// <param name="client"></param>
+        /// <param name="nbOfConfirmationReq"></param>
+        /// <returns></returns>
+        public static ICoin[] FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client)
         {
-
-
-            List<GetTransactionResponse> responses = SeekAllTransaction(bitcoinPrivateKey, client);
-            List<OutPoint> trxSignedWithOurSpk = new List<OutPoint>();
-
-            for (int i = 0; i < responses.Count; i++)
-            {
-                var receivedCoins = responses[i].ReceivedCoins;
-                OutPoint outPointToSpend = null;
-                foreach (var coin in receivedCoins)
-                {
-                    if (coin.TxOut.ScriptPubKey == bitcoinPrivateKey.ScriptPubKey)
-                    {
-                        trxSignedWithOurSpk.Add(coin.Outpoint);
-                        outPointToSpend = coin.Outpoint;
-
-                    }
-                }
-            }
-            List<GetTransactionResponse> ResponseSignWithOurPrivateKey = new List<GetTransactionResponse>();
-            List<OutPoint> prevouts = new List<OutPoint>();
-
-            foreach (var trxResponse in responses)
-            {
-                foreach (var intput in trxResponse.Transaction.Inputs)
-                {
-                    prevouts.Add(intput.PrevOut);
-                }
-            }
-            List<OutPoint> utxo = new List<OutPoint>();
-
-            foreach (var trx in trxSignedWithOurSpk)
-            {
-                if (!prevouts.Contains(trx)) utxo.Add(trx);
-            }
-
-            Dictionary<OutPoint, double> UTXOs = new Dictionary<OutPoint, double>();
-
-            for (int i = 0; i < utxo.Count; i++)
-            {
-                var trx = uint256.Parse(utxo[i].Hash.ToString());
-                GetTransactionResponse trxResponse = client.GetTransaction(trx).Result;
-                if (trxResponse.Block.Confirmations < nbOfConfirmationReq) continue;
-                double value = double.Parse(trxResponse.Transaction.Outputs[utxo[i].N].Value.ToString().Replace(".", ","));
-                UTXOs.Add(utxo[i], value);
-            }
-            return UTXOs;
+            var coins = client.GetBalance(bitcoinPrivateKey.GetAddress(), true).Result.Operations.SelectMany(op => op.ReceivedCoins).ToArray();
+            return coins;
         }
     }
 }

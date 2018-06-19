@@ -25,10 +25,10 @@ namespace Superstars.Wallet
             decimal total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
             if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
 
-            Dictionary<OutPoint, double> UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client, nbOfConfimationReq);
+            ICoin[] UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client);
             var transaction = new Transaction();
             var senderScriptPubKey = senderPrivateKey.GetAddress().ScriptPubKey;
-            var sortedDict = from entry in UTXOS orderby entry.Value descending select entry;
+            var sortedDict = from entry in UTXOS orderby entry.Amount descending select entry;
             decimal totalToSend = amountToSend + minerFee;
 
             int p = 0;
@@ -37,9 +37,9 @@ namespace Superstars.Wallet
             {
                 transaction.Inputs.Add(new TxIn()
                 {
-                    PrevOut = utxo.Key
+                    PrevOut = utxo.Outpoint
                 });
-                valueOfInputs += (decimal)utxo.Value;
+                valueOfInputs += decimal.Parse(utxo.Amount.ToString().Replace(".", ","));
                 transaction.Inputs[p].ScriptSig = senderScriptPubKey;
                 if (valueOfInputs > totalToSend) break;
                 p++;                
@@ -47,13 +47,13 @@ namespace Superstars.Wallet
 
             TxOut destinationTxOut = new TxOut()
             {
-                Value = new Money(amountToSend, MoneyUnit.BTC),
+                Value = new Money((decimal)amountToSend, MoneyUnit.BTC),
                 ScriptPubKey = destinationAdress.ScriptPubKey
             };
 
             TxOut changeBackTxOut = new TxOut()
             {
-                Value = new Money(valueOfInputs - totalToSend, MoneyUnit.BTC),
+                Value = new Money((decimal)valueOfInputs - (decimal)totalToSend, MoneyUnit.BTC),
                 ScriptPubKey = senderScriptPubKey
             };
 
@@ -64,20 +64,23 @@ namespace Superstars.Wallet
             return transaction;         
         }
 
-        public static void BroadCastTransaction(Transaction transaction, QBitNinjaClient client)
+        public static List<string> BroadCastTransaction(Transaction transaction, QBitNinjaClient client)
         {
             BroadcastResponse broadcastResponse = client.Broadcast(transaction).Result;
 
+            List<string> broadCastResponseString = new List<string>();
+
             if (!broadcastResponse.Success)
             {
-                Console.Error.WriteLine("ErrorCode: " + broadcastResponse.Error.ErrorCode);
-                Console.Error.WriteLine("Error message: " + broadcastResponse.Error.Reason);
+                broadCastResponseString.Add("ErrorCode: " + broadcastResponse.Error.ErrorCode);
+                broadCastResponseString.Add("Error message: " + broadcastResponse.Error.Reason);
             }
             else
             {
-                Console.WriteLine("Success! You can check out the hash of the transaciton in any block explorer:");
-                Console.WriteLine(transaction.GetHash());
+                broadCastResponseString.Add("Success! You can check out the hash of the transaciton in any block explorer:");
+                broadCastResponseString.Add(transaction.GetHash().ToString());
             }
+            return broadCastResponseString;
         }       
     }
 }
