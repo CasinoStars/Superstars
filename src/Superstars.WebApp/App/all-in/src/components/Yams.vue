@@ -34,14 +34,15 @@
   <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
     <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER</div>
     <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA</div>
-    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ <div class="loader"></div></div>  
-    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ  <div class="loader"></div></div>
-    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ <div class="loader"></div></div>
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCER <div class="loader"></div></div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCER <div class="loader"></div></div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCER <div class="loader"></div></div>
     <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     <br>
 
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
-    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0">RELANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0" @click="nbTurn = 3">GARDER MES DÉS</button>
     <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
     <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE: <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
   </div>
@@ -184,7 +185,6 @@ export default {
 </script>
 
 <style>
-
 .loader {
   border: 2px solid #f3f3f3;
   border-radius: 0%;
