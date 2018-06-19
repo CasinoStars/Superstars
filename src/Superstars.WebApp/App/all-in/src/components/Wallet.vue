@@ -25,7 +25,7 @@
                             <label>
                                 Montant<span class="req">*</span>
                             </label><br><br>
-                            <input  type="number" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off"/>
+                            <input  type="decimal" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off"/>
                         </div>
                     <div class="field-wrap">
                         <label>
@@ -44,7 +44,10 @@
                         <input type="number" min="0" max="1000000" placeholder="..." v-model="item.fakeCoins" required autocomplete="off"/>
                     </div><br>
                     <button type="submit" class="button button-block">Créditer</button>
+
                 </form>
+
+
         </div><!-- tab-content -->
         </div> <!-- /form -->
     </div>
@@ -66,7 +69,8 @@ export default {
             fakeCoins: 0,
             trueCoins: 'waiting...',
             BTCAddress: '',
-            errors: []
+            errors: [],
+            Responses : [],
         };
     },
 
@@ -116,7 +120,8 @@ export default {
             console.log("Test");
             var errors = [];
                 try {
-                    await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+                    this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+                    this.refreshTrueCoins();
                 }
                 catch(error){
 
