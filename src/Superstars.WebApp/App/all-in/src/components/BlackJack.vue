@@ -222,6 +222,8 @@ export default {
         e.preventDefault();
         if(this.cansplitplayer) {
         BlackJackApiService.SplitPlayer();
+        this.playercards = this.GetPlayerCards();
+        this.playersecondcards = this.GetSecondPlayerCards();
         }
     },
 
@@ -236,7 +238,6 @@ export default {
     CanSplitPlayer() {
         this.cansplitplayer = BlackJackApiService.CanSplitPlayer();
     },
-
 
     async playdealer(e) {
         e.preventDefault();
