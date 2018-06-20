@@ -10,7 +10,7 @@ namespace Superstars.WebApp.Services
 		YamsService _yamsService;
 		int[] _myHand = new int[5];
 		int _enemyPoints;
-		List<float[]> _indexDice = new List<float[]>();
+		List<int[]> _indexDice = new List<int[]>();
 
 		public YamsIAService(YamsService yamsService)
 		{
@@ -19,6 +19,7 @@ namespace Superstars.WebApp.Services
 
 		private int PointCount(int[] hand) => _yamsService.PointCount(hand);
 
+		#region Big Three
 		private void ChangeOneDice()
 		{
 			int[] testHand = new int[5];
@@ -30,18 +31,7 @@ namespace Superstars.WebApp.Services
 					testHand[index] = diceValue;
 					if ((PointCount(testHand) > _enemyPoints))
 					{
-						float[] result = new float[1]{index};
-						/*
-						if (TabAlreadyExist(result))
-						{
-							var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0]).First());
-							// var indexQuery = _indexDice.IndexOf(_indexDice.Where((int[] array) => array[0] == result[0] && array[1] == result[1]).First());
-							_indexDice[indexQuery][_indexDice[indexQuery].Length - 1]++;
-						}
-						else
-						{
-							_indexDice.Add(result);
-						}*/
+						int[] result = new int[1] { index };
 						_indexDice.Add(result);
 					}
 				}
@@ -65,16 +55,9 @@ namespace Superstars.WebApp.Services
 							testHand[indexDice2] = valueDice2;
 							if (PointCount(testHand) > _enemyPoints)
 							{
-								float[] result = new float[3] { indexDice1, indexDice2, 1 };
-								if (TabAlreadyExist(result))
-								{
-									var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0] && array[1] == result[1]).First());
-									_indexDice[indexQuery][_indexDice[indexQuery].Length - 1]++;
-								}
-								else
-								{
-									_indexDice.Add(result);
-								}
+								int[] result = new int[2] { indexDice1, indexDice2 };
+								result = TriABulle(result);
+								_indexDice.Add(result);
 							}
 						}
 					}
@@ -103,19 +86,9 @@ namespace Superstars.WebApp.Services
 									testHand[indexDice3] = valueDice3;
 									if (PointCount(testHand) > _enemyPoints)
 									{
-										if (indexDice1 == 2 && (indexDice2 != 0 || indexDice3 != 0))
-										{
-										}
-										float[] result = new float[4] { indexDice1, indexDice2, indexDice3, 1 };
-										if (TabAlreadyExist(result))
-										{
-											var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0] && array[1] == result[1] && array[2] == result[2]).First());
-											_indexDice[indexQuery][_indexDice[indexQuery].Length - 1]++;
-										}
-										else
-										{
-											_indexDice.Add(result);
-										}
+										int[] result = new int[3] { indexDice1, indexDice2, indexDice3 };
+										result = TriABulle(result);
+										_indexDice.Add(result);
 									}
 								}
 							}
@@ -157,16 +130,9 @@ namespace Superstars.WebApp.Services
 											p++;
 										}
 									}
-									float[] result = new float[5] { indexs[0], indexs[1], indexs[2], indexs[3], 1 };
-									if (TabAlreadyExist(result))
-									{
-										var indexQuery = _indexDice.IndexOf(_indexDice.Where((float[] array) => array[0] == result[0] && array[1] == result[1]).First());
-										_indexDice[indexQuery][_indexDice[indexQuery].Length - 1]++;
-									}
-									else
-									{
-										_indexDice.Add(result);
-									}
+									int[] result = new int[4] { indexs[0], indexs[1], indexs[2], indexs[3] };
+									result = TriABulle(result);
+									_indexDice.Add(result);
 								}
 							}
 						}
@@ -175,9 +141,8 @@ namespace Superstars.WebApp.Services
 			}
 		}
 
-		public void ChangeFiveDices()
+		private void ChangeFiveDices()
 		{
-			int betterThanEnemyHand = 0;
 			int[] testHand = new int[5];
 			Array.Copy(_myHand, testHand, 5);
 			for (int valueDice1 = 1; valueDice1 <= 6; valueDice1++) // value of the first dice in the hand 
@@ -197,48 +162,56 @@ namespace Superstars.WebApp.Services
 								testHand[4] = valueDice5;
 								if (PointCount(testHand) >= _enemyPoints)
 								{
-									betterThanEnemyHand++;
+									int[] Levesque = new int[5] { 0, 1, 2, 3, 4 };
+									_indexDice.Add(Levesque);
 								}
 							}
 						}
 					}
 				}
 			}
-			float[] Levesque = new float[6] { 0, 1, 2, 3, 4, betterThanEnemyHand };
-			_indexDice.Add(Levesque);
+
+		}
+		#endregion
+
+		private int[] CountSameIndexes()
+		{
+			int[] numbers = new int[_indexDice.Count];
+			for (int i = 0; i < _indexDice.Count; i++)
+			{
+				int count = 0;
+				for (int j = 0; j < _indexDice.Count; j++)
+				{
+					_indexDice[i] = _indexDice[j];
+					count++;
+
+				}
+				numbers[i] = count;
+			}
+			return numbers;
 		}
 
-		public int[] TheBestIndexProba()
+		private int IndexBestHand(int[] timenumber)
 		{
-			int lengthOfTheTableInTheList = 0;
-			int[] toRerollIndex;
-			float[] THE_ONE = new float[6];
-			for (int i = 0; i < _indexDice.Count - 1; i++)
+			int indexBestProba = 0;
+			double[] probas = new double[timenumber.Length]; 
+			for(int i = 0; i<timenumber.Length; i++)
 			{
-				if (_indexDice[i][_indexDice[i].Length - 1] > _indexDice[i + 1][_indexDice[i + 1].Length - 1])
+				probas[i] = timenumber[i] / (Math.Pow(6, _indexDice[i].Length)); 
+			}
+			for(int i = 0; i<probas.Length;i++)
+			{
+				if(indexBestProba<probas[i])
 				{
-					lengthOfTheTableInTheList = _indexDice[i].Length;
-					THE_ONE = new float[_indexDice[i].Length];
-					Array.Copy(_indexDice[i], THE_ONE, _indexDice[i].Length);
-				}
-				else
-				{
-					lengthOfTheTableInTheList = _indexDice[i + 1].Length;
-					THE_ONE = new float[_indexDice[i + 1].Length];
-					Array.Copy(_indexDice[i + 1], THE_ONE, _indexDice[i + 1].Length);
+					indexBestProba = i;
 				}
 			}
-			toRerollIndex = new int[lengthOfTheTableInTheList];
-			for (int i = 0; i < (lengthOfTheTableInTheList - 1); i++)
-			{
-				toRerollIndex[i] = (int)THE_ONE[i];
-			}
-			return toRerollIndex;
+			return indexBestProba;
 		}
 
 		public int[] GiveRerollHand(int[] myhand, int enemypoint)
 		{
-			if (PointCount(myhand) <= enemypoint )
+			if (PointCount(myhand) <= enemypoint)
 			{
 				_myHand = myhand;
 				_enemyPoints = enemypoint;
@@ -247,27 +220,18 @@ namespace Superstars.WebApp.Services
 				ChangeThreeDices();
 				ChangeFourDices();
 				ChangeFiveDices();
-				MultiplyProbaAndNumber();
-				int[] indexes = TheBestIndexProba();
+				int[] countIndexes = CountSameIndexes();
+				int indexbestdices = IndexBestHand(countIndexes);
 				int[] toRerollHand = new int[5];
 				Array.Copy(_myHand, toRerollHand, 5);
-				for (int i = 0; i < indexes.Length; i++)
+				foreach (int i in _indexDice[indexbestdices])
 				{
-					toRerollHand[indexes[i]] = 0;
+					toRerollHand[i] = 0;
 				}
 				_indexDice.Clear();
 				return toRerollHand;
 			}
 			return myhand;
-		}
-
-		private void MultiplyProbaAndNumber()
-		{
-			for (int i = 0; i < _indexDice.Count; i++)
-			{
-				int m = _indexDice[i].Length - 1;
-				_indexDice[i][m] = _indexDice[i][m] * HandProba(m);
-			}
 		}
 
 		#region Tolls methodes
@@ -293,7 +257,7 @@ namespace Superstars.WebApp.Services
 			return hand;
 		}
 
-		private bool TabAlreadyExist(float[] check)
+		private bool TabAlreadyExist(int[] check)
 		{
 			int[] part = TakeonlyIndex(check);
 			part = TriABulle(part);
@@ -325,7 +289,7 @@ namespace Superstars.WebApp.Services
 			return oooll;
 		}  // number of dices who are the sames
 
-		private int[] TakeonlyIndex(float[] check)
+		private int[] TakeonlyIndex(int[] check)
 		{
 			int[] part = new int[check.Length - 1];
 			for (int i = 0; i < part.Length; i++)
@@ -347,35 +311,6 @@ namespace Superstars.WebApp.Services
 			}
 			return count;
 		}
-
-		private float HandProba(int diceRerollNumber)
-		{
-			float proba;
-			switch (diceRerollNumber)
-			{
-				case 0:
-					proba = 1;
-					break;
-				case 1:
-					proba = ((float)(1) / (float)(6));
-					break;
-				case 2:
-					proba = ((float)(2*1) / (float)(6 * 6));
-					break;
-				case 3:
-					proba = ((float)(3*2*1) / (float)(6 * 6 * 6));
-					break;
-				case 4:
-					proba = ((float)(1*2*3*4) / (float)(6 * 6 * 6 * 6));
-					break;
-				case 5:
-					proba = ((float)(1*2*3*4*5) / (float)(6 * 6 * 6 * 6 * 6));
-					break;
-				default:
-					throw new NotImplementedException("bad number of dices");
-			}
-			return proba;
-		} // give proba according to the number of dices we reroll in the same time
 		#endregion
 	}
 }
