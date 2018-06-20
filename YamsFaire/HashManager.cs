@@ -57,15 +57,16 @@ namespace YamsFaire
                 
             }
 
-            foreach (var item in IntFromResults)
+            foreach (var value in IntFromResults)
             {
-                Console.WriteLine(item % (10000) / 100);
-                if ((item % (10000) / 100) < 10) dicesFromHash.Add(0);
-               else if ((item % (10000) / 100) < 20) dicesFromHash.Add(1);
-               else if ((item % (10000) / 100) < 30) dicesFromHash.Add(2);
-               else if ((item % (10000) / 100) < 40) dicesFromHash.Add(3);
-               else if ((item % (10000) / 100) < 50) dicesFromHash.Add(4);
-               else if ((item % (10000) / 100) < 60) dicesFromHash.Add(5);
+                Console.WriteLine(value % (10000) / 100);
+                if ((value    / 10000) < 10) dicesFromHash.Add(0);
+               else if ((value  / 10000) < 20) dicesFromHash.Add(1);
+               else if ((value  / 10000) < 30) dicesFromHash.Add(2);
+               else if ((value  / 10000) < 40) dicesFromHash.Add(3);
+               else if ((value  / 10000) < 50) dicesFromHash.Add(4);
+               else if ((value  / 10000) < 60) dicesFromHash.Add(5);
+                else { throw new Exception("value must be lower then 60"); }
             }
             return dicesFromHash; 
          }

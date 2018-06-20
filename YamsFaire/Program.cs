@@ -17,7 +17,7 @@ namespace YamsFaire
          // Console.WriteLine(ok);
 
             var rnd = new RNGCryptoServiceProvider();
-            int nonce = 100;
+            int nonce = 9300;
             //      byte[] ServeurSeed = System.Text.Encoding.ASCII.GetBytes("MA CHAINE");
             //     byte[] clientSeedWithNonce = System.Text.Encoding.ASCII.GetBytes("MA CHAINE" + nonce);
 
@@ -29,7 +29,7 @@ namespace YamsFaire
 
             int[] Test = new int[] {0,0,0,0,0,0};
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 List<int> dicesFromHash = HashManager.GetDicesFromHash("aerfsfrzsf", "efe,fesofes" + nonce.ToString());
                 for (int p = 0; p < dicesFromHash.Count; p++)
