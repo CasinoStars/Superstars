@@ -11,7 +11,7 @@ namespace YamsFaire
         public static string getHashSha512(string text)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(text);
-            SHA512Managed hashstring = new SHA512Managed();
+            HMACSHA512 hashstring = new HMACSHA512();
             byte[] hash = hashstring.ComputeHash(bytes);
             string hashString = string.Empty;
             foreach (byte x in hash)
@@ -45,48 +45,29 @@ namespace YamsFaire
                 }
             }
 
-         //   List<int> IntFromResults = new List<int>();
+            List<int> IntFromResults = new List<int>();
             List<int> dicesFromHash = new List<int>();
 
 
             foreach (var item in results)
             {
-                // if(int.Parse(item, System.Globalization.NumberStyles.HexNumber) < 59999)
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) % 6000 / 100 < 10) dicesFromHash.Add(1);
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) % 6000 / 100 < 20) dicesFromHash.Add(2);
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) % 6000 / 100 < 30) dicesFromHash.Add(3);
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) % 6000 / 100 < 40) dicesFromHash.Add(4);
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) % 6000 / 100 < 50) dicesFromHash.Add(5);
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) % 6000 / 100 < 60) dicesFromHash.Add(6);
+                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) > 599999) continue;
 
-
+                IntFromResults.Add(int.Parse(item, System.Globalization.NumberStyles.HexNumber));
+                
             }
 
-            foreach (var item in dicesFromHash)
+            foreach (var item in IntFromResults)
             {
-                Console.WriteLine(item);
+                Console.WriteLine(item % (10000) / 100);
+                if ((item % (10000) / 100) < 10) dicesFromHash.Add(0);
+               else if ((item % (10000) / 100) < 20) dicesFromHash.Add(1);
+               else if ((item % (10000) / 100) < 30) dicesFromHash.Add(2);
+               else if ((item % (10000) / 100) < 40) dicesFromHash.Add(3);
+               else if ((item % (10000) / 100) < 50) dicesFromHash.Add(4);
+               else if ((item % (10000) / 100) < 60) dicesFromHash.Add(5);
             }
-
-
-            //foreach (var item in IntFromResults)
-            //{
-            //    if (item < 10000) dicesFromHash.Add(1);
-            //    if (item < 20000) dicesFromHash.Add(2);
-            //    if (item < 30000) dicesFromHash.Add(3);
-            //    if (item < 40000) dicesFromHash.Add(4);
-            //    if (item < 50000) dicesFromHash.Add(5);
-            //    if (item < 60000) dicesFromHash.Add(6);
-            //}
-          //  if (dicesFromHash.Count < 15) throw new ArgumentException(" Length to short");
-
             return dicesFromHash; 
          }
-
-
-        public static void get ()
-        {
-
-        }
-
     }
 }
