@@ -2,8 +2,9 @@
 
 <div>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-      <h1 style="text-decoration: underline;"> <strong> Mes statistiques : </strong></h1>
+      <h1 style="text-decoration: underline;"> <strong> Mes statistiques  </strong></h1>
   </div>
+  <br>
 <table>
   <tr>
     <th>Jeu</th>
@@ -27,7 +28,11 @@
     <td>{{playernbgamesy}}</td>
   </tr>
 </table>
-
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
 <center>
 
 <div class="piecontainer">
@@ -61,6 +66,8 @@ export default {
             playerwinsy: 0,
             playerlossesy:0,
             playerratioy: 0,
+            playerratioynum: 0,
+            playerratiobjnum: 0,
             playernbgamesy: 0
         }
     },
@@ -75,8 +82,8 @@ new Chart(document.getElementById("pie-chart"), {
       labels: ["Victoires", "Defaites"],
       datasets: [{
         label: "Ratio (percentage)",
-        backgroundColor: ["#3e95cd", "#8e5ea2"],
-        data: [this.playerwinsy,this.playerlossesy]
+        backgroundColor: ["#c3c3d5", "#343a40"],
+        data: [this.playerratioynum.toFixed(2), (100 - this.playerratioynum).toFixed(2)]
       }]
     },
     options: {
@@ -93,8 +100,8 @@ new Chart(document.getElementById("pie-chart2"), {
       labels: ["Victoires", "Defaites"],
       datasets: [{
         label: "Ratio (percentage)",
-        backgroundColor: ["#3e95cd", "#8e5ea2"],
-        data: [this.playerwinsbj,this.playerlossesbj]
+        backgroundColor: ["#c3c3d5", "#343a40"],
+        data: [this.playerratiobjnum.toFixed(2),(100 - this.playerratiobjnum).toFixed(2)]
       }]
     },
     options: {
@@ -116,6 +123,7 @@ new Chart(document.getElementById("pie-chart2"), {
       this.playerlossesbj = await this.executeAsyncRequest(() => GameApiService.getLossesBlackJackPlayer());
       this.playernbgamesbj = this.playerwinsbj + this.playerlossesbj;
       this.playerratiobj = this.playerwinsbj / (this.playerwinsbj + this.playerlossesbj);
+      this.playerratiobjnum = this.playerratiobj.toFixed(4) * 100;
       this.playerratiobj = this.playerratiobj.toFixed(4) * 100 + ' %';
       if(this.playerratiobj == "NaN %") {
         this.playerratiobj = "0 %";
@@ -127,6 +135,7 @@ new Chart(document.getElementById("pie-chart2"), {
       this.playerlossesy = await this.executeAsyncRequest(() => GameApiService.getLossesYamsPlayer());
       this.playernbgamesy = this.playerwinsy + this.playerlossesy;
       this.playerratioy = this.playerwinsy / (this.playerwinsy + this.playerlossesy);
+      this.playerratioynum = this.playerratioy.toFixed(4) * 100;
       this.playerratioy = this.playerratioy.toFixed(4) * 100 + ' %';
       if(this.playerratioy == "NaN %") {
         this.playerratioy = "0 %";
@@ -145,8 +154,8 @@ new Chart(document.getElementById("pie-chart2"), {
 //    height: 10px;
 // }
 .piecontainer {
-height: 600px;
-width: 600px;
+height: 700px;
+width: 700px;
 display: inline-block;
 }
 

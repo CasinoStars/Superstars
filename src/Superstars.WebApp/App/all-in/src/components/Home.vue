@@ -5,6 +5,7 @@
             <h1>WELCOME ON ALL`IN</h1>
         </div>
     </header>
+    <center>
         <div class="colonne">
             <div class="container">
               <img src="../img/provablylogo.png" class="logo1">
@@ -34,6 +35,7 @@
             </div>
             </div>
         </div>
+    </center>
 
 
     </div>
@@ -114,7 +116,7 @@ export default {
 
 .container {
   position: relative;
-  width: 50%;
+  width: 0%;
 }
 
 .container:hover .overlay {

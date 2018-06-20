@@ -138,15 +138,15 @@
     <a> RESULT : {{winnerlooser}} </a> <br>
 
    <form @submit="hit($event)">
-   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false ">HIT</button></div>
+   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false ">HIT</button></div>
    </form>
 
    <form @submit="stand($event)">
-   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false">STAND</button></div>
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">STAND</button></div>
    </form>
 
    <form @submit="split($event)">
-   <div style="text-align:center;"><button type="submit" value="split" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true">SPLIT</button></div>
+   <div style="text-align:center;"><button type="submit" value="split" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && cansplitplayer == true && gameend == false">SPLIT</button></div>
    </form>
 
    <form @submit="playdealer($event)">
