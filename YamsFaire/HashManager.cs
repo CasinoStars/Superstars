@@ -51,7 +51,7 @@ namespace YamsFaire
 
             foreach (var item in results)
             {
-                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) > 599999) continue;
+                if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) > 609999) continue;
 
                 IntFromResults.Add(int.Parse(item, System.Globalization.NumberStyles.HexNumber));
                 
@@ -59,14 +59,18 @@ namespace YamsFaire
 
             foreach (var value in IntFromResults)
             {
-                Console.WriteLine(value % (10000) / 100);
-                if ((value    / 10000) < 10) dicesFromHash.Add(0);
-               else if ((value  / 10000) < 20) dicesFromHash.Add(1);
-               else if ((value  / 10000) < 30) dicesFromHash.Add(2);
-               else if ((value  / 10000) < 40) dicesFromHash.Add(3);
-               else if ((value  / 10000) < 50) dicesFromHash.Add(4);
-               else if ((value  / 10000) < 60) dicesFromHash.Add(5);
-                else { throw new Exception("value must be lower then 60"); }
+                if (value / 10000 < 1) continue;
+
+                Console.WriteLine(value / 100000);
+                if ((value    / 10000) < 11) dicesFromHash.Add(0);
+               else if ((value  / 10000) < 21) dicesFromHash.Add(1);
+               else if ((value  / 10000) < 31) dicesFromHash.Add(2);
+               else if ((value  / 10000) < 41) dicesFromHash.Add(3);
+               else if ((value  / 10000) < 51) dicesFromHash.Add(4);
+               else if ((value  / 10000) < 61) dicesFromHash.Add(5);
+               if (value/10000 > 60) throw new Exception("value must be lower then 60");
+               if (value/10000 < 1) throw new Exception("value must at least 1");
+
             }
             return dicesFromHash; 
          }
