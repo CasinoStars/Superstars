@@ -182,9 +182,10 @@ namespace Superstars.WebApp.Services
 				int count = 0;
 				for (int j = 0; j < _indexDice.Count; j++)
 				{
-					_indexDice[i] = _indexDice[j];
-					count++;
-
+					if ( _indexDice[i].SequenceEqual(_indexDice[j]))
+					{
+						count++;
+					}
 				}
 				numbers[i] = count;
 			}
@@ -197,7 +198,8 @@ namespace Superstars.WebApp.Services
 			double[] probas = new double[timenumber.Length]; 
 			for(int i = 0; i<timenumber.Length; i++)
 			{
-				probas[i] = timenumber[i] / (Math.Pow(6, _indexDice[i].Length)); 
+				double diviseur = (Math.Pow(6, _indexDice[i].Length));
+				probas[i] = timenumber[i] / diviseur; 
 			}
 			for(int i = 0; i<probas.Length;i++)
 			{
