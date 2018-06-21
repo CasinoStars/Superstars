@@ -1,16 +1,17 @@
 <template>
 
 <div>
-  <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-      <h1 style="text-decoration: underline;"> <strong> Mes statistiques  </strong></h1>
-  </div>
   <br>
+  <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
+      <h1 style="font-variant: small-caps;"> <strong> Mes statistiques  </strong></h1>
+  </div>
+  <br><br>
 <table>
   <tr>
     <th>Jeu</th>
     <th>Victoires</th>
     <th>Défaites</th>
-    <th>Victoire/Défaite</th>
+    <th>Victoire %</th>
     <th>Nombre de parties</th>
   </tr>
   <tr>
@@ -42,10 +43,7 @@
 <div class="piecontainer">
 <canvas id="pie-chart2" class="chartjs" width="770px" height="385px" ></canvas>
 </div>
-
 </center>
-<!-- <canvas id="pie-chart" height="20px" width="40px"></canvas> -->
-
 </div>
 </template>
 
@@ -154,8 +152,8 @@ new Chart(document.getElementById("pie-chart2"), {
 //    height: 10px;
 // }
 .piecontainer {
-height: 700px;
-width: 700px;
+height: 800px;
+width: 800px;
 display: inline-block;
 }
 
@@ -167,13 +165,22 @@ table {
     border: 1px solid #ddd;
 }
 
-tr:nth-child(even) { 
+tr { 
   background-color: #f2f2f2;
   }
 
 td, th {
-    border: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 14px;
+    font-family: 'Courier New', sans-serif;
+    font-size: 21px;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
 }
 </style>
