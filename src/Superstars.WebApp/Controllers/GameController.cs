@@ -139,5 +139,21 @@ namespace Superstars.WebApp.Controllers
             Result<int> result = await _gameGateway.GetLosses(userId, "Yams");
             return this.CreateResult(result);
         }
+
+        [HttpGet("gettrueprofitplayer")]
+        public async Task<IActionResult> GetTrueProfitPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _gameGateway.GetTrueProfit(userId);
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("getfakeprofitplayer")]
+        public async Task<IActionResult> GetFakeProfitPlayer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _gameGateway.GetFakeProfit(userId);
+            return this.CreateResult(result);
+        }
     }
 }
