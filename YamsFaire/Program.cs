@@ -14,19 +14,15 @@ namespace YamsFaire
             dices.rolleDices();
 
             var rnd = new RNGCryptoServiceProvider();
-            int nonce = 19990300;
+            int nonce = 100000000;
 
 
             int[] Test = new int[] {0,0,0,0,0,0};
 
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 10000000; i++)
             {
-                List<int> dicesFromHash = HashManager.GetDicesFromHash("aerfsfrzsf", "efe,fesofes" + nonce.ToString());
-                for (int p = 0; p < dicesFromHash.Count; p++)
-                {
-                    Test[dicesFromHash[p]]++;
-                }
-
+                int dicesFromHash = HashManager.GetDicesFromHash("aerfsfrzsf", "efe,fesofes" + nonce.ToString());                
+                Test[dicesFromHash-1]++;              
             }
 
             foreach (var item in Test)

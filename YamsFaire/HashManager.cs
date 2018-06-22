@@ -21,7 +21,7 @@ namespace YamsFaire
             return hashString;
         }
 
-        public static List<int> GetDicesFromHash(string cryptedServeurSeed, string clientSeedWithNonce)
+        public static int GetDicesFromHash(string cryptedServeurSeed, string clientSeedWithNonce)
         {
             //string[] results = new string[3];
             //SHA512Managed hashManager = new SHA512Managed();
@@ -29,7 +29,7 @@ namespace YamsFaire
             //cryptedServeurSeed.CopyTo(concatened, 0);
             //clientSeedWithNonce.CopyTo(concatened, cryptedServeurSeed.Length);
             string hash = getHashSha512(cryptedServeurSeed + clientSeedWithNonce);
-
+            int result = 100;
             // byte[] fromResult = new byte[10];
             // int[] decimalResults = new int[3];
             int i = 0;
@@ -51,28 +51,26 @@ namespace YamsFaire
 
             foreach (var item in results)
             {
+                int candidate = int.Parse(item, System.Globalization.NumberStyles.HexNumber);
                 if (int.Parse(item, System.Globalization.NumberStyles.HexNumber) > 609999) continue;
-
-                IntFromResults.Add(int.Parse(item, System.Globalization.NumberStyles.HexNumber));
-                
+                else
+                {
+                    candidate = candidate / 10000;
+                    if (candidate > 60) throw new Exception("value must be lower then 60");
+                    if (candidate < 1) continue;
+                    if (candidate  < 1) throw new Exception("Error"); 
+                    if ((candidate ) < 11 && candidate > 0) result = 1;
+                    else if ((candidate) < 21) result = 2;
+                    else if ((candidate) < 31) result = 3;
+                    else if ((candidate) < 41) result = 4;
+                    else if ((candidate) < 51) result = 5;
+                    else if ((candidate) < 61) result = 6;
+                    break;
+                }                
             }
+            if (i == 0) return GetDicesFromHash(cryptedServeurSeed, clientSeedWithNonce += 1);
 
-            foreach (var value in IntFromResults)
-            {
-                if (value / 10000 < 1) continue;
-
-                Console.WriteLine(value / 100000);
-                if ((value    / 10000) < 11) dicesFromHash.Add(0);
-               else if ((value  / 10000) < 21) dicesFromHash.Add(1);
-               else if ((value  / 10000) < 31) dicesFromHash.Add(2);
-               else if ((value  / 10000) < 41) dicesFromHash.Add(3);
-               else if ((value  / 10000) < 51) dicesFromHash.Add(4);
-               else if ((value  / 10000) < 61) dicesFromHash.Add(5);
-               if (value/10000 > 60) throw new Exception("value must be lower then 60");
-               if (value/10000 < 1) throw new Exception("value must at least 1");
-
-            }
-            return dicesFromHash; 
+            return result; 
          }
     }
 }
