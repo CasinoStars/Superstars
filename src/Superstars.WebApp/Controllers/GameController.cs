@@ -155,5 +155,7 @@ namespace Superstars.WebApp.Controllers
             Result<int> result = await _gameGateway.GetFakeProfit(userId);
             return this.CreateResult(result);
         }
+
+
     }
 }

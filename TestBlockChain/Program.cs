@@ -2,7 +2,7 @@
 using NBitcoin;
 using QBitNinja.Client;
 using System.Linq;
-
+using System.Collections.Generic;
 
 namespace Superstars.Wallet
 {
@@ -30,8 +30,7 @@ namespace Superstars.Wallet
 
             decimal coinInWallet1 = informationSeeker.HowMuchCoinInWallet(btcS, client);
             Console.WriteLine(coinInWallet1);
-
-
+           
             if (coinInWallet1 > (decimal)0.1)
             {
                 Transaction trxx2 = TransactionMaker.MakeATransaction(btcS, btcS2.GetAddress(), coinInWallet1 - (decimal)0.05, (decimal)0.05, 6, client);
