@@ -10,21 +10,25 @@ namespace YamsFaire
     {
         static void Main(string[] args)
         {
-            Dices dices = new Dices();
-            dices.rolleDices();
 
-            var rnd = new RNGCryptoServiceProvider();
-            int nonce = 100000000;
+            string clientSeed = "test";
+            string serverSeed = "test";
+            int nonce = 50000000;
             int nbOfTest = 10000;
 
-          List<string> test = HashManager.Test("okok", "okok", 10, 10000);
+
+            Dices dices = new Dices();
+
+
+
+            List<string> test = HashManager.Test(clientSeed, serverSeed, nonce, 10000000);
 
             foreach (var item in test)
             {
                 Console.WriteLine(item);
             }
 
-              Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

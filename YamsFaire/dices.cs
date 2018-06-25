@@ -7,24 +7,25 @@ namespace YamsFaire
     class Dices
     {
 
-        public int[] dices { get; set; }
+        public int[] dices { get { return _dices; } }
+        int[] _dices;
 
         public Dices()
         {
-            dices = new int[5] { 1, 1, 1, 1, 1 };
+            _dices = new int[5] { 1, 2, 3, 4, 5 };
         }
 
 
-        public int[] rolleDices()
+        public void rolleDices(string serveurSeed, string clientSeed,int nonce)
         {
-            Random random = new Random();
+            int random = 0;
             int i = 0;
             foreach (var dice in dices)
             {
-                dices[i] = random.Next(1, 6);
+                random = HashManager.GetDicesFromHash(serveurSeed, clientSeed, nonce);
+                _dices[i] = random;
                 i++;
             }
-           return dices;
         }
     }
 }
