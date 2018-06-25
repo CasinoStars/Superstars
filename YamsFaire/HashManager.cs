@@ -8,6 +8,13 @@ namespace YamsFaire
 {
     class HashManager
     {
+
+
+        /// <summary>
+        /// Get SHA512 hash from string
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string getHashSha512(string text)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(text);
@@ -21,17 +28,17 @@ namespace YamsFaire
             return hashString;
         }
 
-        public static int GetDicesFromHash(string cryptedServeurSeed, string clientSeedWithNonce)
+
+        /// <summary>
+        /// hash serveurSeed + clientSeed + nonce and return 1 dices from this hash  
+        /// </summary>
+        /// <param name="serverSeed"></param>
+        /// <param name="clientSeedWithNonce"></param>
+        /// <returns></returns>
+        public static int GetDicesFromHash(string serverSeed, string clientSeedWithNonce)
         {
-            //string[] results = new string[3];
-            //SHA512Managed hashManager = new SHA512Managed();
-            //var concatened = new byte[cryptedServeurSeed.Length + clientSeedWithNonce.Length];
-            //cryptedServeurSeed.CopyTo(concatened, 0);
-            //clientSeedWithNonce.CopyTo(concatened, cryptedServeurSeed.Length);
-            string hash = getHashSha512(cryptedServeurSeed + clientSeedWithNonce);
+            string hash = getHashSha512(serverSeed + clientSeedWithNonce);
             int result = 100;
-            // byte[] fromResult = new byte[10];
-            // int[] decimalResults = new int[3];
             int i = 0;
             string[] results = new string[hash.Length/5];
             int z = 0;
@@ -68,9 +75,42 @@ namespace YamsFaire
                     break;
                 }                
             }
-            if (i == 0) return GetDicesFromHash(cryptedServeurSeed, clientSeedWithNonce += 1);
+            if (i == 0) return GetDicesFromHash(serverSeed, clientSeedWithNonce += 1);
 
             return result; 
          }
+
+        /// <summary>
+        /// Run the methode GetDicesFromHash the number of time ask by nbOfTest and return an array with the percentage
+        /// where each dices was found  
+        /// </summary>
+        /// <param name="clientSeed"></param>
+        /// <param name="serverSeed"></param>
+        /// <param name="nonce"></param>
+        /// <param name="nbOfTest"></param>
+        /// <returns></returns>
+        public static List<string> Test(string clientSeed, string serverSeed,int nonce, int nbOfTest)
+        {
+            double[] test = new double[] { 0, 0, 0, 0, 0, 0 };
+
+            for (int i = 0; i < nbOfTest; i++)
+            {
+                int dicesFromHash = HashManager.GetDicesFromHash(clientSeed, serverSeed + nonce.ToString());
+                test[dicesFromHash - 1]++;
+            }
+            for (int i = 0; i < test.Length; i++)
+            {
+                test[i] = (test[i] / (double)nbOfTest) * 100;
+            }
+            List<string> result = new List<string>();
+
+            for (int i = 0; i < test.Length; i ++)
+            {
+                result.Add(test[i].ToString() + " Dice of " + (i+1).ToString());
+            }
+            
+
+            return result;
+        }
     }
 }

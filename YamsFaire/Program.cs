@@ -15,22 +15,16 @@ namespace YamsFaire
 
             var rnd = new RNGCryptoServiceProvider();
             int nonce = 100000000;
+            int nbOfTest = 10000;
 
+          List<string> test = HashManager.Test("okok", "okok", 10, 10000);
 
-            int[] Test = new int[] {0,0,0,0,0,0};
-
-            for (int i = 0; i < 10000000; i++)
-            {
-                int dicesFromHash = HashManager.GetDicesFromHash("aerfsfrzsf", "efe,fesofes" + nonce.ToString());                
-                Test[dicesFromHash-1]++;              
-            }
-
-            foreach (var item in Test)
+            foreach (var item in test)
             {
                 Console.WriteLine(item);
             }
-              Console.ReadKey();
 
+              Console.ReadKey();
         }
     }
 }
