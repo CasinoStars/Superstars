@@ -162,7 +162,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 int data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2",
+                    @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2", 
                     new { userid = userId });
                 return Result.Success(data);
             }
