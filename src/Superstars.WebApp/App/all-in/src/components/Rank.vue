@@ -32,6 +32,8 @@
 import { mapActions } from 'vuex';
 import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
+import WalletApiService from '../services/WalletApiService';
+import UserApiService from '../services/UserApiService';
 
 
 export default {
@@ -45,6 +47,10 @@ export default {
     },
 
     async mounted() {
+      this.pseudos = this.UserApiService.pseudo();
+      this.playertrueprofit = await this.WalletApiService.GetTrueBalance();
+      this.playerfakeprofit = await this.WalletApiService.GetFakeBalance();
+      this.playernbgames = this.GameApiService.getWinsYamsPlayer() + this.GameApiService.getLossesYamsPlayer(); 
 
     },
 
