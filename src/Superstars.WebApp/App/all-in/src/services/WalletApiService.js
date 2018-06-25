@@ -25,6 +25,10 @@ class WalletApiService {
         return await getAsync(`${endpoint}/TrueBalance`);
     }
 
+    async UpdateCredit(credit) {
+        return await postAsync(`${endpoint}/${credit}/updateCredit`);
+    }
+
     async GetWalletAddress(){
         return  await getAsyncNoJSON(`${endpoint}/GetAddress`);
     }

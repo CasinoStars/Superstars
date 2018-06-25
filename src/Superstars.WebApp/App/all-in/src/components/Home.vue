@@ -5,7 +5,7 @@
             <h1>WELCOME ON ALL`IN</h1>
         </div>
     </header>
-    <center>
+    
         <div class="colonne">
             <div class="container">
               <img src="../img/provablylogo.png" class="logo1">
@@ -35,7 +35,7 @@
             </div>
             </div>
         </div>
-    </center>
+    
 
 
     </div>
@@ -117,14 +117,16 @@ export default {
 .container {
   position: relative;
   width: 0%;
+  display: -webkit-inline-block;
+  
 }
 
 .container:hover .overlay {
-  opacity: 0.8;
+  opacity: 0.65;
 }
 
 .text {
-  color: white;
+  color: black;
   font-size: 25px;
   position: relative;
   top: 50%;

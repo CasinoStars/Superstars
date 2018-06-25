@@ -38,14 +38,21 @@
     <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ   </div>
     <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ  </div>
     <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
-    <br>
+    
 
-    <!-- <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="loader"></div> -->
+<center>
+<div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="lds-css ng-scope">
+  <div style="width:100%;height:100%" class="lds-eclipse">
+    <div>
+      </div>
+      </div>
+      </div>
+</center>
 
-    <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="spinner">
+    <!-- <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="spinner">
   <div class="cube1"></div>
   <div class="cube2"></div>
-    </div>
+    </div> -->
 
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
@@ -193,7 +200,65 @@ export default {
 
 <style>
 
-.spinner {
+
+/* ECLIPSE LOADER */
+
+@keyframes lds-eclipse {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes lds-eclipse {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.lds-eclipse {
+  position: relative;
+}
+.lds-eclipse div {
+  position: absolute;
+  -webkit-animation: lds-eclipse 1s linear infinite;
+  animation: lds-eclipse 1s linear infinite;
+  width: 40px;
+  height: 40px;
+  top: 80px;
+  left: 80px;
+  border-radius: 50%;
+  box-shadow: 0 2px 0 0 #7f8387;
+  -webkit-transform-origin: 20px 21px;
+  transform-origin: 20px 21px;
+}
+.lds-eclipse {
+  width: 200px !important;
+  height: 200px !important;
+  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+}
+
+
+
+/* DOUBLE CUBER SPINER */
+
+/* .spinner {
   margin: 100px auto;
   width: 40px;
   height: 40px;
@@ -242,8 +307,10 @@ export default {
     transform: rotate(-360deg);
     -webkit-transform: rotate(-360deg);
   }
-}
+} */
 
+
+/* TURNING SQUARE SPINER */
 .loader {
   border: 2px solid #f3f3f3;
   border-radius: 0%;
