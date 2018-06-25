@@ -25,10 +25,6 @@ async UpdateStats(gametype, win) {
     return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
 }
 
-async UpdateCredit(credit) {
-    return await postAsync(`${endpoint}/${credit}/updateCredit`);
-}
-
 
 async Bet(balance) {
     var bet = prompt("Montant du pari:", "500");
