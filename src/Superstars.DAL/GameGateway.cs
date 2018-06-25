@@ -47,6 +47,17 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> GetYamsPot(int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select g.Pot from sp.vGameYams g where g.YamsGameId = @YamsGameId",
+                    new { YamsGameId = gameId });
+                return Result.Success(data);
+            }
+        }
+
         public async Task<Result<int>> CreateYamsGame(int pot)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
@@ -63,6 +74,21 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<int>> CreateBlackJackGame(int pot)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@BlackJackGameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameBlackJackCreate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<int>("@BlackJackGameId"));
+            }
+        }
 
         public async Task<Result<int>> DeleteAis(int userId)
         {
@@ -76,6 +102,69 @@ namespace Superstars.DAL
                 int status = p.Get<int>("@Status");
 
                 return Result.Success(p.Get<int>("@Status"));
+            }
+        }
+
+        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@GameType", gametype);
+                p.Add("@UserId", userid);
+                p.Add("@Wins", wins);
+                p.Add("@Losses", losses);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "This player doesn't exist.");
+
+                return Result.Success(p.Get<int>("@Status"));
+            }
+        }
+
+        public async Task<Result<int>> GetWins(int userId, string gameType)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select s.Wins from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
+                    new { userid = userId, gametype =  gameType});
+                return Result.Success(data);
+            }
+        }
+
+        public async Task<Result<int>> GetLosses(int userId, string gameType)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select s.Losses from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
+                    new { userid = userId, gametype = gameType });
+                return Result.Success(data);
+            }
+        }
+
+        public async Task<Result<int>> GetTrueProfit(int userId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
+                    new { userid = userId });
+                return Result.Success(data);
+            }
+        }
+
+        public async Task<Result<int>> GetFakeProfit(int userId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2", 
+                    new { userid = userId });
+                return Result.Success(data);
             }
         }
     }

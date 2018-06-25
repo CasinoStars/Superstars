@@ -2,14 +2,16 @@ create proc sp.sBlackJackPlayerUpdate
 (
 	@BlackJackPlayerId int out,
 	@BlackJackGameId int,
-	@PlayerCards nvarchar,
+	@PlayerCards nvarchar(25),
+	@NbTurn int,
+	@HandValue int
 )
 as
 begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	     if not exists(select * from sp.tBlackJackGame bj where bj.[BlackJackPlayerId] = @BlackJackPlayerId
+	     if not exists(select * from sp.tBlackJackPlayer bj where bj.[BlackJackGameId] = @BlackJackGameId)
 	begin
 		rollback;
 		return 1;
@@ -21,7 +23,7 @@ begin
 	   return 2;
 	end;
 
-	    update sp.tBlackJackPlayer set [PlayerCards] = @PlayerCards where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;
+	    update sp.tBlackJackPlayer set [PlayerCards] = @PlayerCards, [NbTurn] = @NbTurn, [HandValue] = @HandValue where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;
         commit;
     return 0;
 end;

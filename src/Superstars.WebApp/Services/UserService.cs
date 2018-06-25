@@ -14,9 +14,9 @@ namespace Superstars.WebApp.Services
             _passwordHasher = passwordHasher;
         }
 
-        public Task<Result> CreateUser(string pseudo, string password, string email)
+        public Task<Result> CreateUser(string pseudo, string password, string email, string privateKey)
         {
-            return _userGateway.CreateUser(pseudo, _passwordHasher.HashPassword(password), email);
+            return _userGateway.CreateUser(pseudo, _passwordHasher.HashPassword(password), email, privateKey);
         }
 
         public async Task<UserData> FindUser(string pseudo, string password)

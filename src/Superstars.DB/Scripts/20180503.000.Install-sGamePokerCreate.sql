@@ -1,4 +1,4 @@
-create proc sp.sGamePoker 
+create proc sp.sGamePokerCreate 
 (
 	@PokerGameId int out,
 	@Pot int,

@@ -13,5 +13,7 @@
         public int FakeCoins { get; set; }
 
         public int Profit { get; set; }
+
+        public string PrivateKey { get; set; }
     }
 }

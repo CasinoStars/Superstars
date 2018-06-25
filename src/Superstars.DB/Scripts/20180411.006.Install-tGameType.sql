@@ -6,5 +6,5 @@ create table sp.tGameType
 );
 
 insert into sp.tGameType(GameType)values('Yams')
-insert into sp.tGameType(GameType)values('Poker')
+insert into sp.tGameType(GameType)values('BlackJack')
 

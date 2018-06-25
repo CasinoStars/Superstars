@@ -7,5 +7,9 @@
         public int RealCoins { get; set; }
 
         public int FakeCoins { get; set; }
+
+        public string DestinationAddress { get; set; }
+
+        public decimal AmountToSend { get; set; }
     }
 }
