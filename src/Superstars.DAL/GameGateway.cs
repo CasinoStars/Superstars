@@ -167,7 +167,6 @@ namespace Superstars.DAL
                 return Result.Success(data);
             }
         }
-
     }
 }
 
