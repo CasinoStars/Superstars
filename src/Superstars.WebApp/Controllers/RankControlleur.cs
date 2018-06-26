@@ -14,22 +14,24 @@ namespace Superstars.WebApp.Controllers
 	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
 	public class RankControlleur : Controller
 	{
-		// RankGateway _rankGateway;
-		UserData _userData;
 		RankGateway _rankGateway;
 
-		public RankControlleur(UserData userData)
+		public RankControlleur()
 		{
-			_userData = userData;
 		}
 
-		[HttpGet("GetPseudoList")]
+		[HttpGet("PseudoList")]
 		public async Task<List<string>> GetPseudoList()
 		{
 			List<string> names = await _rankGateway.PseudoList();
 			return names;
 		}
 
-		
+		[HttpGet("PlayerProfit")]
+		public async Task<int> GetPlayerProfit(string pseudo)
+		{
+			int profit = await _rankGateway.GetPlayerProfit(pseudo);
+			return profit;
+		}
 	}
 }

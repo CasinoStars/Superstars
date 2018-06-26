@@ -22,8 +22,18 @@ namespace Superstars.DAL
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
 				return await con.QueryFirstOrDefaultAsync<List<string>>(
-					"select u.UserName from sp.vUser u where u.UserName is not null ",
+					"select u.UserName from sp.vUser u where u.UserName is not null "
 					);
+			}
+		}
+
+		public async Task<int> GetPlayerProfit(string pseudo)
+		{
+			using (SqlConnection con = new SqlConnection(_connectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>(
+					"select m.Profit from sp.Money m left outer join sp.User u on u.UserId = m.MoneyId  where u.UserName = @Pseudo",
+					new { Pseudo = pseudo });
 			}
 		}
 	}

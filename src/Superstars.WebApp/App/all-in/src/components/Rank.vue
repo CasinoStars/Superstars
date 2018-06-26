@@ -34,20 +34,27 @@ import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
 import UserApiService from '../services/UserApiService';
+import RankApiService from '../services/RankApiServices';
 
 
 export default {
     data() {
         return {
             pseudos: {},
+            profits: {},
             playertrueprofit: 0,
             playerfakeprofit: 0,
             playernbgames: 0
         }
-    },
+    },    
 
     async mounted() {
-      this.pseudos = this.UserApiService.pseudo();
+      this.pseudos = this.RankApiService.GetPseudoList();
+      for(var i = 0;i<console.log(pseudos.length);i++ )
+      {
+        profits.push(this.RankApiService.GetPlayerProfit(pseudos[i]))
+      }
+      
       this.playertrueprofit = await this.WalletApiService.GetTrueBalance();
       this.playerfakeprofit = await this.WalletApiService.GetFakeBalance();
       this.playernbgames = this.GameApiService.getWinsYamsPlayer() + this.GameApiService.getLossesYamsPlayer(); 
