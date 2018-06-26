@@ -4,8 +4,10 @@ create table sp.tUser
 	UserName nvarchar(64) not null,
 	UserPassword varbinary(128) not null,
 	Email nvarchar(64) not null,
-	PrivateKey varchar(64),
-
+	PrivateKey varchar(64) not null,
+	UncryptedPreviousServerSeed varchar(128),
+	UncryptedServerSeed varchar(128),
+	CryptedServerSeed varchar(128),
 
 	constraint PK_tUser primary key(UserId),
 	constraint UK_tUser_Name unique(UserName),
