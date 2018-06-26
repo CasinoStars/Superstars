@@ -18,7 +18,7 @@ namespace YamsFaire
         public static string getHashSha512(string text)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(text);
-            HMACSHA512 hashstring = new HMACSHA512();
+            SHA512 hashstring = SHA512.Create();
             byte[] hash = hashstring.ComputeHash(bytes);
             string hashString = string.Empty;
             foreach (byte x in hash)
@@ -79,37 +79,6 @@ namespace YamsFaire
             if (i == 0) return GetDicesFromHash(serverSeed, clientSeed, nonce+= 1);
 
             return result; 
-         }
-
-        /// <summary>
-        /// Run the methode GetDicesFromHash the number of time ask by nbOfTest and return an array with the percentage
-        /// where each dices was found  
-        /// </summary>
-        /// <param name="clientSeed"></param>
-        /// <param name="serverSeed"></param>
-        /// <param name="nonce"></param>
-        /// <param name="nbOfTest"></param>
-        /// <returns></returns>
-        public static List<string> Test(string clientSeed, string serverSeed,int nonce, int nbOfTest)
-        {
-            double[] test = new double[] { 0, 0, 0, 0, 0, 0 };
-
-            for (int i = 0; i < nbOfTest; i++)
-            {
-                int dicesFromHash = HashManager.GetDicesFromHash(clientSeed, serverSeed,nonce);
-                test[dicesFromHash - 1]++;
-            }
-            for (int i = 0; i < test.Length; i++)
-            {
-                test[i] = (test[i] / (double)nbOfTest) * 100;
-            }
-            List<string> result = new List<string>();
-
-            for (int i = 0; i < test.Length; i ++)
-            {
-                result.Add(test[i].ToString() + " Dice of " + (i+1).ToString());
-            } 
-            return result;
-        }
+         }     
     }
 }
