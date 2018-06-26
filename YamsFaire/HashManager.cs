@@ -35,7 +35,7 @@ namespace YamsFaire
         /// <param name="serverSeed"></param>
         /// <param name="clientSeedWithNonce"></param>
         /// <returns></returns>
-        public static int GetDicesFromHash(string serverSeed, string clientSeed, int nonce)
+        public static int GetDiceFromHash(string serverSeed, string clientSeed, int nonce)
         {
             string clientSeedWithNonce = clientSeed + nonce.ToString();
             string hash = getHashSha512(serverSeed + clientSeedWithNonce);
@@ -76,7 +76,7 @@ namespace YamsFaire
                     break;
                 }                
             }
-            if (i == 0) return GetDicesFromHash(serverSeed, clientSeed, nonce+= 1);
+            if (i == 0) return GetDiceFromHash(serverSeed, clientSeed, nonce+= 1);
 
             return result; 
          }     

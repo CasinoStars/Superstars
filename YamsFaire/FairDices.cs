@@ -4,28 +4,31 @@ using System.Text;
 
 namespace YamsFaire
 {
-    class Dices
+    class FairDices
     {
 
-        public int[] dices { get { return _dices; } }
         int[] _dices;
+        SeedManager _seedmanager = new SeedManager();
 
-        public Dices()
+    public FairDices()
         {
             _dices = new int[5] { 1, 2, 3, 4, 5 };
         }
 
 
-        public void rolleDices(string serveurSeed, string clientSeed,int nonce)
+        public void rolleDices(string serveurSeed, string clientSeed)
         {
             int random = 0;
             int i = 0;
             foreach (var dice in dices)
             {
-                random = HashManager.GetDicesFromHash(serveurSeed, clientSeed, nonce);
+                random = HashManager.GetDiceFromHash(_seedmanager.CryptedServerSeed, _seedmanager.ClientSeed, _seedmanager.Nonce);
+                _seedmanager.Nonce++;
                 _dices[i] = random;
                 i++;
             }
         }
+        public int[] dices { get { return _dices; } }
+
     }
 }

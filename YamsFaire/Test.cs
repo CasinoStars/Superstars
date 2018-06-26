@@ -38,7 +38,7 @@ namespace YamsFaire
 
                 for (int i = 0; i < nbOfTest; i++)
                 {
-                    int dicesFromHash = HashManager.GetDicesFromHash(clientSeed, serverSeed, nonce);
+                    int dicesFromHash = HashManager.GetDiceFromHash(clientSeed, serverSeed, nonce);
                     test[dicesFromHash - 1]++;
                 nonce++;
                 }
