@@ -1,9 +1,7 @@
 create view sp.vProvablyFair
 as
     select UserId = u.UserId,
-           
-	UserId = u.UserId,
-	UncryptedPreviousServerSeed = u.UncryptedPreviousServerSeed,
+   	UncryptedPreviousServerSeed = u.UncryptedPreviousServerSeed,
 	UncryptedServerSeed = u.UncryptedPreviousServerSeed,
 	CryptedServerSeed = u.CryptedServerSeed,
 	ClientSeed = u.ClientSeed,
