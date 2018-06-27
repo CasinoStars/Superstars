@@ -10,6 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\20180431 013.Install-tProvablyFair.sql" />
+    <None Remove="Scripts\20180431 0134.Install-sProvablyFairCreate.sql" />
+    <None Remove="Scripts\2018043101345.Install-sProvablyFairUpdate.sql" />
     <None Remove="Scripts\20180503.001.Install-sGameBlackJackUpdate.sql" />
   </ItemGroup>
 

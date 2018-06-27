@@ -16,7 +16,7 @@ namespace YamsFaire
         }
 
 
-        public void rolleDices(string serveurSeed, string clientSeed)
+        public void RolleDices(string serveurSeed, string clientSeed)
         {
             int random = 0;
             int i = 0;
