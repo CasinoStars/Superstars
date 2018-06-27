@@ -29,9 +29,9 @@ namespace Superstars.WebApp.Controllers
 		}
 
 		[HttpGet("PlayerProfit")]
-		public async Task<IEnumerable<int>> GetPlayerProfit(string pseudo)
+		public async Task<IEnumerable<int>> GetPlayerProfitList(string pseudo)
 		{
-			IEnumerable<int> profit = await _rankGateway.GetPlayerProfit(pseudo);
+			IEnumerable<int> profit = await _rankGateway.GetPlayerProfitList(pseudo);
 			return profit;
 		}
 	}
