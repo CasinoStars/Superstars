@@ -14,6 +14,7 @@
     <None Remove="Scripts\20180431 0134.Install-sProvablyFairCreate.sql" />
     <None Remove="Scripts\2018043101345.Install-sProvablyFairUpdate.sql" />
     <None Remove="Scripts\20180503.001.Install-sGameBlackJackUpdate.sql" />
+    <None Remove="Scripts\20183419 015.Install-vProvablyFair.sql" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Superstars.DAL
 {
-    class ProvablyFairData
+    public class ProvablyFairData
     {
         public string UncryptedPreviousServerSeed { get; set; }
 
-        public string CryptedPreviousServerSeed { get; set; }
+        public string UncryptedServerSeed { get; set; }
 
         public string CryptedServerSeed { get; set; }
 

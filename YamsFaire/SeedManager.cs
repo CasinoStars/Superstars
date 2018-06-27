@@ -19,6 +19,13 @@ namespace Superstars.YamsFair
             _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
         }
+        public SeedManager(string uncryptedServerSeed, string previousUncryptedServerSeed,string clientSeed, string cryptedServerSeed)
+        {
+            _previousUncryptedServerSeed = previousUncryptedServerSeed;
+            _uncryptedServerSeed = uncryptedServerSeed;
+            _clientSeed = clientSeed;
+            _CryptedServerSeed = cryptedServerSeed;
+        }
 
         public string PreviousUncryptedServerSeed
         {
@@ -34,11 +41,22 @@ namespace Superstars.YamsFair
             get { return _clientSeed; }
         }
 
-        public void NewSeed()
+        public string UncryptedServerSeed
+        {
+            get { return _uncryptedServerSeed; }
+        }
+
+        public void NewSeed(string clientSeed = null)
         {
             _previousUncryptedServerSeed = _uncryptedServerSeed;
             _uncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
+            if(clientSeed == null)
             _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
+            else
+            {
+                _clientSeed = HashManager.getHashSha512(clientSeed);
+            }
+
             _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
         }
 
