@@ -1,4 +1,5 @@
 import { getAsync } from "../helpers/apiHelper";
+const endpoint = "/api/rank";
 
 class RankApiService{
     constructor(){   
@@ -12,3 +13,4 @@ class RankApiService{
         return await getAsync(`${endpoint}/PlayerProfit`)
     }
 }
+export default new RankApiService();

@@ -1,20 +1,23 @@
 <template>
     <div>
         <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-      <h1 style="font-variant: small-caps;"> <strong> Mes statistiques  </strong></h1>
-  </div>
+          <h1 style="font-variant: small-caps;"> <strong> Mes statistiques  </strong></h1>
+        </div>
   <br><br>
 <table>
   <tr>
     <th>Pseudo</th>
-    <th>TrueProfit</th>
-    <th>FakeProfit</th>
+    <th>Profit</th>
     <th>Nombre de parties</th>
   </tr>
   <tr>
-    <td>{{Pseudo}}</td>
+    <div v-for="(e,index) of pseudos" :key='index'>
+       <td>{{e}}</td>
+    </div>
+    <div v-for="(e,index) of profits" :key='index'>
+       <td>{{e}}</td>
+    </div>
     <td>{{playertrueprofit}}</td>
-    <td>{{playerfakeprofit}}</td>
     <td>{{playernbgames}}</td>
   </tr>
 </table>
@@ -49,15 +52,13 @@ export default {
     },    
 
     async mounted() {
-      this.pseudos = this.RankApiService.GetPseudoList();
-      for(var i = 0;i<console.log(pseudos.length);i++ )
+      // this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
+      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPseudoList());
+      for(var i = 0;i<console.log(this.pseudos.length);i++ )
       {
-        profits.push(this.RankApiService.GetPlayerProfit(pseudos[i]))
-      }
-      
-      this.playertrueprofit = await this.WalletApiService.GetTrueBalance();
-      this.playerfakeprofit = await this.WalletApiService.GetFakeBalance();
-      this.playernbgames = this.GameApiService.getWinsYamsPlayer() + this.GameApiService.getLossesYamsPlayer(); 
+        var k = await this.executeAsyncRequest(()=> RankApiService.GetPlayerProfit());
+        this.profits.push(k);
+      } 
 
     },
 

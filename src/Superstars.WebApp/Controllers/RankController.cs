@@ -10,27 +10,28 @@ using System.Threading.Tasks;
 
 namespace Superstars.WebApp.Controllers
 {
-	[Route("api/[rank]")]
+	[Route("api/[controller]")]
 	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
-	public class RankControlleur : Controller
+	public class RankController : Controller
 	{
 		RankGateway _rankGateway;
 
-		public RankControlleur()
+		public RankController(RankGateway rankGateway)
 		{
+			_rankGateway = rankGateway;
 		}
 
 		[HttpGet("PseudoList")]
-		public async Task<List<string>> GetPseudoList()
+		public async Task<IEnumerable<string>> GetPseudoList()
 		{
-			List<string> names = await _rankGateway.PseudoList();
+			IEnumerable<string> names = await _rankGateway.PseudoList();
 			return names;
 		}
 
 		[HttpGet("PlayerProfit")]
-		public async Task<int> GetPlayerProfit(string pseudo)
+		public async Task<IEnumerable<int>> GetPlayerProfit(string pseudo)
 		{
-			int profit = await _rankGateway.GetPlayerProfit(pseudo);
+			IEnumerable<int> profit = await _rankGateway.GetPlayerProfit(pseudo);
 			return profit;
 		}
 	}

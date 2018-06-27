@@ -17,21 +17,21 @@ namespace Superstars.DAL
 			_connectionString = connectionString;
 		}
 
-		public async Task<List<string>> PseudoList()
+		public async Task<IEnumerable<string>> PseudoList()
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<List<string>>(
+				return await con.QueryAsync<string>(
 					"select u.UserName from sp.vUser u where u.UserName is not null "
 					);
 			}
 		}
 
-		public async Task<int> GetPlayerProfit(string pseudo)
+		public async Task<IEnumerable<int>> GetPlayerProfit(string pseudo)
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>(
+				return await con.QueryAsync<int>(
 					"select m.Profit from sp.Money m left outer join sp.User u on u.UserId = m.MoneyId  where u.UserName = @Pseudo",
 					new { Pseudo = pseudo });
 			}
