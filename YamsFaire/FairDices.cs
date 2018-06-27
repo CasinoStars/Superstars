@@ -15,15 +15,14 @@ namespace Superstars.YamsFair
             _dices = new int[5] { 1, 2, 3, 4, 5 };
         }
 
-
-        public void RolleDices(string serveurSeed, string clientSeed)
+        public void RolleDices(string serveurSeed, string clientSeed,int nonce)
         {
             int random = 0;
             int i = 0;
             foreach (var dice in dices)
             {
-                random = HashManager.GetDiceFromHash(_seedmanager.CryptedServerSeed, _seedmanager.ClientSeed, _seedmanager.Nonce);
-                _seedmanager.Nonce++;
+                random = HashManager.GetDiceFromHash(_seedmanager.CryptedServerSeed, _seedmanager.ClientSeed, nonce);
+                nonce++;
                 _dices[i] = random;
                 i++;
             }

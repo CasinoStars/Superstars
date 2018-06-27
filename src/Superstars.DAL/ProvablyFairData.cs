@@ -12,6 +12,8 @@ namespace Superstars.DAL
 
         public string CryptedServerSeed { get; set; }
 
+        public string ClientSeed { get; set; }
+
         public int Nonce { get; set; }
     }
 }

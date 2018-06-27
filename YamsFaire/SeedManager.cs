@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Superstars.YamsFair
 {
-    class SeedManager
+    public class SeedManager
     {
 
         Random random = new Random();
@@ -12,15 +12,12 @@ namespace Superstars.YamsFair
         string _uncryptedServerSeed;
         string _clientSeed;
         string _CryptedServerSeed;
-        int _nonce;
-
 
         public SeedManager()
         {
             _uncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
-            _nonce = 0;
         }
 
         public string PreviousUncryptedServerSeed
@@ -37,18 +34,12 @@ namespace Superstars.YamsFair
             get { return _clientSeed; }
         }
 
-        public int Nonce
-        {
-            get { return _nonce; } set { _nonce = value; }
-        }
-
         public void NewSeed()
         {
             _previousUncryptedServerSeed = _uncryptedServerSeed;
             _uncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
-            _nonce = 0;
         }
 
     }

@@ -39,6 +39,7 @@ namespace Superstars.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
+                SeedManager seedManager = new SeedManager();
                 var p = new DynamicParameters();
                 p.Add("@UncryptedPreviousServerSeed", "");
                 p.Add("@UncryptedServerSeed", "");
