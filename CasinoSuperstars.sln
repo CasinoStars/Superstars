@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.DB", "src\Supers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.Wallet", "TestBlockChain\Superstars.Wallet.csproj", "{56B7D695-E6F8-42E8-B38B-59F8EDA00A8B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YamsFaire", "YamsFaire\YamsFaire.csproj", "{8B01319F-AEBE-4F9B-AD0D-695445D5DF36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.YamsFaire", "YamsFaire\Superstars.YamsFaire.csproj", "{8B01319F-AEBE-4F9B-AD0D-695445D5DF36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

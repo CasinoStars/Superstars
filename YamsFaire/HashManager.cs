@@ -4,7 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 
 
-namespace YamsFaire
+namespace Superstars.YamsFair
 {
     class HashManager
     {

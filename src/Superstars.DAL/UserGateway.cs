@@ -112,38 +112,5 @@ namespace Superstars.DAL
                     commandType: CommandType.StoredProcedure);
             }
         }
-
-        public async Task UpdateSeed(int userId, byte[] password)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                await con.ExecuteAsync(
-                    "sp.sUserUpdate",
-                    new { UserId = userId, UserPassword = password },
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
-
-        public async Task UpdateServerServerSeed(int userId)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                await con.ExecuteAsync(
-                    "sp.sUserUpdate",
-                    new {},
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
-
-        public async Task UpdateCryptedServerSeed(int userId, byte[] password)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                await con.ExecuteAsync(
-                    "sp.sUserUpdate",
-                    new { UserId = userId, UserPassword = password },
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
     }
 }

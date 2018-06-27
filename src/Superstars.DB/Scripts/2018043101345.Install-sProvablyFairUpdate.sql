@@ -4,7 +4,8 @@ create procedure sp.sProvablyFairUpdate
 	@UncryptedPreviousServerSeed nvarchar(128),
 	@UncryptedServerSeed nvarchar(128),
 	@CryptedServerSeed nvarchar(128),
-	@ClientSeed nvarchar(128)
+	@ClientSeed nvarchar(128),
+	@Nonce int
 )
 as
 begin

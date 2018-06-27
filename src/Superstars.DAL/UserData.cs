@@ -10,11 +10,6 @@
 
         public byte[] UserPassword { get; set; }
 
-        public  string UncryptedPreviousServerSeed { get; set; }
-
-        public string CryptedPreviousServerSeed { get; set; }
-
-        public string CryptedServerSeed { get; set; }
 
     }
 }

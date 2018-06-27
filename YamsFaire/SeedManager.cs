@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace YamsFaire
+namespace Superstars.YamsFair
 {
     class SeedManager
     {

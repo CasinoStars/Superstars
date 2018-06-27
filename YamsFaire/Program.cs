@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 
-namespace YamsFaire
+namespace Superstars.YamsFair
 {
     class Program
     {
