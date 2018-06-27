@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
+using Superstars.WebApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,5 +35,20 @@ namespace Superstars.WebApp.Controllers
 			IEnumerable<int> profit = await _rankGateway.GetPlayerProfitList(pseudo);
 			return profit;
 		}
+
+		[HttpGet("PlayersProfitSorted")]
+		public List<int> GetPlayersProfitSorted(RankService rankService)
+		{
+			List<int> profits = rankService.Profit;
+			return profits;
+		}
+
+		[HttpGet("PlayersUserNameSorted")]
+		public List<string> GetPlayersUserNameSorted(RankService rankService)
+		{
+			List<string> userName = rankService.UserName;
+			return userName;
+		}
+
 	}
 }
