@@ -13,17 +13,12 @@
             <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTICS
             </router-link>
-          </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/playersStats" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-trophy" style="font-size: 1.4rem;"></i> CLASSEMENT
-              </router-link>
-            </li>
+          </li>         
             <li class="nav-item">
               <router-link class="nav-link" to="/rule" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-info-circle" style="font-size: 1.4rem;"></i> RÈGLES
               </router-link>
-            </li>
+            </li>                        
         </ul>
 
         <div class="collapse navbar-collapse" id="navbarText" v-if="auth.isConnected">
@@ -45,6 +40,13 @@
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"></i>     Déconnexion</router-link>
               </div>
+            </li>
+          </ul>
+                    <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> ProvablyFair
+              </router-link>
             </li>
           </ul>
         </div>

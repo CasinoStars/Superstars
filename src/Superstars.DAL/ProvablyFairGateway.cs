@@ -36,14 +36,6 @@ namespace Superstars.DAL
             }
         }
 
-
-        //       UserId int identity(0,1),
-        //UncryptedPreviousServerSeed varchar(128),
-        //UncryptedServerSeed varchar(128),
-        //CryptedServerSeed varchar(128),
-        //ClientSeed nvarchar(128),
-        //Nonce int
-
         public async Task UpdateSeeds(int userId,string clientSeed = null)
         {
 
