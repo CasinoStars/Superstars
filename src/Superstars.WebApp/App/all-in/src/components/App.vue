@@ -44,7 +44,7 @@
           </ul>
                     <ul class="nav navbar-nav">
             <li class="nav-item">
-              <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
+              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> ProvablyFair
               </router-link>
             </li>

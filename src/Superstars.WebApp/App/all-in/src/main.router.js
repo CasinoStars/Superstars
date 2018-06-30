@@ -27,7 +27,7 @@ const routes = [
     { path: '/rule', component: Rules},
     { path: '/statistics', component: Stats, beforeEnter: requireAuth},
     { path: '/playersStats', component: Rank, beforeEnter: requireAuth},
-    { peth: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
+    { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
 ];
 
 export default new VueRouter({
