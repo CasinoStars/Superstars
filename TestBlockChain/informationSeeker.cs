@@ -16,8 +16,7 @@ namespace Superstars.Wallet
         /// <param name="privateKey"></param>
         /// <returns></returns>
         /// 
-
-         
+                     
         public BitcoinSecret GetBitcoinSecretFromKey(Key key, Network network)
         {
             BitcoinSecret wallet = key.GetBitcoinSecret(network);
@@ -78,7 +77,6 @@ namespace Superstars.Wallet
             }
             return total;
         }
-
         /// <summary>
         /// Get Pending Transactin ID with Amount of confirmation and the Value of the coin that the wallet with receive 
         /// </summary>

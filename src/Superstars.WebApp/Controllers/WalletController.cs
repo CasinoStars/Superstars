@@ -110,5 +110,24 @@ namespace Superstars.WebApp.Controllers
 
             return response;
         }
+
+        [HttpGet("getCredit")]
+
+        public async Task<IActionResult> GetCredit()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _walletGateway.GetCredit(userId);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("updateCredit")]
+
+        public async Task<IActionResult> updateCredit(int credit)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<int> result = await _walletGateway.UpdateCredit(userId, 1, credit);
+            return this.CreateResult(result);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ create table sp.tUser
 	Email nvarchar(64) not null,
 	PrivateKey varchar(64),
 
+
 	constraint PK_tUser primary key(UserId),
 	constraint UK_tUser_Name unique(UserName),
 	constraint UK_tUser_PrivateKey unique(PrivateKey)

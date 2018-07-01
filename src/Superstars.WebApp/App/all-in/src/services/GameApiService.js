@@ -85,6 +85,14 @@ async getLossesYamsPlayer() {
     return await getAsync(`${endpoint}/getlossesYamsPlayer`);
 }
 
+async getTrueProfitPlayer() {
+    return await getAsync(`${endpoint}/gettrueprofitplayer`);
+}
+
+async getFakeProfitPlayer() {
+    return await getAsync(`${endpoint}/getfakeprofitplayer`);
+}
+
 }
 
 export default new GameApiService();
