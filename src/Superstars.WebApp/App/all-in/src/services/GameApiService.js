@@ -25,25 +25,25 @@ async UpdateStats(gametype, win) {
     return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
 }
 
-async Bet(balance) {
-    var bet = prompt("Montant du pari:", "500");
-    var betNumber = parseInt(bet);
-    if(bet == null)
-        return window.location.replace("/Home/play");
-    else if(balance < bet || !betNumber){
-        bet = prompt("Une erreur s'est produite. Montant maximum possible: " + balance, "500");
-        betNumber = parseInt(bet);
-    }else if(bet > 0 && bet != ''){
-        window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
-        return await postAsync(`${endpoint}/${bet}/bet`);
-    }
-    while (bet <= 0 || bet == '' || bet > balance || !betNumber){
-        if(bet == null)
-            return window.location.replace("/Home/play");
-        bet = prompt("Une erreur s'est produite ! Montant disponible: " + balance, "500");
-        betNumber = parseInt(bet);
-    }
-    window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
+async Bet(bet) {
+    // var bet = prompt("Montant du pari:", "500");
+    // var betNumber = parseInt(bet);
+    // if(bet == null)
+    //     return window.location.replace("/Home/play");
+    // else if(balance < bet || !betNumber){
+    //     bet = prompt("Une erreur s'est produite. Montant maximum possible: " + balance, "500");
+    //     betNumber = parseInt(bet);
+    // }else if(bet > 0 && bet != ''){
+    //     window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
+    //     return await postAsync(`${endpoint}/${bet}/bet`);
+    // }
+    // while (bet <= 0 || bet == '' || bet > balance || !betNumber){
+    //     if(bet == null)
+    //         return window.location.replace("/Home/play");
+    //     bet = prompt("Une erreur s'est produite ! Montant disponible: " + balance, "500");
+    //     betNumber = parseInt(bet);
+    // }
+    // window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
     return await postAsync(`${endpoint}/${bet}/bet`);
 }
 

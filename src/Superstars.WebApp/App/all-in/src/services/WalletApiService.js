@@ -32,6 +32,14 @@ class WalletApiService {
     async Withdraw(model){
         return await postAsync(`${endpoint}/Withdraw`, model);
     }
+
+    async GetBTCBankRoll(){
+        return await getAsync(`${endpoint}/BTCBankRoll`);   
+    }
+
+    async GetFakeBankRoll(){
+        return await getAsync(`${endpoint}/FakeBankRoll`);   
+    }
 }
 
 export default new WalletApiService();

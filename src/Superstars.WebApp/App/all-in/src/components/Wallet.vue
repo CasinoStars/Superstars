@@ -17,9 +17,10 @@
       
             <div class="tab-content">
                 <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{trueCoins}} BTC</h5>
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress}}<br><br></h5>
+                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
                 <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeCoins.balance}} all'in</h5>
                 
+                <!-- RealWallet -->
                 <form  @submit="Withdraw($event)" v-if="this.wallet == 'real'">
                         <div class="field-wrap">
                             <label>
@@ -36,6 +37,7 @@
                     <button type="submit" class="button button-block">Envoyer</button>
                 </form>
 
+                <!-- FakeWallet -->
                 <form @submit="onSubmit($event)" :v-model="item.moneyType = 2" v-else>
                     <div class="field-wrap">
                         <label>
@@ -46,10 +48,8 @@
                     <button type="submit" class="button button-block">Créditer</button>
 
                 </form>
-
-
-        </div><!-- tab-content -->
-        </div> <!-- /form -->
+            </div>
+        </div>
     </div>
 </template>
 
@@ -128,6 +128,10 @@ export default {
                 }
         },
 
+        Copy() {
+            navigator.clipboard.writeText(this.BTCAddress);
+        },
+
         ChangeWallet(wallet){
             this.wallet = wallet;
             this.refreshFakeCoins();
@@ -155,10 +159,6 @@ $thin: 300;
 $normal: 400;
 $bold: 600;
 $br: 4px;
-
-// *, *:before, *:after {
-//   box-sizing: border-box;
-// }
 
 .wallet html {
 	overflow-y: scroll; 

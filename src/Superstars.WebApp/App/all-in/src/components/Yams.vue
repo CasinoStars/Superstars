@@ -1,6 +1,35 @@
 <template>
-<div class="page">
-  
+<div class="yams">
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <router-link class="close" to="/play">&times;</router-link>
+      </div>
+
+      <form @submit="bet($event)">
+        <div class="modal-body">
+          <p>Choisissez le montant à parier:</p>
+          <input type="number" v-model="betFake" required/>
+        </div>
+
+        <div class="alert alert-danger" style="text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
+          <div v-for="e of errors" :key="e">{{e}}</div>
+        </div>
+
+        <div class="modal-footer">
+          <div style="margin-right: 43.7%;">
+            <router-link class="btn btn-secondary" to="/play">Annuler</router-link>
+            <button type="submit" class="btn btn-light">Confirmer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
   
   <form @submit="onSubmitAI($event)" id="PlayAI">
@@ -82,19 +111,45 @@ export default {
       IaFigure: '',
       wait: '',
       playerwin: false,
+      betFake: 0,
+      errors: [],
     }
   },
-
 
   async mounted() {
     await this.refreshDices();
     await this.refreshIaDices();
     var data = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
-    GameApiService.Bet(data.balance);
+    this.showModal();
   },
   
   methods: {
     ...mapActions(['executeAsyncRequest']),
+
+    showModal() {
+      var modal = document.getElementById('myModal');
+      modal.style.display = "block";
+    },
+
+    async bet(e) {
+      e.preventDefault();
+      var errors = [];
+      if(this.betFake > 1000000)
+        errors.push("La mise maximum est de 1,000,000");
+      if(this.betFake <= 0)  
+        errors.push("La mise doit être supérieur à 0");
+      this.errors = errors;
+
+      if(errors.length == 0) {
+        try {
+          await this.executeAsyncRequest(() => GameApiService.Bet(this.betFake));
+          var modal = document.getElementById('myModal');
+          modal.style.display = "none";
+        }
+        catch(error) {
+        }
+      }
+    },
 
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
@@ -187,6 +242,80 @@ export default {
 </script>
 
 <style>
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 19%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #222222a8;;
+    color: white;
+}
+
+.modal-body {
+  padding: 2px 16px;
+  text-align: center;
+}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color:  #222222a8;;
+  color: white;
+}
+
 .loader {
   border: 2px solid #f3f3f3;
   border-radius: 0%;

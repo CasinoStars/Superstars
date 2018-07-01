@@ -59,6 +59,19 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        [HttpGet("BTCBankRoll")]
+        public async Task<IActionResult> GetBTCBankRoll()
+        {
+            Result<int> result = await _walletGateway.GetBTCBankRoll();
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("FakeBankRoll")]
+        public async Task<IActionResult> GetFakeBankRoll()
+        {
+            Result<int> result = await _walletGateway.GetFakeBankRoll();
+            return this.CreateResult(result);
+        }
         //public async Task<IActionResult> GetTrueBalance()
         //{
         //    int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -82,11 +95,9 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret(result.Content.PrivateKey);
             string Address = privateKey.GetAddress().ToString();
             return Address;
-
         }
 
         [HttpPost("Withdraw")]
-
         public  async Task<List<string>> Withdraw([FromBody] WalletViewModel WalletViewModel)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -99,6 +110,5 @@ namespace Superstars.WebApp.Controllers
 
             return response;
         }
-
     }
 }
