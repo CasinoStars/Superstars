@@ -5,8 +5,8 @@
       <br>
       <h2 style="text-decoration: underline;"> <strong> Yams: </strong></h2>
   </div>
-<br><br>
-<div id="firsttext" class="text">
+
+<div  class="text">
   <p>
   Le Yahtzee (aussi orthographié Yatzee) ou Yam's est un jeu de société traditionnel de hasard raisonné. <br>
 Le but est d'enchaîner les combinaisons à l'aide de cinq dés pour remporter un maximum de points. Il appartient au domaine public. <br>
@@ -17,7 +17,7 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 </p>
 </div>
 
-<div id="figures" class="text">
+<div class="text">
 <dl>
 <dt> <strong> Liste des figures, de la plus faible à la plus forte : </strong> </dt>
 
@@ -43,13 +43,13 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 <dd> - le joueur a <strong>5 dés de même valeur</strong> </dd>
 </dl>
 </div>
-
+<br><br><br><br><br><br>
 
 <!--  BLACKJACK -->
   <div style="text-align: center; font-family: 'Courier New', sans-serif;">
       <h2 id="bjtitle" style="text-decoration: underline;"> <strong> BlackJack: </strong></h2>
   </div>
-<br><br><br><br><br><br><br>
+  <br>
 <div class="text">
   <p>
   Le Blackjack est un jeu de cartes très populaire dans les casinos.<br>
@@ -94,13 +94,6 @@ img {
   height: 28px;
 }
 
-#figures {
-  padding-top: 16%;
-}
-
-#firsttext {
-  padding-top: 7%;
-}
 
 
 </style>
