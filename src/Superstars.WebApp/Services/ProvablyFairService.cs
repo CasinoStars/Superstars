@@ -28,7 +28,7 @@ namespace Superstars.WebApp.Services
 
         public async Task<int> GetDice(int userId)
         {
-             int dice =  _provablyFairGateway.GetDicesFromHash(userId);
+             int dice =  await _provablyFairGateway.GetDicesFromHash(userId);
             return dice;
         }
     }

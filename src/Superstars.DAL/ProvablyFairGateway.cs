@@ -71,7 +71,7 @@ namespace Superstars.DAL
             }
         }
 
-        public int GetDicesFromHash(int userId)
+        public async Task<int> GetDicesFromHash(int userId)
         {
             ProvablyFairData seeds = GetSeeds(userId).Result;
             SeedManager seedManager = new SeedManager(seeds.UncryptedServerSeed, seeds.UncryptedPreviousServerSeed, seeds.ClientSeed, seeds.CryptedServerSeed, seeds.PreviousClientSeed, seeds.PreviousCryptedServerSeed);
@@ -79,8 +79,16 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Nonce", 2);
-                con.ExecuteAsync("sp.sProvablyFairUpdate", p, commandType: CommandType.StoredProcedure);
+                p.Add("@UserId", userId);
+                p.Add("@UncryptedPreviousServerSeed", seedManager.PreviousUncryptedServerSeed);
+                p.Add("@UncryptedServerSeed", seedManager.UncryptedServerSeed);
+                p.Add("@CryptedServerSeed", seedManager.CryptedServerSeed);
+                p.Add("@ClientSeed", seedManager.ClientSeed);
+                p.Add("@PreviousClientSeed", seedManager.PreviousClientSeeds);
+                p.Add("@PreviousCryptedServerSeed", seedManager.PreviousCryptedServerSeed);
+                p.Add("@Nonce", seeds.Nonce+1);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sProvablyFairUpdate", p, commandType: CommandType.StoredProcedure);
             }
             return dice;
         }
