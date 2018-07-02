@@ -62,6 +62,7 @@
     </div>
 </div> -->
 
+
 <center>
     <a class="txt"> Cartes du Dealer </a>
     <br>
@@ -127,9 +128,35 @@
     </div>
 </center>
 
-<div class="deck">
+
+
+<div class="row">
+
+<!-- <div id="infos" class="col-md-6"> -->
+<!-- </div> -->
+<div id="infos" class="col-md-6">
+    <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
+    <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
+    <a v-if="!iaturn" class="txt"> C'est à votre tour de jouer </a> <br>
+    <a v-if="iaturn && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
+    <a v-if="gameend" class="txt"> {{winnerlooser}} </a> <br>
+</div>
+
+<div id="wait" class="col-md-6">
+<div  class="lds-css ng-scope">
+  <div style="width:100%;height:100%" class="lds-eclipse">
+    <div>
+      </div>
+      </div>
+      </div>
+</div>
+
+<div id="deck1" class="col-md-6">
     <img src="../img/back.png" id="deck"/>
 </div>
+</div>
+
+
 
     <center>
     <a class="txt"> Vos cartes </a>
@@ -196,12 +223,6 @@
     </div>
     </center>
 
-    <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
-    <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
-    <a v-if="!iaturn" class="txt"> C'est à votre tour de jouer </a> <br>
-    <a v-if="iaturn" class="txt"> Le dealer est entrain de jouer </a> <br>
-    <a> RESULT : {{winnerlooser}} </a> <br>
-
    <form @submit="hit($event)">
    <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false ">HIT</button></div>
    </form>
@@ -223,14 +244,6 @@
    <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
 
-<center>
-<div v-if="dealerplaying == true && winnerlooser == ''" class="lds-css ng-scope">
-  <div style="width:100%;height:100%" class="lds-eclipse">
-    <div>
-      </div>
-      </div>
-      </div>
-</center>
 
     <router-link to="/play">
       <br><button class="btn btn-dark" v-if="gameend == true">QUITTER</button>
@@ -280,6 +293,15 @@ export default {
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
+
+    sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+        break;
+        }
+      }
+    },
 
     async hit(e) {
         // if(this.playingsecondhand == false) {
@@ -344,6 +366,7 @@ export default {
     async playdealer(e) {
         e.preventDefault();
         this.dealerplaying = true;
+        this.sleep(3000);
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
@@ -354,22 +377,22 @@ export default {
      CheckWinner() {
         if(this.gameend == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
         if(this.handvalue > 21 ) {
-            this.winnerlooser = 'You loose';
+            this.winnerlooser = 'Vous avez perdu !';
         } else if(this.dealerhandvalue > 21) {
-            this.winnerlooser = 'You win'
+            this.winnerlooser = 'Vous avez gagné !'
             this.playerwin = true;
         } else if(this.dealerhandvalue == 21) {
-            this.winnerlooser = 'BLACKJACK! You loose'
+            this.winnerlooser = 'BLACKJACK! Vous avez perdu !'
         } else if(this.handvalue == 21) {
-            this.winnerlooser = 'BLACKJACK ! You win';
+            this.winnerlooser = 'BLACKJACK ! Vous avez gagné !';
             this.playerwin = true;
         } else if(this.handvalue < this.dealerhandvalue ) {
-            this.winnerlooser = 'You loose';
+            this.winnerlooser = 'Vous avez perdu !';
         }  else if(this.handvalue > this.dealerhandvalue) {
-            this.winnerlooser = 'You win';
+            this.winnerlooser = 'Vous avez gagné !';
             this.playerwin = true;
         } else if(this.handvalue == this.dealerhandvalue) {
-            this.winnerlooser = "Draw";
+            this.winnerlooser = "Egalité";
         }
          this.gameend = true;
          this.updateStats();
@@ -455,6 +478,7 @@ export default {
   height: 200px !important;
   -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
   transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  margin-left: 50%;
 }
 
 .txt {
@@ -467,12 +491,25 @@ export default {
  #deck {
      height: 215px;
      width: 135px;
+     margin-left: 20%;
  }
 
-.deck {
- margin-left: 70%;
+.row {
+ align-content: center;
 }
 
+#deck1 {
+margin-right: 80%;
+   
+}
+
+#wait {
+    /* align-content: center; */
+}
+
+#infos {
+    /* margin-top: 100px; */
+}
  .playercards > img {
      height: 205px;
      width: 125px;
