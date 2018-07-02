@@ -5,6 +5,8 @@ create table sp.tProvablyFair
 	UncryptedServerSeed varchar(128),
 	CryptedServerSeed varchar(128),
 	ClientSeed nvarchar(128),
+	PreviousClientSeed nvarchar(128),
+	PreviousCryptedServerSeed nvarchar(128),
 	Nonce int
 
 	constraint FK_tProvablyFair_UserId foreign key(UserId) references sp.tUser(UserId)

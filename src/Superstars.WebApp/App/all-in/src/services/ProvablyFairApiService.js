@@ -10,8 +10,8 @@ class ProvablyFairApiService {
     }
 
 
-    async UpdateSeeds(){
-        return await getAsync(`${endpoint}/UpdateSeeds`);
+    async UpdateSeeds(str){
+        return await postAsync(`${endpoint}/UpdateSeeds`, str);
     }
 
     async CreateSeeds(){

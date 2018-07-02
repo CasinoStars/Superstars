@@ -41,11 +41,11 @@ namespace Superstars.WebApp.Controllers
             return result;
         }
 
-        [HttpGet("UpdateSeeds")]
-        public async void UpdateSeeds()
+        [HttpPost("UpdateSeeds")]
+        public async void UpdateSeeds([FromBody] string ClientSeed = null)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            await _provablyFairGateway.UpdateSeeds(userId);
+             _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
         }
     }
 }

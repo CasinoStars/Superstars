@@ -14,45 +14,30 @@
       
             <div class="tab-content">
                 <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Client seeds:</span><br>{{seeds.clientSeed}}<br><br></h5>
-                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">previous server seeds:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
                 <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Nombre de dés générer par le hash:</span><br>{{seeds.nonce}}<br><br></h5>
                 
                 
-                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
-                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
-                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">previous server seeds:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Previous Client Seed:</span><br>{{seeds.previousClientSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Previous Crypted Server Seed:</span><br>{{seeds.previousCryptedServerSeed}}<br><br></h5>
 
-
-                
-
-
-
-                
-                <form  @submit="Withdraw($event)" v-if="this.wallet == 'real'">
+                <form  @submit="UpdateSeeds($event)">
                         <div class="field-wrap">
-                            <label>
-                                Client Seed<span class="req">*</span>
+                            <label style="margin-left: 45%; ">
+                                <span style="font-weight: bold; font-style: italic;">
+                                Seed Client<span class="req">*</span> 
+                                </span>
                             </label><br><br>
-                            <input  type="string" min="0" max="1000000" placeholder="New Client Seed" v-model="item.AmountToSend" required autocomplete="off"/>
+                            <input  type="string" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="clientSeeds" required autocomplete="off"/>
                         </div>
-                    <button type="submit" class="button button-block">Envoyer</button>
+
+                    <button type="submit" class="button button-block">Changer</button>
                 </form>
-
-                <!-- <form @submit="onSubmit($event)" :v-model="item.moneyType = 2" v-else>
-                    <div class="field-wrap">
-                        <label>
-                            Montant<span class="req">*</span>
-                        </label><br><br>
-                        <input type="number" min="0" max="1000000" placeholder="..." v-model="item.fakeCoins" required autocomplete="off"/>
-                    </div><br>
-                    <button type="submit" class="button button-block">Créditer</button>
-
-                </form> -->
-
 
         </div><!-- tab-content -->
         </div> <!-- /form -->
-        <div id="snackbar">Vous venez d'ajouter {{item.fakeCoins}} All`in Coins à votre portefeuille </div>
+        <!-- <div id="snackbar">Vous venez d'ajouter {{item.fakeCoins}} All`in Coins à votre portefeuille </div> -->
     </div>
 </template>
 
@@ -68,7 +53,7 @@ import ProvablyFairApiService from '../services/ProvablyFairApiService';
 export default {
     data(){
         return {
-            item: {},
+            clientSeeds: '',
             seeds:  '',
             errors: [],
             Responses : [],
@@ -92,38 +77,14 @@ export default {
         },
 
 
-        async onSubmit(e) {
+        async UpdateSeeds(e) {
             e.preventDefault();
-                var x = document.getElementById("snackbar");
-                x.className = "show";
-                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
-                var errors = [];
-                // if(this.fakeCoins.balance >= 1000000)
-                //     errors.push("Le crédit est bloquer lorsque votre solde atteind 1,000,000 de bits");           
-                // this.errors = errors;
-
-                // if(errors.length == 0) {
-                //     try {
-                //         await this.executeAsyncRequest(() => WalletApiService.AddCoins(this.item));
-                //         await this.refreshFakeCoins();
-                //     }
-                //     catch(error) {
-                //     }
-                // }
+            console.log("Test");
+            var errors = [];
+ 
+                    await this.executeAsyncRequest(() => ProvablyFairApiService.UpdateSeeds(this.clientSeeds));
+                    this.GetSeeds();
         },
-
-        // async Withdraw(e) {
-        //     e.preventDefault();
-        //     console.log("Test");
-        //     var errors = [];
-        //         try {
-        //             this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
-        //             this.refreshTrueCoins();
-        //         }
-        //         catch(error){
-
-        //         }
-        // },
 
     }
 }
@@ -215,7 +176,7 @@ $br: 4px;
 .form {
   background:rgba($form-bg,.9);
   padding: 40px;
-  max-width:600px;
+  max-width:6000px;
   margin:40px auto;
   border-radius:$br;
   box-shadow:0 4px 10px 4px rgba($form-bg,.3);
@@ -268,7 +229,7 @@ $br: 4px;
   position:absolute;
   transform:translateY(6px);
   left:13px;
-  color:rgba($white,.5);
+  color:$white;
   transition:all 0.25s ease;
   -webkit-backface-visibility: hidden;
   pointer-events: none;

@@ -5,6 +5,8 @@ create procedure sp.sProvablyFairCreate
 	@UncryptedServerSeed nvarchar(128),
 	@CryptedServerSeed nvarchar(128),
 	@ClientSeed nvarchar(128),
+	@PreviousClientSeed nvarchar(128),
+	@PreviousCryptedServerSeed nvarchar(128),
 	@Nonce int
 
 )
@@ -22,7 +24,7 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tProvablyFair(UserId,UncryptedPreviousServerSeed, UncryptedServerSeed, CryptedServerSeed, ClientSeed, Nonce) values(@Userfkid, @UncryptedPreviousServerSeed, @UncryptedServerSeed,@CryptedServerSeed,@ClientSeed,@Nonce);
+    insert into sp.tProvablyFair(UserId,UncryptedPreviousServerSeed, UncryptedServerSeed, CryptedServerSeed, ClientSeed,PreviousClientSeed,PreviousCryptedServerSeed, Nonce) values(@Userfkid, @UncryptedPreviousServerSeed, @UncryptedServerSeed,@CryptedServerSeed,@ClientSeed,@PreviousClientSeed,@PreviousCryptedServerSeed,@Nonce);
 	commit;
 	return 0;
 end;

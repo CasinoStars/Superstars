@@ -17,8 +17,8 @@ namespace Superstars.YamsFair
         /// <returns></returns>
         public static string getHashSha512(string text)
         {
-            byte[] bytes = Encoding.Unicode.GetBytes(text);
-            SHA512 hashstring = SHA512.Create();
+            byte[] bytes = Encoding.ASCII.GetBytes(text);
+            HashAlgorithm hashstring = SHA512.Create();
             byte[] hash = hashstring.ComputeHash(bytes);
             string hashString = string.Empty;
             foreach (byte x in hash)
