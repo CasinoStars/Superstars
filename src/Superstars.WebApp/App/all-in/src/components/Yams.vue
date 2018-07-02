@@ -7,8 +7,10 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h2 v-if="this.realOrFake == 'real'" style="margin-left: 32%; font-family: 'Courier New', sans-serif;">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
-        <h2 v-else style="margin-left: 32%; font-family: 'Courier New', sans-serif;">SOLDE DE VOTRE COMPTE ALL'IN: {{fakeCoins.balance}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+        <div style="margin-left: 20%; font-family: 'Courier New', sans-serif;">
+          <h2 v-if="this.realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeCoins.balance}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+        </div>
         <router-link class="close" to="/play">&times;</router-link>
       </div>
       <ul class="tab-group">
@@ -175,19 +177,18 @@ export default {
       this.errors = 0;
       if(this.realOrFake === 'fake') {
         if(this.fakeBet > 1000000)
-          console.log(this.fakeCoins.balance);
           errors.push("La mise maximum est de 1,000,000");
-        if(this.fakeBet <= 0)  
+        else if(this.fakeBet <= 0)  
           errors.push("La mise doit être supérieur à 0");
-        if(this.fakeBet > this.fakeCoins.balance)
+        else if(this.fakeBet > this.fakeCoins.balance)
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
         if(this.trueBet > 10)
           errors.push("La mise maximum est de 10 BTC");
-        if(this.trueBet <= 0)  
+        else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 BTC");
-        if(this.trueBet > this.trueCoins)
+        else if(this.trueBet > this.trueCoins)
           errors.push("Vous n'avez pas cette sommes sur votre compte");
       }
       this.errors = errors;
@@ -295,11 +296,27 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.tab-group {
+<style lang="scss">
+$body-bg: #c1bdba;
+$form-bg: #13232f;
+$white: #ffffff;
+
+$main: #777c7b;
+$main-light: lighten($main,5%);
+$main-dark: darken($main,5%);
+
+$gray-light: #a0b3b0;
+$gray: #ddd;
+
+$thin: 300;
+$normal: 400;
+$bold: 600;
+$br: 4px;
+
+.yams .tab-group {
   list-style:none;
   padding:0;
-  margin:0 0 40px 0;
+  margin:0 0 5px 0;
   &:after {
     content: "";
     display: table;
@@ -308,7 +325,7 @@ export default {
   li a {
     display:block;
     text-decoration:none;
-    padding:15px;
+    padding:8px;
     background:rgba($gray-light,.25);
     color:$gray-light;
     font-size:20px;
@@ -332,7 +349,7 @@ export default {
 <style>
 
 /* The Modal (background) */
-.modal {
+.yams .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -347,12 +364,11 @@ export default {
 }
 
 /* Modal Content */
-.modal-content {
+.yams .modal-content {
     position: relative;
     background-color: #fefefe;
     margin: auto;
     padding: 0;
-    border: 1px solid #888;
     width: 80%;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
@@ -373,33 +389,33 @@ export default {
 }
 
 /* The Close Button */
-.close {
+.yams .close {
     color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.yams .close:hover,
+.yams .close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
 }
 
-.modal-header {
-    padding: 2px 16px;
-    background-color: #222222a8;;
+.yams .modal-header {
+    padding: 10px 16px;
+    background-color: #222222a8;
     color: white;
 }
 
-.modal-body {
-  padding: 2px 16px;
+.yams .modal-body {
+  padding: 20px 16px;
   text-align: center;
 }
 
-.modal-footer {
-  padding: 2px 16px;
+.yams .modal-footer {
+  padding: 10px 16px;
   background-color:  #222222a8;;
   color: white;
 }
@@ -434,10 +450,12 @@ export default {
     transform: rotate(360deg);
   }
 }
-.lds-eclipse {
+
+.yams .lds-eclipse {
   position: relative;
 }
-.lds-eclipse div {
+
+.yams .lds-eclipse div {
   position: absolute;
   -webkit-animation: lds-eclipse 1s linear infinite;
   animation: lds-eclipse 1s linear infinite;
@@ -450,7 +468,8 @@ export default {
   -webkit-transform-origin: 20px 21px;
   transform-origin: 20px 21px;
 }
-.lds-eclipse {
+
+.yams .lds-eclipse {
   width: 200px !important;
   height: 200px !important;
   -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
@@ -514,7 +533,7 @@ export default {
 
 
 /* TURNING SQUARE SPINER */
-.loader {
+.yams .loader {
   border: 2px solid #f3f3f3;
   border-radius: 0%;
   border-top: 4px solid 	rgb(160,160,160);
@@ -539,17 +558,17 @@ export default {
   100% { transform: rotate(360deg); }
 }
 
-.image-checkbox > img {
+.yams .image-checkbox > img {
 	cursor: pointer;
   height: 100px;
   width: 100px;
 }
 
-input[type="checkbox"] {
+.yams input[type="checkbox"] {
 	display: none;
 }
 
-input[type=checkbox]:checked + label > img{
+.yams input[type=checkbox]:checked + label > img{
   height: 120px;
   width: 120px;
 } 
