@@ -1,5 +1,5 @@
 <template>
-    <div class="wallet">
+    <div class="provablyfair">
         <!-- errors of transactions !-->
         <div class="alert alert-danger" style="text-align: center;" v-if="errors.length > 0">
             <li v-for="e of errors" :key="e">{{e}}</li>
@@ -155,16 +155,16 @@ $br: 4px;
     to {bottom: 0; opacity: 0;}
 }
 
-.wallet html {
+.provablyfair html {
 	overflow-y: scroll; 
 }
 
-.wallet body {
+.provablyfair body {
   background:$body-bg;
   font-family: 'Titillium Web', sans-serif;
 }
 
-.wallet .mytitle {
+.provablyfair .mytitle {
   text-decoration:none;
   color:$main;
   transition:.5s ease;
@@ -173,7 +173,7 @@ $br: 4px;
   }
 }
 
-.form {
+.provablyfair .form {
   background:rgba($form-bg,.9);
   padding: 40px;
   max-width:6000px;
@@ -182,7 +182,7 @@ $br: 4px;
   box-shadow:0 4px 10px 4px rgba($form-bg,.3);
 }
 
-.tab-group {
+.provablyfair .tab-group {
   list-style:none;
   padding:0;
   margin:0 0 40px 0;
@@ -214,18 +214,18 @@ $br: 4px;
   }
 }
 
-.tab-content > div:last-child {
+.provablyfair .tab-content > div:last-child {
   display:none;
 }
 
 
-.wallet h5 {
+.provablyfair h5 {
   text-align:center;
   color:$white;
   font-weight:$thin;
 }
 
-.wallet label {
+.provablyfair label {
   position:absolute;
   transform:translateY(6px);
   left:13px;
@@ -240,7 +240,7 @@ $br: 4px;
   }
 }
 
-.wallet input, textarea {
+.provablyfair input, textarea {
   font-size:22px;
   display:block;
   width:100%;
@@ -258,18 +258,18 @@ $br: 4px;
   }
 }
 
-.wallet textarea {
+.provablyfair textarea {
   border:2px solid $gray-light;
   resize: vertical;
 }
 
-.field-wrap {
+.provablyfair .field-wrap {
   position:relative;
   margin-bottom:10px;
 }
 
 
-.button {
+.provablyfair .button {
   border:0;
   outline:none;
   border-radius:0;
@@ -287,12 +287,12 @@ $br: 4px;
   }
 }
 
-.button-block {
+.provablyfair .button-block {
   display:block;
   width:100%;
 }
 
-.forgot {
+.provablyfair .forgot {
   margin-top:-20px;
   text-align:right;
 }
