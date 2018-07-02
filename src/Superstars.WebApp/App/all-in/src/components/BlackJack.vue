@@ -1,63 +1,6 @@
 <template>
 <div>
-    <div v-for="(i, index) of playercards" :key="index" class="playercards">
-      <img v-if="i == '2p'" src="../img/2p.png">
-      <img v-if="i == '3p'" src="../img/3p.png">
-      <img v-if="i == '4p'" src="../img/4p.png">
-      <img v-if="i == '5p'" src="../img/5p.png">      
-      <img v-if="i == '6p'" src="../img/6p.png">
-      <img v-if="i == '7p'" src="../img/7p.png">      
-      <img v-if="i == '8p'" src="../img/8p.png">
-      <img v-if="i == '9p'" src="../img/9p.png">      
-      <img v-if="i == '10p'" src="../img/10p.png">
-      <img v-if="i == '11p'" src="../img/11p.png">      
-      <img v-if="i == '12p'" src="../img/12p.png">
-      <img v-if="i == '13p'" src="../img/13p.png">
-      <img v-if="i == '14p'" src="../img/1p.png">
 
-      <img v-if="i == '2h'" src="../img/2h.png">
-      <img v-if="i == '3h'" src="../img/3h.png">
-      <img v-if="i == '4h'" src="../img/4h.png">
-      <img v-if="i == '5h'" src="../img/5h.png">      
-      <img v-if="i == '6h'" src="../img/6h.png">
-      <img v-if="i == '7h'" src="../img/7h.png">      
-      <img v-if="i == '8h'" src="../img/8h.png">
-      <img v-if="i == '9h'" src="../img/9h.png">      
-      <img v-if="i == '10h'" src="../img/10h.png">
-      <img v-if="i == '11h'" src="../img/11h.png">      
-      <img v-if="i == '12h'" src="../img/12h.png">
-      <img v-if="i == '13h'" src="../img/13h.png">
-      <img v-if="i == '14h'" src="../img/1h.png">
-
-      <img v-if="i == '2t'" src="../img/2t.png">
-      <img v-if="i == '3t'" src="../img/3t.png">
-      <img v-if="i == '4t'" src="../img/4t.png">
-      <img v-if="i == '5t'" src="../img/5t.png">      
-      <img v-if="i == '6t'" src="../img/6t.png">
-      <img v-if="i == '7t'" src="../img/7t.png">      
-      <img v-if="i == '8t'" src="../img/8t.png">
-      <img v-if="i == '9t'" src="../img/9t.png">      
-      <img v-if="i == '10t'" src="../img/10t.png">
-      <img v-if="i == '11t'" src="../img/11t.png">      
-      <img v-if="i == '12t'" src="../img/12t.png">
-      <img v-if="i == '13t'" src="../img/13t.png">
-      <img v-if="i == '14t'" src="../img/1t.png">
-
-      <img v-if="i == '2c'" src="../img/2c.png">
-      <img v-if="i == '3c'" src="../img/3c.png">
-      <img v-if="i == '4c'" src="../img/4c.png">
-      <img v-if="i == '5c'" src="../img/5c.png">      
-      <img v-if="i == '6c'" src="../img/6c.png">
-      <img v-if="i == '7c'" src="../img/7c.png">      
-      <img v-if="i == '8c'" src="../img/8c.png">
-      <img v-if="i == '9c'" src="../img/9c.png">      
-      <img v-if="i == '10c'" src="../img/10c.png">
-      <img v-if="i == '11c'" src="../img/11c.png">      
-      <img v-if="i == '12c'" src="../img/12c.png">
-      <img v-if="i == '13c'" src="../img/13c.png">
-      <img v-if="i == '14c'" src="../img/1c.png">
-
-    </div>
 
 <!-- <div v-if="hasplitplayer">
 <div v-for="(i, index) of playersecondcards" :key="index" class="playercards">
@@ -119,6 +62,11 @@
     </div>
 </div> -->
 
+<center>
+    <a class="txt"> Cartes du Dealer </a>
+    <br>
+    <br>
+
     <div v-for="(i, index) of dealercards" :key="index" class="dealercards">
       <img v-if="i == '2p'" src="../img/2p.png">
       <img v-if="i == '3p'" src="../img/3p.png">
@@ -177,20 +125,81 @@
       <img v-if="i == '14c'" src="../img/1c.png">
 
     </div>
+</center>
 
-<div>
-        <img src="../img/back.png" id="deck"/>
+<div class="deck">
+    <img src="../img/back.png" id="deck"/>
 </div>
 
+    <center>
+    <a class="txt"> Vos cartes </a>
+    <br>
+    <br>
 
-    <a> Your hand value : {{handvalue}} </a> <br>
-    <!-- <a> Your Second Hand Value : {{secondhandvalue}} </a> <br> -->
-    <a> Dealer hand value : {{dealerhandvalue}} </a> <br>
-    <!-- <a> CanSplit : {{cansplitplayer}} {{ typeof cansplitplayer}} </a> <br>
-    <a> HasSplit : {{hasplitplayer}} {{ typeof hasplitplayer}} </a> <br> -->
-    <a> isiaturn : {{iaturn}} {{typeof iaturn}}</a> <br>
-    <!-- <a> Are u playing second hand ? : {{playingsecondhand}} {{typeof playingsecondhand}}</a> <br> -->
-    <a> GAME END : {{gameend}} </a> <br>
+    <div v-for="(i, index) of playercards" :key="index" class="playercards">
+      <img v-if="i == '2p'" src="../img/2p.png">
+      <img v-if="i == '3p'" src="../img/3p.png">
+      <img v-if="i == '4p'" src="../img/4p.png">
+      <img v-if="i == '5p'" src="../img/5p.png">      
+      <img v-if="i == '6p'" src="../img/6p.png">
+      <img v-if="i == '7p'" src="../img/7p.png">      
+      <img v-if="i == '8p'" src="../img/8p.png">
+      <img v-if="i == '9p'" src="../img/9p.png">      
+      <img v-if="i == '10p'" src="../img/10p.png">
+      <img v-if="i == '11p'" src="../img/11p.png">      
+      <img v-if="i == '12p'" src="../img/12p.png">
+      <img v-if="i == '13p'" src="../img/13p.png">
+      <img v-if="i == '14p'" src="../img/1p.png">
+
+      <img v-if="i == '2h'" src="../img/2h.png">
+      <img v-if="i == '3h'" src="../img/3h.png">
+      <img v-if="i == '4h'" src="../img/4h.png">
+      <img v-if="i == '5h'" src="../img/5h.png">      
+      <img v-if="i == '6h'" src="../img/6h.png">
+      <img v-if="i == '7h'" src="../img/7h.png">      
+      <img v-if="i == '8h'" src="../img/8h.png">
+      <img v-if="i == '9h'" src="../img/9h.png">      
+      <img v-if="i == '10h'" src="../img/10h.png">
+      <img v-if="i == '11h'" src="../img/11h.png">      
+      <img v-if="i == '12h'" src="../img/12h.png">
+      <img v-if="i == '13h'" src="../img/13h.png">
+      <img v-if="i == '14h'" src="../img/1h.png">
+
+      <img v-if="i == '2t'" src="../img/2t.png">
+      <img v-if="i == '3t'" src="../img/3t.png">
+      <img v-if="i == '4t'" src="../img/4t.png">
+      <img v-if="i == '5t'" src="../img/5t.png">      
+      <img v-if="i == '6t'" src="../img/6t.png">
+      <img v-if="i == '7t'" src="../img/7t.png">      
+      <img v-if="i == '8t'" src="../img/8t.png">
+      <img v-if="i == '9t'" src="../img/9t.png">      
+      <img v-if="i == '10t'" src="../img/10t.png">
+      <img v-if="i == '11t'" src="../img/11t.png">      
+      <img v-if="i == '12t'" src="../img/12t.png">
+      <img v-if="i == '13t'" src="../img/13t.png">
+      <img v-if="i == '14t'" src="../img/1t.png">
+
+      <img v-if="i == '2c'" src="../img/2c.png">
+      <img v-if="i == '3c'" src="../img/3c.png">
+      <img v-if="i == '4c'" src="../img/4c.png">
+      <img v-if="i == '5c'" src="../img/5c.png">      
+      <img v-if="i == '6c'" src="../img/6c.png">
+      <img v-if="i == '7c'" src="../img/7c.png">      
+      <img v-if="i == '8c'" src="../img/8c.png">
+      <img v-if="i == '9c'" src="../img/9c.png">      
+      <img v-if="i == '10c'" src="../img/10c.png">
+      <img v-if="i == '11c'" src="../img/11c.png">      
+      <img v-if="i == '12c'" src="../img/12c.png">
+      <img v-if="i == '13c'" src="../img/13c.png">
+      <img v-if="i == '14c'" src="../img/1c.png">
+
+    </div>
+    </center>
+
+    <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
+    <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
+    <a v-if="!iaturn" class="txt"> C'est à votre tour de jouer </a> <br>
+    <a v-if="iaturn" class="txt"> Le dealer est entrain de jouer </a> <br>
     <a> RESULT : {{winnerlooser}} </a> <br>
 
    <form @submit="hit($event)">
@@ -293,6 +302,7 @@ export default {
             this.iaturn =  true;
             //this.iaturn = true;
         // }
+        await this.StandandFinish();
         await this.refreshCards();
         await this.refreshHandValue();
     },
@@ -327,6 +337,9 @@ export default {
     //     this.cansplitplayer = BlackJackApiService.CanSplitPlayer();
     // },
 
+    async StandandFinish() {
+        await this.executeAsyncRequest(() => BlackJackApiService.StandPlayer());
+    },
 
     async playdealer(e) {
         e.preventDefault();
@@ -444,15 +457,27 @@ export default {
   transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
 }
 
+.txt {
+  font-family: 'Courier New', sans-serif;
+  font-variant: small-caps;
+  color: black;
+  font-size: 24px;
+}
+
  #deck {
      height: 215px;
      width: 135px;
  }
 
+.deck {
+ margin-left: 70%;
+}
+
  .playercards > img {
      height: 205px;
      width: 125px;
  }
+ 
 
  .playercards {
 	display: inline-block;
@@ -463,13 +488,12 @@ export default {
  .dealercards {
 	display: inline-block;
 	position: relative;
-	left: 2.2%
  }
 
  .dealercards > img {
      height: 205px;
      width: 125px;
-     left: 175%;
+
  }
 
 </style>

@@ -82,9 +82,9 @@ class BlackJackApiService {
         return toto;
     }
 
-    async StandPlayerSecondHand() {
-        return getAsync(`${endpoint}/StandPlayer`);
-    }
+    // async StandPlayerSecondHand() {
+    //     return getAsync(`${endpoint}/StandPlayer`);
+    // }
 
     async PlayAI() {
         await postAsync(`${endpoint}/PlayAi`);

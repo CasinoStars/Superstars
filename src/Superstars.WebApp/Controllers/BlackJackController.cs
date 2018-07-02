@@ -84,7 +84,7 @@ namespace Superstars.WebApp.Controllers
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
             _blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
-            _blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
+            //_blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
             string _cards = "";
             int i = 0;
             foreach (var item in _blackJackService._myhand)
@@ -124,6 +124,31 @@ namespace Superstars.WebApp.Controllers
             Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result);
         }
+
+        //[HttpPost("HitAI")]
+        //public async Task<IActionResult> HitAi()
+        //{
+        //    int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        //    UserData user = await _userGateway.FindByName("AI" + userId);
+        //    BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
+
+        //    _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
+        //    string _cards = "";
+        //    int i = 0;
+        //    foreach (var item in _blackJackService._ennemyhand)
+        //    {
+        //        _cards += item.Value;
+        //        _cards += item.Symbol;
+        //        i++;
+
+        //        if (i > 0)
+        //            _cards += ",";
+        //    }
+        //    data.PlayerCards = _cards;
+        //    data.HandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+        //    Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
+        //    return this.CreateResult(result);
+        //}
 
         //[HttpPost("HitPlayerSecondCards")]
         //public async Task<IActionResult> HitPlayerSecondHand()
@@ -216,9 +241,10 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("StandPlayer")]
-        public bool StandPlayer()
+        public async Task<bool> StandPlayer()
         {
             bool result = _blackJackService.FinishTurn();
+            await InitAi();
             return result;
         }
 
@@ -282,7 +308,7 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
-            
+
             if (_blackJackService._dealerTurn)
             {
                 _blackJackService._myhand = _blackJackService.PlayIA(_blackJackService._myhand, _blackJackService._ennemyhand);
