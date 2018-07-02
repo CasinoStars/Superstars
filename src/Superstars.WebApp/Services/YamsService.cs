@@ -10,6 +10,11 @@ namespace Superstars.WebApp.Services
     {
         readonly ProvablyFairGateway _provablyFairGateway;
 
+        public YamsService(ProvablyFairGateway provablyFairGateway)
+        {
+            _provablyFairGateway = provablyFairGateway;
+        }
+        
         /*
 		 Points:
 		  yams

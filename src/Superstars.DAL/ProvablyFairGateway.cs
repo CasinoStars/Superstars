@@ -79,7 +79,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Nonce", seeds.Nonce+=1);
+                p.Add("@Nonce", 2);
                 con.ExecuteAsync("sp.sProvablyFairUpdate", p, commandType: CommandType.StoredProcedure);
             }
             return dice;
