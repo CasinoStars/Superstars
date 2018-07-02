@@ -37,7 +37,7 @@ import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
 import UserApiService from '../services/UserApiService';
-import RankApiService from '../services/RankApiServices';
+import RankApiService from '../services/RankApiService';
 
 
 export default {

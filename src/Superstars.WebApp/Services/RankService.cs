@@ -10,10 +10,9 @@ namespace Superstars.WebApp.Services
 		List<int> _profit = new List<int>();
 		List<string> _userName = new List<string>();
 
-		public RankService(List<int> profit, List<string> userName)
+		public RankService()
 		{
-			_profit = profit;
-			_userName = userName;
+
 		}
 
 		public void TriProfitAndRank(List<int> profit, List<string> names)

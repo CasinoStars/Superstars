@@ -44,6 +44,7 @@ namespace Superstars.WebApp
             services.AddSingleton<YamsService>();
             services.AddSingleton<BlackJackGateway>(x => new BlackJackGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<BlackJackService>(x => new BlackJackService());
+            services.AddSingleton<RankService>(x => new RankService());
             services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
