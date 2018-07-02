@@ -10,22 +10,32 @@
         
         <ul class="nav navbar-nav">
           <li class="nav-item">
+            <router-link class="nav-link" to="/playersStats" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-trophy" style="font-size: 1.4rem;"></i> CLASSEMENT
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/rule" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-info-circle" style="font-size: 1.4rem;"></i> RÈGLES
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
             <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTICS
             </router-link>
-          </li>         
-            <li class="nav-item">
-              <router-link class="nav-link" to="/rule" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-info-circle" style="font-size: 1.4rem;"></i> RÈGLES
-              </router-link>
-            </li>                        
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
+            <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
+            </router-link>
+          </li>
         </ul>
 
-        <div class="collapse navbar-collapse" id="navbarText" v-if="auth.isConnected">
-          <ul class="nav navbar-nav">
+        <div class="collapse navbar-collapse" v-if="auth.isConnected">
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
+              <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 133, 230); letter-spacing: 2px; font-size: 12px;">
+                BANKROLL: {{BTC}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeCoins}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
@@ -50,7 +60,8 @@
             </li>
           </ul>
         </div>
-        <div class="collapse navbar-collapse" id="navbarText" v-else>
+        
+        <div class="collapse navbar-collapse" v-else>
           <ul class="nav navbar-nav ml-auto">
             <li class="nav-item">
               <router-link class="nav-link" v-on:click.native="log('Login')" to="/">Login</router-link>
@@ -72,17 +83,26 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
+import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 
 export default{
-  
+  data(){
+    return {
+      BTC: 0,
+      fakeCoins: 0,
+    }
+  },
+
   computed: {
     ...mapGetters(['isLoading']),
     auth: () => UserApiService
   },
   
-  mounted() {
+  async mounted() {
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
+    await this.BTCBank();
+    await this.fakeBank();
   },
 
   beforeDestroy() {
@@ -90,10 +110,16 @@ export default{
   },
 
   methods: {
+    ...mapActions(['executeAsyncRequest']),
 
-    zoom() {
-
+    async BTCBank() {
+      this.BTC = await this.executeAsyncRequest(() => WalletApiService.GetBTCBankRoll());
     },
+
+    async fakeBank() {
+      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
+    },
+
     log(selectedBase) {
       UserApiService.log(selectedBase);
     },
