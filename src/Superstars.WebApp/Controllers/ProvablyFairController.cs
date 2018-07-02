@@ -24,6 +24,15 @@ namespace Superstars.WebApp.Controllers
         }
 
 
+        [HttpPost("CreateSeeds")]
+        public async void CreateSeeds()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _provablyFairGateway.AddSeeds(userId);
+
+        }
+
+
         [HttpGet("GetSeeds")]
         public async Task<ProvablyFairData> GetSeeds()
         {

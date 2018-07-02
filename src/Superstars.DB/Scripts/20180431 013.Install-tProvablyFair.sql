@@ -1,6 +1,6 @@
 create table sp.tProvablyFair
 (
-	UserId int identity(0,1),
+	UserId int,
 	UncryptedPreviousServerSeed varchar(128),
 	UncryptedServerSeed varchar(128),
 	CryptedServerSeed varchar(128),

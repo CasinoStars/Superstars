@@ -9,6 +9,9 @@ create procedure sp.sProvablyFairCreate
 
 )
 as 
+
+	declare @Userfkid int;
+	set @Userfkid = (select UserId from sp.tUser u where u.UserId = @UserId);
 begin
 	set transaction isolation level serializable;
 	begin tran;
@@ -19,8 +22,7 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tProvablyFair(UserId,UncryptedPreviousServerSeed, UncryptedServerSeed, CryptedServerSeed, ClientSeed, Nonce) values(@UserId, @UncryptedPreviousServerSeed, @UncryptedServerSeed,@CryptedServerSeed,@ClientSeed,@Nonce);
-	set @UserId = scope_identity();
+    insert into sp.tProvablyFair(UserId,UncryptedPreviousServerSeed, UncryptedServerSeed, CryptedServerSeed, ClientSeed, Nonce) values(@Userfkid, @UncryptedPreviousServerSeed, @UncryptedServerSeed,@CryptedServerSeed,@ClientSeed,@Nonce);
 	commit;
 	return 0;
 end;

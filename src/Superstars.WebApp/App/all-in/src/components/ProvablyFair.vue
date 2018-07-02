@@ -9,34 +9,36 @@
 
         <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">    
             <ul class="tab-group">
-                <li style="color: white" class="tab active" v-if="this.wallet == 'real'"><a v-on:click="ChangeWallet('real')">Réel</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeWallet('real')">Réel</a></li>
-                <li style="color: white" class="tab active" v-if="this.wallet == 'fake'"><a v-on:click="ChangeWallet('real')">Virtuel</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeWallet('fake')">Virtuel</a></li>
+                <li style="color: white" class="tab active" > <h1 style="text-align: center;"> ProvavlyFair</h1> </li>
             </ul>
       
             <div class="tab-content">
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{trueCoins}} BTC</h5>
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{seeds}}<br><br></h5>
-                <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeCoins.balance}} all'in</h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Client seeds:</span><br>{{seeds.clientSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">previous server seeds:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Nombre de dés générer par le hash:</span><br>{{seeds.nonce}}<br><br></h5>
+                
+                
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
+                <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
+
+
+                
+
+
+
                 
                 <form  @submit="Withdraw($event)" v-if="this.wallet == 'real'">
                         <div class="field-wrap">
                             <label>
-                                Montant<span class="req">*</span>
+                                Client Seed<span class="req">*</span>
                             </label><br><br>
-                            <input  type="decimal" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off"/>
+                            <input  type="string" min="0" max="1000000" placeholder="New Client Seed" v-model="item.AmountToSend" required autocomplete="off"/>
                         </div>
-                    <div class="field-wrap">
-                        <label>
-                            Address<span class="req">*</span>
-                        </label><br><br>
-                        <input type="text" placeholder="Address" v-model="item.DestinationAddress" required autocomplete="off"/>
-                    </div><br>      
                     <button type="submit" class="button button-block">Envoyer</button>
                 </form>
 
-                <form @submit="onSubmit($event)" :v-model="item.moneyType = 2" v-else>
+                <!-- <form @submit="onSubmit($event)" :v-model="item.moneyType = 2" v-else>
                     <div class="field-wrap">
                         <label>
                             Montant<span class="req">*</span>
@@ -45,7 +47,7 @@
                     </div><br>
                     <button type="submit" class="button button-block">Créditer</button>
 
-                </form>
+                </form> -->
 
 
         </div><!-- tab-content -->
@@ -61,47 +63,32 @@
 <script>
 import { mapActions } from 'vuex';
 import ProvablyFairApiService from '../services/ProvablyFairApiService';
-import WalletApiService from '../services/WalletApiService';
 
 
 export default {
     data(){
         return {
             item: {},
-            wallet: '',
-            fakeCoins: 0,
             seeds:  '',
-            BTCAddress: '',
             errors: [],
             Responses : [],
         };
     },
 
     mounted(){
-        this.wallet = 'real';
-        this.refreshTrueCoins();
-        this.refreshFakeCoins();
-        this.GetWalletAddress();
+        this.CreateSeeds();
         this.GetSeeds();
     },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
+        async CreateSeeds(){
+            await this.executeAsyncRequest(() => ProvablyFairApiService.CreateSeeds())
+        },
+
         async GetSeeds(){
             this.seeds = await this.executeAsyncRequest(() => ProvablyFairApiService.GetSeeds());
-        },
-
-        async GetWalletAddress(){
-          this.BTCAddress = await this.executeAsyncRequest(() => WalletApiService.GetWalletAddress());
-        },
-
-        async refreshFakeCoins(){    
-            this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
-        },
-
-        async refreshTrueCoins(){
-            this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
         },
 
 
@@ -111,38 +98,33 @@ export default {
                 x.className = "show";
                 setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
                 var errors = [];
-                if(this.fakeCoins.balance >= 1000000)
-                    errors.push("Le crédit est bloquer lorsque votre solde atteind 1,000,000 de bits");           
-                this.errors = errors;
+                // if(this.fakeCoins.balance >= 1000000)
+                //     errors.push("Le crédit est bloquer lorsque votre solde atteind 1,000,000 de bits");           
+                // this.errors = errors;
 
-                if(errors.length == 0) {
-                    try {
-                        await this.executeAsyncRequest(() => WalletApiService.AddCoins(this.item));
-                        await this.refreshFakeCoins();
-                    }
-                    catch(error) {
-                    }
-                }
+                // if(errors.length == 0) {
+                //     try {
+                //         await this.executeAsyncRequest(() => WalletApiService.AddCoins(this.item));
+                //         await this.refreshFakeCoins();
+                //     }
+                //     catch(error) {
+                //     }
+                // }
         },
 
-        async Withdraw(e) {
-            e.preventDefault();
-            console.log("Test");
-            var errors = [];
-                try {
-                    this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
-                    this.refreshTrueCoins();
-                }
-                catch(error){
+        // async Withdraw(e) {
+        //     e.preventDefault();
+        //     console.log("Test");
+        //     var errors = [];
+        //         try {
+        //             this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+        //             this.refreshTrueCoins();
+        //         }
+        //         catch(error){
 
-                }
-        },
+        //         }
+        // },
 
-        ChangeWallet(wallet){
-            this.wallet = wallet;
-            this.refreshFakeCoins();
-            this.errors = 0;           
-        },
     }
 }
 </script>
@@ -221,7 +203,7 @@ $br: 4px;
   font-family: 'Titillium Web', sans-serif;
 }
 
-.wallet a {
+.wallet .mytitle {
   text-decoration:none;
   color:$main;
   transition:.5s ease;
