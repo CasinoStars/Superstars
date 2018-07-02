@@ -51,8 +51,10 @@ export default {
 
 .container {
   position: relative;
-  width: 0%;
-  display: -webkit-inline-block;
+  text-align: center;
+  /* display: -webkit-inline-block; */
+width: 20%;
+height: 0;
 }
 
 .ich {
@@ -60,17 +62,17 @@ export default {
 }
 
 .logo1 {
-    width: 170px;
-    height: 180px;
-
+    width: 150px;
+    height: 160px;
 }
   
   .colonne {
-        display: -webkit-inline-box;
+        display: inline-flex;
+        text-align: center;
   }
 
   .secondtext {
-    font-size: 20px;
+font-size: 20px;
   font-family: 'Courier New', sans-serif;
   font-variant: small-caps;
   color: black;
