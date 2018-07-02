@@ -48,11 +48,8 @@
                     <button type="submit" class="button button-block">Créditer</button>
 
                 </form>
-
-
-        </div><!-- tab-content -->
-        </div> <!-- /form -->
-        <div id="snackbar">Vous venez d'ajouter {{item.fakeCoins}} All`in Coins à votre portefeuille </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -102,9 +99,7 @@ export default {
 
         async onSubmit(e) {
             e.preventDefault();
-                var x = document.getElementById("snackbar");
-                x.className = "show";
-                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
+
                 var errors = [];
                 if(this.fakeCoins.balance >= 1000000)
                     errors.push("Le crédit est bloquer lorsque votre solde atteind 1,000,000 de bits");           
@@ -149,7 +144,6 @@ export default {
 <style lang="scss">
 // @import "compass/css3";
 
-
 $body-bg: #c1bdba;
 $form-bg: #13232f;
 $white: #ffffff;
@@ -165,51 +159,6 @@ $thin: 300;
 $normal: 400;
 $bold: 600;
 $br: 4px;
-
-// *, *:before, *:after {
-//   box-sizing: border-box;
-// }
-#snackbar {
-    visibility: hidden;
-    min-width: 250px;
-    margin-left: -11%;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 2px;
-    padding: 16px;
-    position: fixed;
-    z-index: 1;
-    left: 50%;
-    bottom: 30px;
-    font-size: 17px;
-}
-
-#snackbar.show {
-    visibility: visible;
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
-    animation: fadein 0.5s, fadeout 0.5s 3s;
-}
-
-@-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
-}
-
-@keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-}
 
 .wallet html {
 	overflow-y: scroll; 
@@ -229,7 +178,7 @@ $br: 4px;
   }
 }
 
-.form {
+.wallet .form {
   background:rgba($form-bg,.9);
   padding: 40px;
   max-width:600px;
@@ -238,7 +187,7 @@ $br: 4px;
   box-shadow:0 4px 10px 4px rgba($form-bg,.3);
 }
 
-.tab-group {
+.wallet .tab-group {
   list-style:none;
   padding:0;
   margin:0 0 40px 0;

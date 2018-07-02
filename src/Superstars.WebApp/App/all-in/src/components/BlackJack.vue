@@ -2,67 +2,6 @@
 <div>
 
 
-<!-- <div v-if="hasplitplayer">
-<div v-for="(i, index) of playersecondcards" :key="index" class="playercards">
-      <img v-if="i == '2p'" src="../img/2p.png">
-      <img v-if="i == '3p'" src="../img/3p.png">
-      <img v-if="i == '4p'" src="../img/4p.png">
-      <img v-if="i == '5p'" src="../img/5p.png">      
-      <img v-if="i == '6p'" src="../img/6p.png">
-      <img v-if="i == '7p'" src="../img/7p.png">      
-      <img v-if="i == '8p'" src="../img/8p.png">
-      <img v-if="i == '9p'" src="../img/9p.png">      
-      <img v-if="i == '10p'" src="../img/10p.png">
-      <img v-if="i == '11p'" src="../img/11p.png">      
-      <img v-if="i == '12p'" src="../img/12p.png">
-      <img v-if="i == '13p'" src="../img/13p.png">
-      <img v-if="i == '14p'" src="../img/1p.png">
-
-      <img v-if="i == '2h'" src="../img/2h.png">
-      <img v-if="i == '3h'" src="../img/3h.png">
-      <img v-if="i == '4h'" src="../img/4h.png">
-      <img v-if="i == '5h'" src="../img/5h.png">      
-      <img v-if="i == '6h'" src="../img/6h.png">
-      <img v-if="i == '7h'" src="../img/7h.png">      
-      <img v-if="i == '8h'" src="../img/8h.png">
-      <img v-if="i == '9h'" src="../img/9h.png">      
-      <img v-if="i == '10h'" src="../img/10h.png">
-      <img v-if="i == '11h'" src="../img/11h.png">      
-      <img v-if="i == '12h'" src="../img/12h.png">
-      <img v-if="i == '13h'" src="../img/13h.png">
-      <img v-if="i == '14h'" src="../img/1h.png">
-
-      <img v-if="i == '2t'" src="../img/2t.png">
-      <img v-if="i == '3t'" src="../img/3t.png">
-      <img v-if="i == '4t'" src="../img/4t.png">
-      <img v-if="i == '5t'" src="../img/5t.png">      
-      <img v-if="i == '6t'" src="../img/6t.png">
-      <img v-if="i == '7t'" src="../img/7t.png">      
-      <img v-if="i == '8t'" src="../img/8t.png">
-      <img v-if="i == '9t'" src="../img/9t.png">      
-      <img v-if="i == '10t'" src="../img/10t.png">
-      <img v-if="i == '11t'" src="../img/11t.png">      
-      <img v-if="i == '12t'" src="../img/12t.png">
-      <img v-if="i == '13t'" src="../img/13t.png">
-      <img v-if="i == '14t'" src="../img/1t.png">
-
-      <img v-if="i == '2c'" src="../img/2c.png">
-      <img v-if="i == '3c'" src="../img/3c.png">
-      <img v-if="i == '4c'" src="../img/4c.png">
-      <img v-if="i == '5c'" src="../img/5c.png">      
-      <img v-if="i == '6c'" src="../img/6c.png">
-      <img v-if="i == '7c'" src="../img/7c.png">      
-      <img v-if="i == '8c'" src="../img/8c.png">
-      <img v-if="i == '9c'" src="../img/9c.png">      
-      <img v-if="i == '10c'" src="../img/10c.png">
-      <img v-if="i == '11c'" src="../img/11c.png">      
-      <img v-if="i == '12c'" src="../img/12c.png">
-      <img v-if="i == '13c'" src="../img/13c.png">
-      <img v-if="i == '14c'" src="../img/1c.png">
-    </div>
-</div> -->
-
-
 <center>
     <a class="txt"> Cartes du Dealer </a>
     <br>
@@ -130,20 +69,19 @@
 
 
 
-<div class="row">
+<div id="tocenter">
 
-<!-- <div id="infos" class="col-md-6"> -->
-<!-- </div> -->
-<div id="infos" class="col-md-6">
+
+<div id="infos">
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
     <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
-    <a v-if="!iaturn" class="txt"> C'est à votre tour de jouer </a> <br>
+    <a v-if="!iaturn && !gameend" class="txt"> C'est à votre tour de jouer </a> <br>
     <a v-if="iaturn && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
     <a v-if="gameend" class="txt"> {{winnerlooser}} </a> <br>
 </div>
 
-<div id="wait" class="col-md-6">
-<div  class="lds-css ng-scope">
+<div id="wait" >
+<div v-if="!gameend && dealerplaying" class="lds-css ng-scope">
   <div style="width:100%;height:100%" class="lds-eclipse">
     <div>
       </div>
@@ -151,9 +89,10 @@
       </div>
 </div>
 
-<div id="deck1" class="col-md-6">
+<div id="deck1">
     <img src="../img/back.png" id="deck"/>
 </div>
+
 </div>
 
 
@@ -286,22 +225,12 @@ export default {
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
     await this.refreshCards();
     await this.refreshHandValue();
-    //this.CanPlayerSplit();
-
     this.CheckWinner();
   },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
-    sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-        break;
-        }
-      }
-    },
 
     async hit(e) {
         // if(this.playingsecondhand == false) {
@@ -361,12 +290,12 @@ export default {
 
     async StandandFinish() {
         await this.executeAsyncRequest(() => BlackJackApiService.StandPlayer());
+        this.CheckWinner();
     },
 
     async playdealer(e) {
         e.preventDefault();
         this.dealerplaying = true;
-        this.sleep(3000);
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
@@ -488,34 +417,34 @@ export default {
   font-size: 24px;
 }
 
- #deck {
-     height: 215px;
-     width: 135px;
-     margin-left: 20%;
- }
-
-.row {
- align-content: center;
-}
-
-#deck1 {
-margin-right: 80%;
-   
-}
-
-#wait {
-    /* align-content: center; */
+#tocenter {
+    display: -webkit-inline-box;
 }
 
 #infos {
-    /* margin-top: 100px; */
+margin-top: 3%;
+padding-left: 1%;
 }
+
+ #deck {
+height: 215px;
+width: 135px;
+ }
+
+
+#deck1 {
+    margin-left: 850px;
+}
+
+#wait {
+    margin-left: 370px;
+}
+
  .playercards > img {
      height: 205px;
      width: 125px;
  }
  
-
  .playercards {
 	display: inline-block;
 	position: relative;

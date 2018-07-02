@@ -1,23 +1,22 @@
 <template>
   <div id="home">
     <div class="games">
+
       <div class="yams">
         <router-link v-on:click.native="PlayYams('Yams')" to="">
           <img src="../img/LOGO1.png" alt="yams" id="imgyams">
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" id="textyams">
       </div>
-
+      
       <div class="blackjack">
       <router-link v-on:click.native="PlayBlackJack('BlackJack')" to="">
         <img src="../img/LOGO3.png" alt="blackjack" id="imgblackjack">
       </router-link>
       <img src="../img/LOGO4.png" alt="textbj" id="textbj">
-      </div>
-
-      <img src="../img/LOGO1.png" alt="poker" id="imgpoker">           
-
+      </div>      
     </div>
+
   </div>
 </template>
 
@@ -67,15 +66,18 @@ export default {
 
 <style>
 
-  .games {
-  margin: 290px;
-  margin-left: 400px;
-  display: -webkit-inline-box;
+
+
+.games {
+  margin: 250px;
+  margin-left: 650px;
+  display: inline-flex;
+  display: center;
 }
 
 .textgames {
   margin-top: 190px;
-  margin-left: 55px;
+  margin-left: 45px;
 }
 
 #textyams {
@@ -88,8 +90,8 @@ export default {
 
 #imgyams {
   transition: transform .4s;
-  height: 180px;
-  width: 215px;
+  height: 220px;
+  width: 255px;
 }
 
 #imgyams:hover{
@@ -100,20 +102,11 @@ export default {
 visibility: visible;
 }
 
-#imgpoker {
-  transition: transform .4s;   
-  height: 180px;
-  width: 215px;
-}
-
-#imgpoker:hover {
-    transform: scale(1.4); 
-}
 
 #imgblackjack {
   transition: transform .4s;   
-  height: 180px;
-  width: 215px;
+  height: 220px;
+  width: 255px;
 }
 
 #imgblackjack:hover {
