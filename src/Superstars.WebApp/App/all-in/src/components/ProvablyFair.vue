@@ -68,9 +68,7 @@ export default {
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
-        async CreateSeeds(){
-            await this.executeAsyncRequest(() => ProvablyFairApiService.CreateSeeds())
-        },
+
 
         async GetSeeds(){
             this.seeds = await this.executeAsyncRequest(() => ProvablyFairApiService.GetSeeds());

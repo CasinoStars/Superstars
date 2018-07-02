@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace Superstars.YamsFair
 {
-    class HashManager
+    public class HashManager
     {
 
 

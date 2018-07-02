@@ -71,6 +71,20 @@ namespace Superstars.DAL
             }
         }
 
+        public int GetDicesFromHash(int userId)
+        {
+            ProvablyFairData seeds = GetSeeds(userId).Result;
+            SeedManager seedManager = new SeedManager(seeds.UncryptedServerSeed, seeds.UncryptedPreviousServerSeed, seeds.ClientSeed, seeds.CryptedServerSeed, seeds.PreviousClientSeed, seeds.PreviousCryptedServerSeed);
+            int dice = HashManager.GetDiceFromHash(seeds.UncryptedServerSeed, seeds.ClientSeed, seeds.Nonce);
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Nonce", seeds.Nonce+=1);
+                con.ExecuteAsync("sp.sProvablyFairUpdate", p, commandType: CommandType.StoredProcedure);
+            }
+            return dice;
+        }
+
 
     }
 }

@@ -10,10 +10,10 @@ namespace Superstars.WebApp.Services
     {
         readonly ProvablyFairGateway _provablyFairGateway;
 
-        public ProvablyFairService(ProvablyFairGateway provablyFairGateway, PasswordHasher passwordHasher)
-        {
-            _provablyFairGateway = provablyFairGateway;
-        }
+        //public ProvablyFairService(ProvablyFairGateway provablyFairGateway, PasswordHasher passwordHasher)
+        //{
+        //    _provablyFairGateway = provablyFairGateway;
+        //}
 
 
         public async Task<ProvablyFairData> FindSeeds(int userId)
@@ -24,6 +24,12 @@ namespace Superstars.WebApp.Services
                 return provablyFair;
             }
             return null;
+        }
+
+        public async Task<int> GetDice(int userId)
+        {
+             int dice =  _provablyFairGateway.GetDicesFromHash(userId);
+            return dice;
         }
     }
 }
