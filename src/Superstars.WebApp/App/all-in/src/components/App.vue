@@ -35,7 +35,7 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 133, 230); letter-spacing: 2px; font-size: 12px;">
-                BANKROLL: {{BTC}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeCoins}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
+                BANKROLL: {{BTCBankCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeBankCoins}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
@@ -82,8 +82,8 @@ import Vue from 'vue';
 export default{
   data(){
     return {
-      BTC: 0,
-      fakeCoins: 0,
+      BTCBankCoins: 0,
+      fakeBankCoins: 0,
     }
   },
 
@@ -106,11 +106,11 @@ export default{
     ...mapActions(['executeAsyncRequest']),
 
     async BTCBank() {
-      this.BTC = await this.executeAsyncRequest(() => WalletApiService.GetBTCBankRoll());
+      this.BTCBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetBTCBankRoll());
     },
 
     async fakeBank() {
-      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
+      this.fakeBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
     },
 
     log(selectedBase) {
