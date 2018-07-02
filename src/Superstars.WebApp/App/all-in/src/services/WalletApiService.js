@@ -6,7 +6,7 @@ class WalletApiService {
     }
 
     async AddCoins(model) {
-        return await postAsync(endpoint, model);
+        return await postAsync(`${endpoint}/AddCoins`, model);
     }
 
     async CreditPlayer(pot) {
