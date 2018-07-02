@@ -21,6 +21,7 @@ async function toString(resp) {
      return await resp.text();
 }
 
+
 export async function postAsync(url, data) {
     return await fetch(url, {
         method: 'POST',
@@ -56,6 +57,17 @@ export async function getAsync(url) {
     .then(checkErrors)
     .then(toJSON);
 }
+
+export async function getboolasync(url) {
+    return await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${AuthService.accessToken}`
+        }
+    })
+    .then(checkErrors);
+}
+
 
 export async function getAsyncNoJSON(url) {
     return await fetch(url, {
