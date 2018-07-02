@@ -64,7 +64,7 @@ namespace Superstars.WebApp.Services
             return value;
         }
 
-        private int[] DicesValue(int[] hand) // hand[ 1,2,1,1,6 ]
+        private int[] DicesValue(int[] hand)
         {
             int[] count = new int[6] { 0, 0, 0, 0, 0, 0 };
             for (int i = 0; i < 5; i++)
@@ -85,7 +85,7 @@ namespace Superstars.WebApp.Services
 				//yams
 				if (handcount[i] == 5)
 				{
-					points = points + 50 + (5 * (i + 1));
+					points = points + 100000000*(i + 1);
 					return points;
 				}
 
@@ -96,7 +96,7 @@ namespace Superstars.WebApp.Services
 					{
 						if (handcount[l] == 1)
 						{
-							points = points + 40 + (4 * (i + 1)) + (l + 1);
+							points = points +(1000 * (i + 1)) + (l + 1);
 							return points;
 						}
 					}
@@ -108,7 +108,7 @@ namespace Superstars.WebApp.Services
 					{
 						if (handcount[l] == 2) // full
 						{
-							points = points + 30 + (3 * (i + 1)) + (2 * (l + 1));
+							points = points + 100000*(i + 1) + (10000 * (l + 1));
 							return points;
 						}
 						else if (handcount[l] == 1) // brelan 
@@ -117,7 +117,7 @@ namespace Superstars.WebApp.Services
 							{
 								if (handcount[k] == 1 && k != l)
 								{
-									points = points + 20 + 3 * (i + 1) + (k + 1) + (l + 1);
+									points = points + 100 * (i + 1) + (k + 1) + (l + 1);
 									return points;
 								}
 							}
@@ -131,14 +131,14 @@ namespace Superstars.WebApp.Services
 			{
 				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
 				{
-					points = points + 45;
+					points = points + 1000000;
 				}
 			}//grade suite
 			else if (handcount[1] == 1)
 			{
 				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
 				{
-					points = points + 50;
+					points = points + 10000000;
 				}
 			}
 

@@ -58,6 +58,24 @@ namespace Superstars.DAL
         //    }
         //}
 
+        public async Task<Result<int>> GetBTCBankRoll()
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int bankRoll = await con.QueryFirstOrDefaultAsync<int>("select RealCoins from sp.tBankRoll");
+                return Result.Success(bankRoll);
+            }
+        }
+
+        public async Task<Result<int>> GetFakeBankRoll()
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int bankRoll = await con.QueryFirstOrDefaultAsync<int>("select FakeCoins from sp.tBankRoll");
+                return Result.Success(bankRoll);
+            }
+        }
+
 
         public async Task<Result<WalletData>> GetFakeBalance(int moneyId)
         {
