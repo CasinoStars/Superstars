@@ -7,13 +7,21 @@
     <div class="modal-content">
 
       <div class="modal-header">
+        <h2 v-if="this.realOrFake == 'real'" style="margin-left: 32%; font-family: 'Courier New', sans-serif;">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+        <h2 v-else style="margin-left: 32%; font-family: 'Courier New', sans-serif;">SOLDE DE VOTRE COMPTE ALL'IN: {{fakeCoins.balance}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         <router-link class="close" to="/play">&times;</router-link>
       </div>
-
+      <ul class="tab-group">
+                <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
+                <li class="tab" v-else><a v-on:click="changeBet('real')">Réel</a></li>
+                <li class="tab active" v-if="this.realOrFake == 'fake'"><a v-on:click="changeBet('real')">Virtuel</a></li>
+                <li class="tab" v-else><a v-on:click="changeBet('fake')">Virtuel</a></li>
+      </ul>
       <form @submit="bet($event)">
         <div class="modal-body">
-          <p>Choisissez le montant à parier:</p>
-          <input type="number" v-model="betFake" required/>
+          <h4>Choisissez le montant à parier:</h4>
+          <input v-if="realOrFake == 'real'" type="decimal" v-model="trueBet" required/>
+          <input v-else type="number" v-model="fakeBet" required/>
         </div>
 
         <div class="alert alert-danger" style="text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
@@ -123,7 +131,11 @@ export default {
       IaFigure: '',
       wait: '',
       playerwin: false,
-      betFake: 0,
+      realOrFake: 'real',
+      fakeBet: 0,
+      trueBet: 0,
+      fakeCoins: 0,
+      trueCoins: 0,
       errors: [],
     }
   },
@@ -131,12 +143,26 @@ export default {
   async mounted() {
     await this.refreshDices();
     await this.refreshIaDices();
-    var data = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+    await this.getFakeCoins();
+    await this.getTrueCoins();
     this.showModal();
   },
   
   methods: {
     ...mapActions(['executeAsyncRequest']),
+
+    async getFakeCoins() {
+      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+    },
+
+    async getTrueCoins() {
+      this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
+    },
+
+    changeBet(choice){
+      this.realOrFake = choice;
+      this.errors = 0;
+    },
 
     showModal() {
       var modal = document.getElementById('myModal');
@@ -146,15 +172,31 @@ export default {
     async bet(e) {
       e.preventDefault();
       var errors = [];
-      if(this.betFake > 1000000)
-        errors.push("La mise maximum est de 1,000,000");
-      if(this.betFake <= 0)  
-        errors.push("La mise doit être supérieur à 0");
+      this.errors = 0;
+      if(this.realOrFake === 'fake') {
+        if(this.fakeBet > 1000000)
+          console.log(this.fakeCoins.balance);
+          errors.push("La mise maximum est de 1,000,000");
+        if(this.fakeBet <= 0)  
+          errors.push("La mise doit être supérieur à 0");
+        if(this.fakeBet > this.fakeCoins.balance)
+          errors.push("Vous n'avez pas cette somme sur votre compte");
+      }
+      else {
+        if(this.trueBet > 10)
+          errors.push("La mise maximum est de 10 BTC");
+        if(this.trueBet <= 0)  
+          errors.push("La mise doit être supérieur à 0 BTC");
+        if(this.trueBet > this.trueCoins)
+          errors.push("Vous n'avez pas cette sommes sur votre compte");
+      }
       this.errors = errors;
-
       if(errors.length == 0) {
         try {
-          await this.executeAsyncRequest(() => GameApiService.Bet(this.betFake));
+          if(this.realOrFake === 'fake')
+            await this.executeAsyncRequest(() => GameApiService.Bet(this.fakeBet));
+          else
+            await this.executeAsyncRequest(() => GameApiService.Bet(this.trueBet));
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
         }
@@ -253,6 +295,40 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.tab-group {
+  list-style:none;
+  padding:0;
+  margin:0 0 40px 0;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  li a {
+    display:block;
+    text-decoration:none;
+    padding:15px;
+    background:rgba($gray-light,.25);
+    color:$gray-light;
+    font-size:20px;
+    float:left;
+    width:50%;
+    text-align:center;
+    cursor:pointer;
+    transition:.5s ease;
+    &:hover {
+      background:$main-dark;
+      color:$white;
+    }
+  }
+  .active a {
+    background:$main;
+    color:$white;
+  }
+}
+</style>
+
 <style>
 
 /* The Modal (background) */
@@ -260,7 +336,7 @@ export default {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 19%; /* Location of the box */
+    padding-top: 18%; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -327,8 +403,6 @@ export default {
   background-color:  #222222a8;;
   color: white;
 }
-
-
 
 /* ECLIPSE LOADER */
 

@@ -27,7 +27,7 @@ namespace Superstars.WebApp.Controllers
         /// Add Real or Fake Coins for player
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("AddCoins")]
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);           
@@ -112,7 +112,6 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("getCredit")]
-
         public async Task<IActionResult> GetCredit()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -121,7 +120,6 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("updateCredit")]
-
         public async Task<IActionResult> updateCredit(int credit)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
