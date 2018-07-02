@@ -11,12 +11,16 @@
     <th>Nombre de parties</th>
   </tr>
   <tr>
+    <th>
     <div v-for="(e,index) of pseudos" :key='index'>
        <td>{{e}}</td>
     </div>
+    </th>
+    <th>
     <div v-for="(e,index) of profits" :key='index'>
        <td>{{e}}</td>
     </div>
+    </th>
     <td>{{playertrueprofit}}</td>
     <td>{{playernbgames}}</td>
   </tr>

@@ -22,7 +22,7 @@ namespace Superstars.WebApp.Services
 			while (!tableenordre)
 			{
 				tableenordre = true;
-				for (int i = 0; i < taille; i++)
+				for (int i = 0; i < taille-1; i++)
 				{
 					if (profit[i] > profit[i + 1])
 					{
