@@ -21,8 +21,11 @@
        <td>{{e}}</td>
     </div>
     </th>
-    <td>{{playertrueprofit}}</td>
-    <td>{{playernbgames}}</td>
+    <th>
+      <div v-for="(e,index) of playernbgames" :key='index'>
+        <td>{{e}}</td>
+      </div>
+    </th>
   </tr>
 </table>
  <br>
@@ -49,9 +52,7 @@ export default {
         return {
             pseudos: {},
             profits: {},
-            playertrueprofit: 0,
-            playerfakeprofit: 0,
-            playernbgames: 0
+            playernbgames: {},
         }
     },    
 
@@ -59,6 +60,10 @@ export default {
       // this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
       this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
       this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
+      for (var i = 0; i < console.log(clothing.length); i++) 
+      {
+         playernbgames[i] = await this.executeAsyncRequest(()=> RankApiService.GetPlayerNumberParts());
+      }
     },
 
      methods: {

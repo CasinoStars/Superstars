@@ -45,5 +45,16 @@ namespace Superstars.WebApp.Controllers
 			return namesList;
 		}
 
+		[HttpGet("PlayerNumberParts")]
+		public async Task<int> GetPlayerNumberParts()
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			int winsBlackJack = await _rankGateway.GetPlayerBlackJackWins(userId);
+			int lossesBlackJack = await _rankGateway.GetPlayerBlackJackLosses(userId);
+			int winsYams = await _rankGateway.GetPlayerYamsWins(userId);
+			int lossesYams = await _rankGateway.GetPlayerYamsLosses(userId);
+			int numberParts = lossesBlackJack + winsBlackJack + winsYams + lossesBlackJack;
+			return numberParts;
+		}
 	}
 }

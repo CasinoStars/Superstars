@@ -36,5 +36,49 @@ namespace Superstars.DAL
 					);
 			}
 		}
+
+		public async Task<int> GetPlayerBlackJackWins(int userId)
+		{
+			using (SqlConnection con  = new SqlConnection(_connectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>(
+					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'BlackJack' and u.UserId = @userName",
+					new { userName = userId }
+					);
+			}
+		}
+
+		public async Task<int> GetPlayerBlackJackLosses(int userId)
+		{
+			using (SqlConnection con = new SqlConnection(_connectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>(
+					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'BlackJack' and u.UserId = @userName",
+					new { userName = userId }
+					);
+			}
+		}
+
+		public async Task<int> GetPlayerYamsWins(int userId)
+		{
+			using (SqlConnection con = new SqlConnection(_connectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>(
+					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserName = @userName",
+					new { userName = userId}
+					);
+			}
+		}
+
+		public async Task<int> GetPlayerYamsLosses(int userId)
+		{
+			using (SqlConnection con = new SqlConnection(_connectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>(
+					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserName = @userName",
+					new { userName = userId}
+					);
+			}
+		}
 	}
 }
