@@ -7,8 +7,8 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <div style="margin-left: 20%; font-family: 'Courier New', sans-serif;">
-          <h2 v-if="this.realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+        <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
+          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
           <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeCoins.balance}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
         <router-link class="close" to="/play">&times;</router-link>
@@ -20,18 +20,19 @@
                 <li class="tab" v-else><a v-on:click="changeBet('fake')">Virtuel</a></li>
       </ul>
       <form @submit="bet($event)">
-        <div class="modal-body">
-          <h4>Choisissez le montant à parier:</h4>
-          <input v-if="realOrFake == 'real'" type="decimal" v-model="trueBet" required/>
-          <input v-else type="number" v-model="fakeBet" required/>
-        </div>
-
-        <div class="alert alert-danger" style="text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
-          <div v-for="e of errors" :key="e">{{e}}</div>
+        <div  class="modal-body">
+          <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-if="realOrFake == 'real'">SAISISSEZ VOTRE MISE EN BTC <span class="req">*</span></h4>
+          <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-else>SAISISSEZ VOTRE MISE EN ALL'IN <span class="req">*</span></h4>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-if="realOrFake == 'real'" type="decimal" v-model="trueBet" required/>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-else type="number" v-model="fakeBet" required/>
+        
+          <div class="alert alert-danger" style="opacity: 0.8; font-weight: bold; font-family: 'Courier New', sans-serif; text-transform: uppercase; margin-top: 1%; margin-bottom: 0.5%; text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
+            <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
+          </div>
         </div>
 
         <div class="modal-footer">
-          <div style="margin-right: 43.7%;">
+          <div style="margin-right: 42%;">
             <router-link class="btn btn-secondary" to="/play">Annuler</router-link>
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
@@ -93,7 +94,7 @@
   <div class="cube2"></div>
     </div> -->
 
-    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 ">LANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0" @click="nbTurn = 3">GARDER MES DÉS</button>
     <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
@@ -133,6 +134,7 @@ export default {
       IaFigure: '',
       wait: '',
       playerwin: false,
+      playerBet: false,
       realOrFake: 'real',
       fakeBet: 0,
       trueBet: 0,
@@ -143,11 +145,11 @@ export default {
   },
 
   async mounted() {
-    await this.refreshDices();
-    await this.refreshIaDices();
     await this.getFakeCoins();
     await this.getTrueCoins();
     this.showModal();
+    await this.refreshDices();
+    await this.refreshIaDices();
   },
   
   methods: {
@@ -184,12 +186,12 @@ export default {
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
-        if(this.trueBet > 10)
-          errors.push("La mise maximum est de 10 BTC");
+        if(this.trueBet > 100)
+          errors.push("La mise maximum est de 100 BTC");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 BTC");
         else if(this.trueBet > this.trueCoins)
-          errors.push("Vous n'avez pas cette sommes sur votre compte");
+          errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       this.errors = errors;
       if(errors.length == 0) {
@@ -200,6 +202,7 @@ export default {
             await this.executeAsyncRequest(() => GameApiService.Bet(this.trueBet));
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
+          this.playerBet = true;
         }
         catch(error) {
         }
@@ -300,18 +303,9 @@ export default {
 $body-bg: #c1bdba;
 $form-bg: #13232f;
 $white: #ffffff;
-
 $main: #777c7b;
-$main-light: lighten($main,5%);
 $main-dark: darken($main,5%);
-
 $gray-light: #a0b3b0;
-$gray: #ddd;
-
-$thin: 300;
-$normal: 400;
-$bold: 600;
-$br: 4px;
 
 .yams .tab-group {
   list-style:none;
@@ -344,33 +338,30 @@ $br: 4px;
     color:$white;
   }
 }
-</style>
-
-<style>
 
 /* The Modal (background) */
 .yams .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 18%; /* Location of the box */
+    padding-top: 16%; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba($body-bg,0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .yams .modal-content {
     position: relative;
-    background-color: #fefefe;
+    background: rgba($form-bg,.9);
     margin: auto;
     padding: 0;
     width: 80%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 0 100px 50px rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
@@ -398,14 +389,20 @@ $br: 4px;
 
 .yams .close:hover,
 .yams .close:focus {
-    color: #000;
+    color: white;
     text-decoration: none;
     cursor: pointer;
 }
 
+.req {
+	margin:2px;
+	color:#1ab188;;
+}
+
 .yams .modal-header {
     padding: 10px 16px;
-    background-color: #222222a8;
+    text-align: center;
+    background: #222222a8;
     color: white;
 }
 
@@ -415,11 +412,13 @@ $br: 4px;
 }
 
 .yams .modal-footer {
-  padding: 10px 16px;
-  background-color:  #222222a8;;
+  padding: 15px 16px;
+  background-color:  #222222a8;
   color: white;
 }
+</style>
 
+<style>
 /* ECLIPSE LOADER */
 
 @keyframes lds-eclipse {
@@ -462,7 +461,7 @@ $br: 4px;
   width: 40px;
   height: 40px;
   top: 80px;
-  left: 80px;
+  margin-left: -175%;
   border-radius: 50%;
   box-shadow: 0 2px 0 0 #7f8387;
   -webkit-transform-origin: 20px 21px;
