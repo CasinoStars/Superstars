@@ -53,6 +53,9 @@ p {
    text-align: justify;
    font-weight: bold;
 }
+.bg {
+  /* background-color: aqua; */
+}
 .text {
   text-align: justify;
   font-size: 24px;

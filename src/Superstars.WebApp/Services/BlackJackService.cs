@@ -64,30 +64,35 @@ namespace Superstars.WebApp
             return hand;
         }
 
-        public bool SplitHand()
-        {
-             _hassplit = false;
-            if (CanSplit(_ennemyhand))
-            {
-                List<Card> copylist = new List<Card>();
-                copylist = _ennemyhand;
-                _ennemyhand.Clear();
-                int i = 0;
-                foreach (var item in copylist)
-                {
-                    if (i == 0)
-                    {
-                        _ennemyhand.Add(item);
-                    } else
-                    {
-                        _ennemysecondhand.Add(item);
-                    }
-                    i++;
-                }
-                _hassplit = true;
-            }
-            return _hassplit;
-        }
+        //public bool Hasplayersplit()
+        //{
+        //    return _hassplit;
+        //}
+
+        //public bool SplitHand()
+        //{
+        //     _hassplit = false;
+        //    if (CanSplit(_ennemyhand))
+        //    {
+        //        List<Card> copylist = new List<Card>(_ennemyhand);
+        //        _ennemyhand.Clear();
+        //        int i = 0;
+        //        foreach (var item in copylist)
+        //        {
+        //            if (i == 0)
+        //            {
+        //                _ennemyhand.Add(item);
+        //            } else
+        //            {
+        //                _ennemysecondhand.Add(item);
+        //            }
+        //            i++;
+        //        }
+        //        _hassplit = true;
+        //    }
+        //    return _hassplit;
+        //}
+        
         //public int GetHandValue(List<Card> hand)
         //{
         //    int valeur = 0;
@@ -140,23 +145,27 @@ namespace Superstars.WebApp
             return valeur;
         }
 
-        public bool CanSplit(List<Card> hand)
-        {
-            int [] doubletab = new int[hand.Capacity];
-            int a = 0;
-            foreach (Card carte in hand)
-            {
-                doubletab[a] = carte.Value;
-                a++;
-            }
+        //public bool CanSplit(List<Card> hand)
+        //{
+        //    int [] doubletab = new int[hand.Count];
+        //    int a = 0;
+        //    foreach (Card carte in hand)
+        //    {
+        //        doubletab[a] = carte.Value;
+        //        a++;
+        //    }
 
-            bool ish = doubletab.Distinct().Count() != doubletab.Length;
-            return ish;
-        }
+        //    bool ish = doubletab.Distinct().Count() != doubletab.Length;
+        //    return ish;
+        //}
 
         public bool FinishTurn()
         {
             _dealerTurn = true;
+            if (_hassplit)
+            {
+                _dealerTurn = false;
+            }
             return _dealerTurn;
         }
 
