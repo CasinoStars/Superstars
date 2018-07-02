@@ -16,38 +16,33 @@ namespace Superstars.WebApp.Controllers
 	public class RankController : Controller
 	{
 		RankGateway _rankGateway;
-
-		public RankController(RankGateway rankGateway)
+		RankService _rankService;
+		public RankController(RankGateway rankGateway,RankService rankService)
 		{
 			_rankGateway = rankGateway;
-		}
-
-		[HttpGet("PseudoList")]
-		public async Task<IEnumerable<string>> GetPseudoList()
-		{
-			IEnumerable<string> names = await _rankGateway.PseudoList();
-			return names;
-		}
-
-		[HttpGet("PlayerProfit")]
-		public async Task<IEnumerable<int>> GetPlayerProfitList(string pseudo)
-		{
-			IEnumerable<int> profit = await _rankGateway.GetPlayerProfitList(pseudo);
-			return profit;
+			_rankService = rankService;
 		}
 
 		[HttpGet("PlayersProfitSorted")]
-		public List<int> GetPlayersProfitSorted(RankService rankService)
+		public async Task<IEnumerable<int>> GetPlayersProfitSorted()
 		{
-			List<int> profits = rankService.Profit;
-			return profits;
+			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+			IEnumerable<string> names = await _rankGateway.PseudoList();
+			List<int> profitList = profits.ToList();
+			List<string> namesList = names.ToList(); 
+			_rankService.TriProfitAndRank(profitList,namesList);
+			return profitList;
 		}
 
 		[HttpGet("PlayersUserNameSorted")]
-		public List<string> GetPlayersUserNameSorted(RankService rankService)
+		public async Task<IEnumerable<string>> GetPlayersUserNameSorted()
 		{
-			List<string> userName = rankService.UserName;
-			return userName;
+			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+			IEnumerable<string> names = await _rankGateway.PseudoList();
+			List<int> profitList = profits.ToList();
+			List<string> namesList = names.ToList();
+			_rankService.TriProfitAndRank(profitList, namesList);
+			return namesList;
 		}
 
 	}

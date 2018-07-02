@@ -53,13 +53,8 @@ export default {
 
     async mounted() {
       // this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
-      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPseudoList());
-      for(var i = 0;i<console.log(this.pseudos.length);i++ )
-      {
-        var k = await this.executeAsyncRequest(()=> RankApiService.GetPlayerProfit());
-        this.profits.push(k);
-      } 
-
+      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
+      this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
     },
 
      methods: {

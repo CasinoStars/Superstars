@@ -27,13 +27,13 @@ namespace Superstars.DAL
 			}
 		}
 
-		public async Task<IEnumerable<int>> GetPlayerProfitList(string pseudo)
+		public async Task<IEnumerable<int>> GetPlayerProfitList()
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
 				return await con.QueryAsync<int>(
-					"select m.Profit from sp.tMoney m left outer join sp.tUser u on u.UserId = m.MoneyId where m.MoneyType = 2 and u.UserName = @Pseudo",
-					new { Pseudo = pseudo });
+					"select m.Profit from sp.tMoney m where m.MoneyType = 2 "
+					);
 			}
 		}
 	}

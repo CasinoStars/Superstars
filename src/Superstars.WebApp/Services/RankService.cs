@@ -14,15 +14,11 @@ namespace Superstars.WebApp.Services
 		{
 			_profit = profit;
 			_userName = userName;
-			TriProfitAndRank(_profit, _userName);
 		}
-
-		public List<string> UserName { get { return _userName; } }
-		public List<int> Profit { get { return _profit; } }
 
 		public void TriProfitAndRank(List<int> profit, List<string> names)
 		{
-			int taille = profit.Count - 1;
+			int taille = profit.Count;
 			bool tableenordre = false;
 			while (!tableenordre)
 			{
