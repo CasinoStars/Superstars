@@ -69,13 +69,12 @@
 
 <div id="tocenter">
 
-
 <div id="infos">
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
     <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
     <a v-if="!iaturn && !gameend" class="txt"> C'est à votre tour de jouer </a> <br>
     <a v-if="iaturn && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
-    <a v-if="gameend" class="txt"> {{winnerlooser}} </a> <br>
+    <a v-if="gameend" class="txt"> <strong> {{winnerlooser}} </strong> </a> <br>
 </div>
 
 <div id="wait" >
@@ -92,8 +91,6 @@
 </div>
 
 </div>
-
-
 
     <center>
     <a class="txt"> Votre main </a>
@@ -182,7 +179,7 @@
 <!-- v-on:click="showait()" -->
 
     <router-link to="/play">
-      <br><button class="btn btn-dark" v-if="gameend == true">QUITTER</button>
+      <br><div style="text-align:center;"><button  style="text-align:center;" class="btn btn-dark" v-if="gameend == true">QUITTER</button></div>
     </router-link>
    </div>
 </template>
@@ -308,7 +305,12 @@ export default {
     async playdealer(e) {
         e.preventDefault();
         // this.wait(5000);
+        document.getElementById('wait').style.visibility = "visible";
         this.dealerplaying = true;
+        setTimeout(this.playdealersecond,2000);
+    },
+
+    async playdealersecond() {
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
@@ -402,6 +404,7 @@ export default {
 .lds-eclipse {
   position: relative;
 }
+
 .lds-eclipse div {
   position: absolute;
   -webkit-animation: lds-eclipse 1s linear infinite;
@@ -446,11 +449,11 @@ width: 135px;
 
 
 #deck1 {
-    margin-left: 850px;
+    margin-left: 680px;
 }
 
 #wait {
-    margin-left: 370px;
+    margin-left: 300px;
     visibility: hidden;
 }
 
