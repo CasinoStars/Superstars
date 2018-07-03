@@ -57,12 +57,13 @@ export default {
     },    
 
     async mounted() {
-      // this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
       this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
       this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
-      for (var i = 0; i < console.log(clothing.length); i++) 
+      console.log();
+      for (var i = 0; i < this.pseudos.length; i++) 
       {
-         playernbgames[i] = await this.executeAsyncRequest(()=> RankApiService.GetPlayerNumberParts());
+         this.playernbgames[i] = await this.executeAsyncRequest(()=> RankApiService.GetPlayerNumberParts(this.pseudos[i]));
+         console.log(this.playernbgames[i]);
       }
     },
 

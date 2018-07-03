@@ -64,7 +64,7 @@ namespace Superstars.DAL
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
 				return await con.QueryFirstOrDefaultAsync<int>(
-					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserName = @userName",
+					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserId = @userName",
 					new { userName = userId}
 					);
 			}
@@ -75,7 +75,7 @@ namespace Superstars.DAL
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
 				return await con.QueryFirstOrDefaultAsync<int>(
-					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserName = @userName",
+					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserId = @userName",
 					new { userName = userId}
 					);
 			}

@@ -203,7 +203,7 @@ namespace Superstars.WebApp.Services
 			}
 			for(int i = 0; i<probas.Length;i++)
 			{
-				if(indexBestProba<probas[i])
+				if(probas[indexBestProba]<probas[i])
 				{
 					indexBestProba = i;
 				}
