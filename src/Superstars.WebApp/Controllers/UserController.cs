@@ -82,7 +82,7 @@ namespace Superstars.WebApp.Controllers
                 }
                 UserData user = await _userService.FindUser(model.Pseudo, model.Password);
                 await SignIn(model.Pseudo, user.UserId.ToString());
-                _provablyFairGateway.AddSeeds(user.UserId);
+                await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));
             }
 
