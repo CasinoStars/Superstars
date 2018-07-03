@@ -67,9 +67,14 @@ height: 0;
 }
   
   .colonne {
-        display: inline-flex;
-        text-align: center;
+        display: -webkit-inline-box;
+        
   }
+
+.container > .text {
+ width: 25%;
+ height: 25%;
+}
 
   .secondtext {
 font-size: 20px;

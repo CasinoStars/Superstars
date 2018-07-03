@@ -14,7 +14,7 @@ begin
 	if exists(select * from sp.tUser u where u.UserName = @UserName)
 	begin
 		rollback;
-		return 1;
+		return 1;		
 	end;
 
     insert into sp.tUser(UserName, UserPassword, Email, PrivateKey) values(@UserName, @UserPassword, (case when @Email is null then '' else @Email end),@PrivateKey);

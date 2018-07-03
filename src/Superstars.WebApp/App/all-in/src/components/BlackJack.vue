@@ -290,9 +290,16 @@ export default {
         this.CheckWinner();
     },
 
+sleep(milliseconds) {
+  for (var i = 0; i < milliseconds; i++) {
+      i = i;
+  }
+},
     async playdealer(e) {
         e.preventDefault();
+        document.getElementById('wait').style.visibility = "visible";
         this.dealerplaying = true;
+        //this.sleep(1000000000000000);
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
@@ -435,6 +442,7 @@ width: 135px;
 
 #wait {
     margin-left: 370px;
+    visibility: hidden;
 }
 
  .playercards > img {
