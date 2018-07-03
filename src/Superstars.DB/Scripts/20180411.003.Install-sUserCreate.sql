@@ -4,7 +4,10 @@ create procedure sp.sUserCreate
 	@UserPassword varbinary(128),
 	@Email nvarchar(68),
 	@PrivateKey nvarchar(64), 
-	@UserId int out
+	@UserId int out,
+	@UncryptedPreviousServerSeed nvarchar(128),
+	@UncryptedServerSeed nvarchar(128),
+	@CryptedServerSeed nvarchar(128)
 )
 as 
 begin

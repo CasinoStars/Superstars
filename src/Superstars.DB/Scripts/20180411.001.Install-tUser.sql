@@ -4,7 +4,7 @@ create table sp.tUser
 	UserName nvarchar(64) not null,
 	UserPassword varbinary(128) not null,
 	Email nvarchar(64) not null,
-	PrivateKey varchar(64),
+	PrivateKey varchar(64) not null,
 
 
 	constraint PK_tUser primary key(UserId),

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Superstars.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,13 @@ namespace Superstars.WebApp.Services
 {
     public class YamsService
     {
+        readonly ProvablyFairGateway _provablyFairGateway;
+
+        public YamsService(ProvablyFairGateway provablyFairGateway)
+        {
+            _provablyFairGateway = provablyFairGateway;
+        }
+        
         /*
 		 Points:
 		  yams
@@ -44,23 +52,23 @@ namespace Superstars.WebApp.Services
             return dices;
         }
 
-        public int[] Reroll(int[] dices)
+        public async  Task<int[]> Reroll(int[] dices,int userId)
         {
             for (int i = 0; i < 5; i++)
             {
                 if (dices[i] == 0)
                 {
-                    dices[i] = RollDice();
+                    dices[i] = await RollDice(userId);
                 }
             }
             return dices;
         }
 
-        private int RollDice()
+        private async Task<int> RollDice(int userId)
         {
             Random rdn = new Random();
             int value;
-            value = rdn.Next(1, 7);
+            value = await  _provablyFairGateway.GetDicesFromHash(userId);
             return value;
         }
 

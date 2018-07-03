@@ -57,6 +57,10 @@ namespace Superstars.DAL
                 p.Add("@PrivateKey",privateKey);
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                p.Add("@UncryptedPreviousServerSeed", "");
+                p.Add("@CryptedServerSeed", "");
+                p.Add("@UncryptedServerSeed", "");
+
                 await con.ExecuteAsync("sp.sUserCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");

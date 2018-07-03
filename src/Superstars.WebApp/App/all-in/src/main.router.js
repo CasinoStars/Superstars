@@ -15,6 +15,7 @@ import Wallet from './components/Wallet.vue';
 import Rules from './components/Rules.vue';
 import Stats from './components/MyStats.vue';
 import Rank from './components/Rank.vue';
+import ProvablyFair from './components/ProvablyFair.vue';
 
 const routes = [
     { path: '', component: Home },
@@ -26,6 +27,7 @@ const routes = [
     { path: '/rule', component: Rules},
     { path: '/statistics', component: Stats, beforeEnter: requireAuth},
     { path: '/playersStats', component: Rank, beforeEnter: requireAuth},
+    { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
 ];
 
 export default new VueRouter({

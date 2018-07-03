@@ -25,6 +25,8 @@ async UpdateStats(gametype, win) {
     return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
 }
 
+
+
 async Bet(bet) {
     // var bet = prompt("Montant du pari:", "500");
     // var betNumber = parseInt(bet);
