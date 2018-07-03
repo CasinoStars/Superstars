@@ -11,7 +11,8 @@
             <ul class="tab-group">
                 <li style="color: white" class="tab active" > <h1 style="text-align: center;"> ProvavlyFair</h1> </li>
             </ul>
-      
+            <div style="text-align: center;"><button class="btn btn dark" v-on:click="openjsfiddle()"> Tester le ProvablyFair </button></div>
+            <br>
             <div class="tab-content">
                 <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Client seeds:</span><br>{{seeds.clientSeed}}<br><br></h5>
                 <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
@@ -68,6 +69,9 @@ export default {
         ...mapActions(['executeAsyncRequest']),
 
 
+        openjsfiddle() {
+            window.open('https://jsfiddle.net/so1kv0uj/2/', '_blank');
+        },
 
         async GetSeeds(){
             this.seeds = await this.executeAsyncRequest(() => ProvablyFairApiService.GetSeeds());
