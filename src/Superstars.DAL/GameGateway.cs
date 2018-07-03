@@ -15,10 +15,6 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        //public DateTime GetNowDate()
-        //{
-        //    return DateTime.UtcNow;
-        //}
         public async Task<GameData> FindGameById(int GameID)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))

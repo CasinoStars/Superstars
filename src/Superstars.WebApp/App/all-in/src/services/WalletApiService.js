@@ -9,12 +9,20 @@ class WalletApiService {
         return await postAsync(`${endpoint}/AddCoins`, model);
     }
 
-    async CreditPlayer(pot) {
-        return await postAsync(`${endpoint}/${pot}/creditPlayer`);
+    async CreditPlayerInBTC(pot) {
+        return await postAsync(`${endpoint}/${pot}/creditBTCPlayer`);
     }
 
-    async WithdrawInBankRoll(pot) {
-        return await postAsync(`${endpoint}/${pot}/withdraw`);
+    async CreditPlayerInFake(pot) {
+        return await postAsync(`${endpoint}/${pot}/creditFakePlayer`);
+    }
+
+    async WithdrawFakeBankRoll(pot) {
+        return await postAsync(`${endpoint}/${pot}/withdrawFakeBank`);
+    }
+
+    async WithdrawBTCBankRoll(pot) {
+        return await postAsync(`${endpoint}/${pot}/withdrawBTCBank`);
     }
 
     async GetFakeBalance() {
@@ -23,14 +31,6 @@ class WalletApiService {
 
     async GetTrueBalance() {
         return await getAsync(`${endpoint}/TrueBalance`);
-    }
-
-    async GetCredit() {
-        return await getAsync(`${endpoint}/getCredit`);
-    }
-
-    async UpdateCredit(credit) {
-        return await postAsync(`${endpoint}/${credit}/updateCredit`);
     }
 
     async GetWalletAddress(){

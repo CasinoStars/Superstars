@@ -462,6 +462,7 @@ $gray-light: #a0b3b0;
 
 .yams .lds-eclipse {
   position: relative;
+  margin-right: 15%;
 }
 
 .yams .lds-eclipse div {

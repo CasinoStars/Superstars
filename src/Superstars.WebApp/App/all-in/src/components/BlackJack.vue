@@ -177,9 +177,9 @@
    </form> -->
 
    <form @submit="playdealer($event)">
-   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
+   <div style="text-align:center;"><button  type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
-
+<!-- v-on:click="showait()" -->
 
     <router-link to="/play">
       <br><button class="btn btn-dark" v-if="gameend == true">QUITTER</button>
@@ -290,8 +290,24 @@ export default {
         this.CheckWinner();
     },
 
+//  wait(ms)
+// {
+//     this.showait();
+// var d = new Date();
+// var d2 = null;
+// do { d2 = new Date(); }
+// while(d2-d < ms);
+// },
+
+// showait() {
+//     console.log("BISMILLAH");
+//     console.log( document.getElementById('wait'));
+//     document.getElementById('wait').style.visibility = "visible";
+// },
+
     async playdealer(e) {
         e.preventDefault();
+        // this.wait(5000);
         this.dealerplaying = true;
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
@@ -435,6 +451,7 @@ width: 135px;
 
 #wait {
     margin-left: 370px;
+    visibility: hidden;
 }
 
  .playercards > img {

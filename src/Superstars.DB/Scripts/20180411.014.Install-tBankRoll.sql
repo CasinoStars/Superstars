@@ -1,6 +1,6 @@
 create table sp.tBankRoll
 (
-	RealCoins int,
+	RealCoins decimal(15,8),
 	FakeCoins int
 );
 

@@ -25,6 +25,8 @@ async UpdateStats(gametype, win) {
     return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
 }
 
+
+
 async Bet(bet) {
     return await postAsync(`${endpoint}/${bet}/bet`);
 }

@@ -52,6 +52,13 @@
               </div>
             </li>
           </ul>
+                    <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> ProvablyFair
+              </router-link>
+            </li>
+          </ul>
         </div>
         
         <div class="collapse navbar-collapse" v-else>
