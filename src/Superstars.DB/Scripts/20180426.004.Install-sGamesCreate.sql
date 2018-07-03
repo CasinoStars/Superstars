@@ -8,7 +8,7 @@ as
 begin
        set transaction isolation level serializable;
        begin tran;
-
+	   
        if exists (select * from sp.tGames g where g.StartDate = @StartDate)
        begin 
                rollback;

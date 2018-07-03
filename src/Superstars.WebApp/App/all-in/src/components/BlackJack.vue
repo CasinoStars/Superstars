@@ -4,9 +4,7 @@
 
 <center>
     <a class="txt"> Cartes du Dealer </a>
-    <br>
-    <br>
-
+<div id="leespace3"></div>
     <div v-for="(i, index) of dealercards" :key="index" class="dealercards">
       <img v-if="i == '2p'" src="../img/2p.png">
       <img v-if="i == '3p'" src="../img/3p.png">
@@ -98,9 +96,8 @@
 
 
     <center>
-    <a class="txt"> Vos cartes </a>
-    <br>
-    <br>
+    <a class="txt"> Votre main </a>
+<div id="leespace3"></div>
 
     <div v-for="(i, index) of playercards" :key="index" class="playercards">
       <img v-if="i == '2p'" src="../img/2p.png">
@@ -161,11 +158,11 @@
 
     </div>
     </center>
-
+<div id="leespace2"></div>
    <form @submit="hit($event)">
    <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false ">HIT</button></div>
    </form>
-
+<div id="leespace"></div>
    <form @submit="stand($event)">
    <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">STAND</button></div>
    </form>
@@ -180,9 +177,9 @@
    </form> -->
 
    <form @submit="playdealer($event)">
-   <div style="text-align:center;"><button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
+   <div style="text-align:center;"><button  type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY AI</button></div>
    </form>
-
+<!-- v-on:click="showait()" -->
 
     <router-link to="/play">
       <br><button class="btn btn-dark" v-if="gameend == true">QUITTER</button>
@@ -293,8 +290,24 @@ export default {
         this.CheckWinner();
     },
 
+//  wait(ms)
+// {
+//     this.showait();
+// var d = new Date();
+// var d2 = null;
+// do { d2 = new Date(); }
+// while(d2-d < ms);
+// },
+
+// showait() {
+//     console.log("BISMILLAH");
+//     console.log( document.getElementById('wait'));
+//     document.getElementById('wait').style.visibility = "visible";
+// },
+
     async playdealer(e) {
         e.preventDefault();
+        // this.wait(5000);
         this.dealerplaying = true;
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
@@ -413,8 +426,8 @@ export default {
 .txt {
   font-family: 'Courier New', sans-serif;
   font-variant: small-caps;
-  color: black;
-  font-size: 24px;
+  color: rgb(0, 0, 0);
+  font-size: 28px;
 }
 
 #tocenter {
@@ -438,6 +451,7 @@ width: 135px;
 
 #wait {
     margin-left: 370px;
+    visibility: hidden;
 }
 
  .playercards > img {
@@ -462,6 +476,20 @@ width: 135px;
 
  }
 
+#leespace {
+    height: 5px;
+    width: 5px;
+}
+
+#leespace2 {
+    height: 20px;
+    width: 20px;
+}
+
+#leespace3 {
+    height: 10px;
+    width: 10px;
+}
 </style>
 
 

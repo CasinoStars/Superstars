@@ -52,23 +52,23 @@ namespace Superstars.WebApp.Services
             return dices;
         }
 
-        public int[] Reroll(int[] dices,int userId)
+        public async  Task<int[]> Reroll(int[] dices,int userId)
         {
             for (int i = 0; i < 5; i++)
             {
                 if (dices[i] == 0)
                 {
-                    dices[i] = RollDice(userId);
+                    dices[i] = await RollDice(userId);
                 }
             }
             return dices;
         }
 
-        private int RollDice(int userId)
+        private async Task<int> RollDice(int userId)
         {
             Random rdn = new Random();
             int value;
-            value =  _provablyFairGateway.GetDicesFromHash(userId);
+            value = await  _provablyFairGateway.GetDicesFromHash(userId);
             return value;
         }
 

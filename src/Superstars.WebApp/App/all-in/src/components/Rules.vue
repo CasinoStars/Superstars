@@ -53,8 +53,8 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 <div class="text">
   <p>
   Le Blackjack est un jeu de cartes très populaire dans les casinos.<br>
-La partie oppose le joueur contre la banque (aussi appelé le dealer). Le dealer distribue deux cartes visibles au joueur mais ne se distribue qu’une seule carte. 
-à chaque tour, le joueur peut choisir de  tirer une carte (où non) pour s’approcher de la valeur 21 en essayant de ne pas la dépasser.<br>
+La partie oppose le joueur contre la banque (aussi appelée le dealer). Le dealer distribue deux cartes visibles au joueur mais ne se distribue qu’une seule carte.<br> 
+à chaque tour, le joueur peut choisir de  tirer une carte (ou non) pour s’approcher de la valeur 21 en essayant de ne pas la dépasser.<br>
  Une fois que vous décidez de ne plus tirer de carte, c'est au tour du dealer !<br>
 Le but du joueur est de battre le dealer en obtenant un total de points supérieur à celui-ci ou en voyant ce dernier dépasser 21. <br>
 Valeur des cartes : <br>

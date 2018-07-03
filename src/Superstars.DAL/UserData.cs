@@ -9,7 +9,5 @@
         public string Email { get; set; }
 
         public byte[] UserPassword { get; set; }
-
-
     }
 }
