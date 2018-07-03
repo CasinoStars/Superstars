@@ -43,18 +43,18 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> GetYamsPot(int gameId)
+        public async Task<Result<string>> GetYamsPot(int gameId)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
+                string pot = await con.QueryFirstOrDefaultAsync<string>(
                     @"select g.Pot from sp.vGameYams g where g.YamsGameId = @YamsGameId",
                     new { YamsGameId = gameId });
-                return Result.Success(data);
+                return Result.Success(pot);
             }
         }
 
-        public async Task<Result<int>> CreateYamsGame(decimal pot)
+        public async Task<Result<int>> CreateYamsGame(string pot)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {

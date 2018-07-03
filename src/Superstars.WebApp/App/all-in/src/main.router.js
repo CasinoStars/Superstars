@@ -27,7 +27,6 @@ const routes = [
     { path: '/rule', component: Rules},
     { path: '/statistics', component: Stats, beforeEnter: requireAuth},
     { path: '/playersStats', component: Rank},
-    { path: '/playersStats', component: Rank, beforeEnter: requireAuth},
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
 ];
 
