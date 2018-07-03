@@ -135,6 +135,7 @@ export default {
       wait: '',
       playerwin: false,
       playerBet: false,
+      BTCGame: false,
       realOrFake: 'real',
       fakeBet: 0,
       trueBet: 0,
@@ -147,7 +148,9 @@ export default {
   async mounted() {
     await this.getFakeCoins();
     await this.getTrueCoins();
+    await this.getCredit();
     this.showModal();
+    console.log(this.credit);
     await this.refreshDices();
     await this.refreshIaDices();
   },
@@ -161,6 +164,10 @@ export default {
 
     async getTrueCoins() {
       this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
+    },
+
+    async getCredit() {
+      this.credit = await this.executeAsyncRequest(() => WalletApiService.GetCredit());
     },
 
     changeBet(choice){
@@ -190,7 +197,7 @@ export default {
           errors.push("La mise maximum est de 100 BTC");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 BTC");
-        else if(this.trueBet > this.trueCoins)
+        else if(this.trueBet > this.trueCoins + this.credit)
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       this.errors = errors;
@@ -198,8 +205,10 @@ export default {
         try {
           if(this.realOrFake === 'fake')
             await this.executeAsyncRequest(() => GameApiService.Bet(this.fakeBet));
-          else
-            await this.executeAsyncRequest(() => GameApiService.Bet(this.trueBet));
+          else {
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet));
+            this.BTCGame = true;
+          }
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
@@ -237,6 +246,7 @@ export default {
       else if(this.winOrLose == "You Win"){
         this.playerwin = true;
         await this.updateStats();
+        //RESTE LA CONDITION DU tHis.BETBTC == true OU PAS
         await this.executeAsyncRequest(() => WalletApiService.WithdrawInBankRoll(pot));
         await this.executeAsyncRequest(() => WalletApiService.CreditPlayer(pot));
       }

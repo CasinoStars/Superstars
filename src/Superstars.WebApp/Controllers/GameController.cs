@@ -44,12 +44,22 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result3);
         }
 
+        [HttpPost("{bet}/betBTC")]
+        public async Task<IActionResult> BetBTC(decimal bet)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _gameGateway.CreateYamsGame(bet * 2);
+            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -(bet));
+            //Result result3 = await _walletGateway.InsertInBankRoll(bet, 0);
+            return this.CreateResult(result2);
+        }
+
         [HttpPost("{bet}/betBlackJack")]
         public async Task<IActionResult> BetBlackJack(int bet)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _gameGateway.CreateBlackJackGame(bet * 2);
-            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
+            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet), 0);
             Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
         }

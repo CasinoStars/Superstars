@@ -58,7 +58,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateYamsGame(int pot)
+        public async Task<Result<int>> CreateYamsGame(decimal pot)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {

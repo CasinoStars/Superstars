@@ -25,7 +25,7 @@ const routes = [
     { path: '/wallet', component: Wallet, beforeEnter: requireAuth },
     { path: '/rule', component: Rules},
     { path: '/statistics', component: Stats, beforeEnter: requireAuth},
-    { path: '/playersStats', component: Rank, beforeEnter: requireAuth},
+    { path: '/playersStats', component: Rank},
 ];
 
 export default new VueRouter({

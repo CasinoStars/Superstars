@@ -13,16 +13,20 @@ class WalletApiService {
         return await postAsync(`${endpoint}/${pot}/creditPlayer`);
     }
 
-    async WithdrawInBankRoll(pot){
+    async WithdrawInBankRoll(pot) {
         return await postAsync(`${endpoint}/${pot}/withdraw`);
     }
 
-    async GetFakeBalance(){
+    async GetFakeBalance() {
         return await getAsync(`${endpoint}/FakeBalance`);
     }
 
-    async GetTrueBalance(){
+    async GetTrueBalance() {
         return await getAsync(`${endpoint}/TrueBalance`);
+    }
+
+    async GetCredit() {
+        return await getAsync(`${endpoint}/getCredit`);
     }
 
     async UpdateCredit(credit) {
