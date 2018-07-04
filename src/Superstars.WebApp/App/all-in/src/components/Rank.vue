@@ -50,26 +50,30 @@ import RankApiService from '../services/RankApiService';
 export default {
     data() {
         return {
-            pseudos: {},
-            profits: {},
-            playernbgames: {},
+            pseudos: [],
+            profits: [],
+            playernbgames: []
         }
     },    
 
     async mounted() {
+
       this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
       this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
-      console.log();
+      console.log(typeof this.pseudos[0]);
       for (var i = 0; i < this.pseudos.length; i++) 
       {
          this.playernbgames[i] = await this.executeAsyncRequest(()=> RankApiService.GetPlayerNumberParts(this.pseudos[i]));
-         console.log(this.playernbgames[i]);
       }
+      console.log(this.playernbgames)
     },
+    
 
      methods: {
     ...mapActions(['executeAsyncRequest']),
-
+    write(){
+      console.log(this.playernbgames[0]);
+    }
 
      }
 }
