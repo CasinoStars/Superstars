@@ -1,6 +1,7 @@
 <template>
 <div>
   <br>
+  <br>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;" class="container">
     <div>
       <h1 style="font-variant: small-caps;"> <strong> Mes statistiques </strong></h1>
