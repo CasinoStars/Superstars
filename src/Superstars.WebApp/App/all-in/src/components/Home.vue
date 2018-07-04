@@ -1,7 +1,7 @@
 <template>
 <div class="home">
     <header style="padding:3%;">
-        <div style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;"> 
+        <div style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
             <h1>Bienvenue sur ALL`IN</h1>
         </div>
     </header>
@@ -13,7 +13,7 @@
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
                 <li data-target="#myCarousel" data-slide-to="2"></li>
-            </ol>   
+            </ol>
             <!-- Wrapper for carousel items -->
             <div class="carousel-inner" style="text-align: center; font-family: 'Courier New', sans-serif;">
                 <div class="carousel-item active">
@@ -30,11 +30,13 @@
                 </div>
             </div>
             <!-- Carousel controls -->
-            <a class="carousel-control left" href="#myCarousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
+            <a class="carousel-control-prev left" href="#myCarousel" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control right" href="#myCarousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
+            <a class="carousel-control-next right" href="#myCarousel" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                <span class="sr-only">Next</span>
             </a>
         </div>
     </div>
@@ -51,7 +53,7 @@ import Vue from 'vue';
 import WalletApiService from '../services/WalletApiService';
 
 export default {
-  
+
   data(){
     return {
       BTCBankCoins: 0,
@@ -74,7 +76,7 @@ export default {
       this.fakeBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
     },
 
-     } 
+     }
 }
 </script>
 
@@ -95,4 +97,3 @@ export default {
 </style>
 
 
-  
