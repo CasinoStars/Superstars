@@ -447,6 +447,7 @@ export default {
         }
          this.gameend = true;
         if(this.playerwin == true) {
+            var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
             if(this.trueBet === 0) {
                 await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
                 await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));

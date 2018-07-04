@@ -84,7 +84,7 @@ namespace Superstars.WebApp.Controllers
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateWay.GetPlayer(userId);
-            Result<string> result = await _gameGateway.GetYamsPot(data.BlackJackGameId);
+            Result<string> result = await _gameGateway.GetBlackJackPot(data.BlackJackGameId);
             return System.Convert.ToDecimal(result.Content);
         }
 
