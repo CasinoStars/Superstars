@@ -36,7 +36,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("{bet}/betBTC")]
+        [HttpPost("{bet}/{gameType}/betBTC")]
         public async Task<IActionResult> BetBTC(decimal bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
             string stringBet = System.Convert.ToString(bet*2);
@@ -52,7 +52,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result2);
         }
 
-        [HttpPost("{bet}/betFake")]
+        [HttpPost("{bet}/{gameType}/betFake")]
         public async Task<IActionResult> FakeBet(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
             string stringBet = System.Convert.ToString(bet * 2);

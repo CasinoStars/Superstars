@@ -29,12 +29,12 @@ async UpdateStats(gametype, win) {
     return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
 }
 
-async BetBTC(bet) {
-    return await postAsync(`${endpoint}/${bet}/betBTC`);
+async BetBTC(bet, gameType) {
+    return await postAsync(`${endpoint}/${bet}/${gameType}/betBTC`);
 }
 
-async BetFake(bet) {
-    return await postAsync(`${endpoint}/${bet}/betFake`);
+async BetFake(bet, gameType) {
+    return await postAsync(`${endpoint}/${bet}/${gameType}/betFake`);
 }
 
 async getWinsBlackJackPlayer() {

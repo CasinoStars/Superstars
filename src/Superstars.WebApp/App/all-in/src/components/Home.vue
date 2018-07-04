@@ -1,6 +1,6 @@
 <template>
 <div class="home">
-    <header style="padding:5% 1px;">
+    <header style="padding:3%;">
         <div style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;"> 
             <h1>Bienvenue sur ALL`IN</h1>
         </div>
@@ -18,15 +18,15 @@
             <div class="carousel-inner" style="text-align: center; font-family: 'Courier New', sans-serif;">
                 <div class="carousel-item active">
                     <img src="../img/../img/provablylogo.png">
-                    <div>Un site provably Fair</div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black">Un site provably Fair</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/fastbetlogo.png">
-                    <div>Des jeux rapides</div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black">Des jeux rapides</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/statslogo.png">
-                    <div>Des statistiques détaillées</div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black">Des statistiques détaillées</h5></div>
                 </div>
             </div>
             <!-- Carousel controls -->
@@ -39,8 +39,8 @@
         </div>
     </div>
 
-    <center>
-        <strong><a style="font-size: 35px;   font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
+    <center style="padding-top: 4%;">
+        <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
     </center>
 </div>
 </template>
@@ -81,8 +81,8 @@ export default {
 <style lang="css">
 .home .carousel{
     background: rgb(235,235,235);
-    margin-top: 0%;
 }
+
 .home .carousel .carousel-item{
     min-height: 350px;/* Prevent carousel from being distorted if for some reason image doesn't load */
 }
