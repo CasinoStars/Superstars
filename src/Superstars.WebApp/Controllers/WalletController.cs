@@ -40,7 +40,7 @@ namespace Superstars.WebApp.Controllers
 		{
 			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			Result result = await _walletGateway.AddCoins(userId, 1, 0, profit);
-			return CreateResult(result);
+			return this.CreateResult(result);
 		}
 
 		[HttpPost("UpdateFakeProfit")]
@@ -48,14 +48,14 @@ namespace Superstars.WebApp.Controllers
 		{
 			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			Result result = await _walletGateway.AddCoins(userId, 2, 0, profit);
-			return CreateResult(result);
+			return this.CreateResult(result);
 		}
 
 		[HttpPost("{pot}/creditFakePlayer")]
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2,0, pot);
+            Result result = await _walletGateway.AddCoins(userId, 2,0,0, pot);
             return this.CreateResult(result);
         }
 
