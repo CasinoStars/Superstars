@@ -2,7 +2,7 @@
     <div id="home">
     <header class="ich" style="padding:128px 16px;">
         <div style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;"> 
-            <h1>WELCOME ON ALL`IN</h1>
+            <h1>Bienvenue sur ALL`IN</h1>
         </div>
     </header>
 
