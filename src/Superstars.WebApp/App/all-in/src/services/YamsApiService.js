@@ -6,6 +6,14 @@ class YamsApiService {
 
     }
 
+    async UpdateRealProfit(profit){
+        return await postAsync(`${endpoint}/UpdateRealProfit`,profit)
+    }
+
+    async UpdateFakeProfit(profit){
+        return await postAsync(`${endpoint}/UpdateFakeProfit`,profit)
+    }
+
     async RollDices(selectedDices) {
         return await postAsync(`${endpoint}/Roll`, selectedDices);
     }

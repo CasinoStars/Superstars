@@ -136,6 +136,7 @@ export default {
       playerwin: false,
       playerBet: false,
       realOrFake: 'real',
+      profit: 0,
       fakeBet: 0,
       trueBet: 0,
       fakeCoins: 0,
@@ -234,6 +235,16 @@ export default {
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
       if(this.winOrLose == "You Lose") {
           await this.updateStats();
+          if(this.realOrFake == 'real')
+          {
+            this.profit = -this.trueBet;
+            await this.executeAsyncRequest(() => WalletApiService.UpdateRealProfit(this.profit));
+          }
+          if(this.realOrFake == 'fake')
+          {
+            this.profit = -this.fakeBet;
+            await this.executeAsyncRequest(() => WalletApiService.UpdateFakeProfit(this.profit));
+          }
       }
       else if(this.winOrLose == "You Win"){
         this.playerwin = true;
@@ -245,6 +256,16 @@ export default {
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
+          }
+          if(this.realOrFake == 'real')
+          {
+            this.profit = this.trueBet;
+            await this.executeAsyncRequest(() => WalletApiService.UpdateRealProfit(this.profit));
+          }
+          if(this.realOrFake == 'fake')
+          {
+            this.profit = this.fakeBet;
+            await this.executeAsyncRequest(() => WalletApiService.UpdateFakeProfit(this.profit));
           }
       }
     },

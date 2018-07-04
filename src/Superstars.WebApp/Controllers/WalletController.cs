@@ -12,34 +12,50 @@ using System.Collections.Generic;
 
 namespace Superstars.WebApp.Controllers
 {
-    [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
-    public class WalletController : Controller
-    {
-        WalletGateway _walletGateway;
+	[Route("api/[controller]")]
+	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+	public class WalletController : Controller
+	{
+		WalletGateway _walletGateway;
 
-        public WalletController(WalletGateway walletGateway)
-        {
-            _walletGateway = walletGateway;
-        }
+		public WalletController(WalletGateway walletGateway)
+		{
+			_walletGateway = walletGateway;
+		}
 
-        /// <summary>
-        /// Add Real or Fake Coins for player
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("AddCoins")]
-        public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
-        {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);           
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins);                      
-            return this.CreateResult(result);
-        }
+		/// <summary>
+		/// Add Real or Fake Coins for player
+		/// </summary>
+		/// <returns></returns>
+		[HttpPost("AddCoins")]
+		public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins,0);
+			return this.CreateResult(result);
+		}
 
-        [HttpPost("{pot}/creditFakePlayer")]
+		[HttpPost("UpdateRealProfit")]
+		public async Task<IActionResult> UpdateRealProfit([FromBody] int profit)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, 1, 0, profit);
+			return CreateResult(result);
+		}
+
+		[HttpPost("UpdateFakeProfit")]
+		public async Task<IActionResult> UpdateFakeProfit([FromBody] int profit)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, 2, 0, profit);
+			return CreateResult(result);
+		}
+
+		[HttpPost("{pot}/creditFakePlayer")]
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot);
+            Result result = await _walletGateway.AddCoins(userId, 2,0, pot);
             return this.CreateResult(result);
         }
 
@@ -47,7 +63,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerBTC(decimal pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0,0, pot);
             return this.CreateResult(result);
         }
 
