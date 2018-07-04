@@ -13,14 +13,16 @@ namespace Superstars.WebApp.Controllers
     {
         readonly GameGateway _gameGateway;
         readonly YamsGateway _yamsGateway;
+        readonly BlackJackGateway _blackJackGateWay;
         readonly UserGateway _userGateway;
         readonly WalletGateway _walletGateway;
         readonly PasswordHasher _passwordHasher;
 
-        public GameController(GameGateway gameGateway, YamsGateway yamsGateway, UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher)
+        public GameController(GameGateway gameGateway, YamsGateway yamsGateway, BlackJackGateway blackJackGateway, UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher)
         {
             _gameGateway = gameGateway;
             _yamsGateway = yamsGateway;
+            _blackJackGateWay = blackJackGateway;
             _userGateway = userGateway;
             _walletGateway = walletGateway;
             _passwordHasher = passwordHasher;
@@ -34,33 +36,56 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("{bet}/bet")]
-        public async Task<IActionResult> BetYams(int bet)
+        [HttpPost("{bet}/{gameType}/betBTC")]
+        public async Task<IActionResult> BetBTC(decimal bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
+            string stringBet = System.Convert.ToString(bet*2);
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.CreateYamsGame(bet * 2);
-            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
-            Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
-            return this.CreateResult(result3);
+            if (gameType == "Yams") {
+                Result result = await _gameGateway.CreateYamsGame(stringBet);
+            }
+            else {
+                Result result = await _gameGateway.CreateBlackJackGame(stringBet);
+            }
+            Result result2 = await _walletGateway.AddCoins(userId, 1, 0,0, -(bet));
+            Result result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
+            return this.CreateResult(result2);
         }
 
-        [HttpPost("{bet}/betBlackJack")]
-        public async Task<IActionResult> BetBlackJack(int bet)
+        [HttpPost("{bet}/{gameType}/betFake")]
+        public async Task<IActionResult> FakeBet(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
+            string stringBet = System.Convert.ToString(bet * 2);
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.CreateBlackJackGame(bet * 2);
-            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
+            if (gameType == "Yams")
+            {
+                Result result = await _gameGateway.CreateYamsGame(stringBet);
+            }
+            else
+            {
+                Result result = await _gameGateway.CreateBlackJackGame(stringBet);
+            }
+            Result result2 = await _walletGateway.AddCoins(userId, 2,0, -(bet));
             Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
         }
 
         [HttpGet("getYamsPot")]
-        public async Task<IActionResult> GetYamsPot()
+        public async Task<decimal> GetYamsPot()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            YamsData yams = await _yamsGateway.GetPlayer(userId);
-            Result<int> result = await _gameGateway.GetYamsPot(yams.YamsGameId);
-            return this.CreateResult(result);
+            YamsData data = await _yamsGateway.GetPlayer(userId);
+            Result<string> result = await _gameGateway.GetYamsPot(data.YamsGameId);
+            return System.Convert.ToDecimal(result.Content);
+        }
+
+        [HttpGet("getBlackJackPot")]
+        public async Task<decimal> GetBlackJackPot()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BlackJackData data = await _blackJackGateWay.GetPlayer(userId);
+            Result<string> result = await _gameGateway.GetBlackJackPot(data.BlackJackGameId);
+            return System.Convert.ToDecimal(result.Content);
         }
 
         [HttpPost("createAiUser")]
@@ -155,7 +180,5 @@ namespace Superstars.WebApp.Controllers
             Result<int> result = await _gameGateway.GetFakeProfit(userId);
             return this.CreateResult(result);
         }
-
-
     }
 }

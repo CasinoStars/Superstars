@@ -46,12 +46,12 @@ namespace Superstars.WebApp.Controllers
             if (data.NbrRevives != 0)
             {
                 int[] IaDicesForReRoll = _yamsIAService.GiveRerollHand(IaHand, playerPts);
-                IaFinalDices = _yamsService.Reroll(IaDicesForReRoll);
+                IaFinalDices = await _yamsService.Reroll(IaDicesForReRoll,userId);
                 data.NbrRevives = data.NbrRevives + 1;
             }
             else
             {
-                IaFinalDices = _yamsService.Reroll(new int[] { 0, 0, 0, 0, 0 });
+                IaFinalDices = await _yamsService.Reroll(new int[] { 0, 0, 0, 0, 0 }, userId);
                 data.NbrRevives = data.NbrRevives + 1;
             }
             string IaStringDices = null;
@@ -85,7 +85,7 @@ namespace Superstars.WebApp.Controllers
 
             int[] newDices = playerDices;
             newDices = _yamsService.IndexChange(newDices, selectedDices);
-            newDices = _yamsService.Reroll(newDices);
+            newDices = await _yamsService.Reroll(newDices, userId);
             int playerPts = _yamsService.PointCount(newDices);
 
             string playerStringDices = null;

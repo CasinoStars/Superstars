@@ -3,21 +3,19 @@
     <div class="games">
       <div class="yams">
         <router-link v-on:click.native="PlayYams('Yams')" to="">
-          <img src="../img/LOGO1.png" alt="yams" id="imgyams">
+          <img src="../img/LOGO1.png" alt="yams" class="imgyams">
         </router-link>
-        <img src="../img/LOGO2.png" alt="textyams" id="textyams">
+        <img src="../img/LOGO2.png" alt="textyams" class="textyams">
       </div>
-
+      
       <div class="blackjack">
       <router-link v-on:click.native="PlayBlackJack('BlackJack')" to="">
-        <img src="../img/LOGO3.png" alt="blackjack" id="imgblackjack">
+        <img src="../img/LOGO3.png" alt="blackjack" class="imgblackjack">
       </router-link>
-      <img src="../img/LOGO4.png" alt="textbj" id="textbj">
+      <img src="../img/LOGO4.png" alt="textbj" class="textbj">
       </div>
-
-      <img src="../img/LOGO1.png" alt="poker" id="imgpoker">           
-
     </div>
+
   </div>
 </template>
 
@@ -67,64 +65,53 @@ export default {
 
 <style>
 
-  .games {
-  margin: 290px;
-  margin-left: 400px;
-  display: -webkit-inline-box;
+
+/* DISPLAY POSITION */
+.games {
+  padding-top: 15%;
+  padding-left: 30%;
+  display: inline-flex;
+  display: center;
 }
 
-.textgames {
-  margin-top: 190px;
-  margin-left: 55px;
+/* YAMS */
+.imgyams {
+  transition: transform .4s;
+  height: 220px;
+  width: 255px;
 }
 
-#textyams {
+.imgyams:hover{
+    transform: scale(1.4);
+}
+
+.yams:hover .textyams {
+visibility: visible;
+}
+
+.textyams {
   height: 35px;
   width: 100px;
   transition: transform .4s;
   visibility: hidden;
 }
 
-
-#imgyams {
-  transition: transform .4s;
-  height: 180px;
-  width: 215px;
-}
-
-#imgyams:hover{
-    transform: scale(1.4);
-}
-
-.yams:hover #textyams {
-visibility: visible;
-}
-
-#imgpoker {
+/* BLACK JACK*/
+.imgblackjack {
   transition: transform .4s;   
-  height: 180px;
-  width: 215px;
+  height: 220px;
+  width: 255px;
 }
 
-#imgpoker:hover {
+.imgblackjack:hover {
     transform: scale(1.4); 
 }
 
-#imgblackjack {
-  transition: transform .4s;   
-  height: 180px;
-  width: 215px;
-}
-
-#imgblackjack:hover {
-    transform: scale(1.4); 
-}
-
-.blackjack:hover #textbj {
+.blackjack:hover .textbj {
 visibility: visible;
 }
 
-#textbj {
+.textbj {
   height: 170px;
   width: 210px;
   transition: transform .4s;

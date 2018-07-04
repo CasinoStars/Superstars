@@ -21,8 +21,10 @@ namespace Superstars.WebApp.Controllers
         readonly TokenService _tokenService;
         readonly UserGateway _userGateway;
         readonly Random _random;
-        public UserController(UserService userService, TokenService tokenService, UserGateway userGateway)
+        readonly ProvablyFairGateway _provablyFairGateway;
+        public UserController(UserService userService, TokenService tokenService, UserGateway userGateway, ProvablyFairGateway provablyFairGateway)
         {
+            _provablyFairGateway = provablyFairGateway;
             _userService = userService;
             _tokenService = tokenService;
             _userGateway = userGateway;
@@ -69,6 +71,7 @@ namespace Superstars.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 BitcoinSecret privateKey = new Key().GetBitcoinSecret(Network.TestNet);
                 string privateKeyString = privateKey.ToString();
                 Result result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email, privateKeyString);
@@ -79,6 +82,7 @@ namespace Superstars.WebApp.Controllers
                 }
                 UserData user = await _userService.FindUser(model.Pseudo, model.Password);
                 await SignIn(model.Pseudo, user.UserId.ToString());
+                await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));
             }
 

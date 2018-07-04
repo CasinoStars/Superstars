@@ -4,7 +4,10 @@ create procedure sp.sUserCreate
 	@UserPassword varbinary(128),
 	@Email nvarchar(68),
 	@PrivateKey nvarchar(64), 
-	@UserId int out
+	@UserId int out,
+	@UncryptedPreviousServerSeed nvarchar(128),
+	@UncryptedServerSeed nvarchar(128),
+	@CryptedServerSeed nvarchar(128)
 )
 as 
 begin
@@ -14,7 +17,7 @@ begin
 	if exists(select * from sp.tUser u where u.UserName = @UserName)
 	begin
 		rollback;
-		return 1;
+		return 1;		
 	end;
 
     insert into sp.tUser(UserName, UserPassword, Email, PrivateKey) values(@UserName, @UserPassword, (case when @Email is null then '' else @Email end),@PrivateKey);

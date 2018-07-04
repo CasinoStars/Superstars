@@ -1,14 +1,17 @@
 create proc sp.sGameYamsCreate
 (
 	@YamsGameId int out,
-	@Pot int
+	@Pot varchar(20)
 )
 as
 begin
 	set transaction isolation level serializable;
 	begin tran;
-
-    insert into sp.tGameYams(Pot) values(@Pot);
+    SET IDENTITY_INSERT sp.tGameYams ON;
+	declare @GameId int;
+   select top 1 @GameId = GameId from sp.tGames order by StartDate desc;
+	set @YamsGameId = @GameId;
+    insert into sp.tGameYams(YamsGameId,Pot) values(@YamsGameId,@Pot);
 	set @YamsGameId = scope_identity();
 	commit;
     return 0;

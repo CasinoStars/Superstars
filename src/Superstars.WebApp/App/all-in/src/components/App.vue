@@ -10,52 +10,65 @@
         
         <ul class="nav navbar-nav">
           <li class="nav-item">
-            <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTICS
+            <router-link class="nav-link" to="/playersStats" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-trophy" style="font-size: 1.4rem;"></i> CLASSEMENT
             </router-link>
           </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/playersStats" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-trophy" style="font-size: 1.4rem;"></i> CLASSEMENT
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/rule" style="letter-spacing: 2px; font-size: 12px;">
+          <li class="nav-item">
+            <router-link class="nav-link" to="/rule" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-info-circle" style="font-size: 1.4rem;"></i> RÈGLES
-              </router-link>
-            </li>
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
+            <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTIQUES
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
+            <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
+            </router-link>
+          </li>
         </ul>
 
-        <div class="collapse navbar-collapse" id="navbarText" v-if="auth.isConnected">
-          <ul class="nav navbar-nav">
+        <div class="collapse navbar-collapse" v-if="auth.isConnected">
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
+              <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 133, 230); letter-spacing: 2px; font-size: 12px;">
+                SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins.balance}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
               <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ auth.pseudo }}
+                <i class="fa fa-user" style="font-size: 1.4rem;"></i> {{ auth.pseudo }}
               </a>
-              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:130%; right:-35%">
-                <router-link class="dropdown-item" to="/wallet"><i class="fa fa-diamond"></i>     Porte-feuille</router-link>
-                <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"></i>     Régagles</router-link>
+              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:120%; right: -8%;">
+                <router-link style="margin-left: -2px;" class="dropdown-item" to="/wallet"><i class="fa fa-diamond"> Porte-feuille</i></router-link>
+                <!-- <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"> Régagles</i></router-link> -->
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"></i>     Déconnexion</router-link>
+                <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"> Déconnexion</i></router-link>
               </div>
             </li>
           </ul>
+                    <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> ProvablyFair
+              </router-link>
+            </li>
+          </ul>
         </div>
-        <div class="collapse navbar-collapse" id="navbarText" v-else>
-          <ul class="nav navbar-nav ml-auto">
+        
+        <div class="collapse navbar-collapse" v-else>
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link class="nav-link" v-on:click.native="log('Login')" to="/">Login</router-link>
+              <router-link class="nav-link" v-on:click.native="log('Login')" to="/#" style="letter-spacing: 2px; font-size: 12px;"><i class="fa fa-sign-in" style="font-size: 1.4rem;"></i> CONNEXION</router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" v-on:click.native="log('Register')" to="/">Register</router-link>
-            </li>
+            <!-- <li class="nav-item">
+              <router-link class="nav-link" v-on:click.native="log('Register')" to="/">INSCRIPTION</router-link>
+            </li> -->
           </ul>
         </div>
       </nav>
@@ -70,17 +83,26 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
+import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 
 export default{
-  
+  data(){
+    return {
+      UserBTCoins: 0,
+      UserfakeCoins: 0,
+    }
+  },
+
   computed: {
     ...mapGetters(['isLoading']),
     auth: () => UserApiService
   },
   
-  mounted() {
+  async mounted() {
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
+      await this.BTCUser();
+      await this.fakeUser();
   },
 
   beforeDestroy() {
@@ -88,14 +110,21 @@ export default{
   },
 
   methods: {
+    ...mapActions(['executeAsyncRequest']),
 
-    zoom() {
-
+    async BTCUser() {
+      this.UserBTCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
     },
+
+    async fakeUser() {
+      this.UserfakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+    },
+
     log(selectedBase) {
       UserApiService.log(selectedBase);
     },
     onAuthenticated() {
+      this.isConnected = true;
       this.$router.replace('/play');
     }
   }

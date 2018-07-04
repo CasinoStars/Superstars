@@ -11,4 +11,5 @@ begin
     set Email = @Email, UserName = @UserName, UserPassword = @UserPassword
     where UserId = @UserId;
     return 0;
+	
 end;

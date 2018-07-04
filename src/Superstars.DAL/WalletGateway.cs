@@ -15,12 +15,13 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins)
+        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins,int profit, decimal credit = 0)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
-                p.Add("@Credit", 0);
+				p.Add("@Profit", profit);
+                p.Add("@Credit", credit);
                 p.Add("@MoneyId", moneyId);
                 p.Add("@Balance", coins);
                 p.Add("@MoneyType", moneyType);
@@ -34,7 +35,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result> InsertInBankRoll(int trueCoins, int fakeCoins)
+        public async Task<Result> InsertInBankRoll(decimal trueCoins, int fakeCoins)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -46,17 +47,24 @@ namespace Superstars.DAL
             }
         }
 
-        //public async Task<Result<WalletData>> GetTrueBalance(int moneyId)
-        //{
-        //    using (SqlConnection con = new SqlConnection(_sqlstring))
-        //    {
-        //        WalletData wallet =  await con.QueryFirstOrDefaultAsync<WalletData>(
-        //            "select m.MoneyId, m.MoneyType, m.Balance from sp.vMoney m where m.MoneyId = @moneyId and m.MoneyType = 1",
-        //            new { MoneyId = moneyId });
-        //        if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
-        //        return Result.Success(wallet);
-        //    }
-        //}
+
+        public async Task<Result<int>> GetBTCBankRoll()
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int bankRoll = await con.QueryFirstOrDefaultAsync<int>("select RealCoins from sp.tBankRoll");
+                return Result.Success(bankRoll);
+            }
+        }
+
+        public async Task<Result<int>> GetFakeBankRoll()
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                int bankRoll = await con.QueryFirstOrDefaultAsync<int>("select FakeCoins from sp.tBankRoll");
+                return Result.Success(bankRoll);
+            }
+        }
 
 
         public async Task<Result<WalletData>> GetFakeBalance(int moneyId)
@@ -83,35 +91,25 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> GetCredit(int userId)
+        public async Task<Result<decimal>> GetCredit(int userId)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select m.Credit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
+                decimal credit = await con.QueryFirstOrDefaultAsync<decimal>(
+                    "select m.Credit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
                     new { userid = userId });
-                return Result.Success(data);
+                return Result.Success(credit);
             }
         }
 
-        public async Task<Result<int>> UpdateCredit(int userid, int moneytype, int credit, int balance = 0)
+        public async Task<Result<decimal>> GetAllCredit()
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                var p = new DynamicParameters();
-                p.Add("@MoneyId", userid);
-                p.Add("@Balance", balance);
-                p.Add("@Credit", credit);
-                p.Add("@MoneyType", moneytype);
-                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-                await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);
-
-                int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "This player doesn't exist.");
-
-                return Result.Success(p.Get<int>("@Status"));
+                decimal allCredit = await con.QueryFirstOrDefaultAsync<decimal>(
+                    "select ROUND(SUM(m.Credit),8) from sp.tMoney m");
+                return Result.Success(allCredit);
             }
         }
-
     }
 }

@@ -1,4 +1,5 @@
-import { postAsync, getAsync, getAsyncNoJSON, deleteAsync } from "../helpers/apiHelper";
+import { postAsync, getAsync, getAsyncNoJSON, deleteAsync, getAsyncNoJSONBoolean, getboolasync } from "../helpers/apiHelper";
+import { get } from "http";
 const endpoint = "/api/blackJack";
 
 class BlackJackApiService {
@@ -25,11 +26,11 @@ class BlackJackApiService {
         await postAsync(`${endpoint}/InitAI`);
     }
 
-    async GetSecondPlayerCards() {
-        var cards = await getAsyncNoJSON(`${endpoint}/GetSecondPlayerCards`) + '';
-        var array = cards.split(',');
-        return array;
-    }
+    // async GetSecondPlayerCards() {
+    //     var cards = await getAsyncNoJSON(`${endpoint}/GetSecondPlayerCards`) + '';
+    //     var array = cards.split(',');
+    //     return array;
+    // }
 
 
     async GetPlayerCards() {
@@ -48,29 +49,42 @@ class BlackJackApiService {
         await postAsync(`${endpoint}/HitPlayer`);
     }
 
-    async HitPlayerSecondCards() {
-        await postAsync(`${endpoint}/HitPlayerSecondCards`);
-    }
+    // async HitPlayerSecondCards() {
+    //     await postAsync(`${endpoint}/HitPlayerSecondCards`);
+    // }
 
     refreshAiturn() {
         return getAsyncNoJSON(`${endpoint}/refreshAiturn`);
     }
 
-    CanSplitPlayer() {
-        return getAsyncNoJSON(`${endpoint}/canSplitPlayer`);
+    //  CanSplitPlayer() {
+    //     var value = getAsync(`${endpoint}/canSplitPlayer`);
+    //     var toto = Boolean(value);
+    //     return toto;        
+    // }
+
+    // async SplitPlayer() {
+    //     var value = postAsync(`${endpoint}/SplitPlayer`)
+    //     return value;
+    // }
+
+    //  HasSplit() {       
+    //     let value = getAsync(`${endpoint}/HasSplit`);
+    //     console.log(value);
+    //     var toto = Boolean(value);
+    //     console.log(toto + "here");
+    //     return toto;
+    // }
+
+     async StandPlayer() {
+        var value = getAsync(`${endpoint}/StandPlayer`);
+        var toto = Boolean(value);
+        return toto;
     }
 
-    SplitPlayer() {
-        return getAsyncNoJSON(`${endpoint}/SplitPlayer`);
-    }
-
-    HasSplit() {
-        return getAsyncNoJSON(`${endpoint}/HasSplit`);
-    }
-
-     StandPlayer() {
-        return getAsyncNoJSON(`${endpoint}/StandPlayer`);
-    }
+    // async StandPlayerSecondHand() {
+    //     return getAsync(`${endpoint}/StandPlayer`);
+    // }
 
     async PlayAI() {
         await postAsync(`${endpoint}/PlayAi`);
@@ -85,10 +99,10 @@ class BlackJackApiService {
         return value;
     }
 
-    async getplayerSecondHandValue() {
-        var value = await getAsyncNoJSON(`${endpoint}/getplayerSecondHandValue`);
-        return value;
-    }
+    // async getplayerSecondHandValue() {
+    //     var value = await getAsyncNoJSON(`${endpoint}/getplayerSecondHandValue`);
+    //     return value;
+    // }
 
     async getAiHandValue() {
         var value = await getAsyncNoJSON(`${endpoint}/getAiHandValue`);

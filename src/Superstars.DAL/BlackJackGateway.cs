@@ -8,7 +8,7 @@ namespace Superstars.DAL
     public class BlackJackGateway
     {
         readonly string _connectionString;
-        
+
         public BlackJackGateway(string connectionString)
         {
             _connectionString = connectionString;
@@ -20,7 +20,7 @@ namespace Superstars.DAL
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
-                p.Add("@PlayerCards",cards);
+                p.Add("@PlayerCards", cards);
                 p.Add("@SecondPlayerCards", null);
                 p.Add("@NbTurn", nbturn);
                 p.Add("@HandValue", 0);
@@ -104,15 +104,15 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<string> GetPlayerSecondCards(int userId, int gameId)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<string>(
-                    @"select t.SecondPlayerCards from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
-                    new { BJPlayerId = userId, BJGameId = gameId });
-            }
-        }
+        //public async Task<string> GetPlayerSecondCards(int userId, int gameId)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_connectionString))
+        //    {
+        //        return await con.QueryFirstOrDefaultAsync<string>(
+        //            @"select t.SecondPlayerCards from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
+        //            new { BJPlayerId = userId, BJGameId = gameId });
+        //    }
+        //}
 
 
         public async Task<Result<int>> UpdateBlackJackPlayer(int playerid, int gameid, string cards, int nbturn, int handvalue)
@@ -136,6 +136,17 @@ namespace Superstars.DAL
             }
         }
 
+        //public async Task<Result> DeleteLastCard(string strtoreplace, int playerid, int gameid)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_connectionString))
+        //    {
+        //        return await con.QueryFirstOrDefaultAsync<Result>(
+        //        "update sp.tBlackJackPlayer Set PlayerCards = Replace(PlayerCards, @String,'') where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
+        //        new { @String = strtoreplace, BlackJackPlayerId = playerid, BlackJackGameId = gameid });
+
+        //    }
+        //}
+
         public async Task<Result<int>> GetTurn(int playerId, int gameId)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -157,35 +168,35 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<int> GetPlayerSecondHandValue(int userId, int gameId)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<int>(
-                    @"select t.SecondHandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
-                    new { BJPlayerId = userId, BJGameId = gameId });
-            }
-        }
+        //public async Task<int> GetPlayerSecondHandValue(int userId, int gameId)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_connectionString))
+        //    {
+        //        return await con.QueryFirstOrDefaultAsync<int>(
+        //            @"select t.SecondHandValue from sp.tBlackJackPlayer t where t.BlackJackPlayerId = @BJPlayerId and t.BlackJackGameId = @BJGameId;",
+        //            new { BJPlayerId = userId, BJGameId = gameId });
+        //    }
+        //}
 
-        public async Task<Result> UpdatePlayerSecondHandValue(int userId, int gameId, int secondhandvalue)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<Result>(
-                    @" update sp.tBlackJackPlayer set [SecondHandValue] = @SecondHandValue where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
-                    new { SecondHandValue = secondhandvalue, BlackJackPlayerId = userId, BlackJackGameId = gameId });
-            }
-        }
+        //public async Task<Result> UpdatePlayerSecondHandValue(int userId, int gameId, int secondhandvalue)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_connectionString))
+        //    {
+        //        return await con.QueryFirstOrDefaultAsync<Result>(
+        //            @" update sp.tBlackJackPlayer set [SecondHandValue] = @SecondHandValue where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
+        //            new { SecondHandValue = secondhandvalue, BlackJackPlayerId = userId, BlackJackGameId = gameId });
+        //    }
+        //}
 
-        public async Task<Result> UpdatePlayerSecondPlayerCards(int userId, int gameId, string secondplayercards)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<Result>(
-                    @" update sp.tBlackJackPlayer set [SecondPlayerCards] = @SecondPlayerCards where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
-                    new { SecondPlayerCards = secondplayercards, BlackJackPlayerId = userId, BlackJackGameId = gameId });
-            }
-        }
+        //public async Task<Result> UpdatePlayerSecondPlayerCards(int userId, int gameId, string secondplayercards)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_connectionString))
+        //    {
+        //        return await con.QueryFirstOrDefaultAsync<Result>(
+        //            @" update sp.tBlackJackPlayer set [SecondPlayerCards] = @SecondPlayerCards where BlackJackPlayerId = @BlackJackPlayerId and BlackJackGameId = @BlackJackGameId;",
+        //            new { SecondPlayerCards = secondplayercards, BlackJackPlayerId = userId, BlackJackGameId = gameId });
+        //    }
+        //}
 
 
     }

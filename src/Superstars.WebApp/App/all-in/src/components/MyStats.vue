@@ -1,6 +1,7 @@
 <template>
 <div>
   <br>
+  <br>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;" class="container">
     <div>
       <h1 style="font-variant: small-caps;"> <strong> Mes statistiques </strong></h1>
@@ -123,7 +124,7 @@ new Chart(document.getElementById("pie-chart2"), {
       this.playernbgamesbj = this.playerwinsbj + this.playerlossesbj;
       this.playerratiobj = this.playerwinsbj / (this.playerwinsbj + this.playerlossesbj);
       this.playerratiobjnum = this.playerratiobj.toFixed(3) * 100;
-      this.playerratiobj = this.playerratiobj.toFixed(3) * 100 + ' %';
+      this.playerratiobj = (this.playerratiobj.toFixed(3) * 100).toFixed(2) + ' %';
       if(this.playerratiobj == "NaN %") {
         this.playerratiobj = "0 %";
       }
@@ -135,7 +136,7 @@ new Chart(document.getElementById("pie-chart2"), {
       this.playernbgamesy = this.playerwinsy + this.playerlossesy;
       this.playerratioy = this.playerwinsy / (this.playerwinsy + this.playerlossesy);
       this.playerratioynum = this.playerratioy.toFixed(3) * 100;
-      this.playerratioy = this.playerratioy.toFixed(3 ) * 100 + ' %';
+      this.playerratioy = (this.playerratioy.toFixed(3) * 100).toFixed(2) + ' %';
       if(this.playerratioy == "NaN %") {
         this.playerratioy = "0 %";
       }

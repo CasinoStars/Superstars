@@ -12,26 +12,90 @@ using System.Collections.Generic;
 
 namespace Superstars.WebApp.Controllers
 {
-    [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
-    public class WalletController : Controller
-    {
-        WalletGateway _walletGateway;
+	[Route("api/[controller]")]
+	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+	public class WalletController : Controller
+	{
+		WalletGateway _walletGateway;
 
-        public WalletController(WalletGateway walletGateway)
+		public WalletController(WalletGateway walletGateway)
+		{
+			_walletGateway = walletGateway;
+		}
+
+		/// <summary>
+		/// Add Real or Fake Coins for player
+		/// </summary>
+		/// <returns></returns>
+		[HttpPost("AddCoins")]
+		public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins,0);
+			return this.CreateResult(result);
+		}
+
+		[HttpPost("UpdateRealProfit")]
+		public async Task<IActionResult> UpdateRealProfit([FromBody] int profit)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, 1, 0, profit);
+			return this.CreateResult(result);
+		}
+
+		[HttpPost("UpdateFakeProfit")]
+		public async Task<IActionResult> UpdateFakeProfit([FromBody] int profit)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, 2, 0, profit);
+			return this.CreateResult(result);
+		}
+
+		[HttpPost("{pot}/creditFakePlayer")]
+        public async Task<IActionResult> CreditPlayerFake(int pot)
         {
-            _walletGateway = walletGateway;
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _walletGateway.AddCoins(userId, 2,0,0, pot);
+            return this.CreateResult(result);
         }
 
-        /// <summary>
-        /// Add Real or Fake Coins for player
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
+        [HttpPost("{pot}/creditBTCPlayer")]
+        public async Task<IActionResult> CreditPlayerBTC(decimal pot)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);           
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins);                      
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0,0, pot);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{pot}/withdrawFakeBank")]
+        public async Task<IActionResult> WithdrawFakeBankRoll(int pot)
+        {
+            Result result = await _walletGateway.InsertInBankRoll(0, -pot);
+            return this.CreateResult(result);
+        }
+
+        [HttpPost("{pot}/withdrawBtcBank")]
+        public async Task<IActionResult> WithdrawBTCBankRoll(decimal pot)
+        {
+            Result result = await _walletGateway.InsertInBankRoll(-pot, 0);
+            return this.CreateResult(result);
+        }
+
+        [HttpGet("BTCBankRoll")]
+        public async Task<decimal> GetBTCBankRoll()
+        {
+            Result<int> result = await _walletGateway.GetBTCBankRoll();
+            BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
+            decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
+            Result<decimal> allCredit = await _walletGateway.GetAllCredit();
+            decimal BTCBank = onBlockchain + allCredit.Content;
+            return BTCBank;
+        }
+
+        [HttpGet("FakeBankRoll")]
+        public async Task<IActionResult> GetFakeBankRoll()
+        {
+            Result<int> result = await _walletGateway.GetFakeBankRoll();
             return this.CreateResult(result);
         }
 
@@ -40,31 +104,12 @@ namespace Superstars.WebApp.Controllers
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
-            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");                        
-            return informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
+            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
+            decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
+            Result<decimal> credit = await _walletGateway.GetCredit(userId);
+            decimal realBalance = onBlockchain + credit.Content;
+            return realBalance;
         }
-
-        [HttpPost("{pot}/creditPlayer")]
-        public async Task<IActionResult> CreditPlayersYamsPot(int pot)
-        {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot);
-            return this.CreateResult(result);
-        }
-
-        [HttpPost("{pot}/withdraw")]
-        public async Task<IActionResult> WithdrawBankRoll(int pot)
-        {
-            Result result = await _walletGateway.InsertInBankRoll(0, -pot);
-            return this.CreateResult(result);
-        }
-
-        //public async Task<IActionResult> GetTrueBalance()
-        //{
-        //    int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //    Result<WalletData> result = await _walletGateway.GetTrueBalance(userId);
-        //    return this.CreateResult(result);
-        //}
 
         [HttpGet("FakeBalance")]
         public async Task<IActionResult> GetFakeBalance()
@@ -82,12 +127,10 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret(result.Content.PrivateKey);
             string Address = privateKey.GetAddress().ToString();
             return Address;
-
         }
 
         [HttpPost("Withdraw")]
-
-        public  async Task<List<string>> Withdraw([FromBody] WalletViewModel WalletViewModel)
+        public  async Task<List<string>> WithdrawPlayer([FromBody] WalletViewModel WalletViewModel)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
@@ -99,24 +142,5 @@ namespace Superstars.WebApp.Controllers
 
             return response;
         }
-
-        [HttpGet("getCredit")]
-
-        public async Task<IActionResult> GetCredit()
-        {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result<int> result = await _walletGateway.GetCredit(userId);
-            return this.CreateResult(result);
-        }
-
-        [HttpPost("updateCredit")]
-
-        public async Task<IActionResult> updateCredit(int credit)
-        {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result<int> result = await _walletGateway.UpdateCredit(userId, 1, credit);
-            return this.CreateResult(result);
-        }
-
     }
 }
