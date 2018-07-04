@@ -3,9 +3,19 @@
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
       <h1 style="text-decoration: underline;"> <strong> Règles: </strong></h1>
       <br>
-      <h2 style="text-decoration: underline;"> <strong> Yams: </strong></h2>
+      <center>
+<div>
+<button v-on:click="YamsRules()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">YAMS</button>
+<button v-on:click="BlackJackRules()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">BLACKJACK</button>
+</div>
+</center>
+      <br>
+      <br>
+      <h2 style="text-decoration: underline;" id="YamsTitle"> <strong> Yams: </strong></h2>
   </div>
 
+
+<div id="YamsContent">
 <div  class="text">
   <p>
   Le Yahtzee (aussi orthographié Yatzee) ou Yam's est un jeu de société traditionnel de hasard raisonné. <br>
@@ -43,13 +53,15 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 <dd> - le joueur a <strong>5 dés de même valeur</strong> </dd>
 </dl>
 </div>
-<br><br><br><br><br><br>
+</div>
+
 
 <!--  BLACKJACK -->
   <div style="text-align: center; font-family: 'Courier New', sans-serif;">
       <h2 id="bjtitle" style="text-decoration: underline;"> <strong> BlackJack: </strong></h2>
   </div>
-  <br>
+
+  <div id="BlackJackContent">
 <div class="text">
   <p>
   Le Blackjack est un jeu de cartes très populaire dans les casinos.<br>
@@ -63,11 +75,58 @@ Valeur des cartes : <br>
 - L’As vaut 1 point ou 11 points, au choix du joueur <br>
 </p>
 </div>
+  </div>
 
 
 
 </div>
 </template>
+
+<script>
+import { mapActions } from 'vuex';
+import Vue from 'vue';
+
+export default {
+    
+  data(){
+    return {
+
+    }
+  },
+
+      mounted(){
+       //this.YamsRules();
+    },
+
+     methods: {
+    ...mapActions(['executeAsyncRequest']),
+
+     YamsRules() {  
+      var element3 = document.getElementById("BlackJackContent");
+      console.log(element3);
+      element3.style.display = "none";
+      var element4 = document.getElementById("bjtitle");
+      element4.style.display = "none";
+      var element = document.getElementById("YamsContent");
+      element.style.display = "block";
+      var element2 = document.getElementById("YamsTitle");
+      element2.style.display = "block";
+    },
+
+     BlackJackRules() {
+      var element3 = document.getElementById("BlackJackContent");
+      element3.style.display = "block";
+      var element4 = document.getElementById("bjtitle");
+      element4.style.display = "block";
+      var element = document.getElementById("YamsContent");
+      element.style.display = "none";
+      var element2 = document.getElementById("YamsTitle");
+      element2.style.display = "none";
+    },
+
+     } 
+}
+</script>
 
 
 <style>
@@ -94,6 +153,21 @@ img {
   height: 28px;
 }
 
+#BlackJackContent {
+  display: none;
+}
+
+#bjtitle {
+  display: none;
+}
+
+#YamsContent {
+  display: block;
+}
+
+#Yamstitle {
+  display: block;
+}
 
 
 </style>
