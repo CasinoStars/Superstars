@@ -72,7 +72,15 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
             decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
             Result<decimal> allCredit = await _walletGateway.GetAllCredit();
-            decimal BTCBank = onBlockchain + allCredit.Content;
+            decimal BTCBank;
+            if (allCredit.Content <= 0)
+            {
+                BTCBank = onBlockchain - allCredit.Content;
+            }
+            else
+            {
+                BTCBank = onBlockchain + allCredit.Content;
+            }
             return BTCBank;
         }
 
