@@ -15,7 +15,7 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins, decimal credit = 0, int profit)
+        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins,int profit, decimal credit = 0)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
