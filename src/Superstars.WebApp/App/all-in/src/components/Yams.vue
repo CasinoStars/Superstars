@@ -468,7 +468,7 @@ $gray-light: #a0b3b0;
   width: 40px;
   height: 40px;
   top: 80px;
-  margin-left: -175%;
+  margin-left: -250%;
   border-radius: 50%;
   box-shadow: 0 2px 0 0 #7f8387;
   -webkit-transform-origin: 20px 21px;
