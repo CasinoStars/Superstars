@@ -13,6 +13,10 @@ async getYamsPot() {
     return await getAsync(`${endpoint}/getYamsPot`);
 }
 
+async getBlackJackPot() {
+    return await getAsync(`${endpoint}/getBlackJackPot`);
+}
+
 async DeleteAis() {
     return await deleteAsync(`${endpoint}/DeleteAis`);
 }
@@ -29,12 +33,8 @@ async BetBTC(bet) {
     return await postAsync(`${endpoint}/${bet}/betBTC`);
 }
 
-async Bet(bet) {
-    return await postAsync(`${endpoint}/${bet}/betYams`);
-}
-
-async BetBlackJack(bet) {
-    return await postAsync(`${endpoint}/${bet}/betBlackJack`);
+async BetFake(bet) {
+    return await postAsync(`${endpoint}/${bet}/betFake`);
 }
 
 async getWinsBlackJackPlayer() {

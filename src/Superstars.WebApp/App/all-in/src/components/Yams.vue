@@ -198,7 +198,7 @@ export default {
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake')
-            await this.executeAsyncRequest(() => GameApiService.Bet(this.fakeBet));
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet));
           else
             await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet));
           var modal = document.getElementById('myModal');
