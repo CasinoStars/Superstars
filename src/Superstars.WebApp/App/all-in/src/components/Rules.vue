@@ -13,7 +13,7 @@
       <br>
       <h2 style="text-decoration: underline;" id="YamsTitle"> <strong> Yams: </strong></h2>
   </div>
-
+<br>
 
 <div id="YamsContent">
 <div  class="text">
@@ -60,7 +60,7 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
   <div style="text-align: center; font-family: 'Courier New', sans-serif;">
       <h2 id="bjtitle" style="text-decoration: underline;"> <strong> BlackJack: </strong></h2>
   </div>
-
+<br>
   <div id="BlackJackContent">
 <div class="text">
   <p>
