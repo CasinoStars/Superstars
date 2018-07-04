@@ -1,7 +1,7 @@
 create proc sp.sGameBlackJackUpdate
 (
 	@BlackJackGameId int,
-	@Pot int
+	@Pot varchar(20)
 )
 as
 begin

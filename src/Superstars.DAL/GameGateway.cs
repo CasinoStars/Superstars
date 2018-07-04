@@ -43,18 +43,29 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> GetYamsPot(int gameId)
+        public async Task<Result<string>> GetYamsPot(int gameId)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
+                string pot = await con.QueryFirstOrDefaultAsync<string>(
                     @"select g.Pot from sp.vGameYams g where g.YamsGameId = @YamsGameId",
                     new { YamsGameId = gameId });
-                return Result.Success(data);
+                return Result.Success(pot);
             }
         }
 
-        public async Task<Result<int>> CreateYamsGame(int pot)
+        public async Task<Result<string>> GetBlackJackPot(int gameId)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                string pot = await con.QueryFirstOrDefaultAsync<string>(
+                    @"select g.Pot from sp.vGameBlackJack g where g.BlackJackGameId = @BlackJackGameId",
+                    new { BlackJackGameId = gameId });
+                return Result.Success(pot);
+            }
+        }
+
+        public async Task<Result<int>> CreateYamsGame(string pot)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -70,7 +81,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateBlackJackGame(int pot)
+        public async Task<Result<int>> CreateBlackJackGame(string pot)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {

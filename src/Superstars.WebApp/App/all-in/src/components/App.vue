@@ -21,7 +21,7 @@
           </li>
           <li class="nav-item" v-if="auth.isConnected">
             <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTICS
+              <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTIQUES
             </router-link>
           </li>
           <li class="nav-item" v-if="auth.isConnected">
@@ -35,20 +35,20 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 133, 230); letter-spacing: 2px; font-size: 12px;">
-                BANKROLL: {{BTCBankCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeBankCoins}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
+                SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins.balance}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
               <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ auth.pseudo }}
+                <i class="fa fa-user" style="font-size: 1.4rem;"></i> {{ auth.pseudo }}
               </a>
-              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:130%; right:-35%">
-                <router-link class="dropdown-item" to="/wallet"><i class="fa fa-diamond"></i>     Porte-feuille</router-link>
-                <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"></i>     Régagles</router-link>
+              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:120%; right: -8%;">
+                <router-link style="margin-left: -2px;" class="dropdown-item" to="/wallet"><i class="fa fa-diamond"> Porte-feuille</i></router-link>
+                <!-- <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"> Régagles</i></router-link> -->
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"></i>     Déconnexion</router-link>
+                <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"> Déconnexion</i></router-link>
               </div>
             </li>
           </ul>
@@ -62,13 +62,13 @@
         </div>
         
         <div class="collapse navbar-collapse" v-else>
-          <ul class="nav navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link class="nav-link" v-on:click.native="log('Login')" to="/">Login</router-link>
+              <router-link class="nav-link" v-on:click.native="log('Login')" to="/#" style="letter-spacing: 2px; font-size: 12px;"><i class="fa fa-sign-in" style="font-size: 1.4rem;"></i> CONNEXION</router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" v-on:click.native="log('Register')" to="/">Register</router-link>
-            </li>
+            <!-- <li class="nav-item">
+              <router-link class="nav-link" v-on:click.native="log('Register')" to="/">INSCRIPTION</router-link>
+            </li> -->
           </ul>
         </div>
       </nav>
@@ -89,8 +89,8 @@ import Vue from 'vue';
 export default{
   data(){
     return {
-      BTCBankCoins: 0,
-      fakeBankCoins: 0,
+      UserBTCoins: 0,
+      UserfakeCoins: 0,
     }
   },
 
@@ -101,8 +101,8 @@ export default{
   
   async mounted() {
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
-    await this.BTCBank();
-    await this.fakeBank();
+      await this.BTCUser();
+      await this.fakeUser();
   },
 
   beforeDestroy() {
@@ -112,18 +112,19 @@ export default{
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
-    async BTCBank() {
-      this.BTCBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetBTCBankRoll());
+    async BTCUser() {
+      this.UserBTCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
     },
 
-    async fakeBank() {
-      this.fakeBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
+    async fakeUser() {
+      this.UserfakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
     },
 
     log(selectedBase) {
       UserApiService.log(selectedBase);
     },
     onAuthenticated() {
+      this.isConnected = true;
       this.$router.replace('/play');
     }
   }

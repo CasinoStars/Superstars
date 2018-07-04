@@ -163,6 +163,7 @@ export default {
       this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
     },
 
+
     changeBet(choice){
       this.realOrFake = choice;
       this.errors = 0;
@@ -190,16 +191,16 @@ export default {
           errors.push("La mise maximum est de 100 BTC");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 BTC");
-        else if(this.trueBet > this.trueCoins)
-          errors.push("Vous n'avez pas cette somme sur votre compte");
+        else if(this.trueBet > this.trueCoins){
+          errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
       this.errors = errors;
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake')
-            await this.executeAsyncRequest(() => GameApiService.Bet(this.fakeBet));
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet));
           else
-            await this.executeAsyncRequest(() => GameApiService.Bet(this.trueBet));
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet));
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
@@ -237,8 +238,14 @@ export default {
       else if(this.winOrLose == "You Win"){
         this.playerwin = true;
         await this.updateStats();
-        await this.executeAsyncRequest(() => WalletApiService.WithdrawInBankRoll(pot));
-        await this.executeAsyncRequest(() => WalletApiService.CreditPlayer(pot));
+          if(this.trueBet === 0) {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
+          }
+          else {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
+          }
       }
     },
 
@@ -452,7 +459,6 @@ $gray-light: #a0b3b0;
 
 .yams .lds-eclipse {
   position: relative;
-  margin-right: 15%;
 }
 
 .yams .lds-eclipse div {
@@ -462,7 +468,7 @@ $gray-light: #a0b3b0;
   width: 40px;
   height: 40px;
   top: 80px;
-  margin-left: -175%;
+  margin-left: -250%;
   border-radius: 50%;
   box-shadow: 0 2px 0 0 #7f8387;
   -webkit-transform-origin: 20px 21px;

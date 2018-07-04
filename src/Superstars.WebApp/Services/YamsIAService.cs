@@ -201,9 +201,9 @@ namespace Superstars.WebApp.Services
 				double diviseur = (Math.Pow(6, _indexDice[i].Length));
 				probas[i] = timenumber[i] / diviseur; 
 			}
-			for(int i = 0; i<probas.Length;i++)
+			for(int i = 1; i<probas.Length;i++)
 			{
-				if(indexBestProba<probas[i])
+				if(probas[indexBestProba]<probas[i])
 				{
 					indexBestProba = i;
 				}

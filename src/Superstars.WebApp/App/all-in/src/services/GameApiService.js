@@ -13,6 +13,10 @@ async getYamsPot() {
     return await getAsync(`${endpoint}/getYamsPot`);
 }
 
+async getBlackJackPot() {
+    return await getAsync(`${endpoint}/getBlackJackPot`);
+}
+
 async DeleteAis() {
     return await deleteAsync(`${endpoint}/DeleteAis`);
 }
@@ -25,50 +29,12 @@ async UpdateStats(gametype, win) {
     return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
 }
 
-
-
-async Bet(bet) {
-    // var bet = prompt("Montant du pari:", "500");
-    // var betNumber = parseInt(bet);
-    // if(bet == null)
-    //     return window.location.replace("/Home/play");
-    // else if(balance < bet || !betNumber){
-    //     bet = prompt("Une erreur s'est produite. Montant maximum possible: " + balance, "500");
-    //     betNumber = parseInt(bet);
-    // }else if(bet > 0 && bet != ''){
-    //     window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
-    //     return await postAsync(`${endpoint}/${bet}/bet`);
-    // }
-    // while (bet <= 0 || bet == '' || bet > balance || !betNumber){
-    //     if(bet == null)
-    //         return window.location.replace("/Home/play");
-    //     bet = prompt("Une erreur s'est produite ! Montant disponible: " + balance, "500");
-    //     betNumber = parseInt(bet);
-    // }
-    // window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
-    return await postAsync(`${endpoint}/${bet}/bet`);
+async BetBTC(bet) {
+    return await postAsync(`${endpoint}/${bet}/betBTC`);
 }
 
-async BetBlackJack(balance) {
-    var bet = prompt("Montant du pari:", "500");
-    var betNumber = parseInt(bet);
-    if(bet == null)
-        return window.location.replace("/Home/play");
-    else if(balance < bet || !betNumber){
-        bet = prompt("Une erreur s'est produite. Montant maximum possible: " + balance, "500");
-        betNumber = parseInt(bet);
-    }else if(bet > 0 && bet != ''){
-        window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
-        return await postAsync(`${endpoint}/${bet}/betBlackJack`);
-    }
-    while (bet <= 0 || bet == '' || bet > balance || !betNumber){
-        if(bet == null)
-            return window.location.replace("/Home/play");
-        bet = prompt("Une erreur s'est produite ! Montant disponible: " + balance, "500");
-        betNumber = parseInt(bet);
-    }
-    window.alert("Vous avez bien parié " + bet + " All'In Virtuel");
-    return await postAsync(`${endpoint}/${bet}/betBlackJack`);
+async BetFake(bet) {
+    return await postAsync(`${endpoint}/${bet}/betFake`);
 }
 
 async getWinsBlackJackPlayer() {

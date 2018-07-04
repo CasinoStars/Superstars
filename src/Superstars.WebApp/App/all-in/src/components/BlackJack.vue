@@ -1,11 +1,49 @@
 <template>
-<div>
+<div class="blackJack">
 
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
+          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeCoins.balance}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+        </div>
+        <router-link class="close" to="/play">&times;</router-link>
+      </div>
+      <ul class="tab-group">
+                <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
+                <li class="tab" v-else><a v-on:click="changeBet('real')">Réel</a></li>
+                <li class="tab active" v-if="this.realOrFake == 'fake'"><a v-on:click="changeBet('real')">Virtuel</a></li>
+                <li class="tab" v-else><a v-on:click="changeBet('fake')">Virtuel</a></li>
+      </ul>
+      <form @submit="bet($event)">
+        <div  class="modal-body">
+          <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-if="realOrFake == 'real'">SAISISSEZ VOTRE MISE EN BTC <span class="req">*</span></h4>
+          <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-else>SAISISSEZ VOTRE MISE EN ALL'IN <span class="req">*</span></h4>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-if="realOrFake == 'real'" type="decimal" v-model="trueBet" required/>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-else type="number" v-model="fakeBet" required/>
+        
+          <div class="alert alert-danger" style="opacity: 0.8; font-weight: bold; font-family: 'Courier New', sans-serif; text-transform: uppercase; margin-top: 1%; margin-bottom: 0.5%; text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
+            <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div style="margin-right: 42%;">
+            <router-link class="btn btn-secondary" to="/play">Annuler</router-link>
+            <button type="submit" class="btn btn-light">Confirmer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
 <center>
     <a class="txt"> Cartes du Dealer </a>
 <div id="leespace3"></div>
-    <div v-for="(i, index) of dealercards" :key="index" class="dealercards">
+    <div v-for="(i, index) of dealercards" :key="index" class="dealercards" v-if="playerBet">
       <img v-if="i == '2p'" src="../img/2p.png">
       <img v-if="i == '3p'" src="../img/3p.png">
       <img v-if="i == '4p'" src="../img/4p.png">
@@ -61,8 +99,10 @@
       <img v-if="i == '12c'" src="../img/12c.png">
       <img v-if="i == '13c'" src="../img/13c.png">
       <img v-if="i == '14c'" src="../img/1c.png">
-
     </div>
+    <div v-else class="dealercards">
+        <img src="../img/back.png" id="deck"/>
+    </div>        
 </center>
 
 
@@ -96,7 +136,7 @@
     <a class="txt"> Votre main </a>
 <div id="leespace3"></div>
 
-    <div v-for="(i, index) of playercards" :key="index" class="playercards">
+    <div v-for="(i, index) of playercards" :key="index" class="playercards" v-if="playerBet">
       <img v-if="i == '2p'" src="../img/2p.png">
       <img v-if="i == '3p'" src="../img/3p.png">
       <img v-if="i == '4p'" src="../img/4p.png">
@@ -152,8 +192,10 @@
       <img v-if="i == '12c'" src="../img/12c.png">
       <img v-if="i == '13c'" src="../img/13c.png">
       <img v-if="i == '14c'" src="../img/1c.png">
-
     </div>
+        <div v-else class="playercards">
+        <img src="../img/back.png" id="deck"/>
+    </div>  
     </center>
 <div id="leespace2"></div>
    <form @submit="hit($event)">
@@ -189,6 +231,7 @@ import { mapActions } from 'vuex';
 import BlackJackApiService from '../services/BlackJackApiService';
 import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
+import WalletApiService from '../services/WalletApiService';
 
 
 export default {
@@ -210,24 +253,88 @@ export default {
             // playingsecondhand: false,
             nbturn: 0,
             nbhit: 0,
+            playerBet: false,
+            realOrFake: 'real',
+            fakeBet: 0,
+            trueBet: 0,
+            fakeCoins: 0,
+            trueCoins: 0,
+            errors: [],
         }
     },
     async created(){
     // this.HasPlayerSplit();
     },
   async mounted() {
+    await this.getFakeCoins();
+    await this.getTrueCoins();
+    this.showModal();
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
     await this.refreshCards();
     await this.refreshHandValue();
-    this.CheckWinner();
+    await this.CheckWinner();
   },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
 
+    async getFakeCoins() {
+      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+    },
+
+    async getTrueCoins() {
+      this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
+    },
+
+
+    changeBet(choice){
+      this.realOrFake = choice;
+      this.errors = 0;
+    },
+
+    showModal() {
+      var modal = document.getElementById('myModal');
+      modal.style.display = "block";
+    },
+
+    async bet(e) {
+      e.preventDefault();
+      var errors = [];
+      this.errors = 0;
+      if(this.realOrFake === 'fake') {
+        if(this.fakeBet > 1000000)
+          errors.push("La mise maximum est de 1,000,000");
+        else if(this.fakeBet <= 0)  
+          errors.push("La mise doit être supérieur à 0");
+        else if(this.fakeBet > this.fakeCoins.balance)
+          errors.push("Vous n'avez pas cette somme sur votre compte");
+      }
+      else {
+        if(this.trueBet > 100)
+          errors.push("La mise maximum est de 100 BTC");
+        else if(this.trueBet <= 0)  
+          errors.push("La mise doit être supérieur à 0 BTC");
+        else if(this.trueBet > this.trueCoins){
+          errors.push("Vous n'avez pas cette somme sur votre compte");}
+      }
+      this.errors = errors;
+      if(errors.length == 0) {
+        try {
+          if(this.realOrFake === 'fake')
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet));
+          else
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet));
+          var modal = document.getElementById('myModal');
+          modal.style.display = "none";
+          this.playerBet = true;
+        }
+        catch(error) {
+        }
+      }
+    },
 
     async hit(e) {
-        // if(this.playingsecondhand == false) {
+        e.preventDefault();
         await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
         // } else {
         //     await this.executeAsyncRequest(() => BlackJackApiService.HitPlayerSecondCards());
@@ -235,6 +342,12 @@ export default {
         if(this.handvalue > 21) {
             this.gameend = true;
         }
+         await this.getFakeCoins();
+         await this.getTrueCoins();
+         this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
+         await this.refreshCards();
+         await this.refreshHandValue();
+         await this.CheckWinner();
     },
 
      async stand(e) {
@@ -284,7 +397,7 @@ export default {
 
     async StandandFinish() {
         await this.executeAsyncRequest(() => BlackJackApiService.StandPlayer());
-        this.CheckWinner();
+        await this.CheckWinner();
     },
 
 //  wait(ms)
@@ -315,10 +428,10 @@ export default {
         await this.refreshCards();
         await this.refreshHandValue();
         this.gameend = true;
-        this.CheckWinner();
+        await this.CheckWinner();
     },
 
-     CheckWinner() {
+    async CheckWinner() {
         if(this.gameend == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
         if(this.handvalue > 21 ) {
             this.winnerlooser = 'Vous avez perdu !';
@@ -339,6 +452,17 @@ export default {
             this.winnerlooser = "Egalité";
         }
          this.gameend = true;
+        if(this.playerwin == true) {
+            var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
+            if(this.trueBet === 0) {
+                await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
+                await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
+            }
+            else {
+                await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
+                await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
+            }
+        }
          this.updateStats();
         }
     },
@@ -368,6 +492,125 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+$body-bg: #c1bdba;
+$form-bg: #13232f;
+$white: #ffffff;
+$main: #777c7b;
+$main-dark: darken($main,5%);
+$gray-light: #a0b3b0;
+
+.blackJack .tab-group {
+  list-style:none;
+  padding:0;
+  margin:0 0 5px 0;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  li a {
+    display:block;
+    text-decoration:none;
+    padding:8px;
+    background:rgba($gray-light,.25);
+    color:$gray-light;
+    font-size:20px;
+    float:left;
+    width:50%;
+    text-align:center;
+    cursor:pointer;
+    transition:.5s ease;
+    &:hover {
+      background:$main-dark;
+      color:$white;
+    }
+  }
+  .active a {
+    background:$main;
+    color:$white;
+  }
+}
+
+/* The Modal (background) */
+.blackJack .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 16%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba($body-bg,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.blackJack .modal-content {
+    position: relative;
+    background: rgba($form-bg,.9);
+    margin: auto;
+    padding: 0;
+    width: 80%;
+    box-shadow: 0 0 100px 50px rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.blackJack .close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.blackJack .close:hover,
+.blackJack .close:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.blackJack.req {
+	margin:2px;
+	color:#1ab188;;
+}
+
+.blackJack .modal-header {
+    padding: 10px 16px;
+    text-align: center;
+    background: #222222a8;
+    color: white;
+}
+
+.blackJack .modal-body {
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.blackJack .modal-footer {
+  padding: 15px 16px;
+  background-color:  #222222a8;
+  color: white;
+}
+</style>
 
 <style>
 
