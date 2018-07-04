@@ -17,6 +17,12 @@ class ProvablyFairApiService {
     async CreateSeeds(){
         await  postAsync(`${endpoint}/CreateSeeds`);
     }
+    async RetriveDicesFromSeeds(clientSeedTest, serverSeedTest, nbOfDices){
+        console.log(clientSeedTest);
+        console.log(serverSeedTest);
+        console.log(nbOfDices);
+         return await postAsync(`${endpoint}/${clientSeedTest}/${serverSeedTest}/${nbOfDices}/RetriveDicesFromSeeds`)
+    }
 
 }
 

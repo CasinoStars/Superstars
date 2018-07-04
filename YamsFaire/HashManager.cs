@@ -39,7 +39,7 @@ namespace Superstars.YamsFair
         {
             string clientSeedWithNonce = clientSeed + nonce.ToString();
             string hash = getHashSha512(serverSeed + clientSeedWithNonce);
-            int result = 100;
+            int result = 0;
             int i = 0;
             string[] results = new string[hash.Length/5];
             int z = 0;
@@ -55,7 +55,6 @@ namespace Superstars.YamsFair
 
             List<int> IntFromResults = new List<int>();
             List<int> dicesFromHash = new List<int>();
-
 
             foreach (var item in results)
             {
@@ -77,7 +76,6 @@ namespace Superstars.YamsFair
                 }                
             }
             if (i == 0) return GetDiceFromHash(serverSeed, clientSeed, nonce+= 1);
-
             return result; 
          }     
 
@@ -93,7 +91,7 @@ namespace Superstars.YamsFair
             List<int> retriveDicesFromSeeds = new List<int>();
             for (int i = 0; i < nbOfDices; i++)
             {
-                retriveDicesFromSeeds.Add(HashManager.GetDiceFromHash("ff0b463695f88ecd9a8946327b764a3a0acf935d1f6a527e9359643950bd025900495acd3c4a1e727f4ac5be9713e313700993878b0960a59a05627b9a51268b", "AlbinSeed", i));
+                retriveDicesFromSeeds.Add(HashManager.GetDiceFromHash(serveurSeed, clientSeed, i));
             }
             return retriveDicesFromSeeds;
         }
