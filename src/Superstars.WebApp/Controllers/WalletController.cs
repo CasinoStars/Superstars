@@ -35,27 +35,11 @@ namespace Superstars.WebApp.Controllers
 			return this.CreateResult(result);
 		}
 
-		[HttpPost("UpdateRealProfit")]
-		public async Task<IActionResult> UpdateRealProfit([FromBody] int profit)
-		{
-			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			Result result = await _walletGateway.AddCoins(userId, 1, 0, profit);
-			return this.CreateResult(result);
-		}
-
-		[HttpPost("UpdateFakeProfit")]
-		public async Task<IActionResult> UpdateFakeProfit([FromBody] int profit)
-		{
-			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			Result result = await _walletGateway.AddCoins(userId, 2, 0, profit);
-			return this.CreateResult(result);
-		}
-
 		[HttpPost("{pot}/creditFakePlayer")]
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot, 0);
+            Result result = await _walletGateway.AddCoins(userId, 2, pot, pot);
             return this.CreateResult(result);
         }
 
@@ -63,7 +47,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerBTC(decimal pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 1, 0,0, pot);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0, 0, pot);
             return this.CreateResult(result);
         }
 
