@@ -65,7 +65,7 @@ namespace Superstars.WebApp.Controllers
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
             }
-            Result result2 = await _walletGateway.AddCoins(userId, 2,0, -(bet));
+            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet), 0);
             Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
         }
