@@ -5,28 +5,10 @@
             <h1>WELCOME ON ALL`IN</h1>
         </div>
     </header>
-    
-        <div class="colonne">
 
-            <div class="container">
-              <img src="../img/provablylogo.png" class="logo1">
-                <div class="text">Un site provably Fair</div>
-                <!-- <div class="secondtext"> Grâce à notre système ProvablyFair, <br> vous pouvez avoir confiance en notre Casino !
-                </div>                -->
-            </div>
-
-            <div class="container">
-                 <img src="../img/statslogo.png" class="logo1">
-                <div class="text"> Des statistiques détaillées </div>
-            </div>
-
-            <div class="container">
-            <img src="../img/fastbetlogo.png" class="logo1">
-                <div class="text"> Des jeux rapides </div>
-            </div>
-        </div>
-    
-
+<center>
+<strong><a style="font-size: 35px;   font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
+</center>
 
     </div>
 
@@ -35,12 +17,31 @@
 <script>
 import { mapActions } from 'vuex';
 import Vue from 'vue';
+import WalletApiService from '../services/WalletApiService';
 
 export default {
+  
+  data(){
+    return {
+      BTCBankCoins: 0,
+      fakeBankCoins: 0,
+    }
+  },
+
+     async created(){
+      await this.BTCBank();
+      await this.fakeBank();
+    },
 
      methods: {
     ...mapActions(['executeAsyncRequest']),
-     
+    async BTCBank() {
+      this.BTCBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetBTCBankRoll());
+    },
+
+    async fakeBank() {
+      this.fakeBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
+    },
 
      } 
 }
@@ -49,39 +50,6 @@ export default {
 <style lang="css">
 
 
-.container {
-  position: relative;
-  text-align: center;
-  /* display: -webkit-inline-block; */
-width: 20%;
-height: 0;
-}
-
-.ich {
-      background-color: rgb(235,235,235)
-}
-
-.logo1 {
-    width: 150px;
-    height: 160px;
-}
-  
-  .colonne {
-        display: -webkit-inline-box;
-        
-  }
-
-.container > .text {
- width: 25%;
- height: 25%;
-}
-
-  .secondtext {
-font-size: 20px;
-  font-family: 'Courier New', sans-serif;
-  font-variant: small-caps;
-  color: black;
-  }
 
 </style>
 

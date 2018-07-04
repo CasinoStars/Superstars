@@ -334,7 +334,7 @@ export default {
     },
 
     async hit(e) {
-        // if(this.playingsecondhand == false) {
+        e.preventDefault();
         await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
         // } else {
         //     await this.executeAsyncRequest(() => BlackJackApiService.HitPlayerSecondCards());
@@ -342,6 +342,12 @@ export default {
         if(this.handvalue > 21) {
             this.gameend = true;
         }
+         await this.getFakeCoins();
+         await this.getTrueCoins();
+         this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
+         await this.refreshCards();
+         await this.refreshHandValue();
+         await this.CheckWinner();
     },
 
      async stand(e) {
