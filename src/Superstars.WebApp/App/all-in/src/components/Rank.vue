@@ -1,14 +1,15 @@
 <template>
     <div>
         <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-          <h1 style="font-variant: small-caps;"> <strong> Mes statistiques  </strong></h1>
+          <h1 style="font-variant: small-caps;"> <strong> Classement  </strong></h1>
         </div>
   <br><br>
 <table>
   <tr>
     <th>Pseudo</th>
     <th>Profit</th>
-    <th>Nombre de parties</th>
+    <th>Parties de Yams joué</th>
+    <th>Parties de BlackJack joué</th>
   </tr>
   <tr>
     <th>
@@ -21,10 +22,15 @@
        <td>{{e}}</td>
     </div>
     </th>
-    <th>
-      <div v-for="(e,index) of playernbgames" :key='index'>
-        <td>{{e}}</td>
-      </div>
+     <th>
+    <div v-for="(e,index) of playeryamsnbgames" :key='index'>
+       <td>{{e}}</td>
+    </div>
+    </th>
+     <th>
+    <div v-for="(e,index) of playerblackjacknbgames" :key='index'>
+       <td>{{e}}</td>
+    </div>
     </th>
   </tr>
 </table>
@@ -50,26 +56,23 @@ import RankApiService from '../services/RankApiService';
 export default {
     data() {
         return {
-            pseudos: {},
-            profits: {},
-            playernbgames: {},
+            pseudos: [],
+            profits: [],
+            playerblackjacknbgames: [],
+            playeryamsnbgames: []
         }
     },    
 
     async mounted() {
-      // this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
       this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
       this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
-      for (var i = 0; i < console.log(clothing.length); i++) 
-      {
-         playernbgames[i] = await this.executeAsyncRequest(()=> RankApiService.GetPlayerNumberParts());
-      }
+      this.playeryamsnbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersYamsNumberParts());
+      this.playerblackjacknbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersBlackJackNumberParts());
     },
 
      methods: {
     ...mapActions(['executeAsyncRequest']),
-
-
+    
      }
 }
 </script>

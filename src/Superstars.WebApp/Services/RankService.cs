@@ -24,7 +24,7 @@ namespace Superstars.WebApp.Services
 				tableenordre = true;
 				for (int i = 0; i < taille-1; i++)
 				{
-					if (profit[i] > profit[i + 1])
+					if (profit[i] < profit[i + 1])
 					{
 						int stock = profit[i];
 						profit[i] = profit[i + 1];
@@ -39,6 +39,44 @@ namespace Superstars.WebApp.Services
 				}
 				taille--;
 			}
+		}
+
+		private void TriProfitAndGames(List<int> profit, List<int> games)
+		{
+			int taille = profit.Count;
+			bool tableenordre = false;
+			while (!tableenordre)
+			{
+				tableenordre = true;
+				for (int i = 0; i < taille - 1; i++)
+				{
+					if (profit[i] < profit[i + 1])
+					{
+						int stock = profit[i];
+						profit[i] = profit[i + 1];
+						profit[i + 1] = stock;
+
+						int stockos = games[i];
+						games[i] = games[i + 1];
+						games[i + 1] = stockos;
+
+						tableenordre = false;
+					}
+				}
+				taille--;
+			}
+		}
+
+		public List<int> SortedNbGames(List<int> profit, List<int> wins,List<int> losses)
+		{
+			List<int> games = new List<int>();
+			for(int i = 0; i<losses.Count;i++)
+			{
+				int lll = wins[i] + losses[i];
+				games.Add(lll);
+			}
+			TriProfitAndGames(profit, games);
+			return games;
 		}
 	}
 }

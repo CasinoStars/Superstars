@@ -45,16 +45,30 @@ namespace Superstars.WebApp.Controllers
 			return namesList;
 		}
 
-		[HttpGet("PlayerNumberParts")]
-		public async Task<int> GetPlayerNumberParts()
+		[HttpGet("PlayersYamsNumberParts")]
+		public async Task<IEnumerable<int>> GetPlayersYamsNumberParts()
 		{
-			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			int winsBlackJack = await _rankGateway.GetPlayerBlackJackWins(userId);
-			int lossesBlackJack = await _rankGateway.GetPlayerBlackJackLosses(userId);
-			int winsYams = await _rankGateway.GetPlayerYamsWins(userId);
-			int lossesYams = await _rankGateway.GetPlayerYamsLosses(userId);
-			int numberParts = lossesBlackJack + winsBlackJack + winsYams + lossesBlackJack;
-			return numberParts;
+			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+			IEnumerable<int> winsYams = await _rankGateway.GetPlayersYamsWins();
+			IEnumerable<int> lossesYams = await _rankGateway.GetPlayerYamsLosses();
+			List<int> profitList = profits.ToList();
+			List<int> winsList = winsYams.ToList();
+			List<int> lossesList = lossesYams.ToList();
+			List<int> NbGame = _rankService.SortedNbGames(profitList,winsList,lossesList);
+			return NbGame;
+		}
+
+		[HttpGet("PlayersBlackJackNumberParts")]
+		public async Task<IEnumerable<int>> GetPlayersBlackJackNumberParts()
+		{
+			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+			IEnumerable<int> winsBlackJack = await _rankGateway.GetPlayersBlackJackWins();
+			IEnumerable<int> lossesBlackJack = await _rankGateway.GetPlayersBlackJackLosses();
+			List<int> profitList = profits.ToList();
+			List<int> winsList = winsBlackJack.ToList();
+			List<int> lossesList = lossesBlackJack.ToList();
+			List<int> NbGame = _rankService.SortedNbGames(profitList, winsList, lossesList);
+			return NbGame;
 		}
 	}
 }
