@@ -75,7 +75,7 @@ namespace Superstars.Wallet
                 Money amount = (Money) coin.Amount;
                 total += (int)amount.Satoshi;
             }
-            return total;
+            return total/100;
         }
         /// <summary>
         /// Get Pending Transactin ID with Amount of confirmation and the Value of the coin that the wallet with receive 
