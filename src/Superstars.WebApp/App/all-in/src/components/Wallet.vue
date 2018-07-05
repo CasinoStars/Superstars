@@ -102,7 +102,7 @@ export default {
 
                 var errors = [];
                 if(this.fakeCoins.balance >= 1000000)
-                    errors.push("Le crédit est bloquer lorsque votre solde atteind 1,000,000 de bits");           
+                    errors.push("Le crédit est bloqué lorsque votre solde atteint 1,000,000 de bits");           
                 this.errors = errors;
 
                 if(errors.length == 0) {
