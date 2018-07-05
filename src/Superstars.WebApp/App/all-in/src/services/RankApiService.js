@@ -5,20 +5,20 @@ class RankApiService{
     constructor(){   
     }
 
-    async GetPlayersProfitSorted(){
-        return await getAsync(`${endpoint}/PlayersProfitSorted`)
+    async GetPlayersProfitSorted(TrueOrFake){
+        return await getAsync(`${endpoint}/${TrueOrFake}/PlayersProfitSorted`)
     }
 
-    async GetPlayersUserNameSorted(){
-        return await getAsync(`${endpoint}/PlayersUserNameSorted`)
+    async GetPlayersUserNameSorted(TrueOrFake){
+        return await getAsync(`${endpoint}/${TrueOrFake}/PlayersUserNameSorted`)
     }
 
-    async GetPlayersYamsNumberParts(){
-        return await getAsync(`${endpoint}/PlayersYamsNumberParts`)
+    async GetPlayersYamsNumberParts(TrueOrFake){
+        return await getAsync(`${endpoint}/${TrueOrFake}/PlayersYamsNumberParts`)
     }
 
-    async GetPlayersBlackJackNumberParts(){
-        return await getAsync(`${endpoint}/PlayersBlackJackNumberParts`)
+    async GetPlayersBlackJackNumberParts(TrueOrFake){
+        return await getAsync(`${endpoint}/${TrueOrFake}/PlayersBlackJackNumberParts`)
     }
 }
 export default new RankApiService();

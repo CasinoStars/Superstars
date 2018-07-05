@@ -5,6 +5,7 @@
           <h1 style="font-variant: small-caps; font-size: 45px;"> <strong>Classement</strong></h1>
         </div>
   <br><br>
+  <button v-on:click="SwapTrueOrFake()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">Vrai Argent / Faux Argent</button>
 <table>
   <tr>
     <th>Pseudo</th>
@@ -57,6 +58,7 @@ import RankApiService from '../services/RankApiService';
 export default {
     data() {
         return {
+            TrueOrFake: true,
             pseudos: [],
             profits: [],
             playerblackjacknbgames: [],
@@ -65,14 +67,17 @@ export default {
     },    
 
     async mounted() {
-      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
-      this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
-      this.playeryamsnbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersYamsNumberParts());
-      this.playerblackjacknbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersBlackJackNumberParts());
+      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted(this.TrueOrFake));
+      this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted(this.TrueOrFake));
+      this.playeryamsnbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersYamsNumberParts(this.TrueOrFake));
+      this.playerblackjacknbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersBlackJackNumberParts(this.TrueOrFake));
     },
 
      methods: {
     ...mapActions(['executeAsyncRequest']),
+      SwapTrueOrFake(){
+        this.TrueOrFake = !this.TrueOrFake;
+      }
     
      }
 }
