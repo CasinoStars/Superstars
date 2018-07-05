@@ -4,7 +4,7 @@ create proc sp.sMoneyUpdate
 	@Balance int,
 	@Profit int,
 	@MoneyType varchar(64),
-	@Credit decimal(15,8)
+	@Credit int
 )
 as
 begin
@@ -15,10 +15,7 @@ begin
         rollback;
         return 1;
     end;
-	declare @secondCredit decimal(10,10);
-    select @secondCredit = m.Credit from sp.tMoney m where m.MoneyId = @MoneyId;
-	set @secondCredit = @secondCredit + @Credit;
-	update sp.tMoney set Balance += @Balance, Credit = Credit + @Credit , Profit = Profit + @Profit where MoneyId = @MoneyId and MoneyType = @MoneyType;
+	update sp.tMoney set Balance += @Balance, Credit = Credit + @Credit, Profit = Profit + @Profit where MoneyId = @MoneyId and MoneyType = @MoneyType;
 	commit;
     return 0;
 end;

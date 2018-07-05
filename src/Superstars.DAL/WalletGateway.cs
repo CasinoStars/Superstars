@@ -15,7 +15,7 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins,int profit, decimal credit = 0)
+        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins,int profit, int credit)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -35,7 +35,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result> InsertInBankRoll(decimal trueCoins, int fakeCoins)
+        public async Task<Result> InsertInBankRoll(int trueCoins, int fakeCoins)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -91,11 +91,11 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<decimal>> GetCredit(int userId)
+        public async Task<Result<int>> GetCredit(int userId)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                decimal credit = await con.QueryFirstOrDefaultAsync<decimal>(
+                int credit = await con.QueryFirstOrDefaultAsync<int>(
                     "select m.Credit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
                     new { userid = userId });
                 return Result.Success(credit);

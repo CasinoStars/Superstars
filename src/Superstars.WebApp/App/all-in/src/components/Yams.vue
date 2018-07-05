@@ -23,7 +23,7 @@
         <div  class="modal-body">
           <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-if="realOrFake == 'real'">SAISISSEZ VOTRE MISE EN BTC <span class="req">*</span></h4>
           <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-else>SAISISSEZ VOTRE MISE EN ALL'IN <span class="req">*</span></h4>
-          <input style="margin-top: 10px; margin-bottom: 1%;" v-if="realOrFake == 'real'" type="decimal" v-model="trueBet" required/>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-if="realOrFake == 'real'" type="number" v-model="trueBet" required/>
           <input style="margin-top: 10px; margin-bottom: 1%;" v-else type="number" v-model="fakeBet" required/>
         
           <div class="alert alert-danger" style="opacity: 0.8; font-weight: bold; font-family: 'Courier New', sans-serif; text-transform: uppercase; margin-top: 1%; margin-bottom: 0.5%; text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
@@ -188,10 +188,10 @@ export default {
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
-        if(this.trueBet > 100)
-          errors.push("La mise maximum est de 100 BTC");
+        if(this.trueBet > 10000000)
+          errors.push("La mise maximum est de 10000000 bits");
         else if(this.trueBet <= 0)  
-          errors.push("La mise doit être supérieur à 0 BTC");
+          errors.push("La mise doit être supérieur à 0 bits");
         else if(this.trueBet > this.trueCoins){
           errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
