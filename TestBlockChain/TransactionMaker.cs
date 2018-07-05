@@ -41,9 +41,9 @@ namespace Superstars.Wallet
                     PrevOut = utxo.Outpoint
                 });
                 amount = (Money)utxo.Amount;
-                valueOfInputs += (int)amount;
+                valueOfInputs += (int)amount.Satoshi;
                 transaction.Inputs[p].ScriptSig = senderScriptPubKey;
-                if (valueOfInputs > totalToSend) break;
+                if (valueOfInputs > totalToSend*100) break;
                 p++;                
             }
 
