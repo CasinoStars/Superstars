@@ -113,7 +113,7 @@
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
     <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
     <a v-if="!iaturn && !gameend" class="txt"> C'est à votre tour de jouer </a> <br>
-    <a v-if="iaturn && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
+    <a v-if="dealerplaying && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
     <a v-if="gameend" class="txt"> <strong> {{winnerlooser}} </strong> </a> <br>
 </div>
 
@@ -368,11 +368,11 @@ export default {
     async playdealer(e) {
         e.preventDefault();
         document.getElementById('wait').style.visibility = "visible";
-        this.dealerplaying = true;
         setTimeout(this.playdealersecond,2000);
     },
 
     async playdealersecond() {
+        this.dealerplaying = true;
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
