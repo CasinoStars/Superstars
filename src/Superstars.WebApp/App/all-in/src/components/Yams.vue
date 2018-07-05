@@ -189,7 +189,7 @@ export default {
       }
       else {
         if(this.trueBet > 10000000)
-          errors.push("La mise maximum est de 10000000 bits");
+          errors.push("La mise maximum est de 10,000,000 bits");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 bits");
         else if(this.trueBet > this.trueCoins){
