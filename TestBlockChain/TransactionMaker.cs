@@ -47,13 +47,13 @@ namespace Superstars.Wallet
 
             TxOut destinationTxOut = new TxOut()
             {
-                Value = new Money(amountToSend, MoneyUnit.BTC),
+                Value = new Money(amountToSend*100, MoneyUnit.Satoshi),
                 ScriptPubKey = destinationAdress.ScriptPubKey
             };
 
             TxOut changeBackTxOut = new TxOut()
             {
-                Value = new Money(valueOfInputs - totalToSend, MoneyUnit.BTC),
+                Value = new Money(valueOfInputs - totalToSend*100, MoneyUnit.Satoshi),
                 ScriptPubKey = senderScriptPubKey
             };
 

@@ -75,6 +75,7 @@ namespace Superstars.Wallet
                 Money amount = (Money) coin.Amount;
                 total += (int)amount.Satoshi;
             }
+            total = total / 100;
             return total;
         }
         /// <summary>
