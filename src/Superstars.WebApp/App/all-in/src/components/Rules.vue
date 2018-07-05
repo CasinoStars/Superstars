@@ -1,9 +1,10 @@
 <template>
 <div class="bg">
+  <br>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-      <h1 style="text-decoration: underline;"> <strong> Règles: </strong></h1>
+      <h1 style="font-variant: small-caps;font-size: 45px;"> <strong> Règles </strong></h1>
       <br>
-      <center>
+<center>
 <div>
 <button v-on:click="YamsRules()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">YAMS</button>
 <button v-on:click="BlackJackRules()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">BLACKJACK</button>
@@ -11,7 +12,7 @@
 </center>
       <br>
       <br>
-      <h2 style="text-decoration: underline;" id="YamsTitle"> <strong> Yams: </strong></h2>
+      <h2  id="YamsTitle" style="font-variant: small-caps; font-size: 40px;"> <strong>Le Yams </strong></h2>
   </div>
 <br>
 
@@ -58,7 +59,7 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 
 <!--  BLACKJACK -->
   <div style="text-align: center; font-family: 'Courier New', sans-serif;">
-      <h2 id="bjtitle" style="text-decoration: underline;"> <strong> BlackJack: </strong></h2>
+      <h2 id="bjtitle" style="font-variant: small-caps; font-size: 40px;"> <strong>Le BlackJack </strong></h2>
   </div>
 <br>
   <div id="BlackJackContent">
@@ -142,6 +143,7 @@ p {
   font-family: 'Courier New', sans-serif;
   font-variant: small-caps;
   color: black;
+  margin-left: 1.5%;
 }
 
 dt {
