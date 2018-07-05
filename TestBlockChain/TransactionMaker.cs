@@ -20,26 +20,26 @@ namespace Superstars.Wallet
         /// <param name="key"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static Transaction MakeATransaction(BitcoinSecret senderPrivateKey, BitcoinAddress destinationAdress, decimal amountToSend, decimal minerFee, int nbOfConfimationReq, QBitNinjaClient client)
+        public static Transaction MakeATransaction(BitcoinSecret senderPrivateKey, BitcoinAddress destinationAdress, int amountToSend, int minerFee, int nbOfConfimationReq, QBitNinjaClient client)
         {
-            decimal total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
+            int total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
             if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
 
             ICoin[] UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client);
             var transaction = new Transaction();
             var senderScriptPubKey = senderPrivateKey.GetAddress().ScriptPubKey;
             var sortedDict = from entry in UTXOS orderby entry.Amount descending select entry;
-            decimal totalToSend = amountToSend + minerFee;
+            int totalToSend = amountToSend + minerFee;
 
             int p = 0;
-            decimal valueOfInputs = 0;
+            int valueOfInputs = 0;
             foreach (var utxo in sortedDict)
             {
                 transaction.Inputs.Add(new TxIn()
                 {
                     PrevOut = utxo.Outpoint
                 });
-                valueOfInputs += decimal.Parse(utxo.Amount.ToString().Replace(".", ","));
+                valueOfInputs += int.Parse(utxo.Amount.ToString());
                 transaction.Inputs[p].ScriptSig = senderScriptPubKey;
                 if (valueOfInputs > totalToSend) break;
                 p++;                
@@ -47,13 +47,13 @@ namespace Superstars.Wallet
 
             TxOut destinationTxOut = new TxOut()
             {
-                Value = new Money((decimal)amountToSend, MoneyUnit.BTC),
+                Value = new Money(amountToSend, MoneyUnit.BTC),
                 ScriptPubKey = destinationAdress.ScriptPubKey
             };
 
             TxOut changeBackTxOut = new TxOut()
             {
-                Value = new Money((decimal)valueOfInputs - (decimal)totalToSend, MoneyUnit.BTC),
+                Value = new Money(valueOfInputs - totalToSend, MoneyUnit.BTC),
                 ScriptPubKey = senderScriptPubKey
             };
 

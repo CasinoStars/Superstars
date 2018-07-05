@@ -31,7 +31,7 @@ namespace Superstars.WebApp.Controllers
 		public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
 		{
 			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins,0);
+			Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins,0,0);
 			return this.CreateResult(result);
 		}
 
@@ -39,12 +39,12 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot, pot);
+            Result result = await _walletGateway.AddCoins(userId, 2, pot, pot,0);
             return this.CreateResult(result);
         }
 
         [HttpPost("{pot}/creditBTCPlayer")]
-        public async Task<IActionResult> CreditPlayerBTC(decimal pot)
+        public async Task<IActionResult> CreditPlayerBTC(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _walletGateway.AddCoins(userId, 1, 0, 0, pot);
@@ -59,7 +59,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{pot}/withdrawBtcBank")]
-        public async Task<IActionResult> WithdrawBTCBankRoll(decimal pot)
+        public async Task<IActionResult> WithdrawBTCBankRoll(int pot)
         {
             Result result = await _walletGateway.InsertInBankRoll(-pot, 0);
             return this.CreateResult(result);
@@ -70,7 +70,7 @@ namespace Superstars.WebApp.Controllers
         {
             Result<int> result = await _walletGateway.GetBTCBankRoll();
             BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
-            decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
+            int onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
             Result<decimal> allCredit = await _walletGateway.GetAllCredit();
             decimal BTCBank;
             if (allCredit.Content <= 0)
@@ -92,14 +92,14 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("TrueBalance")]
-        public async Task<decimal> GetTrueBalance()
+        public async Task<int> GetTrueBalance()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
-            decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
-            Result<decimal> credit = await _walletGateway.GetCredit(userId);
-            decimal realBalance = onBlockchain + credit.Content;
+            int onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
+            Result<int> credit = await _walletGateway.GetCredit(userId);
+            int realBalance = onBlockchain + credit.Content;
             return realBalance;
         }
 
@@ -129,7 +129,7 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
             BitcoinAddress destinationAddress = BitcoinAddress.Create(WalletViewModel.DestinationAddress,Network.TestNet);
-            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, (decimal)0.05, 6, client);
+            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, 50000, 6, client);
             List<string> response =  TransactionMaker.BroadCastTransaction(transaction,client);
 
             return response;

@@ -1,4 +1,6 @@
 import AuthService from '../services/UserApiService';
+import axios from 'axios';
+
 
 async function checkErrors(resp) {
     if(resp.ok) return resp;
@@ -32,6 +34,13 @@ export async function postAsync(url, data) {
         }
     })
     .then(checkErrors);
+}
+
+export async function postAxios(url, data) {
+    return await axios.post(url, data, {headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AuthService.accessToken}`
+    }})
 }
 
 export async function putAsync(url, data) {
