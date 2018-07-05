@@ -14,9 +14,7 @@ class RankApiService{
     }
 
     async GetPlayerNumberParts(userName){
-        console.log(userName + "HERE");
-        console.log(typeof userName);
-        return await getAsync(`${endpoint}/PlayerNumberParts`, userName)
+        return await getAsync(`${endpoint}/${userName}/PlayerNumberParts`)
     }
 }
 export default new RankApiService();

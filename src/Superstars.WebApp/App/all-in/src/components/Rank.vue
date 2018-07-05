@@ -22,7 +22,7 @@
     </div>
     </th>
     <th>
-      <div v-for="(e,index) of playernbgames" :key='index'>
+      <div v-for="(e,index) of this.playernbgames" :key='index'>
         <td>{{e}}</td>
       </div>
     </th>
@@ -60,7 +60,6 @@ export default {
 
       this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted());
       this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted());
-      console.log(typeof this.pseudos[0]);
       for (var i = 0; i < this.pseudos.length; i++) 
       {
          this.playernbgames[i] = await this.executeAsyncRequest(()=> RankApiService.GetPlayerNumberParts(this.pseudos[i]));

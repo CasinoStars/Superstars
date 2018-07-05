@@ -45,8 +45,8 @@ namespace Superstars.WebApp.Controllers
 			return namesList;
 		}
 
-		[HttpGet("PlayerNumberParts")]
-		public async Task<int> GetPlayerNumberParts([FromBody] string userName)
+		[HttpGet("{userName}/PlayerNumberParts")]
+		public async Task<int> GetPlayerNumberParts(string userName)
 		{
 			int winsBlackJack = await _rankGateway.GetPlayerBlackJackWins(userName);
 			int lossesBlackJack = await _rankGateway.GetPlayerBlackJackLosses(userName);
