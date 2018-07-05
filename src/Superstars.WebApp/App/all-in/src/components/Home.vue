@@ -7,7 +7,7 @@
     </header>
 <br>
     <div class="bs-example">
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel" data-interval=4000>
             <!-- Carousel indicators -->
             <ol class="carousel-indicators">
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="carousel-item">
                     <img src="../img/fastbetlogo.png" id="fastbetlogo">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Des jeux rapides</strong><br>Attention à ne pas vous brûler</h5></div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Des jeux rapides</strong><br>Mais attention à ne pas vous brûler</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/statslogo.png" id="statslogo">
@@ -50,10 +50,24 @@
             </a>
         </div>
     </div>
+    
 <br>
     <center style="padding-top: 4%;">
         <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
     </center>
+
+<!-- Footer -->
+<br><br>
+<footer class="page-footer font-small blue">
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">Jouer comporte des risques : endettement, isolement, dépendance...  - 
+    <a href="http://www.joueurs-info-service.fr/"> Besoin d'aide ? </a> - 09 74 75 13 13 (FRA)
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
 </div>
 </template>
 
@@ -92,7 +106,7 @@ export default {
 
 <style lang="css">
 .home .carousel{
-    background: #212529;
+    /* background: #212529; */
 }
 
 .home .carousel .carousel-item{
