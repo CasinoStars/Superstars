@@ -88,8 +88,7 @@
 
                         <button type="submit" class="button button-block">Retrouver les dés</button>
                     </form>
-                    {{dicesFromSeeds}}
-
+                        <div v-for="(i,index) of (dicesFromSeeds)" :key="index" style="display: inline;"> {{i}}</div>
                 </div><!-- tab-content -->
             </div>
 
@@ -250,11 +249,18 @@ export default {
     
     async RetriveDicesFromSeeds(e) {
         e.preventDefault();
+        let toto = this;
+        let azerty =  await ProvablyFairApiService.RetriveDicesFromSeeds(this.serverSeedTest,this.clientSeedTest,this.nbOfDices).then(function(azerty){
+                console.log("The last one");
+                console.log(azerty);
+                toto.dicesFromSeeds = azerty;
+        });
+      
 
-      this.dicesFromSeeds = await this.executeAsyncRequest(() => ProvablyFairApiService.RetriveDicesFromSeeds(this.clientSeedTest,this.serverSeedTest,this.nbOfDices)
-      , console.log(this.dicesFromSeeds[1]) 
-      , console.log("ICIIIIIIIIII")
-      );
+        
+              
+      
+
     },
 
     async UpdateSeeds(e) {
