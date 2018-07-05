@@ -92,14 +92,14 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("TrueBalance")]
-        public async Task<decimal> GetTrueBalance()
+        public async Task<int> GetTrueBalance()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
-            decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
-            Result<decimal> credit = await _walletGateway.GetCredit(userId);
-            decimal realBalance = onBlockchain + credit.Content;
+            int onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
+            Result<int> credit = await _walletGateway.GetCredit(userId);
+            int realBalance = onBlockchain + credit.Content;
             return realBalance;
         }
 
@@ -129,7 +129,7 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
             BitcoinAddress destinationAddress = BitcoinAddress.Create(WalletViewModel.DestinationAddress,Network.TestNet);
-            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, (decimal)0.05, 6, client);
+            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, 50000, 6, client);
             List<string> response =  TransactionMaker.BroadCastTransaction(transaction,client);
 
             return response;

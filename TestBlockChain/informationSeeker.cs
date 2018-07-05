@@ -66,13 +66,13 @@ namespace Superstars.Wallet
         /// <param name="privateKey"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static decimal HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
+        public static int HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
             ICoin[] Coins = FindUtxo(privateKey, client);
-            decimal total = 0;
+            int total = 0;
             foreach (var coin in Coins)
             {
-                decimal value = (decimal)double.Parse(coin.Amount.ToString().Replace(".", ","));
+                int value = int.Parse(coin.Amount.ToString());
                 total += value;
             }
             return total;

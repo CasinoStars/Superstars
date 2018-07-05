@@ -10,6 +10,6 @@
 
         public string DestinationAddress { get; set; }
 
-        public decimal AmountToSend { get; set; }
+        public int AmountToSend { get; set; }
     }
 }
