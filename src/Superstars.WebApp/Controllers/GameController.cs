@@ -36,7 +36,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("{bet}/betBTC")]
+        [HttpPost("{bet}/{gameType}/betBTC")]
         public async Task<IActionResult> BetBTC(decimal bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
             string stringBet = System.Convert.ToString(bet*2);
@@ -47,12 +47,12 @@ namespace Superstars.WebApp.Controllers
             else {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
             }
-            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -(bet));
+            Result result2 = await _walletGateway.AddCoins(userId, 1, 0,0, -(bet));
             Result result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
             return this.CreateResult(result2);
         }
 
-        [HttpPost("{bet}/betFake")]
+        [HttpPost("{bet}/{gameType}/betFake")]
         public async Task<IActionResult> FakeBet(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
             string stringBet = System.Convert.ToString(bet * 2);
@@ -65,7 +65,7 @@ namespace Superstars.WebApp.Controllers
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
             }
-            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet));
+            Result result2 = await _walletGateway.AddCoins(userId, 2, -(bet), -(bet));
             Result result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
         }

@@ -15,11 +15,12 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins, decimal credit = 0)
+        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins,int profit, decimal credit = 0)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
+				p.Add("@Profit", profit);
                 p.Add("@Credit", credit);
                 p.Add("@MoneyId", moneyId);
                 p.Add("@Balance", coins);

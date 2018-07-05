@@ -136,6 +136,7 @@ export default {
       playerwin: false,
       playerBet: false,
       realOrFake: 'real',
+      profit: 0,
       fakeBet: 0,
       trueBet: 0,
       fakeCoins: 0,
@@ -198,9 +199,9 @@ export default {
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake')
-            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet));
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 'Yams'));
           else
-            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet));
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;

@@ -12,34 +12,34 @@ using System.Collections.Generic;
 
 namespace Superstars.WebApp.Controllers
 {
-    [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
-    public class WalletController : Controller
-    {
-        WalletGateway _walletGateway;
+	[Route("api/[controller]")]
+	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+	public class WalletController : Controller
+	{
+		WalletGateway _walletGateway;
 
-        public WalletController(WalletGateway walletGateway)
-        {
-            _walletGateway = walletGateway;
-        }
+		public WalletController(WalletGateway walletGateway)
+		{
+			_walletGateway = walletGateway;
+		}
 
-        /// <summary>
-        /// Add Real or Fake Coins for player
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("AddCoins")]
-        public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
-        {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);           
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins);                      
-            return this.CreateResult(result);
-        }
+		/// <summary>
+		/// Add Real or Fake Coins for player
+		/// </summary>
+		/// <returns></returns>
+		[HttpPost("AddCoins")]
+		public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
+		{
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins,0);
+			return this.CreateResult(result);
+		}
 
-        [HttpPost("{pot}/creditFakePlayer")]
+		[HttpPost("{pot}/creditFakePlayer")]
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot);
+            Result result = await _walletGateway.AddCoins(userId, 2, pot, pot);
             return this.CreateResult(result);
         }
 
@@ -47,7 +47,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerBTC(decimal pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0, 0, pot);
             return this.CreateResult(result);
         }
 
@@ -72,7 +72,15 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
             decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
             Result<decimal> allCredit = await _walletGateway.GetAllCredit();
-            decimal BTCBank = onBlockchain + allCredit.Content;
+            decimal BTCBank;
+            if (allCredit.Content <= 0)
+            {
+                BTCBank = onBlockchain - allCredit.Content;
+            }
+            else
+            {
+                BTCBank = onBlockchain + allCredit.Content;
+            }
             return BTCBank;
         }
 
