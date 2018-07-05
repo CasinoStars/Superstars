@@ -25,15 +25,22 @@
             </router-link>
           </li>
           <li class="nav-item" v-if="auth.isConnected">
-            <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
-            </router-link>
+              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> PROVABLYFAIR
+              </router-link>
           </li>
         </ul>
 
         <div class="collapse navbar-collapse" v-if="auth.isConnected">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
+            <li class="nav-item" v-if="auth.isConnected">
+              <router-link class="nav-link" to="/play" style="letter-spacing: 2px; font-size: 12px;">
+                <i class="fa fa-gamepad" style="font-size: 1.4rem;"></i> JOUER
+              </router-link>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
               <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
                 SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins.balance}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
@@ -44,19 +51,12 @@
               <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user" style="font-size: 1.4rem;"></i> {{ auth.pseudo }}
               </a>
-              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:120%; right: -8%;">
+              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:120%;">
                 <router-link style="margin-left: -2px;" class="dropdown-item" to="/wallet"><i class="fa fa-diamond"> Porte-feuille</i></router-link>
                 <!-- <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"> Régagles</i></router-link> -->
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"> Déconnexion</i></router-link>
               </div>
-            </li>
-          </ul>
-                    <ul class="nav navbar-nav">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> ProvablyFair
-              </router-link>
             </li>
           </ul>
         </div>

@@ -119,13 +119,19 @@ export default {
             e.preventDefault();
             console.log("Test");
             var errors = [];
+            if(this.item.AmountToSend < 100000)
+                errors.push("Le retrait minimum est de 100,000 bits");  
+            else if(this.trueCoins < this.item.AmountToSend)
+                errors.push("Vous n'avez pas cette somme");
+            this.errors = errors;
+            if(errors.length === 0) {          
                 try {
                     this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
                     this.refreshTrueCoins();
                 }
                 catch(error){
-
                 }
+            }
         },
 
         Copy() {
