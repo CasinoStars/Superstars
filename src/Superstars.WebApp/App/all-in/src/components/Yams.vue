@@ -188,10 +188,10 @@ export default {
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
-        if(this.trueBet > 100)
-          errors.push("La mise maximum est de 100 BTC");
+        if(this.trueBet > 1000000)
+          errors.push("La mise maximum est de 1000000 bits");
         else if(this.trueBet <= 0)  
-          errors.push("La mise doit être supérieur à 0 BTC");
+          errors.push("La mise doit être supérieur à 0 bits");
         else if(this.trueBet > this.trueCoins){
           errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
