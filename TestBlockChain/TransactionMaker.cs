@@ -24,6 +24,7 @@ namespace Superstars.Wallet
         {
             int total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
             if (amountToSend + minerFee > total) throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
+            Money amount = 0;
 
             ICoin[] UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client);
             var transaction = new Transaction();
@@ -39,7 +40,8 @@ namespace Superstars.Wallet
                 {
                     PrevOut = utxo.Outpoint
                 });
-                valueOfInputs += int.Parse(utxo.Amount.ToString());
+                amount = (Money)utxo.Amount;
+                valueOfInputs += (int)amount;
                 transaction.Inputs[p].ScriptSig = senderScriptPubKey;
                 if (valueOfInputs > totalToSend) break;
                 p++;                
