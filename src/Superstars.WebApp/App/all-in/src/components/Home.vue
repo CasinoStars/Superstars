@@ -13,20 +13,30 @@
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
                 <li data-target="#myCarousel" data-slide-to="2"></li>
+                <li data-target="#myCarousel" data-slide-to="3"></li>
+                <li data-target="#myCarousel" data-slide-to="4"></li>
             </ol>
             <!-- Wrapper for carousel items -->
             <div class="carousel-inner" style="text-align: center; font-family: 'Courier New', sans-serif;">
                 <div class="carousel-item active">
-                    <img src="../img/../img/provablylogo.png">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"> <strong> &nbsp Un site provably Fair </strong> <br> &nbsp Pariez les yeux fermés</h5></div>
+                    <img src="../img/../img/provablylogo.png" id="provablylogo">
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Un site provably fair</strong><br>Vous pouvez parier les yeux fermés</h5></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="../img/fastbetlogo.png">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong> Des jeux rapides </strong><br> Gagnez beaucoup en quelques instants</h5></div>
+                    <img src="../img/fastbetlogo.png" id="fastbetlogo">
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Des jeux rapides</strong><br>Attention à ne pas vous brûler</h5></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="../img/statslogo.png">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"> <strong> Des statistiques détaillées </strong> <br> Visualisez vos statistiques en temps réel </h5></div>
+                    <img src="../img/statslogo.png" id="statslogo">
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Des statistiques détaillées</strong><br>Visualisez vos statistiques en temps réel</h5></div>
+                </div>
+                <div class="carousel-item">
+                    <img src="../img/bitcoinlogo.png" id="bitcoinlogo">
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Un Bitcoin Casino</strong><br>La maison accepte le Bitcoin</h5></div>
+                </div>
+                <div class="carousel-item">
+                    <img src="../img/leaderboardlogo.png" id="leaderboardlogo">
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Classement général</strong><br>Comparez votre parcours par rapport à vos amis</h5></div>
                 </div>
             </div>
             <!-- Carousel controls -->
@@ -40,7 +50,7 @@
             </a>
         </div>
     </div>
-<br><br>
+<br>
     <center style="padding-top: 4%;">
         <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
     </center>
@@ -82,17 +92,44 @@ export default {
 
 <style lang="css">
 .home .carousel{
-    background: rgb(210,210,210);
+    background: #212529;
 }
 
 .home .carousel .carousel-item{
+    height: 450px;
     min-height: 350px;/* Prevent carousel from being distorted if for some reason image doesn't load */
 }
 
 .home .carousel .carousel-item img{
+    margin-top: 5%; /* Align slide image horizontally center */
+}
+
+#provablylogo {
+    margin-top: 3.5%;
+    width: 180px;
+    height: 230px;
+}
+
+#statslogo {
+    margin-left: 3%;
+    width: 260px;
+    height: 170px;
+}
+
+#fastbetlogo {
+    margin-top: 4%;
+    width: 180px;
+    height: 190px;
+}
+
+#bitcoinlogo {
+    width: 180px;
+    height: 170px;
+}
+
+#leaderboardlogo {
     width: 150px;
-    height: 160px;
-    margin-top: 3%; /* Align slide image horizontally center */
+    height: 190px;
 }
 </style>
 

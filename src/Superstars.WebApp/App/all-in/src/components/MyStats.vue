@@ -4,7 +4,7 @@
   <br>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;" class="container">
     <div>
-      <h1 style="font-variant: small-caps;"> <strong> Mes statistiques </strong></h1>
+      <h1 style="font-variant: small-caps; font-size: 45px;"> <strong> Mes statistiques </strong></h1>
     </div>
   </div>
   <br><br>

@@ -69,7 +69,7 @@ export default {
 /* DISPLAY POSITION */
 .games {
   padding-top: 15%;
-  padding-left: 30%;
+  padding-left: 34%;
   display: inline-flex;
   display: center;
 }
