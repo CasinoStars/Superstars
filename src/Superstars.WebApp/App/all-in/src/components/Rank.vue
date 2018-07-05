@@ -6,10 +6,41 @@
         </div>
   <br><br>
   <button v-on:click="SwapTrueOrFake()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">Vrai Argent / Faux Argent</button>
-<table>
+
+<table v-if=TrueOrFake>
   <tr>
     <th>Pseudo</th>
-    <th>Profit</th>
+    <th>Profit Bitcoin</th>
+    <th>Parties de Yams joué</th>
+    <th>Parties de BlackJack joué</th>
+  </tr>
+  <tr>
+    <th>
+    <div v-for="(e,index) of pseudos" :key='index'>
+       <td>{{e}}</td>
+    </div>
+    </th>
+    <th>
+    <div v-for="(e,index) of profits" :key='index'>
+       <td>{{e}}</td>
+    </div>
+    </th>
+     <th>
+    <div v-for="(e,index) of playeryamsnbgames" :key='index'>
+       <td>{{e}}</td>
+    </div>
+    </th>
+     <th>
+    <div v-for="(e,index) of playerblackjacknbgames" :key='index'>
+       <td>{{e}}</td>
+    </div>
+    </th>
+  </tr>
+</table>
+<table v-else>
+  <tr>
+    <th>Pseudo</th>
+    <th>Profit Fausse Monnaie</th>
     <th>Parties de Yams joué</th>
     <th>Parties de BlackJack joué</th>
   </tr>
@@ -77,6 +108,15 @@ export default {
     ...mapActions(['executeAsyncRequest']),
       SwapTrueOrFake(){
         this.TrueOrFake = !this.TrueOrFake;
+        this.changethetab();
+        console.log(this.TrueOrFake);
+      },
+
+      async changethetab(){
+      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted(this.TrueOrFake));
+      this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted(this.TrueOrFake));
+      this.playeryamsnbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersYamsNumberParts(this.TrueOrFake));
+      this.playerblackjacknbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersBlackJackNumberParts(this.TrueOrFake));
       }
     
      }
