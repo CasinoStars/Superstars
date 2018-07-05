@@ -5,9 +5,7 @@ using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Superstars.Wallet;
-using NBitcoin;
-using QBitNinja.Client;
+using Superstars.YamsFair;
 using System.Collections.Generic;
 
 namespace Superstars.WebApp.Controllers
@@ -45,7 +43,14 @@ namespace Superstars.WebApp.Controllers
         public async void UpdateSeeds([FromBody] string ClientSeed = null)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-             _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
+            _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
+        }
+        [HttpPost("{clientSeedTest}/{serverSeedTest}/{nbOfDices}/RetriveDicesFromSeeds")]
+        public async Task<int[]> RetriveDicesFromSeeds(string clientSeedTest ,string serverSeedTest,  int nbOfDices)
+        {
+             List<int> dicesFromSeeds =  HashManager.RetriveDicesFromSeeds(clientSeedTest, serverSeedTest, nbOfDices);
+            int[] dicesFromSeedsArray = dicesFromSeeds.ToArray();
+            return dicesFromSeedsArray;
         }
     }
 }

@@ -11,13 +11,12 @@ namespace Superstars.YamsFair
         static void Main(string[] args)
         {
 
+            List<int> dicesFromSeeds = HashManager.RetriveDicesFromSeeds("ff0b463695f88ecd9a8946327b764a3a0acf935d1f6a527e9359643950bd025900495acd3c4a1e727f4ac5be9713e313700993878b0960a59a05627b9a51268b", "AlbinSeed",5);
 
-            int nonce = 50000000;
-            int nbOfTest = 10000;
-  
-
-
-            Console.WriteLine(HashManager.getHashSha512("e2df737b43ae8b1b2e65baa774da87c58aa621aef3cdb6e453297300366e6c8ffc7e2c5e5fd1f85e09fc8ac48096c25bc5bf828cd0cb0babc06095b769a678a5"));
+            foreach (var item in dicesFromSeeds)
+            {
+                Console.WriteLine(item);
+            }
 
             Console.ReadKey();
         }
