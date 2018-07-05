@@ -72,8 +72,8 @@ namespace Superstars.Wallet
             int total = 0;
             foreach (var coin in Coins)
             {
-                int value = int.Parse(coin.Amount.ToString());
-                total += value;
+                Money amount = (Money) coin.Amount;
+                total += (int)amount.Satoshi;
             }
             return total;
         }

@@ -44,7 +44,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{pot}/creditBTCPlayer")]
-        public async Task<IActionResult> CreditPlayerBTC(decimal pot)
+        public async Task<IActionResult> CreditPlayerBTC(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _walletGateway.AddCoins(userId, 1, 0, 0, pot);
@@ -59,7 +59,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{pot}/withdrawBtcBank")]
-        public async Task<IActionResult> WithdrawBTCBankRoll(decimal pot)
+        public async Task<IActionResult> WithdrawBTCBankRoll(int pot)
         {
             Result result = await _walletGateway.InsertInBankRoll(-pot, 0);
             return this.CreateResult(result);
@@ -70,7 +70,7 @@ namespace Superstars.WebApp.Controllers
         {
             Result<int> result = await _walletGateway.GetBTCBankRoll();
             BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
-            decimal onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
+            int onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
             Result<decimal> allCredit = await _walletGateway.GetAllCredit();
             decimal BTCBank;
             if (allCredit.Content <= 0)

@@ -35,7 +35,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result> InsertInBankRoll(decimal trueCoins, int fakeCoins)
+        public async Task<Result> InsertInBankRoll(int trueCoins, int fakeCoins)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
