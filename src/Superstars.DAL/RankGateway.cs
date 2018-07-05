@@ -22,7 +22,7 @@ namespace Superstars.DAL
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
 				return await con.QueryAsync<string>(
-					"select u.UserName from sp.vUser u where u.UserName is not null "
+					"select u.UserName from sp.vUser u where u.UserName is not null order by u.UserId ASC "
 					);
 			}
 		}
@@ -37,46 +37,42 @@ namespace Superstars.DAL
 			}
 		}
 
-		public async Task<int> GetPlayerBlackJackWins(string userId)
+		public async Task<IEnumerable<int>> GetPlayersBlackJackWins()
 		{
 			using (SqlConnection con  = new SqlConnection(_connectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>(
-					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'BlackJack' and u.UserName = @userName",
-					new { userName = userId }
+				return await con.QueryAsync<int>(
+					"select s.Wins from sp.tStats s where GameType = 'BlackJack'"
 					);
 			}
 		}
 
-		public async Task<int> GetPlayerBlackJackLosses(string userId)
+		public async Task<IEnumerable<int>> GetPlayersBlackJackLosses()
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>(
-					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'BlackJack' and u.UserName = @userName",
-					new { userName = userId }
+				return await con.QueryAsync<int>(
+					"select s.Losses from sp.tStats s where GameType = 'BlackJack'"
 					);
 			}
 		}
 
-		public async Task<int> GetPlayerYamsWins(string userId)
+		public async Task<IEnumerable<int>> GetPlayersYamsWins()
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>(
-					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserName = @userName",
-					new { userName = userId}
+				return await con.QueryAsync<int>(
+					"select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams'"
 					);
 			}
 		}
 
-		public async Task<int> GetPlayerYamsLosses(string userId)
+		public async Task<IEnumerable<int>> GetPlayerYamsLosses()
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>(
-					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams' and u.UserName = @userName",
-					new { userName = userId}
+				return await con.QueryAsync<int>(
+					"select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams'"
 					);
 			}
 		}
