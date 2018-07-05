@@ -238,19 +238,14 @@ export default {
     data() {
         return {
             playercards: [],
-            //playersecondcards: [],
             dealercards: [],
             handvalue: 0,
-            //secondhandvalue: 0,
             dealerhandvalue: 0,
             iaturn : false,
             dealerplaying: false,
             gameend: false,
             winnerlooser: '',
             playerwin: false,
-            // cansplitplayer: false,
-            //  hasplitplayer: false,
-            // playingsecondhand: false,
             nbturn: 0,
             nbhit: 0,
             playerBet: false,
@@ -263,8 +258,8 @@ export default {
         }
     },
     async created(){
-    // this.HasPlayerSplit();
     },
+
   async mounted() {
     await this.getFakeCoins();
     await this.getTrueCoins();
@@ -336,12 +331,11 @@ export default {
     async hit(e) {
         e.preventDefault();
         await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
-        // } else {
-        //     await this.executeAsyncRequest(() => BlackJackApiService.HitPlayerSecondCards());
-        // }
+
         if(this.handvalue > 21) {
             this.gameend = true;
         }
+
          await this.getFakeCoins();
          await this.getTrueCoins();
          this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
@@ -352,72 +346,27 @@ export default {
 
      async stand(e) {
         e.preventDefault();
-        // this.HasPlayerSplit();
-        // if(this.hasplitplayer == true && this.playingsecondhand == false){
-        //     this.iaturn = false;
-        //     this.playingsecondhand = true;
-        // } else {
-            this.iaturn =  true;
-            //this.iaturn = true;
-        // }
+        this.iaturn =  true;
         await this.StandandFinish();
         await this.refreshCards();
         await this.refreshHandValue();
     },
 
-    // async split(e) {
-    //     e.preventDefault();
-    //     console.log("before " + typeof this.cansplitplayer)
-    //     if(this.cansplitplayer) {
-    //     await BlackJackApiService.SplitPlayer();
-    //     this.hasplitplayer = true;
-    //     this.cansplitplayer = false;
-    //     await this.refreshCards();
-    //     await this.refreshHandValue();
-    //     console.log("after" + typeof this.hasplitplayer)
-    //     }
-    // },
 
     refreshiaturn() {
         this.iaturn = BlackJackApiService.refreshAiturn();
     },
 
-    //  HasPlayerSplit() {
-    //      this.hasplitplayer = BlackJackApiService.HasSplit();
-    // },
 
-    // CanPlayerSplit() {
-        // let toto = this;
-        // let michel  = BlackJackApiService.CanSplitPlayer().then(function(michel){
-        //     toto.cansplitplayer = michel;
-        // });
-
-    //     this.cansplitplayer = BlackJackApiService.CanSplitPlayer();
-    // },
 
     async StandandFinish() {
         await this.executeAsyncRequest(() => BlackJackApiService.StandPlayer());
         await this.CheckWinner();
     },
 
-//  wait(ms)
-// {
-//     this.showait();
-// var d = new Date();
-// var d2 = null;
-// do { d2 = new Date(); }
-// while(d2-d < ms);
-// },
-
-// showait() {
-//     console.log("BISMILLAH");
-//     console.log( document.getElementById('wait'));
-//     document.getElementById('wait').style.visibility = "visible";
-// },
 
     async playdealer(e) {
         e.preventDefault();
-        // this.wait(5000);
         document.getElementById('wait').style.visibility = "visible";
         this.dealerplaying = true;
         setTimeout(this.playdealersecond,2000);
@@ -475,19 +424,13 @@ export default {
         this.handvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerHandValue());
         this.dealerhandvalue = await this.executeAsyncRequest(() => BlackJackApiService.getAiHandValue());
 
-    //     if(this.hasplitplayer) {
-    //       this.secondhandvalue = await this.executeAsyncRequest(() => BlackJackApiService.getplayerSecondHandValue());
-    //   }
     },
 
     async refreshCards() {
       this.playercards = await this.executeAsyncRequest(() => BlackJackApiService.GetPlayerCards());
       this.dealercards = await this.executeAsyncRequest(() => BlackJackApiService.GetAiCards());
 
-    //   if(this.hasplitplayer) {
-    //       console.log("ET OUI");
-    //       this.playersecondcards = await this.executeAsyncRequest(() => BlackJackApiService.GetSecondPlayerCards());
-    //   }
+
     },
     }
 }
