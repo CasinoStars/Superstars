@@ -4,7 +4,7 @@ create proc sp.sMoneyUpdate
 	@Balance int,
 	@Profit int,
 	@MoneyType varchar(64),
-	@Credit decimal(15,8)
+	@Credit int
 )
 as
 begin

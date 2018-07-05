@@ -1,5 +1,5 @@
 create proc sp.sBankRollUpdate(
-	@RealCoins decimal(15,8),
+	@RealCoins int,
 	@FakeCoins int
 ) as
 begin

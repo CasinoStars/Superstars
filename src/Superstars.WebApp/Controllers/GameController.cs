@@ -37,7 +37,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{bet}/{gameType}/betBTC")]
-        public async Task<IActionResult> BetBTC(decimal bet, string gameType) // gameType = 'Yams' or 'BlackJack'
+        public async Task<IActionResult> BetBTC(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
         {
             string stringBet = System.Convert.ToString(bet*2);
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -47,7 +47,7 @@ namespace Superstars.WebApp.Controllers
             else {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
             }
-            Result result2 = await _walletGateway.AddCoins(userId, 1, 0,0, (-bet));
+            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, bet, (-bet));
             Result result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
             return this.CreateResult(result2);
         }
