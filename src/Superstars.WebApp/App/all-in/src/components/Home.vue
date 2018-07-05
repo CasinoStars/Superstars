@@ -5,7 +5,7 @@
             <h1>Bienvenue sur ALL`IN</h1>
         </div>
     </header>
-
+<br>
     <div class="bs-example">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Carousel indicators -->
@@ -18,15 +18,15 @@
             <div class="carousel-inner" style="text-align: center; font-family: 'Courier New', sans-serif;">
                 <div class="carousel-item active">
                     <img src="../img/../img/provablylogo.png">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black">Un site provably Fair</h5></div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"> <strong> &nbsp Un site provably Fair </strong> <br> &nbsp Pariez les yeux fermés</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/fastbetlogo.png">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black">Des jeux rapides</h5></div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong> Des jeux rapides </strong><br> Gagnez beaucoup en quelques instants</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/statslogo.png">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black">Des statistiques détaillées</h5></div>
+                    <div class="carousel-caption d-none d-md-block"><h5 style="color: black; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"> <strong> Des statistiques détaillées </strong> <br> Visualisez vos statistiques en temps réel </h5></div>
                 </div>
             </div>
             <!-- Carousel controls -->
@@ -40,7 +40,7 @@
             </a>
         </div>
     </div>
-
+<br><br>
     <center style="padding-top: 4%;">
         <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
     </center>
@@ -82,7 +82,7 @@ export default {
 
 <style lang="css">
 .home .carousel{
-    background: rgb(235,235,235);
+    background: rgb(210,210,210);
 }
 
 .home .carousel .carousel-item{
@@ -92,7 +92,7 @@ export default {
 .home .carousel .carousel-item img{
     width: 150px;
     height: 160px;
-    margin-top: 5%; /* Align slide image horizontally center */
+    margin-top: 3%; /* Align slide image horizontally center */
 }
 </style>
 

@@ -2,7 +2,7 @@
   <div id="app">
     <header>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <router-link class="navbar-brand" to="/" style="font-family: 'Courier New', sans-serif; font-weight: 600px;">SUPERSTARS</router-link>
+        <router-link class="navbar-brand" to="/" style="font-family: 'Courier New', sans-serif; font-weight: 600px;">ALL`IN</router-link>
         
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -34,7 +34,7 @@
         <div class="collapse navbar-collapse" v-if="auth.isConnected">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 133, 230); letter-spacing: 2px; font-size: 12px;">
+              <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
                 SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins.balance}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
