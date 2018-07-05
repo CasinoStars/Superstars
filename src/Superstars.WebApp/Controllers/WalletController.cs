@@ -96,7 +96,15 @@ namespace Superstars.WebApp.Controllers
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
-            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
+            BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
+            if (userId == 0)
+            {
+                 privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
+            }
+            else
+            {
+                 privateKey = new BitcoinSecret(result1.Content.PrivateKey/*"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"*/);
+            }
             int onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
             Result<int> credit = await _walletGateway.GetCredit(userId);
             int realBalance = onBlockchain + credit.Content;
