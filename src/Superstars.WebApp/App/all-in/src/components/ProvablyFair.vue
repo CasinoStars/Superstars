@@ -17,8 +17,8 @@
                 <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairTest')">Seeds</a></li>
                 
                 
-                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFair')">Code</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')">Code</a></li>
+                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFair')" style="margin-leftg: 25%;">Code</a></li>
+                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')" style="margin-leftg: 25%;">Code</a></li>
             </ul>
 
             <div style="color: white" v-if="this.view == 'provablyFair'">
