@@ -72,7 +72,8 @@
           </ul>
         </div>
       </nav>
-      <div class="progress" v-if="isLoading" v-bind="fakeUser() && BTCUser()">
+      <div class="progress" v-if="isLoading">
+        <div v-if="auth.isConnected" v-bind="fakeUser() && BTCUser()"></div>
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div>
     </header>
@@ -101,8 +102,6 @@ export default{
   
   async mounted() {
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
-      await this.BTCUser();
-      await this.fakeUser();
   },
 
   beforeDestroy() {

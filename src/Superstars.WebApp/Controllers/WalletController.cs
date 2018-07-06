@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace Superstars.WebApp.Controllers
 {
 	[Route("api/[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)] //NO AUTHORIZE FOR RESFRESH PUBLIC BANKROLL
 	public class WalletController : Controller
 	{
 		WalletGateway _walletGateway;
@@ -66,6 +66,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("BTCBankRoll")]
+        [AllowAnonymous]
         public async Task<decimal> GetBTCBankRoll()
         {
             Result<int> result = await _walletGateway.GetBTCBankRoll();
@@ -85,6 +86,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("FakeBankRoll")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetFakeBankRoll()
         {
             Result<int> result = await _walletGateway.GetFakeBankRoll();
