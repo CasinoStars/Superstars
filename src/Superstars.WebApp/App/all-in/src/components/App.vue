@@ -72,7 +72,7 @@
           </ul>
         </div>
       </nav>
-      <div class="progress" v-if="isLoading">
+      <div class="progress" v-if="isLoading" v-bind="fakeUser() && BTCUser()">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div>
     </header>
@@ -85,6 +85,15 @@ import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
 import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
+
+  var navbarOpts = {
+    name: 'navbar',
+    data() {
+      return {
+        isActive: []
+      }
+    }
+  };
 
 export default{
   data(){
@@ -113,11 +122,11 @@ export default{
     ...mapActions(['executeAsyncRequest']),
 
     async BTCUser() {
-      this.UserBTCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
+      this.UserBTCoins = await WalletApiService.GetTrueBalance();
     },
 
     async fakeUser() {
-      this.UserfakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+      this.UserfakeCoins = await WalletApiService.GetFakeBalance();
     },
 
     log(selectedBase) {
