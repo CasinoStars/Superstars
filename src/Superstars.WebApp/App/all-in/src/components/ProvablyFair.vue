@@ -57,7 +57,7 @@
 
 <div style="color: white" v-if="this.view == 'provablyFairTest'">
                 <div class="tab-content">
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Test:</span><br>{{seeds.clientSeed}}<br><br></h5>
+                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;"></span><br><br><br></h5>
         
 
                     <form  @submit="RetriveDicesFromSeeds($event)">
