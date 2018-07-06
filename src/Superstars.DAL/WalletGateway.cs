@@ -96,18 +96,18 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
                 int credit = await con.QueryFirstOrDefaultAsync<int>(
-                    "select m.Credit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
+                    "select m.Credit from sp.vMoney m where m.MoneyId = @userid and m.MoneyType = 1",
                     new { userid = userId });
                 return Result.Success(credit);
             }
         }
 
-        public async Task<Result<decimal>> GetAllCredit()
+        public async Task<Result<int>> GetAllCredit()
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
-                decimal allCredit = await con.QueryFirstOrDefaultAsync<decimal>(
-                    "select ROUND(SUM(m.Credit),8) from sp.tMoney m");
+                int allCredit = await con.QueryFirstOrDefaultAsync<int>(
+                    "select SUM(m.Credit) from sp.vMoney m");
                 return Result.Success(allCredit);
             }
         }

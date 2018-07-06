@@ -4,5 +4,6 @@ as
 	MoneyId = m.MoneyId,
 	MoneyType = m.MoneyType,
 	Balance = m.Balance,
-	Profit = m.Profit
+	Profit = m.Profit,
+	Credit = m.Credit
 	from sp.tMoney m

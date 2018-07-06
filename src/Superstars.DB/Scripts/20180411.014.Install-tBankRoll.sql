@@ -4,4 +4,4 @@ create table sp.tBankRoll
 	FakeCoins int
 );
 
-insert into sp.tBankRoll(RealCoins, FakeCoins) values(0, 0);
+insert into sp.tBankRoll(RealCoins, FakeCoins) values(0, 5000000);

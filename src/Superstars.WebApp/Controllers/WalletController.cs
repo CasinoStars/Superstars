@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace Superstars.WebApp.Controllers
 {
 	[Route("api/[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+	[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)] //NO AUTHORIZE FOR RESFRESH PUBLIC BANKROLL
 	public class WalletController : Controller
 	{
 		WalletGateway _walletGateway;
@@ -66,12 +66,13 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("BTCBankRoll")]
+        [AllowAnonymous]
         public async Task<decimal> GetBTCBankRoll()
         {
             Result<int> result = await _walletGateway.GetBTCBankRoll();
             BitcoinSecret privateKey = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
             int onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
-            Result<decimal> allCredit = await _walletGateway.GetAllCredit();
+            Result<int> allCredit = await _walletGateway.GetAllCredit();
             decimal BTCBank;
             if (allCredit.Content <= 0)
             {
@@ -85,6 +86,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("FakeBankRoll")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetFakeBankRoll()
         {
             Result<int> result = await _walletGateway.GetFakeBankRoll();

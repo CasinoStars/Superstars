@@ -41,7 +41,7 @@
           </ul>
           <ul class="navbar-nav ml-auto">
               <li class="nav-item">
-              <router-link class="nav-link" to="/#" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
+              <router-link class="nav-link" to="/wallet" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
                 SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins.balance}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
@@ -73,6 +73,7 @@
         </div>
       </nav>
       <div class="progress" v-if="isLoading">
+        <div v-if="auth.isConnected" v-bind="fakeUser() && BTCUser()"></div>
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div>
     </header>
@@ -101,8 +102,6 @@ export default{
   
   async mounted() {
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
-      await this.BTCUser();
-      await this.fakeUser();
   },
 
   beforeDestroy() {
@@ -113,11 +112,11 @@ export default{
     ...mapActions(['executeAsyncRequest']),
 
     async BTCUser() {
-      this.UserBTCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
+      this.UserBTCoins = await WalletApiService.GetTrueBalance();
     },
 
     async fakeUser() {
-      this.UserfakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
+      this.UserfakeCoins = await WalletApiService.GetFakeBalance();
     },
 
     log(selectedBase) {

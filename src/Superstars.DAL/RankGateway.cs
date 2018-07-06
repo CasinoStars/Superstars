@@ -27,6 +27,16 @@ namespace Superstars.DAL
 			}
 		}
 
+		public async Task<IEnumerable<int>> GetPlayerTrueProfitList()
+		{
+			using (SqlConnection con = new SqlConnection(_connectionString))
+			{
+				return await con.QueryAsync<int>(
+					"select m.Profit from sp.tMoney m where m.MoneyType = 1 "
+					);
+			}
+		}
+
 		public async Task<IEnumerable<int>> GetPlayerProfitList()
 		{
 			using (SqlConnection con = new SqlConnection(_connectionString))
