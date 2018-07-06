@@ -86,15 +86,6 @@ import UserApiService from '../services/UserApiService';
 import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 
-  var navbarOpts = {
-    name: 'navbar',
-    data() {
-      return {
-        isActive: []
-      }
-    }
-  };
-
 export default{
   data(){
     return {
