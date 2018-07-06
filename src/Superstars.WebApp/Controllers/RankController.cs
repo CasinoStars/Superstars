@@ -23,50 +23,86 @@ namespace Superstars.WebApp.Controllers
 			_rankService = rankService;
 		}
 
-		[HttpGet("PlayersProfitSorted")]
-		public async Task<IEnumerable<int>> GetPlayersProfitSorted()
+		[HttpGet("{TrueOrFake}/PlayersProfitSorted")]
+		public async Task<IEnumerable<int>> GetPlayersProfitSorted(bool TrueOrFake)
 		{
-			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
 			IEnumerable<string> names = await _rankGateway.PseudoList();
-			List<int> profitList = profits.ToList();
+			List<int> profitList = new List<int>();
 			List<string> namesList = names.ToList(); 
-			_rankService.TriProfitAndRank(profitList,namesList);
+			if(TrueOrFake)
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerTrueProfitList();
+				profitList = profits.ToList(); 
+			}
+			else
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+				profitList = profits.ToList();
+			}
+			_rankService.TriProfitAndRank(profitList, namesList);
 			return profitList;
 		}
 
-		[HttpGet("PlayersUserNameSorted")]
-		public async Task<IEnumerable<string>> GetPlayersUserNameSorted()
+		[HttpGet("{TrueOrFake}/PlayersUserNameSorted")]
+		public async Task<IEnumerable<string>> GetPlayersUserNameSorted(bool TrueorFake)
 		{
-			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
 			IEnumerable<string> names = await _rankGateway.PseudoList();
-			List<int> profitList = profits.ToList();
+			List<int> profitList = new List<int>();
+			if (TrueorFake)
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerTrueProfitList();
+				profitList = profits.ToList();
+			}
+			else
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+				profitList = profits.ToList();
+			}
 			List<string> namesList = names.ToList();
 			_rankService.TriProfitAndRank(profitList, namesList);
 			return namesList;
 		}
 
-		[HttpGet("PlayersYamsNumberParts")]
-		public async Task<IEnumerable<int>> GetPlayersYamsNumberParts()
+		[HttpGet("{TrueOrFake}/PlayersYamsNumberParts")]
+		public async Task<IEnumerable<int>> GetPlayersYamsNumberParts(bool TrueOrFake)
 		{
-			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
 			IEnumerable<int> winsYams = await _rankGateway.GetPlayersYamsWins();
 			IEnumerable<int> lossesYams = await _rankGateway.GetPlayerYamsLosses();
-			List<int> profitList = profits.ToList();
+			List<int> profitList = new List<int>();
 			List<int> winsList = winsYams.ToList();
 			List<int> lossesList = lossesYams.ToList();
+			if(TrueOrFake)
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerTrueProfitList();
+				profitList = profits.ToList();
+			}
+			else
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+				profitList = profits.ToList();
+			}
 			List<int> NbGame = _rankService.SortedNbGames(profitList,winsList,lossesList);
 			return NbGame;
 		}
 
-		[HttpGet("PlayersBlackJackNumberParts")]
-		public async Task<IEnumerable<int>> GetPlayersBlackJackNumberParts()
+		[HttpGet("{TrueOrFake}/PlayersBlackJackNumberParts")]
+		public async Task<IEnumerable<int>> GetPlayersBlackJackNumberParts(bool TrueOrFake)
 		{
-			IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
 			IEnumerable<int> winsBlackJack = await _rankGateway.GetPlayersBlackJackWins();
 			IEnumerable<int> lossesBlackJack = await _rankGateway.GetPlayersBlackJackLosses();
-			List<int> profitList = profits.ToList();
+			List<int> profitList = new List<int>();
 			List<int> winsList = winsBlackJack.ToList();
 			List<int> lossesList = lossesBlackJack.ToList();
+			if(TrueOrFake)
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerTrueProfitList();
+				profitList = profits.ToList();
+			}
+			else
+			{
+				IEnumerable<int> profits = await _rankGateway.GetPlayerProfitList();
+				profitList = profits.ToList();
+			}
 			List<int> NbGame = _rankService.SortedNbGames(profitList, winsList, lossesList);
 			return NbGame;
 		}

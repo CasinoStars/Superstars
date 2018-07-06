@@ -113,7 +113,7 @@
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
     <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
     <a v-if="!iaturn && !gameend" class="txt"> C'est à votre tour de jouer </a> <br>
-    <a v-if="iaturn && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
+    <a v-if="dealerplaying && !gameend" class="txt"> Le dealer est entrain de jouer </a> <br>
     <a v-if="gameend" class="txt"> <strong> {{winnerlooser}} </strong> </a> <br>
 </div>
 
@@ -297,18 +297,18 @@ export default {
       var errors = [];
       this.errors = 0;
       if(this.realOrFake === 'fake') {
-        if(this.fakeBet > 1000000)
-          errors.push("La mise maximum est de 1,000,000");
+        if(this.fakeBet > 10000000)
+          errors.push("La mise maximum est de 10,000,000");
         else if(this.fakeBet <= 0)  
           errors.push("La mise doit être supérieur à 0");
         else if(this.fakeBet > this.fakeCoins.balance)
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
-        if(this.trueBet > 100)
-          errors.push("La mise maximum est de 100 BTC");
+        if(this.trueBet > 10000000)
+          errors.push("La mise maximum est de 10,000,000 bits");
         else if(this.trueBet <= 0)  
-          errors.push("La mise doit être supérieur à 0 BTC");
+          errors.push("La mise doit être supérieur à 0 bits");
         else if(this.trueBet > this.trueCoins){
           errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
@@ -368,11 +368,11 @@ export default {
     async playdealer(e) {
         e.preventDefault();
         document.getElementById('wait').style.visibility = "visible";
-        this.dealerplaying = true;
         setTimeout(this.playdealersecond,2000);
     },
 
     async playdealersecond() {
+        this.dealerplaying = true;
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
