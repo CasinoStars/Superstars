@@ -14,29 +14,29 @@
                 <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
 
                       <li style="color: white" class="tab active" v-if="this.view == 'provablyFairTest'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairTest')">Seeds</a></li>
+                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairTest')">Retrouver les dés</a></li>
                 
                 
-                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFair')">Code</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')">Code</a></li>
+                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFair')" style="margin-left: 25%;">Code</a></li>
+                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')" style="margin-left: 25%;">Code</a></li>
             </ul>
 
             <div style="color: white" v-if="this.view == 'provablyFair'">
                 <div class="tab-content">
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Client seeds:</span><br>{{seeds.clientSeed}}<br><br></h5>
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Crypted Server Seed:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
+                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef client:</span><br>{{seeds.clientSeed}}<br><br></h5>
+                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef Serveur:</span><br>{{seeds.cryptedServerSeed}}<br><br></h5>
                     <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Nombre de dés générer par le hash:</span><br>{{seeds.nonce}}<br><br></h5>
                     
                     
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">previous server seeds:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br><br></h5>
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Previous Client Seed:</span><br>{{seeds.previousClientSeed}}<br><br></h5>
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Previous Crypted Server Seed:</span><br>{{seeds.previousCryptedServerSeed}}<br><br></h5>
+                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveur:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br><br></h5>
+                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef client:</span><br>{{seeds.previousClientSeed}}<br><br></h5>
+                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveir crypté:</span><br>{{seeds.previousCryptedServerSeed}}<br><br></h5>
 
                     <form  @submit="UpdateSeeds($event)">
                             <div class="field-wrap">
                                 <label style="margin-left: 45%; ">
                                     <span style="font-weight: bold; font-style: italic;">
-                                    Seed Client<span class="req">*</span> 
+                                    Clef client<span class="req">*</span> 
                                     </span>
                                 </label><br><br>
                                 <input  type="string" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="clientSeeds" required autocomplete="off"/>
