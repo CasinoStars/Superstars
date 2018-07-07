@@ -47,7 +47,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerBTC(int pot)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 1, 0, 0, pot);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot, pot);
             return this.CreateResult(result);
         }
 

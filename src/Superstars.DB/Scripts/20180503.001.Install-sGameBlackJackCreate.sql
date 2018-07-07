@@ -7,8 +7,11 @@ as
 begin
 	set transaction isolation level serializable;
 	begin tran;
-
-    insert into sp.tGameBlackJack(Pot) values(@Pot);
+    SET IDENTITY_INSERT sp.tGameBlackJack ON;
+	declare @GameId int;
+   select top 1 @GameId = GameId from sp.tGames order by StartDate desc;
+	set @BlackJackGameId = @GameId;
+    insert into sp.tGameBlackJack(BlackJackGameId,Pot) values(@BlackJackGameId,@Pot);
 	set @BlackJackGameId = scope_identity();
 	commit;
     return 0;

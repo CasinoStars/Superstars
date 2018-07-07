@@ -155,6 +155,8 @@ export default {
   
   methods: {
     ...mapActions(['executeAsyncRequest']),
+    ...mapActions(['executeAsyncRequestWithMoney']),
+    
 
     async getFakeCoins() {
       this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
@@ -199,9 +201,9 @@ export default {
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake')
-            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 'Yams'));
+            await this.executeAsyncRequestWithMoney(() => GameApiService.BetFake(this.fakeBet, 'Yams'));
           else
-            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
+            await this.executeAsyncRequestWithMoney(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
@@ -241,11 +243,11 @@ export default {
         await this.updateStats();
           if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
-            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
+            await this.executeAsyncRequestWithMoney(() => WalletApiService.CreditPlayerInFake(pot));
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
-            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
+            await this.executeAsyncRequestWithMoney(() => WalletApiService.CreditPlayerInBTC(pot));
           }
       }
     },

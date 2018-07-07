@@ -39,13 +39,13 @@
               </router-link>
             </li>
           </ul>
-          <!-- <ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto">
               <li class="nav-item">
               <router-link class="nav-link" to="/wallet" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
-                SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins.balance}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
+                SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
-          </ul> -->
+          </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
               <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,9 +73,9 @@
         </div>
       </nav>
       <div class="progress" v-if="isLoading">
-        <div v-if="auth.isConnected" v-bind="fakeUser() && BTCUser()"></div>
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div>
+      <div v-if="walletChange" v-bind="fakeUser() && BTCUser()"></div>
     </header>
     <router-view></router-view>
   </div>
@@ -97,10 +97,15 @@ export default{
 
   computed: {
     ...mapGetters(['isLoading']),
+    ...mapGetters(['walletChange']),
     auth: () => UserApiService
   },
   
   async mounted() {
+    if(UserApiService.isConnected) {
+      this.fakeUser();
+      this.BTCUser();
+    }
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
   },
 
@@ -109,21 +114,25 @@ export default{
   },
 
   methods: {
-    ...mapActions(['executeAsyncRequest']),
+    ...mapActions(['executeAsyncRequestWithMoney']),
 
     async BTCUser() {
-      this.UserBTCoins = await WalletApiService.GetTrueBalance();
+      this.UserBTCoins = await this.executeAsyncRequestWithMoney(() => WalletApiService.GetTrueBalance());
     },
 
     async fakeUser() {
-      this.UserfakeCoins = await WalletApiService.GetFakeBalance();
+      var dataUser = await this.executeAsyncRequestWithMoney(() => WalletApiService.GetFakeBalance());
+      this.UserfakeCoins = dataUser.balance;
     },
 
     log(selectedBase) {
       UserApiService.log(selectedBase);
     },
+    
     onAuthenticated() {
       this.isConnected = true;
+      this.fakeUser();
+      this.BTCUser();
       this.$router.replace('/play');
     }
   }

@@ -18,6 +18,15 @@ export function notifyLoading({ commit }, isLoading) {
     commit(types.SET_IS_LOADING, isLoading);
 }
 
+/**
+ * Notify when wallet change
+ * @param {*} param0 
+ * @param {boolean} walletChange
+ */
+export function notifyWalletChange({ commit }, walletChange) {
+    commit(types.WALLET_CHANGE, walletChange);
+}
+
 // In order to be DRY, we can combine all of the previous actions in one action...
 
 /**
@@ -38,5 +47,19 @@ export async function executeAsyncRequest({ commit }, asyncCallback) {
     }
     finally {
         commit(types.SET_IS_LOADING, false);
+    }
+}
+
+export async function executeAsyncRequestWithMoney({ commit }, asyncCallback) {
+    commit(types.WALLET_CHANGE, true);
+    try {
+        return await asyncCallback();
+    }
+    catch (error) {
+        commit(types.ERROR_HAPPENED, error.message);
+        throw error;
+    }
+    finally {
+        commit(types.WALLET_CHANGE, false);
     }
 }
