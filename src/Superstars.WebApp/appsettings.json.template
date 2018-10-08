@@ -1,0 +1,10 @@
+﻿{
+  "ConnectionStrings": {
+    "SuperstarsDB": "<connection string>"
+  },
+  "JwtBearer": {
+    "SigningKey": "<Signing key>",
+    "Audience": "<audience>",
+    "Issuer": "<issuer>"
+  }
+}
