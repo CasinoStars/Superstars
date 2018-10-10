@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using NBitcoin;
-using NBitcoin.DataEncoders;
-using NBitcoin.Protocol;
-using System.Threading;
-using QBitNinja.Client;
 using QBitNinja.Client.Models;
-using System.Linq;
-using System.Globalization;
 
 namespace TestBlockChain
 {

@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using NBitcoin;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;

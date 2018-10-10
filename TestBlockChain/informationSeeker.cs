@@ -1,10 +1,8 @@
 ﻿using NBitcoin;
 using QBitNinja.Client;
 using QBitNinja.Client.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Superstars.Wallet
 {

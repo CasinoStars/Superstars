@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Superstars.YamsFair
+﻿namespace Superstars.YamsFair
 {
     class FairDices
     {
