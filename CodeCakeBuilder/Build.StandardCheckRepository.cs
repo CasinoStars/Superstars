@@ -15,7 +15,7 @@ namespace CodeCake
             string configuration = "Debug";
             if( !gitInfo.IsValid )
             {
-                if( Cake.IsInteractiveMode()
+                if( Cake.InteractiveMode() == InteractiveMode.Interactive
                     && Cake.ReadInteractiveOption( "PublishDirtyRepo", "Repository is not ready to be published. Proceed anyway?", 'Y', 'N' ) == 'Y' )
                 {
                     Cake.Warning( "GitInfo is not valid, but you choose to continue..." );
@@ -26,7 +26,7 @@ namespace CodeCake
                     if( !Cake.AppVeyor().IsRunningOnAppVeyor ) Cake.TerminateWithError( "Repository is not ready to be published." );
                 }
             }
-
+            
             if( gitInfo.IsValidRelease
                 && (gitInfo.PreReleaseName.Length == 0 || gitInfo.PreReleaseName == "rc") )
             {

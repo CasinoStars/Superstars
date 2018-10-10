@@ -23,6 +23,7 @@ namespace CodeCakeBuilder
                 Console.WriteLine( "Hit any key to exit. (Use -{0} parameter to exit immediately)", InteractiveAliases.NoInteractionArgument );
                 Console.ReadKey();
             }
+
             return result;
         }
     }

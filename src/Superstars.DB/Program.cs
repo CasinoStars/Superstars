@@ -52,7 +52,7 @@ namespace Superstars.DB
                 {
                     _configuration = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false)
+                        .AddJsonFile("appsettings.json", optional: true)
                         .AddEnvironmentVariables()
                         .Build();
                 }

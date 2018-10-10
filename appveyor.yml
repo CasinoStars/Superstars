@@ -6,8 +6,11 @@ image: Visual Studio 2017
 #    - master
 #    - develop
 environment:
-  MYGET_CI_API_KEY:
-    secure: w9TR+h+r5ZTPdqedGkiqoekB3DKzkXqiqvAITYn2p+Vej2mp9ZBpy4T3LvSR1sbE
+  ConnectionStrings_SuperstarsDB: Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!
+
+
 build_script:
   - dotnet run --project CodeCakeBuilder -nointeraction
 test: off
+services:
+  - mssql2017
