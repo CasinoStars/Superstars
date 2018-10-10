@@ -49,7 +49,7 @@ namespace CodeCake
                 .IsDependentOn( "Check-Repository" )
                 .Does( () =>
                  {
-
+                    
                      Cake.CleanDirectories( projects.Select( p => p.Path.GetDirectory().Combine( "bin" ) ) );
                      Cake.CleanDirectories( releasesDir );
                      Cake.DeleteFiles( "Tests/**/TestResult*.xml" );
