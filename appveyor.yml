@@ -11,3 +11,5 @@ environment:
 build_script:
   - dotnet run --project CodeCakeBuilder -nointeraction
 test: off
+services:
+  - mssql2017
