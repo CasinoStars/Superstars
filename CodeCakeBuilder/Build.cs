@@ -11,6 +11,7 @@ using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
+
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using CK.Text;
@@ -19,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Cake.Json;
 
 namespace CodeCake
 {
@@ -65,6 +67,10 @@ namespace CodeCake
                      Cake.CleanDirectories( projects.Select( p => p.Path.GetDirectory().Combine( "bin" ) ) );
                      Cake.CleanDirectories( releasesDir );
                      Cake.DeleteFiles( "Tests/**/TestResult*.xml" );
+                     if (Cake.AppVeyor().IsRunningOnAppVeyor)
+                     {
+                         Cake.SerializeJsonToFile(new FilePath("C:/projects/superstars/src/Superstars.DB/"), "Server=(local)\\SQL2017;Database=master;User ID=sa;Password=Password12!");
+                     }
                  } );
 
             Task( "Build" )
