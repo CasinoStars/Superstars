@@ -63,13 +63,11 @@ namespace CodeCake
                 .IsDependentOn( "Check-Repository" )
                 .Does( () =>
                  {
+
                      Cake.CleanDirectories( projects.Select( p => p.Path.GetDirectory().Combine( "bin" ) ) );
                      Cake.CleanDirectories( releasesDir );
                      Cake.DeleteFiles( "Tests/**/TestResult*.xml" );
-                     if (Cake.AppVeyor().IsRunningOnAppVeyor)
-                     {
-                         Cake.SerializeJsonToFile(new FilePath("C:/projects/superstars/src/Superstars.DB/"), "Server=(local)\\SQL2017;Database=master;User ID=sa;Password=Password12!");
-                     }
+                    
                  } );
 
             Task( "Build" )
