@@ -8,10 +8,9 @@ image: Visual Studio 2017
 environment:
   ConnectionStrings_SuperstarsDB: Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!
 
-build_script: 
-- dotnet run --project CodeCakeBuilder -nointeraction
-
 build:
+  build_script: 
+    - dotnet run --project CodeCakeBuilder -nointeraction
  publish_wap_octopus: true
 
 test: off
