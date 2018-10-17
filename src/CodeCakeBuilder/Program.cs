@@ -1,3 +1,4 @@
+using System.IO;
 using CodeCake;
 using System;
 using System.Linq;
@@ -23,7 +24,6 @@ namespace CodeCakeBuilder
                 Console.WriteLine( "Hit any key to exit. (Use -{0} parameter to exit immediately)", InteractiveAliases.NoInteractionArgument );
                 Console.ReadKey();
             }
-
             return result;
         }
     }
