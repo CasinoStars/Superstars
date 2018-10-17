@@ -31,13 +31,16 @@ namespace Superstars.WebApp.Controllers
         }
 
 
+        //Roll player dices
         [HttpPost("RollIa")]
         public async Task<IActionResult> RollIaDices([FromBody] int[][] dices)
-        {
+        {   
+            // Get IA data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData IA = await _userGateway.FindByName("AI" + userId);
             YamsData data = await _yamsGateway.GetPlayer(IA.UserId);
 
+            // Roll new dices
             int[] playerHand = dices[1];
             int[] IaHand = dices[0];
             int playerPts = _yamsService.PointCount(playerHand);
@@ -59,6 +62,8 @@ namespace Superstars.WebApp.Controllers
             {
                 IaStringDices += IaFinalDices[i];
             }
+
+            //Update SQL
             Result result = await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
             Stopwatch timer = new Stopwatch();
             timer.Start();
@@ -69,44 +74,50 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        //Roll player dices
         [HttpPost("Roll")]
         public async Task<IActionResult> RollDices([FromBody] int[] selectedDices = null)
         {
+            //Get the player data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             YamsData data = await _yamsGateway.GetPlayer(userId);
-            data.NbrRevives = data.NbrRevives + 1;
             int[] playerDices = new int[5];
             string stringDices = data.Dices;
-
             for (int i = 0; i < 5; i++)
             {
                 playerDices[i] = (int)char.GetNumericValue(stringDices[i]);
             }
 
+            //Roll new dices
             int[] newDices = playerDices;
             newDices = _yamsService.IndexChange(newDices, selectedDices);
             newDices = await _yamsService.Reroll(newDices, userId);
             int playerPts = _yamsService.PointCount(newDices);
-
             string playerStringDices = null;
             for (int i = 0; i < newDices.Length; i++)
             {
                 playerStringDices += newDices[i];
             }
 
+            //Update number of throws
+            data.NbrRevives = data.NbrRevives + 1;
+
+            //Update SQL
             Result result = await _yamsGateway.UpdateYamsPlayer(userId, data.YamsGameId, data.NbrRevives, playerStringDices, playerPts);
             return this.CreateResult(result);
         }
 
+        // Return the result of a game
         [HttpGet("GetFinalResult")]
         public async Task<string[]> GetResultGame()
         {
+            // Get data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData Ia = await _userGateway.FindByName("AI" + userId);
             YamsData playerData = await _yamsGateway.GetPlayer(userId);
             YamsData IaData = await _yamsGateway.GetPlayer(Ia.UserId);
 
-
+            //Convert dices from string to int
             int[] IaDices = new int[5];
             int[] playerDices = new int[5];
             string stringIaDices = IaData.Dices;
@@ -117,10 +128,13 @@ namespace Superstars.WebApp.Controllers
                 IaDices[i] = (int)char.GetNumericValue(stringIaDices[i]);
                 playerDices[i] = (int)char.GetNumericValue(stringPlayerDices[i]);
             }
+
+            // Return the result of the game
             string[] result = _yamsService.TabFiguresAndWinner(IaDices, playerDices);
             return result;
         }
 
+        //Return player dices
         [HttpGet("getPlayerDices")]
         public async Task<IActionResult> GetPlayerDices()
         {
@@ -130,6 +144,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        //Return IA dices
         [HttpGet("getIaDices")]
         public async Task<IActionResult> GetIaDices()
         {
@@ -141,6 +156,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Return the turn 
         [HttpGet("getTurn")]
         public async Task<IActionResult> GetTurn()
         {
@@ -151,6 +167,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Create a YamsPlayer in t.YamsPlayer
         [HttpPost("createPlayer")]
         public async Task<IActionResult> CreateYamsPlayer()
         {
@@ -159,6 +176,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Create a IA YamsPlayer in t.YamsPlayer
         [HttpPost("createAI")]
         public async Task<IActionResult> CreateYamsAiPlayer()
         {
@@ -167,6 +185,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Delete the IA YamsPlayer assigned to the current YamsPlayer in t.YamsPlayer 
         [HttpDelete("deleteAI")]
         public async Task<IActionResult> DeleteYamsAiPlayer()
         {

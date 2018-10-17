@@ -28,7 +28,7 @@ namespace Superstars.DAL
                 await con.ExecuteAsync("sp.sMoneyUpdate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "Money type already exist ??");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "Money type do no exist");
 
                 return Result.Success(p.Get<int>("@Balance"));
             }

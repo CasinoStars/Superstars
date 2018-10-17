@@ -24,6 +24,7 @@ namespace Superstars.WebApp.Controllers
             _blackJackService = blackJackService;
         }
 
+        // Create a BlackJackPlayer in t.BlackJackPlayer
         [HttpPost("CreatePlayer")]
         public async Task<IActionResult> CreateJackPlayer()
         {
@@ -32,6 +33,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Create a IA BlackJackPlayer in t.BlackJackPlayer
         [HttpPost("CreateAi")]
         public async Task<IActionResult> CreateJackAiPlayer()
         {
@@ -40,6 +42,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Delete the IA BlackJackPlayer assigned to the current BlackJackPlayer in t.BlackJackPlayer 
         [HttpDelete("DeleteAi")]
         public async Task<IActionResult> DeleteJackAiPlayer()
         {
@@ -48,13 +51,18 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-
+        // Initializing only during first turn
         [HttpPost("InitPlayer")]
         public async Task<IActionResult> InitPlayer()
-        {
+        {   
+            // Get data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
+
+            // Init obj BlackJackService 
             _blackJackService.InitGame();
+
+            //Draw 2 cards for player's hand
             _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
             _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
 
@@ -71,18 +79,25 @@ namespace Superstars.WebApp.Controllers
             }
             data.PlayerCards = _cards;
             data.HandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+
+            //Update SQL
             Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result); 
         }
 
+        // Initializing only during first turn or when player choose to stand
         [HttpPost("InitAI")]
         public async Task<IActionResult> InitAi()
         {   
+            // Get data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData user = await _userGateway.FindByName("AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
+            
+            // Draw one card for IA hand
             _blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
             //_blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
+
             string _cards = "";
             int i = 0;
             foreach (var item in _blackJackService._myhand)
@@ -96,16 +111,23 @@ namespace Superstars.WebApp.Controllers
             }
             data.PlayerCards = _cards;
             data.HandValue = _blackJackService.GetHandValue(_blackJackService._myhand);
+
+            // Update SQL
             Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1,data.HandValue);
             return this.CreateResult(result);
         }
 
+        // A player choose to Hit
         [HttpPost("HitPlayer")]
         public async Task<IActionResult> HitPlayer()
         {
+            // Get data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             BlackJackData data = await _blackJackGateway.GetPlayer(userId);
+
+            //Draw one card for player hand
             _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
+
             string _cards = "";
             int i = 0;
             foreach (var item in _blackJackService._ennemyhand)
@@ -119,6 +141,8 @@ namespace Superstars.WebApp.Controllers
             }
             data.PlayerCards = _cards;
             data.HandValue = _blackJackService.GetHandValue(_blackJackService._ennemyhand);
+
+            //Update SQL
             Result result = await _blackJackGateway.UpdateBlackJackPlayer(data.BlackJackPlayerID, data.BlackJackGameId, data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result);
         }
@@ -171,6 +195,7 @@ namespace Superstars.WebApp.Controllers
         //    return this.CreateResult(result);
         //}
 
+        // Return a player's hand as a string, each card separated by ","
         [HttpGet("GetPlayerCards")]
         public async Task<string> GetPlayerCards()
         {
@@ -191,6 +216,7 @@ namespace Superstars.WebApp.Controllers
         //    return playercards;
         //}
 
+        // Return an IA hand as a string, each card separated by ","
         [HttpGet("GetAiCards")]
         public async Task<string> GetAiCards()
         {
@@ -201,6 +227,7 @@ namespace Superstars.WebApp.Controllers
             return playercards;
         }
 
+        // Return the turn number (int)
         [HttpGet("getTurn")]
         public async Task<IActionResult> GetTurn()
         {
@@ -210,6 +237,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        // Return player hand value
         [HttpGet("getplayerHandValue")]
         public async Task<int> GetPlayerHandValue()
         {
@@ -228,6 +256,7 @@ namespace Superstars.WebApp.Controllers
         //    return handv;
         //}
 
+        // Return AI hand value
         [HttpGet("getAiHandValue")]
         public async Task<int> GetAiHandValue()
         {
@@ -238,6 +267,7 @@ namespace Superstars.WebApp.Controllers
             return handv;
         }
 
+        // A player choose to Stand
         [HttpGet("StandPlayer")]
         public async Task<bool> StandPlayer()
         {
@@ -246,6 +276,7 @@ namespace Superstars.WebApp.Controllers
             return result;
         }
 
+        // true if it's dealer/AI turn, false otherwise
         [HttpGet("refreshAiturn")]
         public bool refreshAiturn()
         {
