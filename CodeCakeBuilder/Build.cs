@@ -28,7 +28,7 @@ namespace CodeCake
                            .Projects
                            .Where( p => !(p is SolutionFolder)
                                         && p.Name != "CodeCakeBuilder" );
-
+             
             // We do not publish Tests and Samples projects for this solution.
             var projectsToPublish = projects
                                         .Where(p => !p.Path.Segments.Contains("Tests"))
@@ -39,14 +39,14 @@ namespace CodeCake
             // Configuration is either "Debug" or "Release".
             string configuration = "Debug";
 
-            Task( "Check-Repository" )
-                .Does( () =>
-                {
-                    configuration = StandardCheckRepository( projectsToPublish, gitInfo );
-                } );
+            //Task( "Check-Repository" )
+            //    .Does( () =>
+            //    {
+            //        configuration = StandardCheckRepository( projectsToPublish, gitInfo );
+            //    } );
 
             Task( "Clean" )
-                .IsDependentOn( "Check-Repository" )
+              //  .IsDependentOn( "Check-Repository" )
                 .Does( () =>
                  {
                     
@@ -70,17 +70,17 @@ namespace CodeCake
                     StandardUnitTests( configuration, projects.Where( p => p.Name.EndsWith( ".Tests" ) ) );
                 } );
 
-            Task( "Create-NuGet-Packages" )
-                .WithCriteria( () => gitInfo.IsValid )
+            Task( "Create-Zip" )
+           //     .WithCriteria( () => gitInfo.IsValid )
                 .IsDependentOn( "Unit-Testing" )
                 .Does( () =>
                 {
-                    StandardCreateNuGetPackages( releasesDir, projectsToPublish, gitInfo, configuration );
+                    StandardCreateZip( releasesDir, projectsToPublish, gitInfo, configuration );
                 } );
 
             // The Default task for this script can be set here.
             Task( "Default" )
-                .IsDependentOn("Create-NuGet-Packages");
+                .IsDependentOn("Create-Zip");
 
         }
     }
