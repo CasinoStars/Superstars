@@ -47,7 +47,7 @@ namespace CodeCake
                     });
                    
                     
-                    Cake.Zip(p.Path.GetDirectory() + "/bin/Debug/", "WebApp.zip");
+                    Cake.Zip(p.Path.GetDirectory() + "/bin/Debug/netcoreapp2.1/publish", "WebApp.zip");
                 }
                 if(p.Name == "Superstars.DB")
                 {

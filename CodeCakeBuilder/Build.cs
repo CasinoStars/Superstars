@@ -6,6 +6,7 @@ using Cake.Core.Diagnostics;
 using SimpleGitVersion;
 using System.Linq;
 using Cake.Json;
+using System;
 
 namespace CodeCake
 {
@@ -33,7 +34,11 @@ namespace CodeCake
             var projectsToPublish = projects
                                         .Where(p => !p.Path.Segments.Contains("Tests"))
                                         .Where(p => !p.Path.Segments.Contains("Samples"));
+        
+            var webAppPath = projectsToPublish.FirstOrDefault(p => p.Name == "Superstars.WebApp").Path;
+            if (webAppPath == null) throw new InvalidOperationException("WebApp is missing or not found"); 
 
+            
             SimpleRepositoryInfo gitInfo = Cake.GetSimpleRepositoryInfo();
 
             // Configuration is either "Debug" or "Release".
@@ -56,6 +61,8 @@ namespace CodeCake
                     
                  } );
 
+         
+
             Task( "Build" )
                 .IsDependentOn( "Clean" )
                 .Does( () =>
@@ -63,8 +70,16 @@ namespace CodeCake
                     StandardSolutionBuild( solutionFileName, gitInfo, configuration );
                 } );
 
+            Task("Publish")
+             .IsDependentOn("Build")   
+             .Does(() =>
+             {
+                 PublishWebApp(webAppPath.ToString());
+             }
+             );
+
             Task( "Unit-Testing" )
-                .IsDependentOn( "Build" )
+                .IsDependentOn( "Publish" )
                 .Does( () =>
                 {
                     StandardUnitTests( configuration, projects.Where( p => p.Name.EndsWith( ".Tests" ) ) );
