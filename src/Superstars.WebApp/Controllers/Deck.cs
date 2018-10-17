@@ -13,6 +13,7 @@ namespace Superstars.WebApp
 
         public List<Card> DeckCards { get; set; }
 
+        //Initialize and create a Deck of Cards
         public void CreateDeck()
         {
             List<Card> NewDeck = new List<Card>();
@@ -27,6 +28,7 @@ namespace Superstars.WebApp
             DeckCards = NewDeck;
         }
 
+        //Shuffle the Deck
         public void Shuffle()
         {
             for (int i = 0; i < 52; i++)
@@ -35,6 +37,7 @@ namespace Superstars.WebApp
             }
         }
 
+        //Draw a random card
         public Card RandomDraw()
         {
             Random rnd = new Random();
@@ -44,6 +47,7 @@ namespace Superstars.WebApp
             return drawedCard;
         }
 
+        //Draw the top Card
         public Card Draw()
         {
             int top = DeckCards.Count;
