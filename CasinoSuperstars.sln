@@ -12,9 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.WebApp", "src\Su
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.DB", "src\Superstars.DB\Superstars.DB.csproj", "{7A7B685C-6C35-4D5C-A83A-115724D2A143}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.Wallet", "src\TestBlockChain\Superstars.Wallet.csproj", "{56B7D695-E6F8-42E8-B38B-59F8EDA00A8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.Wallet", "src\Superstars.TestBlockChain\Superstars.Wallet.csproj", "{56B7D695-E6F8-42E8-B38B-59F8EDA00A8B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.YamsFair", "src\YamsFaire\Superstars.YamsFair.csproj", "{8B01319F-AEBE-4F9B-AD0D-695445D5DF36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.YamsFair", "src\Superstars.YamsFair\Superstars.YamsFair.csproj", "{8B01319F-AEBE-4F9B-AD0D-695445D5DF36}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeCakeBuilder", "src\CodeCakeBuilder\CodeCakeBuilder.csproj", "{E265B536-DF3A-496D-BEB7-8639F838C3EF}"
 EndProject
