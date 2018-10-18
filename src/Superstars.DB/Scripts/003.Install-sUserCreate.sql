@@ -5,9 +5,7 @@ create procedure sp.sUserCreate
 	@Email nvarchar(68),
 	@PrivateKey nvarchar(64), 
 	@UserId int out,
-	@UncryptedPreviousServerSeed nvarchar(128),
-	@UncryptedServerSeed nvarchar(128),
-	@CryptedServerSeed nvarchar(128)
+	@Country nvarchar(64)
 )
 as 
 begin
@@ -20,7 +18,7 @@ begin
 		return 1;		
 	end;
 
-    insert into sp.tUser(UserName, UserPassword, Email, PrivateKey) values(@UserName, @UserPassword, (case when @Email is null then '' else @Email end),@PrivateKey);
+    insert into sp.tUser(UserName, UserPassword, Email, PrivateKey, Country) values(@UserName, @UserPassword, (case when @Email is null then '' else @Email end),@PrivateKey, @Country);
 	set @UserId = scope_identity();
 	if(substring(@UserName, 1, 2)  <> 'AI')
 	begin

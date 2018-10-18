@@ -5,6 +5,9 @@ create table sp.tUser
 	UserPassword varbinary(128) not null,
 	Email nvarchar(64) not null,
 	PrivateKey varchar(64) not null,
+	Country varchar(64),
+	LastConnexionDate datetime,
+	LastDeconnexionDate datetime
 
 
 	constraint PK_tUser primary key(UserId),

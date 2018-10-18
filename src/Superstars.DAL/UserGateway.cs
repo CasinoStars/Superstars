@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -55,9 +56,7 @@ namespace Superstars.DAL
                 p.Add("@UserName", pseudo);
                 p.Add("@UserPassword", password);
                 p.Add("@PrivateKey",privateKey);
-                p.Add("@UncryptedPreviousServerSeed", "");
-                p.Add("@CryptedServerSeed", "");
-                p.Add("@UncryptedServerSeed", "");
+                //p.Add("@Country", country);
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
@@ -110,6 +109,40 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new { UserId = userId, UserPassword = password },
                     commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        
+        public async Task UpdateLastConnexion(int userId, DateTime time)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync(
+                    "sp.sUserUpdate",
+                    new { UserId = userId, LastConnexionDate = time },
+                   commandType: CommandType.StoredProcedure);
+           }
+        }
+
+        public async Task UpdateLastDeconnexion(int userId, DateTime time)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync(
+                    "sp.sUserUpdate",
+                    new { UserId = userId, LastDeconnexionDate = time },
+                   commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task UpdateCountry(int userId, string country)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync(
+                    "sp.sUserUpdate",
+                    new { UserId = userId, Country = country },
+                   commandType: CommandType.StoredProcedure);
             }
         }
     }
