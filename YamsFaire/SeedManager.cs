@@ -18,8 +18,8 @@ namespace Superstars.YamsFair
             _uncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
-            _previousCryptedServerSeed = "testCrypted";
-            _previousClientSeed = "testClient";
+            _previousCryptedServerSeed = "";
+            _previousClientSeed = "";
         }
         public SeedManager(string uncryptedServerSeed, string previousUncryptedServerSeed, string clientSeed, string cryptedServerSeed, string previousClientSeed, string previousCryptedServerSeed)
         {

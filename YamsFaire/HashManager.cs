@@ -53,9 +53,6 @@ namespace Superstars.YamsFair
                 }
             }
 
-            List<int> IntFromResults = new List<int>();
-            List<int> dicesFromHash = new List<int>();
-
             foreach (var item in results)
             {
                 int candidate = int.Parse(item, System.Globalization.NumberStyles.HexNumber);
@@ -65,8 +62,9 @@ namespace Superstars.YamsFair
                     candidate = candidate / 10000;
                     if (candidate > 60) throw new Exception("value must be lower then 60");
                     if (candidate < 1) continue;
-                    if (candidate  < 1) throw new Exception("Error"); 
+                    if (candidate  < 1) throw new Exception("candidate must greater then 1"); 
                     if ((candidate ) < 11 && candidate > 0) result = 1;
+
                     else if ((candidate) < 21) result = 2;
                     else if ((candidate) < 31) result = 3;
                     else if ((candidate) < 41) result = 4;
