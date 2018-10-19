@@ -9,7 +9,7 @@ let config = {
     entry: "./src/main.js",
     output: {
         path: path.resolve(wwwroot, "./dist"),
-        publicPath: "http://localhost:8080/dist/",
+        publicPath: "http://superstars.azurewebsites.net/dist/",
         filename: "./bundle.js"
     },
     module: {
