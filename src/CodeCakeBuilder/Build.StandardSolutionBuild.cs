@@ -31,7 +31,12 @@ namespace CodeCake
                     {
                         s.Configuration = configuration;
                     } ) );
+
             }
+        }
+        void PublishWebApp(string webAppPath)
+        {
+            Cake.DotNetCorePublish(webAppPath);
         }
     }
 }
