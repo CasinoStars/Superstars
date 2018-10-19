@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Superstars.DAL;
-using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models.AccountViewModels;
 using Superstars.WebApp.Services;

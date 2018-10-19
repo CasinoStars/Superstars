@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
-using Superstars.WebApp.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Superstars.YamsFair;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Superstars.WebApp.Controllers
+﻿namespace Superstars.WebApp.Controllers
 {
     public class Card
     {
