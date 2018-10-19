@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -13,12 +14,11 @@ namespace Superstars.WebApp
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
+            WebHost.CreateDefaultBuilder(args)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                    config.AddJsonFile("appsettings.json", false, true);
+                    config.AddJsonFile("appsettings.json", true, true);
                     config.AddEnvironmentVariables();
 
                     if (args != null)
@@ -31,6 +31,7 @@ namespace Superstars.WebApp
                     logging.AddDebug();
                 })
                 .UseStartup<Startup>()
+                
                 .Build();
     }
 }
