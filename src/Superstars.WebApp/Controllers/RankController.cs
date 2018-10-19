@@ -17,6 +17,7 @@ namespace Superstars.WebApp.Controllers
 	{
 		RankGateway _rankGateway;
 		RankService _rankService;
+
 		public RankController(RankGateway rankGateway,RankService rankService)
 		{
 			_rankGateway = rankGateway;
@@ -106,5 +107,6 @@ namespace Superstars.WebApp.Controllers
 			List<int> NbGame = _rankService.SortedNbGames(profitList, winsList, lossesList);
 			return NbGame;
 		}
-	}
+
+    }
 }
