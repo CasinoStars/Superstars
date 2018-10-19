@@ -84,5 +84,25 @@ namespace Superstars.DAL
 					);
 			}
 		}
-	}
+
+        public async Task<IEnumerable<int>> GetPlayerYamsBets(int userid)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<IEnumerable<int>>(
+                    "select s.Pot from sp.tGameYams s left outer join sp.tUser u on s.UserId = @UserId where GameType = 'Yams'",
+                    new { UserId = userid });
+            }
+        }
+
+        public async Task<IEnumerable<int>> GetPlayerBJBets(int userid)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<IEnumerable<int>>(
+                    "select s.Pot from sp.tGameBlackJack s left outer join sp.tUser u on s.UserId = @UserId where GameType = 'BlackJack'",
+                    new { UserId = userid });
+            }
+        }
+    }
 }

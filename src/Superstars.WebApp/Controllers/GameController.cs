@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Superstars.WebApp.Authentication;
 using System.Security.Claims;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -17,8 +19,9 @@ namespace Superstars.WebApp.Controllers
         readonly UserGateway _userGateway;
         readonly WalletGateway _walletGateway;
         readonly PasswordHasher _passwordHasher;
+        readonly RankGateway _rankGateway;
 
-        public GameController(GameGateway gameGateway, YamsGateway yamsGateway, BlackJackGateway blackJackGateway, UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher)
+        public GameController(GameGateway gameGateway, YamsGateway yamsGateway, BlackJackGateway blackJackGateway, UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher, RankGateway rankGateway)
         {
             _gameGateway = gameGateway;
             _yamsGateway = yamsGateway;
@@ -26,6 +29,7 @@ namespace Superstars.WebApp.Controllers
             _userGateway = userGateway;
             _walletGateway = walletGateway;
             _passwordHasher = passwordHasher;
+            _rankGateway = rankGateway;
         }
 
         [HttpPost("{gametype}")]
@@ -118,6 +122,17 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
             Result<int> result2 = await _gameGateway.GetLosses(userId, gametype);
+            int averagebet = 0;
+
+            if (gametype == "Yams")
+            {
+                averagebet = await GetAverageBetYams();
+            }
+            else if (gametype == "BlackJack")
+            {
+                averagebet = await GetAverageBetBJ();
+            }
+
             int wins = result1.Content;
             int losses = result2.Content;
             if (win)
@@ -128,10 +143,42 @@ namespace Superstars.WebApp.Controllers
             {
                 losses = losses + 1;
             }
-            Result<int> result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses);
+            Result<int> result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses, averagebet);
             return Result.Success(result3);
         }
 
+        public async Task<int> GetAverageBetYams()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            IEnumerable<int> betsYams = await _rankGateway.GetPlayerYamsBets(userId);
+            List<int> allbetsyams = betsYams.ToList();
+
+            int sommeYams = 0;
+            foreach (int item in allbetsyams)
+            {
+                sommeYams += item;
+            }
+            sommeYams = sommeYams / allbetsyams.Count();
+
+            return sommeYams;
+
+        }
+
+        public async Task<int> GetAverageBetBJ()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            IEnumerable<int> betsBJ = await _rankGateway.GetPlayerBJBets(userId);
+            List<int> allbetsBJ = betsBJ.ToList();
+
+            int sommeBJ = 0;
+            foreach (int item in allbetsBJ)
+            {
+                sommeBJ += item;
+            }
+            sommeBJ = sommeBJ / allbetsBJ.Count();
+
+            return sommeBJ;
+        }
 
         [HttpGet("getwinsBlackJackPlayer")]
         public async Task<IActionResult> GetWinsBlackJackPlayer()

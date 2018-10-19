@@ -22,7 +22,7 @@ begin
               rollback
               return 2;
        end;
-	update sp.tGames set [EndDate] = @EndDate, [Winner] = @Winner  where [GameId] = @GameId and [GameType] = @GameType and [StartDate] = @StartDate;
+	update sp.tGames set [EndDate] = @EndDate, [Winner] = @Winner  where [GameId] = @GameId;
 	commit;
     return 0;
 end;

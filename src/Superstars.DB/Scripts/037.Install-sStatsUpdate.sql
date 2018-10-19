@@ -3,7 +3,10 @@
         @GameType varchar(25),
         @UserId int,
 		@Wins int,
-		@Losses int
+		@Losses int,
+		@AverageBet int,
+		@AverageTime float,
+		@ClientSeedChanges int
 )
 as 
 begin
@@ -16,7 +19,8 @@ begin
                  return 1;
          end;  
 		 
-      update sp.tStats  set Wins = @Wins, Losses = @Losses where UserId = @UserId and GameType = @GameType;
+      update sp.tStats  set Wins = @Wins, Losses = @Losses, AverageBet = @AverageBet, AverageTime = @AverageTime, ClientSeedChanges = @ClientSeedChanges 
+	  where UserId = @UserId and GameType = @GameType;
          commit;
       return 0;
 end;

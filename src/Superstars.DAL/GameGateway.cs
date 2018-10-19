@@ -15,7 +15,7 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<GameData> FindGameById(int GameID)
+        public async Task<GameData> FindGameById (int GameID)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -37,7 +37,7 @@ namespace Superstars.DAL
                 await con.ExecuteAsync("sp.sGamesCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game with this gametype and  start date already exists.");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game with this gametype and start date already exists.");
 
                 return Result.Success(p.Get<int>("@GameId"));
             }
@@ -112,7 +112,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses)
+        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses, int averagebet)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -121,6 +121,8 @@ namespace Superstars.DAL
                 p.Add("@UserId", userid);
                 p.Add("@Wins", wins);
                 p.Add("@Losses", losses);
+                p.Add("@AverageBet", averagebet);
+                //p.Add("@Averagetime", averagetime);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);
 
@@ -172,6 +174,17 @@ namespace Superstars.DAL
                     @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2", 
                     new { userid = userId });
                 return Result.Success(data);
+            }
+        }
+
+        public async Task UpdateGameEnd(int gameid)
+        {
+            using (SqlConnection con = new SqlConnection(_sqlstring))
+            {
+                await con.ExecuteAsync(
+                    "sp.sGamesUpdate",
+                    new { GameId = gameid, EndDate = DateTime.UtcNow},
+                    commandType: CommandType.StoredProcedure);
             }
         }
     }
