@@ -14,3 +14,21 @@ build_script:
 test: off
 services:
   - mssql2017
+
+artifacts:
+- path: DB.zip
+  name: DB
+
+- path: WebApp.zip
+  name: WebApp
+
+deploy:
+- provider: Octopus
+  push_packages: true
+  create_release: false
+  deploy_release: false
+  server: http://octo.francecentral.cloudapp.azure.com
+  api_key: 
+    secure: EwWTXSmLE6eDoBq6XaWyNzzMEgr8H0bYk9RkVXMRxms=
+  project: All'in
+  
