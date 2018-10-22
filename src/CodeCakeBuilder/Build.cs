@@ -20,7 +20,7 @@ namespace CodeCake
         {
             Cake.Log.Verbosity = Verbosity.Diagnostic;
 
-            const string solutionName = "CasinoSuperstars";
+            const string solutionName = "../CasinoSuperstars";
             const string solutionFileName = solutionName + ".sln";
 
             var releasesDir = Cake.Directory( "CodeCakeBuilder/Releases" );

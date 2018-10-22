@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using NBitcoin;
-
+using System.Text.RegularExpressions;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -70,7 +70,11 @@ namespace Superstars.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+                if (Regex.Match(model.Pseudo, @"\b((AI)|(ai)|(Ai)|(aI))[0-9]*$").Success)
+                {
+                    ModelState.AddModelError(string.Empty, "This pseudo is invalid");
+                    return View(model);
+                }
                 BitcoinSecret privateKey = new Key().GetBitcoinSecret(Network.TestNet);
                 string privateKeyString = privateKey.ToString();
                 Result result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email, privateKeyString);
@@ -84,7 +88,6 @@ namespace Superstars.WebApp.Controllers
                 await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));
             }
-
             return View(model);
         }
 

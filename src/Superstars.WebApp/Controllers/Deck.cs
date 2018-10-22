@@ -38,7 +38,7 @@ namespace Superstars.WebApp
         }
 
         //Draw a random card
-        public Card RandomDraw()
+        private Card RandomDraw()
         {
             Random rnd = new Random();
             int random = rnd.Next(1, DeckCards.Count);
