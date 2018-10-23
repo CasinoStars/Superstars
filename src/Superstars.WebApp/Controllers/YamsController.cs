@@ -201,5 +201,19 @@ namespace Superstars.WebApp.Controllers
             int result = await _userGateway.GetIsingameyams(userid);
             return result;
         }
+
+        [HttpPost("SetIsingameyamstrue")]
+        public async Task SetIsingameyamstrue()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameyams(userid,1);
+        }
+
+        [HttpPost("SetIsingameblackjacktrue")]
+        public async Task SetIsingameblackjacktrue()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameblackjack(userid, 1);
+        }
     }
 }
