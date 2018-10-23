@@ -16,7 +16,7 @@ services:
   - mssql2017
 
 artifacts:
-- path: *.zip
+- path: '**\*.zip'
 
 deploy:
 - provider: Octopus
