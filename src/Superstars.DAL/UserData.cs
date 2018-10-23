@@ -9,5 +9,13 @@
         public string Email { get; set; }
 
         public byte[] UserPassword { get; set; }
+
+        public string PrivateKey { get; set; }
+
+        public string Country { get; set; }
+
+        public int Isingameyams { get; set; }
+
+        public int Isingameblackjack { get; set; }
     }
 }

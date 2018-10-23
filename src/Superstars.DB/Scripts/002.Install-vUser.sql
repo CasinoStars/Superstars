@@ -7,5 +7,7 @@ as
 		   PrivateKey = u.PrivateKey,
 		   Country = u.Country,
 		   LastConnexionDate = u.LastConnexionDate,
-		   LastDeconnexionDate = u.LastDeconnexionDate
+		   LastDeconnexionDate = u.LastDeconnexionDate,
+		   Isingameyams = u.Isingameyams,
+		   Isingameblackjack = u.Isingameblackjack
 	from sp.tUser u

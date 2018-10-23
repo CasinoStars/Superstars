@@ -22,7 +22,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword from sp.vUser u where u.UserId = @UserId",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Isingameyams, u.Isingameblackjack u from sp.vUser u where u.UserId = @UserId",
                     new { UserId = userId });
             }
         }
@@ -32,7 +32,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword from sp.vUser u where u.UserName = @UserName",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Isingameyams, u.Isingameblackjack from sp.vUser u where u.UserName = @UserName",
                     new { UserName = pseudo });
             }
         }
@@ -42,7 +42,7 @@ namespace Superstars.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword from sp.vUser u where u.Email = @Email",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Isingameyams, u.Isingameblackjack from sp.vUser u where u.Email = @Email",
                     new { Email = email });
             }
         }
@@ -142,6 +142,47 @@ namespace Superstars.DAL
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",
                     new { UserId = userId, Country = country },
+                   commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<int> GetIsingameyams(int userid)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<int>(
+                    "select u.Isingameyams from sp.vUser u where u.UserId = @UserID",
+                    new { UserID = userid });
+            }
+        }
+
+        public async Task<int> GetIsingameblackjack(int userid)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<int>(
+                    "select u.Isingameblackjack from sp.vUser u where u.UserId = @UserID",
+                    new { UserID = userid });
+            }
+        }
+        public async Task UpdateIsingameyams(int userId, int isingame)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync(
+                    "sp.sUserUpdate",
+                    new { UserId = userId, Isingameyams = isingame },
+                   commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task UpdateIsingameblackjack(int userId, int isingame)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync(
+                    "sp.sUserUpdate",
+                    new { UserId = userId, Isingameblackjack = isingame },
                    commandType: CommandType.StoredProcedure);
             }
         }

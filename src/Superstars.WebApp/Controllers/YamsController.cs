@@ -193,5 +193,13 @@ namespace Superstars.WebApp.Controllers
             Result result = await _yamsGateway.DeleteYamsAi(userId);
             return this.CreateResult(result);
         }
+
+        [HttpGet("Getisingameyams")]
+        public async Task<int> GetIsingameyams()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int result = await _userGateway.GetIsingameyams(userid);
+            return result;
+        }
     }
 }

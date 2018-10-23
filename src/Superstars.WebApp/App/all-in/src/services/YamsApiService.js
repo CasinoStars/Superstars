@@ -53,5 +53,9 @@ class YamsApiService {
     async GetFinalResult() {
         return await getAsync(`${endpoint}/GetFinalResult`);
     }
+
+    async Getisingame() {
+        return await getAsync(`${endpoint}/Getisingameyams`);
+    }
 }
 export default new YamsApiService();
