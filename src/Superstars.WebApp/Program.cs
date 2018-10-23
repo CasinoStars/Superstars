@@ -31,7 +31,6 @@ namespace Superstars.WebApp
                     logging.AddDebug();
                 })
                 .UseStartup<Startup>()
-                
                 .Build();
     }
 }
