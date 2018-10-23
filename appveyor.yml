@@ -16,11 +16,7 @@ services:
   - mssql2017
 
 artifacts:
-- path: DB.zip
-  name: DB
-
-- path: WebApp.zip
-  name: WebApp
+- path: *.zip
 
 deploy:
 - provider: Octopus
