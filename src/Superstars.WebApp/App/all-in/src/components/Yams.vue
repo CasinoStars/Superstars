@@ -227,6 +227,8 @@ export default {
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
+        await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
     },
 
     async getFinalResult() {

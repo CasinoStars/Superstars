@@ -56,7 +56,7 @@ namespace Superstars.DAL
                 p.Add("@UserName", pseudo);
                 p.Add("@UserPassword", password);
                 p.Add("@PrivateKey",privateKey);
-                //p.Add("@Country", country);
+                p.Add("@Country", "France");
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 

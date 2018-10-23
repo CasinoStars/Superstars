@@ -30,7 +30,7 @@ import Vue from 'vue';
 export default {
 
   async mounted() {
-    await this.DeleteAis();
+    //await this.DeleteAis();
   },
 
   methods: {
@@ -43,10 +43,14 @@ export default {
     },
 
     async PlayYams(gametype) {
+      if(await this.executeAsyncRequest(() => YamsApiService.GetTurn()) < 3 ) 
+      {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
+      }
+
       this.$router.push({ path: 'yams' });
     },
 
