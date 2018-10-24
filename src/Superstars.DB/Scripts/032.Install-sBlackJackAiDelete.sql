@@ -4,6 +4,6 @@ create procedure sp.sBlackJackAIDelete
 )
 as
 begin
-delete sp.tBlackJackPlayer from sp.tBlackJackPlayer bj left JOIN sp.tUser u ON bj.BlackJackPlayerId = u.UserId where u.UserName = (select CONCAT('AI', @UserId) AS ConcatenatedString);
+delete sp.tBlackJackPlayer from sp.tBlackJackPlayer bj left JOIN sp.tUser u ON bj.BlackJackPlayerId = u.UserId where u.UserName = (select CONCAT('#AI', @UserId) AS ConcatenatedString);
     return 0;
 end;
