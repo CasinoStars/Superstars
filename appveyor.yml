@@ -31,8 +31,9 @@ deploy:
   api_key: 
     secure: EwWTXSmLE6eDoBq6XaWyNzzMEgr8H0bYk9RkVXMRxms=
   project: All'in
-  version: $env:APPVEYOR_REPO_TAG_NAME
-  deployat: 22:00:00
+  release_number: $env:APPVEYOR_REPO_TAG_NAME
+  deploy_release_advanced:
+    deployAt = "22:00:00"
   on:
    appveyor_repo_tag: true  
   
