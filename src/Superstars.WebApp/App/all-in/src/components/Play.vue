@@ -23,6 +23,7 @@
 import { mapActions } from 'vuex';
 import GameApiService from '../services/GameApiService';
 import YamsApiService from '../services/YamsApiService';
+import UserApiService from '../services/UserApiService';
 import BlackJackApiService from '../services/BlackJackApiService';
 
 import Vue from 'vue';

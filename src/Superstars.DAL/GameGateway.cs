@@ -112,7 +112,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses, int averagebet)
+        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses)
         {
             using (SqlConnection con = new SqlConnection(_sqlstring))
             {
@@ -121,7 +121,7 @@ namespace Superstars.DAL
                 p.Add("@UserId", userid);
                 p.Add("@Wins", wins);
                 p.Add("@Losses", losses);
-                p.Add("@AverageBet", averagebet);
+                //p.Add("@AverageBet", averagebet);
                 //p.Add("@Averagetime", averagetime);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);

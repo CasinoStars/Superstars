@@ -142,21 +142,39 @@ export default {
       fakeCoins: 0,
       trueCoins: 0,
       errors: [],
+      isingame: 0,
     }
   },
 
   async mounted() {
     await this.getFakeCoins();
     await this.getTrueCoins();
-    this.showModal();
     await this.refreshDices();
     await this.refreshIaDices();
+    await this.getIsingame();
+    await this.changeTurn();
+    if(this.isingame == 0) {
+      this.showModal();
+      await this.setisingametrue();
+    }
+
   },
   
   methods: {
     ...mapActions(['executeAsyncRequest']),
     ...mapActions(['executeAsyncRequestWithMoney']),
     
+    async setisingametrue() {
+        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyamstrue());
+    },
+
+    async setisingamefalse() {
+        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyamsfalse());
+    },
+
+    async getIsingame() {
+      this.isingame = await this.executeAsyncRequest(() => YamsApiService.Getisingame());
+    },
 
     async getFakeCoins() {
       this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
@@ -227,6 +245,7 @@ export default {
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
+        await this.setisingamefalse();
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
     },
