@@ -1,17 +1,14 @@
 version: build{build}
 image: Visual Studio 2017
-#clone_folder: C:\CK-World\SimpleGitVersion\CodeCake
-#branches:
-#  only:
-#    - master
-#    - develop
+
 environment:
   ConnectionStrings_SuperstarsDB: Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!
 
-
 build_script:
   - dotnet run --project src\CodeCakeBuilder -nointeraction
+  
 test: off
+
 services:
   - mssql2017
 
@@ -27,4 +24,6 @@ deploy:
   api_key: 
     secure: EwWTXSmLE6eDoBq6XaWyNzzMEgr8H0bYk9RkVXMRxms=
   project: All'in
+  on:
+   appveyor_repo_tag: true  
   
