@@ -1,7 +1,6 @@
 ﻿using Cake.Common.IO;
 using Cake.Common.Solution;
 using Cake.Core;
-
 using Cake.Core.Diagnostics;
 using SimpleGitVersion;
 using System.Linq;
@@ -92,10 +91,17 @@ namespace CodeCake
                 {
                     StandardCreateZip( releasesDir, projectsToPublish, gitInfo, configuration );
                 } );
+            Task("Deploy")
+                .WithCriteria(() => gitInfo.IsValid)
+                .IsDependentOn("Create-Zip")
+                .Does(() =>
+                {
+                    StandardDeploy(releasesDir, projectsToPublish, gitInfo, configuration);
+                });
 
             // The Default task for this script can be set here.
             Task( "Default" )
-                .IsDependentOn("Create-Zip");
+                .IsDependentOn("Deploy");
 
         }
     }
