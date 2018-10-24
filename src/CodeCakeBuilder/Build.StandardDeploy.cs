@@ -25,11 +25,11 @@ namespace CodeCake
             {
                 if(p.Name == "Superstars.WebApp")
                 {
-                    filePaths.Add(new FilePath("src/WebApp." + gitInfo.SafeSemVersion + ".zip"));
+                    filePaths.Add(new FilePath("WebApp." + gitInfo.SafeSemVersion + ".zip"));
                 }
                 if(p.Name == "Superstars.DB")
                 {
-                    filePaths.Add(new FilePath("src/DB." + gitInfo.SafeSemVersion + ".zip"));
+                    filePaths.Add(new FilePath("DB." + gitInfo.SafeSemVersion + ".zip"));
                 }
             }
 
