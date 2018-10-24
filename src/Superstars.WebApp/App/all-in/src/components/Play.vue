@@ -30,8 +30,9 @@ import Vue from 'vue';
 
 export default {
 
+
   async mounted() {
-    //await this.DeleteAis();
+    await this.DeleteAis();
   },
 
   methods: {
@@ -39,8 +40,10 @@ export default {
 
     async DeleteAis() {
       //await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-      //await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      //await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
+         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+      }
     },
 
     async PlayYams(gametype) {

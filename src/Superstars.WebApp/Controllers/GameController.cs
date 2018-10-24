@@ -122,17 +122,17 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
             Result<int> result2 = await _gameGateway.GetLosses(userId, gametype);
-            int averagebet = 0;
+            //int averagebet = 0;
 
             //WIP
-            /* if (gametype == "Yams")
+            /*if (gametype == "Yams")
             {
                 averagebet = await GetAverageBetYams();
             }
             else if (gametype == "BlackJack")
             {
                 averagebet = await GetAverageBetBJ();
-            } */
+            }*/
 
             int wins = result1.Content;
             int losses = result2.Content;
