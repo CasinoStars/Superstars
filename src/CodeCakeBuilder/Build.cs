@@ -86,7 +86,7 @@ namespace CodeCake
                 } );
 
             Task( "Create-Zip" )
-           //     .WithCriteria( () => gitInfo.IsValid )
+                .WithCriteria( () => gitInfo.IsValid )
                 .IsDependentOn( "Unit-Testing" )
                 .Does( () =>
                 {
