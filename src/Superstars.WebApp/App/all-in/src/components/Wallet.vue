@@ -70,7 +70,7 @@ export default {
             trueCoins: 'waiting...',
             BTCAddress: '',
             errors: [],
-            Responses : [],
+            Responses: [],
         };
     },
 
@@ -118,7 +118,6 @@ export default {
 
         async Withdraw(e) {
             e.preventDefault();
-            console.log("Test");
             var errors = [];
             if(this.item.AmountToSend < 100000)
                 errors.push("Le retrait minimum est de 100,000 bits");  
@@ -129,6 +128,7 @@ export default {
                 try {
                     this.Responses = await this.executeAsyncRequestWithMoney(() => WalletApiService.Withdraw(this.item));
                     this.refreshTrueCoins();
+                    console.log(this.Responses);
                 }
                 catch(error){
                 }
