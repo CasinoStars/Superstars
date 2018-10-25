@@ -36,6 +36,8 @@ namespace CodeCake
             OctopusDeployAliases.OctoPush(Cake, "http://octo.francecentral.cloudapp.azure.com", "API-SQSHNGIU7ACDBGGWDWQQ7S9RZOQ", filePaths, new OctopusPushSettings());
             CreateReleaseSettings releaseSettings = new CreateReleaseSettings();
             releaseSettings.ReleaseNumber = gitInfo.SafeSemVersion;
+            releaseSettings.ApiKey = "API-SQSHNGIU7ACDBGGWDWQQ7S9RZOQ";
+            releaseSettings.Server = "http://octo.francecentral.cloudapp.azure.com";
             OctopusDeployAliases.OctoCreateRelease(Cake, "All'in", releaseSettings);
         }
     }

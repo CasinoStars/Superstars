@@ -72,10 +72,10 @@ namespace CodeCake
             Task("Publish")
              .IsDependentOn("Build")   
              .Does(() =>
-             {
-                 PublishWebApp(webAppPath.ToString());
-             }
-             );
+                {
+                     PublishWebApp(webAppPath.ToString());
+                 }
+                 );
 
             Task( "Unit-Testing" )
                 .IsDependentOn( "Publish" )
