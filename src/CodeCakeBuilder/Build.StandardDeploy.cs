@@ -21,13 +21,13 @@ namespace CodeCake
         void StandardDeploy( DirectoryPath releasesDir, IEnumerable<SolutionProject> projectsToPublish, SimpleRepositoryInfo gitInfo, string configuration )
         {
             List<FilePath> filePaths = new List<FilePath>();
-            foreach( SolutionProject p in projectsToPublish )
+            foreach (SolutionProject p in projectsToPublish)
             {
-                if(p.Name == "Superstars.WebApp")
+                if (p.Name == "Superstars.WebApp")
                 {
                     filePaths.Add(new FilePath("WebApp." + gitInfo.SafeSemVersion + ".zip"));
                 }
-                if(p.Name == "Superstars.DB")
+                if (p.Name == "Superstars.DB")
                 {
                     filePaths.Add(new FilePath("DB." + gitInfo.SafeSemVersion + ".zip"));
                 }
@@ -38,6 +38,7 @@ namespace CodeCake
             releaseSettings.ReleaseNumber = gitInfo.SafeSemVersion;
             releaseSettings.ApiKey = "API-SQSHNGIU7ACDBGGWDWQQ7S9RZOQ";
             releaseSettings.Server = "http://octo.francecentral.cloudapp.azure.com";
+            releaseSettings.DefaultPackageVersion = gitInfo.SafeSemVersion;
             OctopusDeployAliases.OctoCreateRelease(Cake, "All'in", releaseSettings);
         }
     }
