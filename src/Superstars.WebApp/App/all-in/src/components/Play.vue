@@ -23,11 +23,13 @@
 import { mapActions } from 'vuex';
 import GameApiService from '../services/GameApiService';
 import YamsApiService from '../services/YamsApiService';
+import UserApiService from '../services/UserApiService';
 import BlackJackApiService from '../services/BlackJackApiService';
 
 import Vue from 'vue';
 
 export default {
+
 
   async mounted() {
     await this.DeleteAis();
@@ -37,16 +39,22 @@ export default {
     ...mapActions(['executeAsyncRequest']),
 
     async DeleteAis() {
-      await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+      //await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
+         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+      }
     },
 
     async PlayYams(gametype) {
+      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
+      } else {
+        //REPRENDRE LA GAME
+      }
       this.$router.push({ path: 'yams' });
     },
 

@@ -193,5 +193,34 @@ namespace Superstars.WebApp.Controllers
             Result result = await _yamsGateway.DeleteYamsAi(userId);
             return this.CreateResult(result);
         }
+
+        [HttpGet("Getisingameyams")]
+        public async Task<int> GetIsingameyams()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int result = await _userGateway.GetIsingameyams(userid);
+            return result;
+        }
+
+        [HttpPost("SetIsingameyamstrue")]
+        public async Task SetIsingameyamstrue()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameyams(userid,1);
+        }
+
+        [HttpPost("SetIsingameyamsfalse")]
+        public async Task SetIsingameyamsfalse()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameyams(userid, 0);
+        }
+
+        [HttpPost("SetIsingameblackjacktrue")]
+        public async Task SetIsingameblackjacktrue()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameblackjack(userid, 1);
+        }
     }
 }

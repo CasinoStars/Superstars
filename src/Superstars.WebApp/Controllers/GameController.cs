@@ -122,16 +122,17 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<int> result1 = await _gameGateway.GetWins(userId, gametype);
             Result<int> result2 = await _gameGateway.GetLosses(userId, gametype);
-            int averagebet = 0;
+            //int averagebet = 0;
 
-            if (gametype == "Yams")
+            //WIP
+            /*if (gametype == "Yams")
             {
                 averagebet = await GetAverageBetYams();
             }
             else if (gametype == "BlackJack")
             {
                 averagebet = await GetAverageBetBJ();
-            }
+            }*/
 
             int wins = result1.Content;
             int losses = result2.Content;
@@ -143,7 +144,7 @@ namespace Superstars.WebApp.Controllers
             {
                 losses = losses + 1;
             }
-            Result<int> result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses, averagebet);
+            Result<int> result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses);
             return Result.Success(result3);
         }
 
@@ -226,6 +227,13 @@ namespace Superstars.WebApp.Controllers
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result<int> result = await _gameGateway.GetFakeProfit(userId);
             return this.CreateResult(result);
+        }
+
+        [HttpPost("UpdateIsingameyams")]
+        public async Task UpdateIsingameyams([FromBody] int isingame)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameyams(userId, isingame);
         }
     }
 }
