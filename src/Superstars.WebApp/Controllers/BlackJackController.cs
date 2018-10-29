@@ -91,7 +91,7 @@ namespace Superstars.WebApp.Controllers
         {   
             // Get data
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            UserData user = await _userGateway.FindByName("AI" + userId);
+            UserData user = await _userGateway.FindByName("#AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
             
             // Draw one card for IA hand
@@ -221,7 +221,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<string> GetAiCards()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            UserData user = await _userGateway.FindByName("AI" + userId);
+            UserData user = await _userGateway.FindByName("#AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
             string playercards = await _blackJackGateway.GetPlayerCards(user.UserId, data.BlackJackGameId);
             return playercards;
@@ -261,7 +261,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<int> GetAiHandValue()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            UserData user = await _userGateway.FindByName("AI" + userId);
+            UserData user = await _userGateway.FindByName("#AI" + userId);
             BlackJackData data = await _blackJackGateway.GetGameId(user.UserId);
             int handv = await _blackJackGateway.GetPlayerHandValue(user.UserId, data.BlackJackGameId);
             return handv;
@@ -335,7 +335,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> PlayAi()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            UserData user = await _userGateway.FindByName("AI" + userId);
+            UserData user = await _userGateway.FindByName("#AI" + userId);
             BlackJackData data = await _blackJackGateway.GetPlayer(user.UserId);
 
             if (_blackJackService._dealerTurn)

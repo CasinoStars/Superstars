@@ -47,11 +47,12 @@ namespace CodeCake
                     });
                    
                     
-                    Cake.Zip(p.Path.GetDirectory() + "/bin/Debug/netcoreapp2.1/publish", "WebApp.zip");
+                    
+                    Cake.Zip(p.Path.GetDirectory() + "/bin/Debug/netcoreapp2.1/publish", "WebApp."+ gitInfo.SafeSemVersion + ".zip");
                 }
                 if(p.Name == "Superstars.DB")
                 {
-                    Cake.Zip(p.Path.GetDirectory() + "/bin/Debug", "DB.zip");
+                    Cake.Zip(p.Path.GetDirectory() + "/bin/Debug", "DB."+ gitInfo.SafeSemVersion + ".zip");
                 }
 
                 //     C: \Users\Albin\DEV\Superstars\src\Superstars.WebApp\bin\Debug\netcoreapp2.1 + "/bin/Debug/netcorapp2.1"

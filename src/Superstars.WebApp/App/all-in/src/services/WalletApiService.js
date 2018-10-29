@@ -38,7 +38,8 @@ class WalletApiService {
     }
 
     async Withdraw(model){
-        return await postAsync(`${endpoint}/Withdraw`, model);
+        var response = await postAsync(`${endpoint}/Withdraw`, model);
+        return response.text();
     }
 
     async GetBTCBankRoll(){

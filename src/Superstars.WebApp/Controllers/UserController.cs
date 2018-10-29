@@ -44,6 +44,11 @@ namespace Superstars.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (Regex.Match(model.Pseudo, @"\W").Success) // \W => 	Characters who are not alphanumeric
+                {
+                    ModelState.AddModelError(string.Empty, "Characters must be alphanumeric");
+                    return View(model);
+                }
                 UserData user = await _userService.FindUser(model.Pseudo, model.Password);
                 if (user == null)
                 {
@@ -70,9 +75,9 @@ namespace Superstars.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (Regex.Match(model.Pseudo, @"\b((AI)|(ai)|(Ai)|(aI))[0-9]*$").Success)
+                if (Regex.Match(model.Pseudo, @"\W").Success) // \W => 	Characters who are not alphanumeric
                 {
-                    ModelState.AddModelError(string.Empty, "This pseudo is invalid");
+                    ModelState.AddModelError(string.Empty, "Characters must be alphanumeric");
                     return View(model);
                 }
                 BitcoinSecret privateKey = new Key().GetBitcoinSecret(Network.TestNet);

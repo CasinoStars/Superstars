@@ -1,7 +1,6 @@
 ﻿using Cake.Common.IO;
 using Cake.Common.Solution;
 using Cake.Core;
-
 using Cake.Core.Diagnostics;
 using SimpleGitVersion;
 using System.Linq;
@@ -44,14 +43,14 @@ namespace CodeCake
             // Configuration is either "Debug" or "Release".
             string configuration = "Debug";
 
-            //Task( "Check-Repository" )
-            //    .Does( () =>
-            //    {
-            //        configuration = StandardCheckRepository( projectsToPublish, gitInfo );
-            //    } );
+            Task("Check-Repository")
+                .Does(() =>
+               {
+                   configuration = StandardCheckRepository(projectsToPublish, gitInfo);
+               });
 
             Task( "Clean" )
-              //  .IsDependentOn( "Check-Repository" )
+                .IsDependentOn( "Check-Repository" )
                 .Does( () =>
                  {
                     
@@ -73,10 +72,10 @@ namespace CodeCake
             Task("Publish")
              .IsDependentOn("Build")   
              .Does(() =>
-             {
-                 PublishWebApp(webAppPath.ToString());
-             }
-             );
+                {
+                     PublishWebApp(webAppPath.ToString());
+                 }
+                 );
 
             Task( "Unit-Testing" )
                 .IsDependentOn( "Publish" )
@@ -86,16 +85,23 @@ namespace CodeCake
                 } );
 
             Task( "Create-Zip" )
-           //     .WithCriteria( () => gitInfo.IsValid )
+                .WithCriteria( () => gitInfo.IsValid )
                 .IsDependentOn( "Unit-Testing" )
                 .Does( () =>
                 {
                     StandardCreateZip( releasesDir, projectsToPublish, gitInfo, configuration );
                 } );
+            Task("Deploy")
+                .WithCriteria(() => gitInfo.IsValid)
+                .IsDependentOn("Create-Zip")
+                .Does(() =>
+                {
+                    StandardDeploy(releasesDir, projectsToPublish, gitInfo, configuration);
+                });
 
             // The Default task for this script can be set here.
             Task( "Default" )
-                .IsDependentOn("Create-Zip");
+                .IsDependentOn("Deploy");
 
         }
     }
