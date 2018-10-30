@@ -181,6 +181,9 @@ export default {
 
     async getIsingame() {
       this.isingame = await this.executeAsyncRequest(() => YamsApiService.Getisingame());
+      if(this.isingame == 1) {
+        this.playerBet = true;
+      }
     },
 
     async getFakeCoins() {
