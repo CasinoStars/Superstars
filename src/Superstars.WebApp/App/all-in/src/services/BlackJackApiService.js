@@ -53,8 +53,8 @@ class BlackJackApiService {
     //     await postAsync(`${endpoint}/HitPlayerSecondCards`);
     // }
 
-    refreshAiturn() {
-        return getAsyncNoJSON(`${endpoint}/refreshAiturn`);
+    async refreshAiturn() {
+        return await getAsync(`${endpoint}/refreshAiturn`);
     }
 
     //  CanSplitPlayer() {
@@ -108,6 +108,15 @@ class BlackJackApiService {
         var value = await getAsyncNoJSON(`${endpoint}/getAiHandValue`);
         return value;
     }
+
+    async Getisingame() {
+        return await getAsync(`${endpoint}/GetisingameBJ`);
+    }
+
+    async SetIsingameBJ(isingame) {
+        return await postAsync(`${endpoint}/SetIsingameBJ`, isingame);
+    }
+
 }
 
 export default new BlackJackApiService();

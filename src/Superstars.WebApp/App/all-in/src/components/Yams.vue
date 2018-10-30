@@ -167,15 +167,15 @@ export default {
     
 
     async setisingametrue() {
-        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyamstrue());
+        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyams(1));
     },
 
     async setisingamefalse() {
-        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyamsfalse());
+        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyams(0));
     },
 
     async setisingamefalseandredirect() {
-        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyamsfalse());
+        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyams(0));
         this.$router.push({ path: 'play' });
     },
 

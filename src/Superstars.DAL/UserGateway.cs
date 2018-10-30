@@ -181,10 +181,9 @@ namespace Superstars.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                await con.ExecuteAsync(
-                    "sp.sUserUpdate",
-                    new { UserId = userId, Isingameblackjack = isingame },
-                   commandType: CommandType.StoredProcedure);
+                await con.QueryFirstOrDefaultAsync<Task>(
+                    "update sp.tUser set Isingameblackjack = @Isingamebj where UserId = @UserID",
+                    new { UserID = userId, Isingamebj = isingame });
             }
         }
     }

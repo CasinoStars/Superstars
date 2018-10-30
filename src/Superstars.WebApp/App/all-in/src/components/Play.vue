@@ -39,9 +39,16 @@ export default {
     ...mapActions(['executeAsyncRequest']),
 
     async DeleteAis() {
-      //await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+
+      if(await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0 ) {
+         await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+      }
+
       if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
          await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+      }
+
+      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0 && await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0) {
          await this.executeAsyncRequest(() => GameApiService.DeleteAis());
       }
     },
@@ -59,12 +66,16 @@ export default {
     },
 
     async PlayBlackJack(gametype) {
-      await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-      await this.executeAsyncRequest(() => GameApiService.createAiUser());
-      await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
-      await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
-      await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
-      await this.executeAsyncRequest(() => BlackJackApiService.InitIa());
+      if(await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0 ) {
+       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+       await this.executeAsyncRequest(() => GameApiService.createAiUser());
+       await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
+       await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
+       await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
+       await this.executeAsyncRequest(() => BlackJackApiService.InitIa());
+      } else {
+        // REPRENDRE LA GAME
+      }
       this.$router.push({ path: 'blackJack' });
     }
   }
