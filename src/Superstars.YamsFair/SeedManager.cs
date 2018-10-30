@@ -4,77 +4,52 @@ namespace Superstars.YamsFair
 {
     public class SeedManager
     {
-
-        Random random = new Random();
-        string _previousUncryptedServerSeed;
-        string _uncryptedServerSeed;
-        string _clientSeed;
-        string _CryptedServerSeed;
-        string _previousCryptedServerSeed;
-        string _previousClientSeed;
+        private readonly Random random = new Random();
 
         public SeedManager()
         {
-            _uncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
-            _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
-            _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
-            _previousCryptedServerSeed = "";
-            _previousClientSeed = "";
-        }
-        public SeedManager(string uncryptedServerSeed, string previousUncryptedServerSeed, string clientSeed, string cryptedServerSeed, string previousClientSeed, string previousCryptedServerSeed)
-        {
-            _previousCryptedServerSeed = previousCryptedServerSeed;
-            _previousClientSeed = previousClientSeed;
-            _previousUncryptedServerSeed = previousUncryptedServerSeed;
-            _uncryptedServerSeed = uncryptedServerSeed;
-            _clientSeed = clientSeed;
-            _CryptedServerSeed = cryptedServerSeed;
+            UncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
+            ClientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
+            CryptedServerSeed = HashManager.getHashSha512(UncryptedServerSeed);
+            PreviousCryptedServerSeed = "";
+            PreviousClientSeeds = "";
         }
 
-        public string PreviousUncryptedServerSeed
+        public SeedManager(string uncryptedServerSeed, string previousUncryptedServerSeed, string clientSeed,
+            string cryptedServerSeed, string previousClientSeed, string previousCryptedServerSeed)
         {
-            get { return _previousUncryptedServerSeed; }
+            PreviousCryptedServerSeed = previousCryptedServerSeed;
+            PreviousClientSeeds = previousClientSeed;
+            PreviousUncryptedServerSeed = previousUncryptedServerSeed;
+            UncryptedServerSeed = uncryptedServerSeed;
+            ClientSeed = clientSeed;
+            CryptedServerSeed = cryptedServerSeed;
         }
 
-        public string CryptedServerSeed
-        {
-            get { return _CryptedServerSeed; }
-        }
-        public string ClientSeed
-        {
-            get { return _clientSeed; }
-        }
+        public string PreviousUncryptedServerSeed { get; private set; }
 
-        public string UncryptedServerSeed
-        {
-            get { return _uncryptedServerSeed; }
-        }
+        public string CryptedServerSeed { get; private set; }
 
-        public string PreviousClientSeeds
-        {
-            get { return _previousClientSeed; }
-        }
+        public string ClientSeed { get; private set; }
 
-        public string PreviousCryptedServerSeed
-        {
-            get { return _previousCryptedServerSeed; }
-        }
+        public string UncryptedServerSeed { get; private set; }
+
+        public string PreviousClientSeeds { get; private set; }
+
+        public string PreviousCryptedServerSeed { get; private set; }
 
         public void NewSeed(string clientSeed = null)
         {
-            _previousCryptedServerSeed = _CryptedServerSeed;
-            _previousClientSeed = _clientSeed;
-            _previousUncryptedServerSeed = _uncryptedServerSeed;
-            _uncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
-            if(clientSeed == null)
-            _clientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
+            PreviousCryptedServerSeed = CryptedServerSeed;
+            PreviousClientSeeds = ClientSeed;
+            PreviousUncryptedServerSeed = UncryptedServerSeed;
+            UncryptedServerSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
+            if (clientSeed == null)
+                ClientSeed = HashManager.getHashSha512(random.Next(int.MaxValue).ToString());
             else
-            {
-                _clientSeed = clientSeed;
-            }
+                ClientSeed = clientSeed;
 
-            _CryptedServerSeed = HashManager.getHashSha512(_uncryptedServerSeed);
+            CryptedServerSeed = HashManager.getHashSha512(UncryptedServerSeed);
         }
-
     }
 }

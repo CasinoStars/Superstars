@@ -13,11 +13,11 @@
                 <li style="color: white" class="tab active" v-if="this.view == 'provablyFair'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
                 <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
 
-                      <li style="color: white" class="tab active" v-if="this.view == 'provablyFairTest'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
+                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairTest'"><a v-on:click="ChangeView('provablyFairTest')">Retrouver les dés</a></li>
                 <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairTest')">Retrouver les dés</a></li>
                 
                 
-                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFair')" style="margin-leftg: 25%;">Code</a></li>
+                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFairCode')" style="margin-leftg: 25%;">Code</a></li>
                 <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')" style="margin-leftg: 25%;">Code</a></li>
             </ul>
 
@@ -100,7 +100,7 @@
 
 
           
- <div class="tab-content" v-if="this.view == 'provablyFairCode'">
+ <div class="tab-content" v-else>
 <h6 style="color: white"><span style="font-weight: bold; font-style: italic;"><pre style="color: white">
 using System;
 using System.Collections.Generic;
@@ -203,7 +203,7 @@ namespace Rextester
             </div>
         </div>
 
-    </div> 
+   
         
 </template>
 
@@ -217,9 +217,9 @@ import ProvablyFairApiService from "../services/ProvablyFairApiService";
 export default {
   data() {
     return {
-       serverSeedTest: "",
+      serverSeedTest: "",
       clientSeedTest: "",
-       nbOfDices: 0,
+      nbOfDices: 0,
       clientSeeds: "",
       seeds: "",
       view: "provablyFair",
@@ -246,21 +246,18 @@ export default {
       );
     },
 
-    
     async RetriveDicesFromSeeds(e) {
-        e.preventDefault();
-        let toto = this;
-        let azerty =  await ProvablyFairApiService.RetriveDicesFromSeeds(this.serverSeedTest,this.clientSeedTest,this.nbOfDices).then(function(azerty){
-                console.log("The last one");
-                console.log(azerty);
-                toto.dicesFromSeeds = azerty;
-        });
-      
-
-        
-              
-      
-
+      e.preventDefault();
+      let toto = this;
+      let azerty = await ProvablyFairApiService.RetriveDicesFromSeeds(
+        this.serverSeedTest,
+        this.clientSeedTest,
+        this.nbOfDices
+      ).then(function(azerty) {
+        console.log("The last one");
+        console.log(azerty);
+        toto.dicesFromSeeds = azerty;
+      });
     },
 
     async UpdateSeeds(e) {
@@ -277,7 +274,6 @@ export default {
       this.view = view;
       this.errors = 0;
     }
-
   }
 };
 </script>

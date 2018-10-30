@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Superstars.YamsFair;
-using System.Collections.Generic;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -13,7 +12,7 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class ProvablyFairController : Controller
     {
-        ProvablyFairGateway _provablyFairGateway;
+        private readonly ProvablyFairGateway _provablyFairGateway;
 
         public ProvablyFairController(ProvablyFairGateway provablyFairGateway)
         {
@@ -24,31 +23,31 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("CreateSeeds")]
         public async void CreateSeeds()
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             await _provablyFairGateway.AddSeeds(userId);
-
         }
 
 
         [HttpGet("GetSeeds")]
         public async Task<ProvablyFairData> GetSeeds()
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            ProvablyFairData result = await _provablyFairGateway.GetSeeds(userId);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var result = await _provablyFairGateway.GetSeeds(userId);
             return result;
         }
 
         [HttpPost("UpdateSeeds")]
-        public async void UpdateSeeds([FromBody] string ClientSeed = null)
+        public void UpdateSeeds([FromBody] string ClientSeed = null)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
         }
+
         [HttpPost("{clientSeedTest}/{serverSeedTest}/{nbOfDices}/RetriveDicesFromSeeds")]
-        public async Task<int[]> RetriveDicesFromSeeds(string clientSeedTest ,string serverSeedTest,  int nbOfDices)
+        public int[] RetriveDicesFromSeeds(string clientSeedTest, string serverSeedTest, int nbOfDices)
         {
-             List<int> dicesFromSeeds =  HashManager.RetriveDicesFromSeeds(clientSeedTest, serverSeedTest, nbOfDices);
-            int[] dicesFromSeedsArray = dicesFromSeeds.ToArray();
+            var dicesFromSeeds = HashManager.RetriveDicesFromSeeds(clientSeedTest, serverSeedTest, nbOfDices);
+            var dicesFromSeedsArray = dicesFromSeeds.ToArray();
             return dicesFromSeedsArray;
         }
     }
