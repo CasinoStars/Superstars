@@ -1,10 +1,10 @@
-﻿using QBitNinja.Client.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using QBitNinja.Client.Models;
 
 namespace Superstars.Wallet
 {
-    class Wallet
+    internal class Wallet
     {
-        List<GetTransactionResponse> _pendingTrx;      
+        private List<GetTransactionResponse> _pendingTrx;
     }
 }

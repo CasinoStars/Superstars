@@ -1,11 +1,11 @@
-﻿using Superstars.DAL;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Superstars.DAL;
 
 namespace Superstars.WebApp.Services
 {
     public class ProvablyFairService
     {
-        readonly ProvablyFairGateway _provablyFairGateway;
+        private readonly ProvablyFairGateway _provablyFairGateway;
 
         //public ProvablyFairService(ProvablyFairGateway provablyFairGateway, PasswordHasher passwordHasher)
         //{
@@ -15,17 +15,14 @@ namespace Superstars.WebApp.Services
 
         public async Task<ProvablyFairData> FindSeeds(int userId)
         {
-            ProvablyFairData provablyFair = await _provablyFairGateway.GetSeeds(userId);
-            if (provablyFair != null)
-            {
-                return provablyFair;
-            }
+            var provablyFair = await _provablyFairGateway.GetSeeds(userId);
+            if (provablyFair != null) return provablyFair;
             return null;
         }
 
         public async Task<int> GetDice(int userId)
         {
-             int dice =  await _provablyFairGateway.GetDicesFromHash(userId);
+            var dice = await _provablyFairGateway.GetDicesFromHash(userId);
             return dice;
         }
     }

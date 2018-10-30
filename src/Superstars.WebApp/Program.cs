@@ -13,8 +13,9 @@ namespace Superstars.WebApp
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -32,5 +33,6 @@ namespace Superstars.WebApp
                 })
                 .UseStartup<Startup>()
                 .Build();
+        }
     }
 }

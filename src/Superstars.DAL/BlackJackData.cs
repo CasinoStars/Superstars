@@ -15,6 +15,5 @@
         public int HandValue { get; set; }
 
         public int SecondHandValue { get; set; }
-
     }
 }

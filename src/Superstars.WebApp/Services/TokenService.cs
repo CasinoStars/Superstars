@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.Options;
-using Superstars.WebApp.Authentication;
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.Extensions.Options;
+using Superstars.WebApp.Authentication;
 
 namespace Superstars.WebApp.Services
 {
     public class TokenService
     {
-        readonly TokenProviderOptions _options;
+        private readonly TokenProviderOptions _options;
 
         public TokenService(IOptions<TokenProviderOptions> options)
         {
@@ -21,24 +21,25 @@ namespace Superstars.WebApp.Services
 
             // Specifically add the iat (issued timestamp), and sub (subject/user) claims.
             // You can add other claims here, if you want:
-            var claims = new Claim[]
+            var claims = new[]
             {
-                new Claim( JwtRegisteredClaimNames.Sub, userId ),
-                new Claim( JwtRegisteredClaimNames.UniqueName, pseudo ),
-                new Claim( JwtRegisteredClaimNames.Iat, ( ( int )( now - new DateTime( 1970, 1, 1 ) ).TotalSeconds).ToString(), ClaimValueTypes.Integer64 )
+                new Claim(JwtRegisteredClaimNames.Sub, userId),
+                new Claim(JwtRegisteredClaimNames.UniqueName, pseudo),
+                new Claim(JwtRegisteredClaimNames.Iat, ((int) (now - new DateTime(1970, 1, 1)).TotalSeconds).ToString(),
+                    ClaimValueTypes.Integer64)
             };
 
             // Create the JWT and write it to a string
             var jwt = new JwtSecurityToken(
-                issuer: _options.Issuer,
-                audience: _options.Audience,
-                claims: claims,
-                notBefore: now,
-                expires: now.Add(_options.Expiration),
-                signingCredentials: _options.SigningCredentials);
+                _options.Issuer,
+                _options.Audience,
+                claims,
+                now,
+                now.Add(_options.Expiration),
+                _options.SigningCredentials);
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return new Token(encodedJwt, (int)_options.Expiration.TotalSeconds);
+            return new Token(encodedJwt, (int) _options.Expiration.TotalSeconds);
         }
     }
 

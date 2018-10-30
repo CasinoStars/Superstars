@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
-using System;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -11,14 +11,16 @@ namespace Superstars.WebApp.Controllers
             return CreateResult(@this, result, new ActionResultOptions<T>(@this));
         }
 
-        public static IActionResult CreateResult<T>(this Controller @this, Result<T> result, Action<ActionResultOptions<T>> options)
+        public static IActionResult CreateResult<T>(this Controller @this, Result<T> result,
+            Action<ActionResultOptions<T>> options)
         {
-            ActionResultOptions<T> o = new ActionResultOptions<T>(@this);
+            var o = new ActionResultOptions<T>(@this);
             options(o);
             return @this.CreateResult(result, o);
         }
 
-        public static IActionResult CreateResult<T>(this Controller @this, Result<T> result, ActionResultOptions<T> options)
+        public static IActionResult CreateResult<T>(this Controller @this, Result<T> result,
+            ActionResultOptions<T> options)
         {
             object value;
             if (!result.HasError) value = result.Content;
@@ -28,9 +30,7 @@ namespace Superstars.WebApp.Controllers
             if (result.Status == Status.NotFound) return @this.NotFound(value);
             if (result.Status == Status.BadRequest) return @this.BadRequest(value);
             if (result.Status == Status.Created)
-            {
                 return @this.CreatedAtRoute(options.RouteName, options.RouteValues(result.Content), value);
-            }
             throw new ArgumentException("Unknown status.", nameof(result));
         }
 
