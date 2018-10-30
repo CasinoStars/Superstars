@@ -2,11 +2,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NBitcoin.OpenAsset;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Services;
@@ -28,8 +26,8 @@ namespace Superstars.WebApp
             services.AddOptions();
             services.AddMvc();
 
-            string secretKey = Configuration["JwtBearer:SigningKey"];
-            SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+            var secretKey = Configuration["JwtBearer:SigningKey"];
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             services.Configure<TokenProviderOptions>(o =>
             {
@@ -38,18 +36,21 @@ namespace Superstars.WebApp
                 o.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
 
-            services.AddSingleton<UserGateway>(x => new UserGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<GameGateway>(x => new GameGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<YamsGateway>(x => new YamsGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<WalletGateway>(x => new WalletGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<RankGateway>(x => new RankGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(x => new UserGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(x => new GameGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(x => new YamsGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(
+                x => new WalletGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(x => new RankGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<YamsService>();
-            services.AddSingleton<BlackJackGateway>(x => new BlackJackGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<BlackJackService>(x => new BlackJackService());
-            services.AddSingleton<ProvablyFairGateway>(x => new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(x =>
+                new BlackJackGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton(x => new BlackJackService());
+            services.AddSingleton(x =>
+                new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<ProvablyFairService>();
 
-            services.AddSingleton<RankService>(x => new RankService());
+            services.AddSingleton(x => new RankService());
             services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
@@ -58,23 +59,23 @@ namespace Superstars.WebApp
             services.AddAuthentication(CookieAuthentication.AuthenticationScheme)
                 .AddCookie(CookieAuthentication.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerAuthentication.AuthenticationScheme,
-                o =>
-                {
-                    o.TokenValidationParameters = new TokenValidationParameters
+                    o =>
                     {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = signingKey,
+                        o.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = signingKey,
 
-                        ValidateIssuer = true,
-                        ValidIssuer = Configuration["JwtBearer:Issuer"],
+                            ValidateIssuer = true,
+                            ValidIssuer = Configuration["JwtBearer:Issuer"],
 
-                        ValidateAudience = true,
-                        ValidAudience = Configuration["JwtBearer:Audience"],
+                            ValidateAudience = true,
+                            ValidAudience = Configuration["JwtBearer:Audience"],
 
-                        NameClaimType = ClaimTypes.Name,
-                        AuthenticationType = JwtBearerAuthentication.AuthenticationType
-                    };
-                });
+                            NameClaimType = ClaimTypes.Name,
+                            AuthenticationType = JwtBearerAuthentication.AuthenticationType
+                        };
+                    });
         }
 
         //This method gets called by the runtime.Use this method to configure the HTTP request pipeline.
@@ -86,8 +87,8 @@ namespace Superstars.WebApp
                 app.UseDeveloperExceptionPage();
             }
 
-            string secretKey = Configuration["JwtBearer:SigningKey"];
-            SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+            var secretKey = Configuration["JwtBearer:SigningKey"];
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             app.UseAuthentication();
 
             app.UseStaticFiles();
@@ -95,14 +96,14 @@ namespace Superstars.WebApp
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "Home", action = "Index" });
+                    "default",
+                    "{controller}/{action}/{id?}",
+                    new {controller = "Home", action = "Index"});
 
                 routes.MapRoute(
-                    name: "spa-fallback",
-                    template: "Home/{*anything}",
-                    defaults: new { controller = "Home", action = "Index" });
+                    "spa-fallback",
+                    "Home/{*anything}",
+                    new {controller = "Home", action = "Index"});
             });
 
             //app.Run(async context =>

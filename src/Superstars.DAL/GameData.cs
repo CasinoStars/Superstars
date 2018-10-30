@@ -11,7 +11,5 @@ namespace Superstars.DAL
         public DateTime EndDate { get; set; }
 
         public int ResultWinner { get; set; }
-
-
     }
 }

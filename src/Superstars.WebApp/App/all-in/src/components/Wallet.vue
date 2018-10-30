@@ -83,7 +83,8 @@ export default {
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
-        ...mapActions(['executeAsyncRequestWithMoney']),
+        ...mapActions(['executeAsyncRequestWithFakeMoney']),
+        ...mapActions(['executeAsyncRequestWithBTCMoney']),
 
         async GetWalletAddress(){
           this.BTCAddress = await this.executeAsyncRequest(() => WalletApiService.GetWalletAddress());
@@ -108,7 +109,7 @@ export default {
 
                 if(errors.length == 0) {
                     try {
-                        await this.executeAsyncRequestWithMoney(() => WalletApiService.AddCoins(this.item));
+                        await this.executeAsyncRequestWithFakeMoney(() => WalletApiService.AddCoins(this.item));
                         await this.refreshFakeCoins();
                     }
                     catch(error) {
@@ -126,9 +127,8 @@ export default {
             this.errors = errors;
             if(errors.length === 0) {          
                 try {
-                    this.Responses = await this.executeAsyncRequestWithMoney(() => WalletApiService.Withdraw(this.item));
+                    this.Responses = await this.executeAsyncRequestWithBTCMoney(() => WalletApiService.Withdraw(this.item));
                     this.refreshTrueCoins();
-                    console.log(this.Responses);
                 }
                 catch(error){
                 }

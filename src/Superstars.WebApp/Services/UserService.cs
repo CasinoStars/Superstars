@@ -5,8 +5,8 @@ namespace Superstars.WebApp.Services
 {
     public class UserService
     {
-        readonly UserGateway _userGateway;
-        readonly PasswordHasher _passwordHasher;
+        private readonly PasswordHasher _passwordHasher;
+        private readonly UserGateway _userGateway;
 
         public UserService(UserGateway userGateway, PasswordHasher passwordHasher)
         {
@@ -21,11 +21,9 @@ namespace Superstars.WebApp.Services
 
         public async Task<UserData> FindUser(string pseudo, string password)
         {
-            UserData user = await _userGateway.FindByName(pseudo);
-            if (user != null && _passwordHasher.VerifyHashedPassword(user.UserPassword, password) == PasswordVerificationResult.Success)
-            {
-                return user;
-            }
+            var user = await _userGateway.FindByName(pseudo);
+            if (user != null && _passwordHasher.VerifyHashedPassword(user.UserPassword, password) ==
+                PasswordVerificationResult.Success) return user;
             return null;
         }
     }
