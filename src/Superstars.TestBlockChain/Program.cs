@@ -37,7 +37,9 @@ namespace Superstars.Wallet
 
             Console.ReadKey();
 
-
+            bool hugo = Validator.IsValidAddress("mzRnZHJodRUmE6cSPvGrhtcsgvhdVFYroa");
+            bool loiseau = Validator.IsValidAddress("mh2e7YHio7fTjLXHZ3KRXDfU52RbwQbhtK");
+            bool marceau = Validator.IsValidAddress("21232e7YHio7fTjLXHZ3KRXDfU52RbwQbhtK");
         }
     }
 }

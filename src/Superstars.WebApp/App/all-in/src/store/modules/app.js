@@ -1,26 +1,31 @@
-import * as types from '../mutation-types'
+import * as types from '../mutation-types';
 
 const state = {
     isLoading: false,
-    walletChange: false,
+    BTCMoneyChange: false,
+    fakeMoneyChange: false,
     errors: []
-}
+};
 
 const mutations = {
     [types.SET_IS_LOADING](state, isLoading) {
-        state.isLoading = isLoading
+        state.isLoading = isLoading;
     },
 
     [types.ERROR_HAPPENED](state, error) {
-        state.errors.push(error || "")
+        state.errors.push(error || "");
     },
 
-    [types.WALLET_CHANGE](state, walletChange){
-        state.walletChange = walletChange
+    [types.BTC_MONEY_CHANGE](state, BTCMoneyChange) {
+        state.BTCMoneyChange = BTCMoneyChange;
+    },
+
+    [types.FAKE_MONEY_CHANGE](state, fakeMoneyChange) {
+        state.fakeMoneyChange = fakeMoneyChange;
     }
-}
+};
 
 export default {
     state,
     mutations
-}
+};

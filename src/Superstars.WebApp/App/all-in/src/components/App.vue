@@ -75,7 +75,8 @@
       <div class="progress" v-if="isLoading">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div>
-      <div v-if="walletChange" v-bind="fakeUser() && BTCUser()"></div>
+      <div v-if="BTCMoneyChange" v-bind="BTCUser()"></div>
+      <div v-if="fakeMoneyChange" v-bind="fakeUser()"></div>
     </header>
     <router-view></router-view>
   </div>
@@ -97,7 +98,8 @@ export default{
 
   computed: {
     ...mapGetters(['isLoading']),
-    ...mapGetters(['walletChange']),
+    ...mapGetters(['BTCMoneyChange']),
+    ...mapGetters(['fakeMoneyChange']),
     auth: () => UserApiService
   },
   
@@ -117,11 +119,11 @@ export default{
     ...mapActions(['executeAsyncRequestWithMoney']),
 
     async BTCUser() {
-      this.UserBTCoins = await this.executeAsyncRequestWithMoney(() => WalletApiService.GetTrueBalance());
+      this.UserBTCoins = await WalletApiService.GetTrueBalance();
     },
 
     async fakeUser() {
-      var dataUser = await this.executeAsyncRequestWithMoney(() => WalletApiService.GetFakeBalance());
+      var dataUser = await WalletApiService.GetFakeBalance();
       this.UserfakeCoins = dataUser.balance;
     },
 

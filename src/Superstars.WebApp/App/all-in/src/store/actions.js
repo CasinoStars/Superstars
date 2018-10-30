@@ -1,4 +1,4 @@
-import * as types from './mutation-types'
+import * as types from './mutation-types';
 
 /**
  * Notify when an error happens
@@ -19,12 +19,21 @@ export function notifyLoading({ commit }, isLoading) {
 }
 
 /**
- * Notify when wallet change
+ * Notify when BTC wallet change
  * @param {*} param0 
- * @param {boolean} walletChange
+ * @param {boolean} BTCMoneyChange
  */
-export function notifyWalletChange({ commit }, walletChange) {
-    commit(types.WALLET_CHANGE, walletChange);
+export function notifyBTCMoneyChange({ commit }, BTCMoneyChange) {
+    commit(types.BTC_MONEY_CHANGE, BTCMoneyChange);
+}
+
+/**
+ * Notify when Fake wallet change
+ * @param {*} param0 
+ * @param {boolean} fakeMoneyChange
+ */
+export function notifyFakeMoneyChange({ commit }, fakeMoneyChange) {
+    commit(types.FAKE_MONEY_CHANGE, fakeMoneyChange);
 }
 
 // In order to be DRY, we can combine all of the previous actions in one action...
@@ -50,8 +59,8 @@ export async function executeAsyncRequest({ commit }, asyncCallback) {
     }
 }
 
-export async function executeAsyncRequestWithMoney({ commit }, asyncCallback) {
-    commit(types.WALLET_CHANGE, true);
+export async function executeAsyncRequestWithBTCMoney({ commit }, asyncCallback) {
+    commit(types.BTC_MONEY_CHANGE, true);
     try {
         return await asyncCallback();
     }
@@ -60,6 +69,20 @@ export async function executeAsyncRequestWithMoney({ commit }, asyncCallback) {
         throw error;
     }
     finally {
-        commit(types.WALLET_CHANGE, false);
+        commit(types.BTC_MONEY_CHANGE, false);
+    }
+}
+
+export async function executeAsyncRequestWithFakeMoney({ commit }, asyncCallback) {
+    commit(types.FAKE_MONEY_CHANGE, true);
+    try {
+        return await asyncCallback();
+    }
+    catch (error) {
+        commit(type.ERROR_HAPPENED, error.message);
+        throw error;
+    }
+    finally {
+        commit(types.FAKE_MONEY_CHANGE, false);
     }
 }
