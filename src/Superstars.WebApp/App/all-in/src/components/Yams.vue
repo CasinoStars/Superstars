@@ -8,8 +8,8 @@
 
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{trueCoins}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
-          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeCoins.balance}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
         <router-link class="close"  v-on:click.native="setisingamefalseandredirect()" to="">&times;</router-link>
       </div>
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
@@ -139,8 +139,6 @@ export default {
       profit: 0,
       fakeBet: 0,
       trueBet: 0,
-      fakeCoins: 0,
-      trueCoins: 0,
       errors: [],
       isingame: 0,
     }
@@ -160,13 +158,16 @@ export default {
 
   },
   
+  computed: {
+    ...mapGetters(['BTCMoney']),
+    ...mapGetters(['fakeMoney'])
+  },
+
   methods: {
     ...mapActions(['executeAsyncRequest']),
-    ...mapActions(['executeAsyncRequestWithFakeMoney']),
-    ...mapActions(['executeAsyncRequestWithBTCMoney']),
+    ...mapActions(['RefreshFakeCoins']),
+    ...mapActions(['RefreshBTC']),
     
-    
-
     async setisingametrue() {
         await this.executeAsyncRequest(() => YamsApiService.SetIsingameyamstrue());
     },
@@ -229,10 +230,14 @@ export default {
       this.errors = errors;
       if(errors.length == 0) {
         try {
-          if(this.realOrFake === 'fake')
-            await this.executeAsyncRequestWithFakeMoney(() => GameApiService.BetFake(this.fakeBet, 'Yams'));
-          else
-            await this.executeAsyncRequestWithBTCMoney(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
+          if(this.realOrFake === 'fake') {
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 'Yams'));
+            await this.RefreshFakeCoins();
+          }
+          else {
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
+            await this.RefreshBTC();
+          }
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
@@ -275,11 +280,13 @@ export default {
         await this.updateStats();
           if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
-            await this.executeAsyncRequestWithFakeMoney(() => WalletApiService.CreditPlayerInFake(pot));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
+            await this.RefreshFakeCoins();
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
-            await this.executeAsyncRequestWithBTCMoney(() => WalletApiService.CreditPlayerInBTC(pot));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
+            await this.RefreshBTC();
           }
       }
     },

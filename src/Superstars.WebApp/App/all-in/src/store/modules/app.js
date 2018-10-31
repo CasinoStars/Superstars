@@ -4,6 +4,8 @@ const state = {
     isLoading: false,
     BTCMoneyChange: false,
     fakeMoneyChange: false,
+    fakeMoney: 0,
+    BTCMoney: 0,
     errors: []
 };
 
@@ -16,12 +18,12 @@ const mutations = {
         state.errors.push(error || "");
     },
 
-    [types.BTC_MONEY_CHANGE](state, BTCMoneyChange) {
-        state.BTCMoneyChange = BTCMoneyChange;
+    [types.FAKE_MONEY](state, fakeMoney) {
+        state.fakeMoney = fakeMoney;
     },
 
-    [types.FAKE_MONEY_CHANGE](state, fakeMoneyChange) {
-        state.fakeMoneyChange = fakeMoneyChange;
+    [types.BTC_MONEY](state, BTCMoney) {
+        state.BTCMoney = BTCMoney;
     }
 };
 
