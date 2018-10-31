@@ -58,12 +58,9 @@ class YamsApiService {
         return await getAsync(`${endpoint}/Getisingameyams`);
     }
 
-    async SetIsingameyamstrue() {
-        return await postAsync(`${endpoint}/SetIsingameyamstrue`);
+    async SetIsingameyams(isingame) {
+        return await postAsync(`${endpoint}/SetIsingameyams`, isingame);
     }
 
-    async SetIsingameyamsfalse() {
-        return await postAsync(`${endpoint}/SetIsingameyamsfalse`);
-    }
 }
 export default new YamsApiService();

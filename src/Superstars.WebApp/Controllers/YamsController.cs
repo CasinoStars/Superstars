@@ -198,25 +198,13 @@ namespace Superstars.WebApp.Controllers
             return result;
         }
 
-        [HttpPost("SetIsingameyamstrue")]
-        public async Task SetIsingameyamstrue()
+        // 1 for true, 0 for false
+        [HttpPost("SetIsingameyams")]
+        public async Task SetIsingameyams([FromBody] int isingame)
         {
-            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            await _userGateway.UpdateIsingameyams(userid, 1);
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameyams(userid,isingame);
         }
 
-        [HttpPost("SetIsingameyamsfalse")]
-        public async Task SetIsingameyamsfalse()
-        {
-            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            await _userGateway.UpdateIsingameyams(userid, 0);
-        }
-
-        [HttpPost("SetIsingameblackjacktrue")]
-        public async Task SetIsingameblackjacktrue()
-        {
-            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            await _userGateway.UpdateIsingameblackjack(userid, 1);
-        }
     }
 }

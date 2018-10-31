@@ -365,5 +365,21 @@ namespace Superstars.WebApp.Controllers
                 data.PlayerCards, data.NbTurn + 1, data.HandValue);
             return this.CreateResult(result);
         }
+
+        // 1 for true, 0 for false
+        [HttpPost("SetIsingameBJ")]
+        public async Task SetIsingameBJ([FromBody] int isingame)
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _userGateway.UpdateIsingameblackjack(userid, isingame);
+        }
+
+        [HttpGet("GetisingameBJ")]
+        public async Task<int> GetIsingameBJ()
+        {
+            int userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int result = await _userGateway.GetIsingameblackjack(userid);
+            return result;
+        }
     }
 }

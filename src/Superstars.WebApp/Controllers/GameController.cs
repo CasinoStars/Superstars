@@ -225,11 +225,5 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("UpdateIsingameyams")]
-        public async Task UpdateIsingameyams([FromBody] int isingame)
-        {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            await _userGateway.UpdateIsingameyams(userId, isingame);
-        }
     }
 }
