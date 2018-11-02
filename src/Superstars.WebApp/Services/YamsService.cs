@@ -91,21 +91,25 @@ namespace Superstars.WebApp.Services
 
                 //carré
                 if (handcount[i] == 4)
+                {
                     for (l = 0; l < 6; l++)
                         if (handcount[l] == 1)
                         {
                             points = points + 1000 * (i + 1) + l + 1;
                             return points;
                         }
+                }
 
-                else if (handcount[i] == 3)
+                if (handcount[i] == 3)
+                {
                     for (l = 0; l < 6; l++)
+                    {
                         if (handcount[l] == 2) // full
                         {
                             points = points + 100000 * (i + 1) + 10000 * (l + 1);
                             return points;
                         }
-                        else if (handcount[l] == 1) // brelan 
+                        if (handcount[l] == 1) // brelan 
                         {
                             for (var k = 0; k < 6; k++)
                                 if (handcount[k] == 1 && k != l)
@@ -114,6 +118,8 @@ namespace Superstars.WebApp.Services
                                     return points;
                                 }
                         }
+                    }
+                }       
             }
 
             // petite suite
@@ -149,11 +155,15 @@ namespace Superstars.WebApp.Services
 
                 //carré
                 if (handcount[i] == 4)
+                {
                     for (l = 0; l < 6; l++)
                         if (handcount[l] == 1)
                             return figureName = "carré de " + (i + 1);
+                }
 
-                else if (handcount[i] == 3)
+
+                if (handcount[i] == 3)
+                {
                     for (l = 0; l < 6; l++)
                         if (handcount[l] == 2) // full 
                             return figureName = "full " + (i + 1) + "-" + (l + 1);
@@ -161,6 +171,8 @@ namespace Superstars.WebApp.Services
                             for (var k = 0; k < 6; k++)
                                 if (handcount[k] == 1 && k != l)
                                     return figureName = "Brelan de " + (i + 1);
+                }
+                   
             }
 
             // petite suite
