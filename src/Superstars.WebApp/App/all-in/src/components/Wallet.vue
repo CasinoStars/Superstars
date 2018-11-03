@@ -35,6 +35,7 @@
                         <input type="text" placeholder="Address" v-model="item.DestinationAddress" required autocomplete="off"/>
                     </div><br>      
                     <button type="submit" class="button button-block">Envoyer</button>
+                    <div> {{Responses}} </div>
                 </form>
 
                 <!-- FakeWallet -->
@@ -50,8 +51,36 @@
                 </form>
             </div>
         </div>
+
+
+
+ <!-- The Modal -->
+  <div id="withdrawModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
+          <p >SOLDE DE VOTRE COMPTE BTC: {{Responses}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></p>
+        </div>
+        <router-link class="close"  v-on:click.native="setisingamefalseandredirect()" to="">&times;</router-link>
+      </div>
+        <div  class="modal-body">        
+            <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div style="margin-right: 42%;">
+            <button type="submit" class="btn btn-light">Confirmer</button>
+          </div>
+        </div>
     </div>
+  </div>
+
 </template>
+
+
 
 <style lang="css">
   
@@ -71,6 +100,7 @@ export default {
             BTCAddress: '',
             errors: [],
             Responses: [],
+            
         };
     },
 
@@ -79,6 +109,7 @@ export default {
         this.refreshTrueCoins();
         this.refreshFakeCoins();
         this.GetWalletAddress();
+        this.showModal();
     },
 
     methods: {
@@ -115,6 +146,11 @@ export default {
                     }
                 }
         },
+
+           showModal() {
+      var modal = document.getElementById('WithdrawModal');
+      modal.style.display = "block";
+    },
 
         async Withdraw(e) {
             e.preventDefault();
@@ -250,6 +286,52 @@ $br: 4px;
   	margin:2px;
   	color:#1ab188;;
   }
+}
+
+.wallet .modal-header {
+    padding: 10px 16px;
+    text-align: center;
+    background: #222222a8;
+    color: white;
+}
+
+.wallet .modal-body {
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.wallet .modal-footer {
+  padding: 15px 16px;
+  background-color:  #222222a8;
+  color: white;
+}
+
+.wallet .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 16%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba($body-bg,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.wallet .modal-content {
+    position: relative;
+    background: rgba($form-bg,.9);
+    margin: auto;
+    padding: 0;
+    width: 80%;
+    box-shadow: 0 0 100px 50px rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
 }
 
 .wallet input, textarea {

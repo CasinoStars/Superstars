@@ -8,7 +8,7 @@ namespace Superstars.WebApp
         Deck _deck;
         public List<Card> _myhand { get; set; }
         public List<Card> _ennemyhand { get; set; }
-        public List<Card> _ennemysecondhand { get; set; }
+       // public List<Card> _ennemysecondhand { get; set; }
         public int _pot;
         public bool _dealerTurn;
         public bool _hassplit;
@@ -27,7 +27,7 @@ namespace Superstars.WebApp
             _values = Valueforcards(_values);
             _deck.Shuffle();
             _myhand = new List<Card>();
-            _ennemysecondhand = new List<Card>();
+           // _ennemysecondhand = new List<Card>();
             _ennemyhand = new List<Card>();
             _hassplit = false;
             _dealerTurn = false;

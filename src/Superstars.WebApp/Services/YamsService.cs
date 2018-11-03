@@ -89,13 +89,14 @@ namespace Superstars.WebApp.Services
 			for (int i = 0; i < 6; i++)
 			{
 				//yams
+                // handcount reprente le nombre de dés pareils 
+                // et i le dé en question 
 				if (handcount[i] == 5)
 				{
 					points = points + 100000000*(i + 1);
 					return points;
 				}
 
-				//carré
 				if (handcount[i] == 4)
 				{
 					for (int l = 0; l < 6; l++)
@@ -137,6 +138,7 @@ namespace Superstars.WebApp.Services
 			{
 				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
 				{
+
 					points = points + 1000000;
 				}
 			}//grade suite
