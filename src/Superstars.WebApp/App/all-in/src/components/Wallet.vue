@@ -16,9 +16,9 @@
             </ul>
       
             <div class="tab-content">
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{trueCoins}} BTC</h5>
+                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{BTCMoney}} BTC</h5>
                 <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
-                <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeCoins.balance}} all'in</h5>
+                <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeMoney}} all'in</h5>
                 
                 <!-- RealWallet -->
                 <form  @submit="Withdraw($event)" v-if="this.wallet == 'real'">
@@ -87,7 +87,7 @@
 </style>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import WalletApiService from '../services/WalletApiService';
 
 export default {
@@ -95,8 +95,6 @@ export default {
         return {
             item: {},
             wallet: '',
-            fakeCoins: 0,
-            trueCoins: 'waiting...',
             BTCAddress: '',
             errors: [],
             Responses: [],
@@ -104,17 +102,23 @@ export default {
         };
     },
 
-    mounted(){
+    computed: {
+        ...mapGetters(['BTCMoney']),
+        ...mapGetters(['fakeMoney'])
+    },
+
+    async mounted(){
         this.wallet = 'real';
-        this.refreshTrueCoins();
-        this.refreshFakeCoins();
+        await this.RefreshBTC();
+        await this.RefreshFakeCoins();
         this.GetWalletAddress();
         this.showModal();
     },
 
     methods: {
         ...mapActions(['executeAsyncRequest']),
-        ...mapActions(['executeAsyncRequestWithMoney']),
+        ...mapActions(['RefreshFakeCoins']),
+        ...mapActions(['RefreshBTC']),
 
         async GetWalletAddress(){
           this.BTCAddress = await this.executeAsyncRequest(() => WalletApiService.GetWalletAddress());
@@ -139,8 +143,8 @@ export default {
 
                 if(errors.length == 0) {
                     try {
-                        await this.executeAsyncRequestWithMoney(() => WalletApiService.AddCoins(this.item));
-                        await this.refreshFakeCoins();
+                        await this.executeAsyncRequest(() => WalletApiService.AddCoins(this.item));
+                        await this.RefreshFakeCoins();
                     }
                     catch(error) {
                     }
@@ -162,9 +166,8 @@ export default {
             this.errors = errors;
             if(errors.length === 0) {          
                 try {
-                    this.Responses = await this.executeAsyncRequestWithMoney(() => WalletApiService.Withdraw(this.item));
-                    this.refreshTrueCoins();
-                    console.log(this.Responses);
+                    this.Responses = await this.executeAsyncRequest(() => WalletApiService.Withdraw(this.item));
+                    await this.RefreshBTC();
                 }
                 catch(error){
                 }

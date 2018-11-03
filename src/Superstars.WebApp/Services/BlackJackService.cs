@@ -1,24 +1,25 @@
-﻿using Superstars.WebApp.Controllers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Superstars.WebApp.Controllers;
 
 namespace Superstars.WebApp
 {
     public class BlackJackService
     {
-        Deck _deck;
-        public List<Card> _myhand { get; set; }
-        public List<Card> _ennemyhand { get; set; }
-       // public List<Card> _ennemysecondhand { get; set; }
-        public int _pot;
         public bool _dealerTurn;
+        private Deck _deck;
         public bool _hassplit;
+        public int _pot;
 
-        Dictionary<Card, int> _values = new Dictionary<Card, int>();
+        private Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
         public BlackJackService()
         {
             InitGame();
         }
+
+        public List<Card> _myhand { get; set; }
+        public List<Card> _ennemyhand { get; set; }
+        public List<Card> _ennemysecondhand { get; set; }
 
         public void InitGame()
         {
@@ -35,27 +36,19 @@ namespace Superstars.WebApp
 
         internal Dictionary<Card, int> Valueforcards(Dictionary<Card, int> valuesdic)
         {
-            foreach (Card carte in _deck.DeckCards)
-            {
+            foreach (var carte in _deck.DeckCards)
                 if (carte.Value < 10)
-                {
                     valuesdic.Add(carte, carte.Value);
-                }
                 else if (carte.Value < 14)
-                {
                     valuesdic.Add(carte, 10);
-                }
                 else
-                {
                     valuesdic.Add(carte, 11);
-                }
-            }
             return valuesdic;
         }
 
         public List<Card> DrawCard(List<Card> hand)
         {
-            Card card = _deck.Draw();
+            var card = _deck.Draw();
             hand.Add(card);
             return hand;
         }
@@ -88,7 +81,7 @@ namespace Superstars.WebApp
         //    }
         //    return _hassplit;
         //}
-        
+
         //public int GetHandValue(List<Card> hand)
         //{
         //    int valeur = 0;
@@ -115,29 +108,22 @@ namespace Superstars.WebApp
 
         public int GetHandValue(List<Card> hand)
         {
-            int valeur = 0;
-            int nbraces = 0;
-            foreach (Card carte in hand)
-            {
-                foreach (KeyValuePair<Card, int> item in _values)
+            var valeur = 0;
+            var nbraces = 0;
+            foreach (var carte in hand)
+            foreach (var item in _values)
+                if (carte == item.Key)
                 {
-                    if (carte == item.Key)
-                    {
-                        if (item.Key.Value == 14)
-                        {
-                            nbraces = nbraces + 1;
-                        }
-                        valeur += item.Value;
-                       
-                    }
+                    if (item.Key.Value == 14) nbraces = nbraces + 1;
+                    valeur += item.Value;
                 }
-            }
 
-            while(valeur > 21 && nbraces > 0)
+            while (valeur > 21 && nbraces > 0)
             {
                 valeur = valeur - 10;
                 nbraces = nbraces - 1;
             }
+
             return valeur;
         }
 
@@ -158,44 +144,29 @@ namespace Superstars.WebApp
         public bool FinishTurn()
         {
             _dealerTurn = true;
-            if (_hassplit)
-            {
-                _dealerTurn = false;
-            }
+            if (_hassplit) _dealerTurn = false;
             return _dealerTurn;
         }
 
         public bool BlackJackCheck(List<Card> hand)
         {
-            int blowjob = GetHandValue(hand);
+            var blowjob = GetHandValue(hand);
             if (blowjob == 21)
-            {
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public List<Card> PlayIA(List<Card> myhand, List<Card> ennemyhand)
         {
-            if (BlackJackCheck(myhand))
-            {
-                // BLACKJACK
-                return myhand;
-            }
+            if (BlackJackCheck(myhand)) return myhand;
 
-            while (GetHandValue(myhand) < 17 || GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn == true)
+            while (GetHandValue(myhand) < 17 || GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn)
             {
                 DrawCard(myhand);
 
-                if (BlackJackCheck(myhand))
-                {
-                    // BLACKJACK
-                    return myhand;
-                }
+                if (BlackJackCheck(myhand)) return myhand;
             }
+
             return myhand;
         }
     }

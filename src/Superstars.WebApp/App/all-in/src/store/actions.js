@@ -1,4 +1,5 @@
-import * as types from './mutation-types'
+import * as types from './mutation-types';
+import services from '../services/WalletApiService';
 
 /**
  * Notify when an error happens
@@ -18,15 +19,6 @@ export function notifyLoading({ commit }, isLoading) {
     commit(types.SET_IS_LOADING, isLoading);
 }
 
-/**
- * Notify when wallet change
- * @param {*} param0 
- * @param {boolean} walletChange
- */
-export function notifyWalletChange({ commit }, walletChange) {
-    commit(types.WALLET_CHANGE, walletChange);
-}
-
 // In order to be DRY, we can combine all of the previous actions in one action...
 
 /**
@@ -37,7 +29,6 @@ export function notifyWalletChange({ commit }, walletChange) {
  */
 export async function executeAsyncRequest({ commit }, asyncCallback) {
     commit(types.SET_IS_LOADING, true);
-
     try {
         return await asyncCallback();
     }
@@ -50,16 +41,23 @@ export async function executeAsyncRequest({ commit }, asyncCallback) {
     }
 }
 
-export async function executeAsyncRequestWithMoney({ commit }, asyncCallback) {
-    commit(types.WALLET_CHANGE, true);
+export async function RefreshFakeCoins({ commit }) {
     try {
-        return await asyncCallback();
+        var response = await services.GetFakeBalance();
+        commit(types.FAKE_MONEY, response.balance);
     }
     catch (error) {
         commit(types.ERROR_HAPPENED, error.message);
         throw error;
     }
-    finally {
-        commit(types.WALLET_CHANGE, false);
+}
+
+export async function RefreshBTC({ commit }) {
+    try {
+        commit(types.BTC_MONEY, await services.GetTrueBalance());
+    }
+    catch (error) {
+        commit(types.ERROR_HAPPENED, error.message);
+        throw error;
     }
 }

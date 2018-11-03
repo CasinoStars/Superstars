@@ -1,33 +1,33 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace Superstars.DAL
 {
     public class GameGateway
     {
-        readonly string _sqlstring;
+        private readonly string _sqlstring;
 
         public GameGateway(string sqlstring)
         {
             _sqlstring = sqlstring;
         }
 
-        public async Task<GameData> FindGameById (int GameID)
+        public async Task<GameData> FindGameById(int GameID)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 return await con.QueryFirstOrDefaultAsync<GameData>(
                     "select g.GameId, g.GameType, g.StartDate, g.EndDate, g.Winner from vGames g where g.GameId = @GameId",
-                    new { GameId = GameID });
+                    new {GameId = GameID});
             }
         }
 
         public async Task<Result<int>> CreateGame(string gameType)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameType", gameType);
@@ -36,8 +36,10 @@ namespace Superstars.DAL
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sGamesCreate", p, commandType: CommandType.StoredProcedure);
 
-                int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A game with this gametype and start date already exists.");
+                var status = p.Get<int>("@Status");
+                if (status == 1)
+                    return Result.Failure<int>(Status.BadRequest,
+                        "A game with this gametype and start date already exists.");
 
                 return Result.Success(p.Get<int>("@GameId"));
             }
@@ -45,29 +47,29 @@ namespace Superstars.DAL
 
         public async Task<Result<string>> GetYamsPot(int gameId)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
-                string pot = await con.QueryFirstOrDefaultAsync<string>(
+                var pot = await con.QueryFirstOrDefaultAsync<string>(
                     @"select g.Pot from sp.vGameYams g where g.YamsGameId = @YamsGameId",
-                    new { YamsGameId = gameId });
+                    new {YamsGameId = gameId});
                 return Result.Success(pot);
             }
         }
 
         public async Task<Result<string>> GetBlackJackPot(int gameId)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
-                string pot = await con.QueryFirstOrDefaultAsync<string>(
+                var pot = await con.QueryFirstOrDefaultAsync<string>(
                     @"select g.Pot from sp.vGameBlackJack g where g.BlackJackGameId = @BlackJackGameId",
-                    new { BlackJackGameId = gameId });
+                    new {BlackJackGameId = gameId});
                 return Result.Success(pot);
             }
         }
 
         public async Task<Result<int>> CreateYamsGame(string pot)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@Pot", pot);
@@ -75,7 +77,7 @@ namespace Superstars.DAL
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sGameYamsCreate", p, commandType: CommandType.StoredProcedure);
 
-                int status = p.Get<int>("@Status");
+                var status = p.Get<int>("@Status");
 
                 return Result.Success(p.Get<int>("@YamsGameId"));
             }
@@ -83,7 +85,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> CreateBlackJackGame(string pot)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@Pot", pot);
@@ -91,7 +93,7 @@ namespace Superstars.DAL
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sGameBlackJackCreate", p, commandType: CommandType.StoredProcedure);
 
-                int status = p.Get<int>("@Status");
+                var status = p.Get<int>("@Status");
 
                 return Result.Success(p.Get<int>("@BlackJackGameId"));
             }
@@ -99,14 +101,14 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> DeleteAis(int userId)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sUserAIDelete", p, commandType: CommandType.StoredProcedure);
 
-                int status = p.Get<int>("@Status");
+                var status = p.Get<int>("@Status");
 
                 return Result.Success(p.Get<int>("@Status"));
             }
@@ -114,7 +116,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameType", gametype);
@@ -126,7 +128,7 @@ namespace Superstars.DAL
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);
 
-                int status = p.Get<int>("@Status");
+                var status = p.Get<int>("@Status");
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "This player doesn't exist.");
 
                 return Result.Success(p.Get<int>("@Status"));
@@ -135,58 +137,57 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetWins(int userId, string gameType)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
+                var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select s.Wins from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
-                    new { userid = userId, gametype =  gameType});
+                    new {userid = userId, gametype = gameType});
                 return Result.Success(data);
             }
         }
 
         public async Task<Result<int>> GetLosses(int userId, string gameType)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
+                var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select s.Losses from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
-                    new { userid = userId, gametype = gameType });
+                    new {userid = userId, gametype = gameType});
                 return Result.Success(data);
             }
         }
 
         public async Task<Result<int>> GetTrueProfit(int userId)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
+                var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
-                    new { userid = userId });
+                    new {userid = userId});
                 return Result.Success(data);
             }
         }
 
         public async Task<Result<int>> GetFakeProfit(int userId)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
-                int data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2", 
-                    new { userid = userId });
+                var data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2",
+                    new {userid = userId});
                 return Result.Success(data);
             }
         }
 
         public async Task UpdateGameEnd(int gameid)
         {
-            using (SqlConnection con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlstring))
             {
                 await con.ExecuteAsync(
                     "sp.sGamesUpdate",
-                    new { GameId = gameid, EndDate = DateTime.UtcNow},
+                    new {GameId = gameid, EndDate = DateTime.UtcNow},
                     commandType: CommandType.StoredProcedure);
             }
         }
     }
 }
-

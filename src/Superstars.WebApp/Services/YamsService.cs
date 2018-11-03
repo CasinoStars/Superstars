@@ -1,12 +1,12 @@
-﻿using Superstars.DAL;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Superstars.DAL;
 
 namespace Superstars.WebApp.Services
 {
     public class YamsService
     {
-        readonly ProvablyFairGateway _provablyFairGateway;
+        private readonly ProvablyFairGateway _provablyFairGateway;
 
         public YamsService(ProvablyFairGateway provablyFairGateway)
         {

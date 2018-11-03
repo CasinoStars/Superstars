@@ -1,24 +1,40 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using DbUp;
 using Microsoft.Extensions.Configuration;
 
-
 namespace Superstars.DB
 {
-    class Program
+    internal class Program
     {
-        static IConfiguration _configuration;
+        private static IConfiguration _configuration;
+
+        private static IConfiguration Configuration
+        {
+            get
+            {
+                if (_configuration == null)
+                    _configuration = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", true)
+                        .AddEnvironmentVariables()
+                        .Build();
+
+                return _configuration;
+            }
+        }
 
         public static int Main(string[] args)
         {
-            foreach (System.Collections.DictionaryEntry env in Environment.GetEnvironmentVariables())
+            foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
             {
-                string name = (string)env.Key;
-                string value = (string)env.Value;
+                var name = (string) env.Key;
+                var value = (string) env.Value;
                 Console.WriteLine("{0}={1}", name, value);
             }
+
             var connectionString = Configuration["ConnectionStrings:SuperstarsDB"];
 
             EnsureDatabase.For.SqlDatabase(connectionString);
@@ -37,8 +53,8 @@ namespace Superstars.DB
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(result.Error);
                 Console.ResetColor();
-
                 return -1;
+                
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -46,23 +62,6 @@ namespace Superstars.DB
             Console.ResetColor();
 
             return 0;
-        }
-
-        static IConfiguration Configuration
-        {
-            get
-            {
-                if (_configuration == null)
-                {
-                    _configuration = new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: true)
-                        .AddEnvironmentVariables()
-                        .Build();
-                }
-
-                return _configuration;
-            }
         }
     }
 }

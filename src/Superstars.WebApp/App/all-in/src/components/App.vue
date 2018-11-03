@@ -42,7 +42,7 @@
           <ul class="navbar-nav ml-auto">
               <li class="nav-item">
               <router-link class="nav-link" to="/wallet" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
-                SOLDE DU COMPTE : {{UserBTCoins}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{UserfakeCoins}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
+                SOLDE DU COMPTE : {{BTCMoney}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeMoney}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
@@ -75,7 +75,6 @@
       <div class="progress" v-if="isLoading">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div>
-      <div v-if="walletChange" v-bind="fakeUser() && BTCUser()"></div>
     </header>
     <router-view></router-view>
   </div>
@@ -88,16 +87,10 @@ import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 
 export default{
-  data(){
-    return {
-      UserBTCoins: 0,
-      UserfakeCoins: 0,
-    }
-  },
-
   computed: {
     ...mapGetters(['isLoading']),
-    ...mapGetters(['walletChange']),
+    ...mapGetters(['BTCMoney']),
+    ...mapGetters(['fakeMoney']),
     auth: () => UserApiService
   },
   
@@ -114,14 +107,12 @@ export default{
   },
 
   methods: {
-    ...mapActions(['executeAsyncRequestWithMoney']),
-
     async BTCUser() {
-      this.UserBTCoins = await this.executeAsyncRequestWithMoney(() => WalletApiService.GetTrueBalance());
+      this.UserBTCoins = await WalletApiService.GetTrueBalance();
     },
 
     async fakeUser() {
-      var dataUser = await this.executeAsyncRequestWithMoney(() => WalletApiService.GetFakeBalance());
+      var dataUser = await WalletApiService.GetFakeBalance();
       this.UserfakeCoins = dataUser.balance;
     },
 
