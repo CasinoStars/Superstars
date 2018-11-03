@@ -20,7 +20,7 @@
                 <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{BTCMoney}} BTC</h5>
                 <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
                 <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeMoney}} all'in</h5>
-                  <div id="withdrawModal" class="modal">
+  <div id="withdrawModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
 
@@ -32,14 +32,13 @@
       </div>
         <div  class="modal-body">        
             <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
-          </div>
         </div>
-
         <div class="modal-footer">
           <div style="margin-right: 42%;">
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
         </div>
+      </div>
     </div>
   </div>
                 <!-- RealWallet -->
@@ -74,12 +73,7 @@
             </div>
         </div>
          <!-- The Modal -->
-
-
 </template>
-
-
-
 
 <style lang="css">
 </style>
@@ -109,6 +103,7 @@ export default {
     await this.RefreshBTC();
     await this.RefreshFakeCoins();
     this.GetWalletAddress();
+    this.showModal();
   },
 
   methods: {
@@ -155,7 +150,7 @@ export default {
     },
 
     showModal() {
-      var withdrawModal = document.getElementById("WithdrawModal");
+      var withdrawModal = document.getElementById("withdrawModal");
       withdrawModal.style.display = "block";
     },
 
