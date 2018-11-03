@@ -26,16 +26,17 @@
 
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-          <p >SOLDE DE VOTRE COMPTE BTC:<!-- {{Responses}}--> <i class="fa fa-btc" style="font-size: 1.5rem;"></i></p>
+          <p >SOLDE DE VOTRE COMPTE BTC:  <i class="fa fa-btc" style="font-size: 1.5rem;"></i></p>
         </div>
-        <router-link class="close"  v-on:click.native="setisingamefalseandredirect()" to="">&times;</router-link>
       </div>
-        <div  class="modal-body">        
+        <div  class="modal-body">    
+            {{Responses}}    
             <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
         </div>
         <div class="modal-footer">
           <div style="margin-right: 42%;">
-            <button type="submit" class="btn btn-light">Confirmer</button>
+              
+            <button v-on:click="closeModal()" type="close" class="btn btn-light">Confirmer</button>
           </div>
         </div>
       </div>
@@ -56,7 +57,7 @@
                         <input type="text" placeholder="Address" v-model="item.DestinationAddress" required autocomplete="off"/>
                     </div><br>      
                     <button type="submit" class="button button-block">Envoyer</button>
-                    <div> {{Responses}} </div>
+                    <div> </div>
                 </form>
 
                 <!-- FakeWallet -->
@@ -103,7 +104,6 @@ export default {
     await this.RefreshBTC();
     await this.RefreshFakeCoins();
     this.GetWalletAddress();
-    this.showModal();
   },
 
   methods: {
@@ -154,6 +154,10 @@ export default {
       withdrawModal.style.display = "block";
     },
 
+    closeModal() {
+        withdrawModal.style.display = "none";
+    },
+
     async Withdraw(e) {
       e.preventDefault();
       var errors = [];
@@ -161,7 +165,6 @@ export default {
         errors.push("Le retrait minimum est de 100,000 bits");
       else if (this.trueCoins < this.item.AmountToSend)
         errors.push("Vous n'avez pas cette somme");
-          this.showModal();
 
 
       this.errors = errors;
@@ -169,12 +172,15 @@ export default {
         try {
           this.Responses = await this.executeAsyncRequest(() =>
             WalletApiService.Withdraw(this.item)
+            
           );
           await this.RefreshBTC();
         } catch (error) {}
+         if(Response != null)this.showModal();
+
       }
     },
-
+ 
     Copy() {
       navigator.clipboard.writeText(this.BTCAddress);
     },
@@ -301,6 +307,7 @@ $br: 4px;
 .wallet .modal-body {
   padding: 20px 16px;
   text-align: center;
+  color : white;
 }
 
 .wallet .modal-footer {
