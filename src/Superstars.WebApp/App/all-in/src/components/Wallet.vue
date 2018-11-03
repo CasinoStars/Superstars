@@ -26,11 +26,11 @@
 
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-          <p >SOLDE DE VOTRE COMPTE BTC:  <i class="fa fa-btc" style="font-size: 1.5rem;"></i></p>
+          <p >CONFIRMATION DE RETRAIT:  <i class="fa fa-btc" style="font-size: 1.5rem;"></i></p>
         </div>
       </div>
         <div  class="modal-body">    
-            {{Responses}}    
+        <h4 style="color: white;">{{Responses}} </h4>  
             <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
         </div>
         <div class="modal-footer">
