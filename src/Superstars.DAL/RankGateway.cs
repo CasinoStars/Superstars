@@ -20,7 +20,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<string>(
-                    "select u.UserName from sp.vUser u where u.UserName is not null order by u.UserId ASC "
+                    "select u.UserName from sp.vUser u where u.UserName is not null and u.UserName not like '#%' order by u.UserId ASC "
                 );
             }
         }

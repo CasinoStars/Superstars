@@ -126,7 +126,7 @@ namespace Superstars.WebApp.Controllers
             }
 
             // Return the result of the game
-            var result = _yamsService.TabFiguresAndWinner(IaDices, playerDices);
+            string[] result = _yamsService.TabFiguresAndWinner(IaDices, playerDices);
             return result;
         }
 

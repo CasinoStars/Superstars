@@ -131,8 +131,7 @@ namespace Superstars.DAL
 
                 var status = p.Get<int>("@Status");
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "This game doesn't exist");
-                if (status == 2)
-                    return Result.Failure<int>(Status.BadRequest, "This player id doesnt correspond to the game");
+                if (status == 2) return Result.Failure<int>(Status.BadRequest, "This player id doesnt correspond to the game");
 
                 return Result.Success(p.Get<int>("@BlackJackPlayerId"));
             }

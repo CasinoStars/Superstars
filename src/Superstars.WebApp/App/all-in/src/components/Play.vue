@@ -55,8 +55,14 @@ export default {
 
     async PlayYams(gametype) {
       if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
-      await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-      await this.executeAsyncRequest(() => GameApiService.createAiUser());
+          await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+      try {
+         await this.executeAsyncRequest(() => GameApiService.createAiUser());
+      } catch (error) {
+         console.log(error);
+         alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
+         return;
+      }
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
       } else {
@@ -68,7 +74,12 @@ export default {
     async PlayBlackJack(gametype) {
       if(await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0 ) {
        await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-       await this.executeAsyncRequest(() => GameApiService.createAiUser());
+       try {
+         await this.executeAsyncRequest(() => GameApiService.createAiUser());
+       } catch(error) {
+         alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
+         return;
+       }
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
