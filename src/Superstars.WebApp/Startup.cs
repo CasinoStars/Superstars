@@ -48,7 +48,6 @@ namespace Superstars.WebApp
             services.AddSingleton(x => new BlackJackService());
             services.AddSingleton(x =>
                 new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<ProvablyFairService>();
 
             services.AddSingleton(x => new RankService());
             services.AddSingleton<YamsIAService>();

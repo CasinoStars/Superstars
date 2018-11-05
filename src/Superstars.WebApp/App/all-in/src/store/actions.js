@@ -1,4 +1,5 @@
 import * as types from './mutation-types';
+import services from '../services/WalletApiService';
 
 /**
  * Notify when an error happens
@@ -18,24 +19,6 @@ export function notifyLoading({ commit }, isLoading) {
     commit(types.SET_IS_LOADING, isLoading);
 }
 
-/**
- * Notify when BTC wallet change
- * @param {*} param0 
- * @param {boolean} BTCMoneyChange
- */
-export function notifyBTCMoneyChange({ commit }, BTCMoneyChange) {
-    commit(types.BTC_MONEY_CHANGE, BTCMoneyChange);
-}
-
-/**
- * Notify when Fake wallet change
- * @param {*} param0 
- * @param {boolean} fakeMoneyChange
- */
-export function notifyFakeMoneyChange({ commit }, fakeMoneyChange) {
-    commit(types.FAKE_MONEY_CHANGE, fakeMoneyChange);
-}
-
 // In order to be DRY, we can combine all of the previous actions in one action...
 
 /**
@@ -46,7 +29,6 @@ export function notifyFakeMoneyChange({ commit }, fakeMoneyChange) {
  */
 export async function executeAsyncRequest({ commit }, asyncCallback) {
     commit(types.SET_IS_LOADING, true);
-
     try {
         return await asyncCallback();
     }
@@ -59,30 +41,23 @@ export async function executeAsyncRequest({ commit }, asyncCallback) {
     }
 }
 
-export async function executeAsyncRequestWithBTCMoney({ commit }, asyncCallback) {
-    commit(types.BTC_MONEY_CHANGE, true);
+export async function RefreshFakeCoins({ commit }) {
     try {
-        return await asyncCallback();
+        var response = await services.GetFakeBalance();
+        commit(types.FAKE_MONEY, response.balance);
     }
     catch (error) {
         commit(types.ERROR_HAPPENED, error.message);
         throw error;
     }
-    finally {
-        commit(types.BTC_MONEY_CHANGE, false);
-    }
 }
 
-export async function executeAsyncRequestWithFakeMoney({ commit }, asyncCallback) {
-    commit(types.FAKE_MONEY_CHANGE, true);
+export async function RefreshBTC({ commit }) {
     try {
-        return await asyncCallback();
+        commit(types.BTC_MONEY, await services.GetTrueBalance());
     }
     catch (error) {
-        commit(type.ERROR_HAPPENED, error.message);
+        commit(types.ERROR_HAPPENED, error.message);
         throw error;
-    }
-    finally {
-        commit(types.FAKE_MONEY_CHANGE, false);
     }
 }
