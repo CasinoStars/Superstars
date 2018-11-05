@@ -133,15 +133,13 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("Withdraw")]
         public async Task<List<string>> WithdrawPlayer([FromBody] WalletViewModel WalletViewModel)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result1 = await _walletGateway.GetPrivateKey(userId);
-            var privateKey = new BitcoinSecret( /*result1.Content.PrivateKey*/
-                "cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
-            var client = new QBitNinjaClient(Network.TestNet);
-            var destinationAddress = BitcoinAddress.Create(WalletViewModel.DestinationAddress, Network.TestNet);
-            var transaction = TransactionMaker.MakeATransaction(privateKey, destinationAddress,
-                WalletViewModel.AmountToSend, 50000, 6, client);
-            var response = TransactionMaker.BroadCastTransaction(transaction, client);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
+            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
+            QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
+            BitcoinAddress destinationAddress = BitcoinAddress.Create(WalletViewModel.DestinationAddress,Network.TestNet);
+            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, 5000, 6, client);
+            List<string> response =  TransactionMaker.BroadCastTransaction(transaction,client);
 
             return response;
         }

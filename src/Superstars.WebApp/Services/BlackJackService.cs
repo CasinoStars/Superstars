@@ -28,7 +28,7 @@ namespace Superstars.WebApp
             _values = Valueforcards(_values);
             _deck.Shuffle();
             _myhand = new List<Card>();
-            _ennemysecondhand = new List<Card>();
+           // _ennemysecondhand = new List<Card>();
             _ennemyhand = new List<Card>();
             _hassplit = false;
             _dealerTurn = false;

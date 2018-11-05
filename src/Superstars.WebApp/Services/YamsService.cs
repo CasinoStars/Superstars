@@ -12,7 +12,7 @@ namespace Superstars.WebApp.Services
         {
             _provablyFairGateway = provablyFairGateway;
         }
-
+        
         /*
 		 Points:
 		  yams
@@ -43,164 +43,204 @@ namespace Superstars.WebApp.Services
 
         public int[] IndexChange(int[] dices, int[] index)
         {
-            for (var i = 0; i < index.Length; i++) dices[index[i] - 1] = 0;
-
+            for (int i = 0; i < index.Length; i++)
+            {
+                dices[index[i] - 1] = 0;
+            }
             return dices;
         }
 
-        public async Task<int[]> Reroll(int[] dices, int userId)
+        public async  Task<int[]> Reroll(int[] dices,int userId)
         {
-            for (var i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
+            {
                 if (dices[i] == 0)
+                {
                     dices[i] = await RollDice(userId);
-
+                }
+            }
             return dices;
         }
 
         private async Task<int> RollDice(int userId)
         {
-            var rdn = new Random();
+            Random rdn = new Random();
             int value;
-            value = await _provablyFairGateway.GetDicesFromHash(userId);
+            value = await  _provablyFairGateway.GetDicesFromHash(userId);
             return value;
         }
 
         private int[] DicesValue(int[] hand)
         {
-            var count = new int[6] {0, 0, 0, 0, 0, 0};
-            for (var i = 0; i < 5; i++) count[hand[i] - 1]++;
-
+            int[] count = new int[6] { 0, 0, 0, 0, 0, 0 };
+            for (int i = 0; i < 5; i++)
+            {
+                count[hand[i] - 1]++;
+            }
             return count;
         }
 
-        public int PointCount(int[] hand)
+		public int PointCount(int[] hand)
+		{
+			int[] handcount = new int[6];
+			int points = 0;
+
+			handcount = DicesValue(hand);
+			for (int i = 0; i < 6; i++)
+			{
+				//yams
+                // handcount reprente le nombre de dés pareils 
+                // et i le dé en question 
+				if (handcount[i] == 5)
+				{
+					points = points + 100000000*(i + 1);
+					return points;
+				}
+
+				if (handcount[i] == 4)
+				{
+					for (int l = 0; l < 6; l++)
+					{
+						if (handcount[l] == 1)
+						{
+							points = points +(1000 * (i + 1)) + (l + 1);
+							return points;
+						}
+					}
+				}
+
+				else if (handcount[i] == 3)
+				{
+					for (int l = 0; l < 6; l++)
+					{
+						if (handcount[l] == 2) // full
+						{
+							points = points + 100000*(i + 1) + (10000 * (l + 1));
+							return points;
+						}
+						else if (handcount[l] == 1) // brelan 
+						{
+							for (int k = 0; k < 6; k++)
+							{
+								if (handcount[k] == 1 && k != l)
+								{
+									points = points + 100 * (i + 1) + (k + 1) + (l + 1);
+									return points;
+								}
+							}
+						}
+					}
+				}
+
+			}
+			// petite suite
+			if (handcount[0] == 1)
+			{
+				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
+				{
+
+					points = points + 1000000;
+				}
+			}//grade suite
+			else if (handcount[1] == 1)
+			{
+				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
+				{
+					points = points + 10000000;
+				}
+			}
+
+			// chance
+			if (points == 0)
+			{
+				for (int i = 1; i <= 6; i++)
+				{
+					points = points + handcount[i - 1] * i;
+				}
+			}
+			return points;
+		}
+
+		private string FindFigureName(int[] hand)
+		{
+			string figureName;
+			int[] handcount = new int[6];
+
+			handcount = DicesValue(hand);
+			for (int i = 0; i < 6; i++)
+			{
+				//yams
+				if (handcount[i] == 5)
+				{
+					return figureName = ("yams de " + (i + 1));
+				}
+
+				//carré
+				if (handcount[i] == 4)
+				{
+					for (int l = 0; l < 6; l++)
+					{
+						if (handcount[l] == 1)
+						{
+							return figureName = ("carré de " + (i + 1));
+						}
+					}
+				}
+
+				else if (handcount[i] == 3)
+				{
+					for (int l = 0; l < 6; l++)
+					{
+						if (handcount[l] == 2) // full 
+						{
+							return figureName = "full " + (i + 1) + "-" + (l + 1);
+						}
+						else if (handcount[l] == 1) // brelan
+						{
+							for (int k = 0; k < 6; k++)
+							{
+								if (handcount[k] == 1 && k != l)
+								{
+									return figureName = "Brelan de " + (i + 1);
+								}
+							}
+						}
+					}
+				}
+			}
+			// petite suite
+			if (handcount[0] == 1)
+			{
+				if ((handcount[1] == 1) && (handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1))
+				{
+					return figureName = "petite suite";
+				}
+			}
+			else if (handcount[1] == 1)
+			{
+				if ((handcount[2] == 1) && (handcount[3] == 1) && (handcount[4] == 1) && (handcount[5] == 1))
+				{
+					return figureName = "grande suite";
+				}
+			}
+
+			// chance
+			return figureName = "chance";
+		}
+
+		public string[] TabFiguresAndWinner(int[] handIA, int[] handPlayer)
         {
-            var handcount = new int[6];
-            var points = 0;
-
-            handcount = DicesValue(hand);
-            int l;
-            for (var i = 0; i < 6; i++)
-            {
-                //yams
-                if (handcount[i] == 5)
-                {
-                    points = points + 100000000 * (i + 1);
-                    return points;
-                }
-
-                //carré
-                if (handcount[i] == 4)
-                {
-                    for (l = 0; l < 6; l++)
-                        if (handcount[l] == 1)
-                        {
-                            points = points + 1000 * (i + 1) + l + 1;
-                            return points;
-                        }
-                }
-
-                if (handcount[i] == 3)
-                {
-                    for (l = 0; l < 6; l++)
-                    {
-                        if (handcount[l] == 2) // full
-                        {
-                            points = points + 100000 * (i + 1) + 10000 * (l + 1);
-                            return points;
-                        }
-                        if (handcount[l] == 1) // brelan 
-                        {
-                            for (var k = 0; k < 6; k++)
-                                if (handcount[k] == 1 && k != l)
-                                {
-                                    points = points + 100 * (i + 1) + k + 1 + l + 1;
-                                    return points;
-                                }
-                        }
-                    }
-                }       
-            }
-
-            // petite suite
-            if (handcount[0] == 1)
-            {
-                if (handcount[1] == 1 && handcount[2] == 1 && handcount[3] == 1 && handcount[4] == 1)
-                    points = points + 1000000;
-            } //grade suite
-            else if (handcount[1] == 1)
-            {
-                if (handcount[2] == 1 && handcount[3] == 1 && handcount[4] == 1 && handcount[5] == 1)
-                    points = points + 10000000;
-            }
-
-            // chance
-            if (points == 0)
-                for (var i = 1; i <= 6; i++)
-                    points = points + handcount[i - 1] * i;
-
-            return points;
-        }
-
-        private string FindFigureName(int[] hand)
-        {
-            string figureName;
-            var handcount = new int[6];
-            int l;
-            handcount = DicesValue(hand);
-            for (var i = 0; i < 6; i++)
-            {
-                //yams
-                if (handcount[i] == 5) return figureName = "yams de " + (i + 1);
-
-                //carré
-                if (handcount[i] == 4)
-                {
-                    for (l = 0; l < 6; l++)
-                        if (handcount[l] == 1)
-                            return figureName = "carré de " + (i + 1);
-                }
-
-
-                if (handcount[i] == 3)
-                {
-                    for (l = 0; l < 6; l++)
-                        if (handcount[l] == 2) // full 
-                            return figureName = "full " + (i + 1) + "-" + (l + 1);
-                        else if (handcount[l] == 1) // brelan
-                            for (var k = 0; k < 6; k++)
-                                if (handcount[k] == 1 && k != l)
-                                    return figureName = "Brelan de " + (i + 1);
-                }
-                   
-            }
-
-            // petite suite
-            if (handcount[0] == 1)
-            {
-                if (handcount[1] == 1 && handcount[2] == 1 && handcount[3] == 1 && handcount[4] == 1)
-                    return figureName = "petite suite";
-            }
-            else if (handcount[1] == 1)
-            {
-                if (handcount[2] == 1 && handcount[3] == 1 && handcount[4] == 1 && handcount[5] == 1)
-                    return figureName = "grande suite";
-            }
-
-            // chance
-            return figureName = "chance";
-        }
-
-        public string[] TabFiguresAndWinner(int[] handIA, int[] handPlayer)
-        {
-            var figuresAndWinnnerNames = new string[3];
+            string[] figuresAndWinnnerNames = new string[3];
             figuresAndWinnnerNames[0] = FindFigureName(handIA);
             figuresAndWinnnerNames[1] = FindFigureName(handPlayer);
             if (PointCount(handIA) >= PointCount(handPlayer))
+            {
                 figuresAndWinnnerNames[2] = "You Lose";
+            }
             else
+            {
                 figuresAndWinnnerNames[2] = "You Win";
-
+            }
             return figuresAndWinnnerNames;
         }
     }

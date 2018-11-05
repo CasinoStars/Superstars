@@ -46,10 +46,16 @@
     <Folder Include="App\all-in\src\store\" />
     <Folder Include="App\all-in\src\services\" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Superstars.TestBlockChain\Superstars.Wallet.csproj" />
     <ProjectReference Include="..\Superstars.DAL\Superstars.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
