@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto.Digests;
 using System;
+using NBitcoin;
 
 namespace Superstars.Wallet
 {
@@ -36,6 +37,26 @@ namespace Superstars.Wallet
             byte[] rv = new byte[bb.Length - 4];
             Array.Copy(bb, 0, rv, 0, bb.Length - 4);
             return rv;
+        }
+
+
+        /// <summary>
+        /// nbOfTest represente the numbre of TestNet address that will be generate
+        /// and then foreach address we will call the validator throw an expection if on of the address is not valid
+        /// </summary>
+        /// <param name="nbOfTest"></param>
+        private void TestValidator(int nbOfTest)
+        {
+            for (int i = 0; i < nbOfTest; i++)
+            {
+                var tktmagl = new Key();
+
+                if (Validator.IsValidAddress(tktmagl.PubKey.GetAddress(Network.TestNet).ToString()) == true) Console.WriteLine("TRUE");
+                else
+                {
+                    throw new Exception("FASLE");
+                }
+            }
         }
     }
 }

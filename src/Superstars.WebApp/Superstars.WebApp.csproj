@@ -31,7 +31,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
     
     
-    <PackageReference Include="NBitcoin" Version="4.1.1.51" />
+    <PackageReference Include="NBitcoin" Version="4.1.1.67" />
     <PackageReference Include="QBitNinja.Client" Version="1.0.3.47" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
   </ItemGroup>

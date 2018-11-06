@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NBitcoin;
+using NBitcoin.RPC;
+using Newtonsoft.Json.Linq;
 using QBitNinja.Client;
 
 namespace Superstars.Wallet
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //  Console.WriteLine("test");
-
+                
             var network = Network.TestNet;
             var client = new QBitNinjaClient(Network.TestNet);
             // BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
@@ -19,22 +22,16 @@ namespace Superstars.Wallet
             var coinInWallet2 = informationSeeker.HowMuchCoinInWallet(btcS, client);
             Console.WriteLine(coinInWallet2);
 
-            //if (coinInWallet2 > 100000)
-            //{
-            //    Transaction trxx = TransactionMaker.MakeATransaction(btcS2, btcS.GetAddress(), coinInWallet2 - 50000, 50000, 6, client);
-            //    TransactionMaker.BroadCastTransaction(trxx, client);
-            //}
+            for (int i = 0; i < 100000; i++)
+            {
+                var tktmagl = new Key();
 
-            //int coinInWallet1 = informationSeeker.HowMuchCoinInWallet(btcS, client);
-            //Console.WriteLine(coinInWallet1);
+                if(Validator.IsValidAddress(tktmagl.PubKey.GetAddress(Network.TestNet).ToString()) == true) Console.WriteLine("TRUE");
+                else { throw new Exception("FASLE"); }
+            }
 
-            //if (coinInWallet1 > 100000)
-            //{
-            //    Transaction trxx2 = TransactionMaker.MakeATransaction(btcS, btcS2.GetAddress(), coinInWallet1 - 50000, 50000, 6, client);
-            //    TransactionMaker.BroadCastTransaction(trxx2, client);
-            //}
 
-            Console.ReadKey();
+
 
             bool hugo = Validator.IsValidAddress("mzRnZHJodRUmE6cSPvGrhtcsgvhdVFYroa");
             bool loiseau = Validator.IsValidAddress("mh2e7YHio7fTjLXHZ3KRXDfU52RbwQbhtK");
