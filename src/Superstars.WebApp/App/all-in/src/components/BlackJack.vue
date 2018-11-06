@@ -286,7 +286,6 @@ export default {
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
 
-    
     async setisingametrue() {
         await this.executeAsyncRequest(() => BlackJackApiService.SetIsingameBJ(1));
     },
@@ -306,15 +305,6 @@ export default {
         this.playerBet = true;
       }
     },
-
-    async getFakeCoins() {
-      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
-    },
-
-    async getTrueCoins() {
-      this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
-    },
-
 
     changeBet(choice){
       this.realOrFake = choice;
@@ -373,9 +363,6 @@ export default {
       if(this.handvalue > 21) {
         this.gameend = true;
       }
-
-      await this.getFakeCoins();
-      await this.getTrueCoins();
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
       await this.refreshCards();
       await this.refreshHandValue();

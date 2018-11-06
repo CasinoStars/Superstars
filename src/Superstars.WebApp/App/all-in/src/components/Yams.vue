@@ -145,8 +145,6 @@ export default {
   },
 
   async mounted() {
-    await this.getFakeCoins();
-    await this.getTrueCoins();
     await this.refreshDices();
     await this.refreshIaDices();
     await this.getIsingame();
@@ -187,15 +185,6 @@ export default {
         this.playerBet = true;
       }
     },
-
-    async getFakeCoins() {
-      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
-    },
-
-    async getTrueCoins() {
-      this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
-    },
-
 
     changeBet(choice){
       this.realOrFake = choice;
