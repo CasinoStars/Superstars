@@ -1,6 +1,6 @@
 <template>
     <div>
-        <beautiful-chat
+        <launcher
             :participants="participants"
             :onMessageWasSent="onMessageWasSent"
             :messageList="messageList"
@@ -8,24 +8,28 @@
             :isOpen="isChatOpen"
             :close="closeChat"
             :open="openChat"
-            :showEmoji="false"
+            :showEmoji="true"
             :showFile="false"
-            :showTypingIndicator="showTypingIndicator"
             :colors="colors"
             :alwaysScrollToBottom="alwaysScrollToBottom" />
     </div>
 </template>
 
 <script>
+import launcher from './Chat/Launcher.vue'
+
 export default {
+    
     name: 'chat',
+    components: {
+        launcher
+    },
      data() {
     return {
       participants: [
         {
           id: 'user1',
           name: 'Matteo',
-          imageUrl: 'https://avatars3.githubusercontent.com/u/1915989?s=230&v=4'
         },
         {
           id: 'user2',
@@ -33,14 +37,12 @@ export default {
           imageUrl: 'https://avatars3.githubusercontent.com/u/37018832?s=200&v=4'
         }
       ], // the list of all the participant of the conversation. `name` is the user name, `id` is used to establish the author of a message, `imageUrl` is supposed to be the user avatar.
-      titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
       messageList: [
           { type: 'text', author: `me`, data: { text: `Say yes!` } },
           { type: 'text', author: `user1`, data: { text: `No.` } }
       ], // the list of the messages to show, can be paginated and adjusted dynamically
       newMessagesCount: 0,
       isChatOpen: false, // to determine whether the chat window should be open or closed
-      showTypingIndicator: '', // when set to a value matching the participant.id it shows the typing indicator for the specific user
       colors: {
         header: {
           bg: '#4e8cff',
@@ -65,7 +67,7 @@ export default {
           text: '#565867'
         }
       }, // specifies the color scheme for the component
-      alwaysScrollToBottom: false // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
+      alwaysScrollToBottom: true // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
     }
   },
   methods: {
