@@ -47,13 +47,19 @@ namespace Superstars.WebApp.Controllers
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData user = await _userGateway.FindById(userId);
+            
             if (gameType == "Yams")
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
+                var data = await _yamsGateway.GetPlayer(userId);
+                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.YamsGameId);
             }
             else
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
+                var data = await _blackJackGateWay.GetPlayer(userId);
+                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.BlackJackGameId);
             }
 
             Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
@@ -66,13 +72,19 @@ namespace Superstars.WebApp.Controllers
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData user = await _userGateway.FindById(userId);
+
             if (gameType == "Yams")
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
+                var data = await _yamsGateway.GetPlayer(userId);
+                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.YamsGameId);
             }
             else
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
+                var data = await _blackJackGateWay.GetPlayer(userId);
+                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.BlackJackGameId);
             }
 
             Result result2 = await _walletGateway.AddCoins(userId, 2, -bet, -bet, 0);
@@ -129,6 +141,7 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result1 = await _gameGateway.GetWins(userId, gametype);
             var result2 = await _gameGateway.GetLosses(userId, gametype);
+
             //int averagebet = 0;
 
             //WIP

@@ -2,7 +2,10 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Dapper;
 
 namespace Superstars.DAL
@@ -71,6 +74,40 @@ namespace Superstars.DAL
 
                 Debug.Assert(status == 0);
                 return Result.Success();
+            }
+        }
+
+        public async Task ActionConnexion(int userid, string username, DateTime date)
+        {
+
+            //XDocument xDoc = new XDocument( 
+            //    new XDeclaration("1.0","UTF-16",null),
+            //    new XElement("UserID", userid),
+            //    new XElement("UserName", username),
+            //    new XElement("Date", date.ToString() ));
+            //StringWriter sw = new StringWriter();
+            //XmlWriter xWrite = XmlWriter.Create(sw);
+            //xDoc.Save(xWrite);
+            //xWrite.Close();
+            //xDoc.Elements("UserID");                                              
+
+            string action = "Player named " + username + " with UserID " + userid + " connected at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }    
+        }
+
+        public async Task ActionDeconnexion(int userid, string username, DateTime date)
+        {
+            string action = "Player named " + username + " with UserID " + userid + " disconnected at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
             }
         }
 
