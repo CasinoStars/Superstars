@@ -233,14 +233,19 @@ namespace Superstars.WebApp.Services
             string[] figuresAndWinnnerNames = new string[3];
             figuresAndWinnnerNames[0] = FindFigureName(handIA);
             figuresAndWinnnerNames[1] = FindFigureName(handPlayer);
-            if (PointCount(handIA) >= PointCount(handPlayer))
+            if (PointCount(handIA) > PointCount(handPlayer))
             {
                 figuresAndWinnnerNames[2] = "You Lose";
             }
-            else
+            else if (PointCount(handIA) < PointCount(handPlayer))
             {
                 figuresAndWinnnerNames[2] = "You Win";
             }
+            else
+            {
+                figuresAndWinnnerNames[2] = "Draw";
+            }
+
             return figuresAndWinnnerNames;
         }
     }
