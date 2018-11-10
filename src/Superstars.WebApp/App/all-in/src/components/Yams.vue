@@ -205,7 +205,7 @@ export default {
           errors.push("La mise maximum est de 1,000,000");
         else if(this.fakeBet <= 0)  
           errors.push("La mise doit être supérieur à 0");
-        else if(this.fakeBet > this.fakeCoins.balance)
+        else if(this.fakeBet > this.fakeMoney)
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
@@ -213,7 +213,7 @@ export default {
           errors.push("La mise maximum est de 10,000,000 bits");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 bits");
-        else if(this.trueBet > this.trueCoins){
+        else if(this.trueBet > this.BTCMoney){
           errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
       this.errors = errors;

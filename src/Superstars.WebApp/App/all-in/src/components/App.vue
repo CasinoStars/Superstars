@@ -114,10 +114,10 @@ export default{
       UserApiService.log(selectedBase);
     },
     
-    onAuthenticated() {
+    async onAuthenticated() {
       this.isConnected = true;
-      this.fakeUser();
-      this.BTCUser();
+      await this.RefreshBTC();
+      await this.RefreshFakeCoins();
       this.$router.replace('/play');
     }
   }

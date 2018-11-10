@@ -38,7 +38,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateGame(string gametype)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.CreateGame(gametype);
+            Result result = await _gameGateway.CreateGame(userId, gametype);
             return this.CreateResult(result);
         }
 
@@ -75,7 +75,7 @@ namespace Superstars.WebApp.Controllers
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
             }
 
-            Result result2 = await _walletGateway.AddCoins(userId, 2, -bet, -bet, 0);
+            Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
             var result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
         }
