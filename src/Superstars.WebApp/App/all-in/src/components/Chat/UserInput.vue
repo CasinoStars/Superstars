@@ -21,12 +21,6 @@
       </div>
       <div class="sc-user-input--buttons">
         <div class="sc-user-input--button"></div>
-        <div v-if="showEmoji" class="sc-user-input--button">
-          <EmojiIcon :onEmojiPicked="_handleEmojiPicked" :color="colors.userInput.text" />
-        </div>
-        <div v-if="showFile" class="sc-user-input--button">
-          <FileIcons :onChange="_handleFileSubmit" :color="colors.userInput.text" />
-        </div>
         <div class="sc-user-input--button">
           <SendIcon :onClick="_submitText" :color="colors.userInput.text" />
         </div>
@@ -37,15 +31,15 @@
 
 
 <script>
-import EmojiIcon from './EmojiIcon.vue'
-import FileIcons from './FileIcons.vue'
 import SendIcon from './SendIcon.vue'
+import UserApiService from '../../services/UserApiService';
 
 export default {
   components: {
-    EmojiIcon,
-    FileIcons,
     SendIcon
+  },
+  computed: {
+    auth: () => UserApiService
   },
   props: {
     showEmoji: {
@@ -90,44 +84,13 @@ export default {
     },
     _submitText (event) {
       const text = this.$refs.userInput.textContent
-      const file = this.file
-      if (file) {
         if (text && text.length > 0) {
           this.onSubmit({
-            author: 'me',
-            type: 'file',
-            data: { text, file }
-          })
-          this.file = null
-          this.$refs.userInput.innerHTML = ''
-        } else {
-          this.onSubmit({
-            author: 'me',
-            type: 'file',
-            data: { file }
-          })
-          this.file = null
-        }
-      } else {
-        if (text && text.length > 0) {
-          this.onSubmit({
-            author: 'me',
-            type: 'text',
-            data: { text }
+            userName: this.auth.pseudo,
+            textMessage: text 
           })
           this.$refs.userInput.innerHTML = ''
         }
-      }
-    },
-    _handleEmojiPicked (emoji) {
-      this.onSubmit({
-        author: 'me',
-        type: 'emoji',
-        data: { emoji }
-      })
-    },
-    _handleFileSubmit (file) {
-      this.file = file
     }
   }
 }

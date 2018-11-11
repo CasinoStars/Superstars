@@ -77,7 +77,7 @@
       </div>
     </header>
     <router-view></router-view>
-    <chat></chat>
+    <chat v-if="auth.isConnected"></chat>
   </div>
 </template>
 

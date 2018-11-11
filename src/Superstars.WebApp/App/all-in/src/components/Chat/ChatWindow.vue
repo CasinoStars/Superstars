@@ -11,7 +11,6 @@
     <MessageList
       v-if="!showUserList"
       :messages="messages"
-      :participants="participants"
       :showTypingIndicator="showTypingIndicator"
       :colors="colors"
       :alwaysScrollToBottom="alwaysScrollToBottom"
@@ -45,10 +44,6 @@ export default {
     showFile: {
       type: Boolean,
       default: false
-    },
-    participants: {
-      type: Array,
-      required: true
     },
     titleImageUrl: {
       type: String,

@@ -1,27 +1,19 @@
 <template>
   <div class="sc-message">
     <div class="sc-message--content" :class="{
-        sent: message.author === 'me',
-        received: message.author !== 'me' && message.type !== 'system',
-        system: message.type === 'system'
+        sent: message.userName === auth.pseudo,
+        received: message.userName !== auth.pseudo
       }">
-      <div v-if="message.type !== 'system'" :title="authorName" class="sc-message--avatar" v-tooltip="message.author"> {{authorName}} </div>
-      <TextMessage v-if="message.type === 'text'" :data="message.data" :messageColors="determineMessageColors()" />
-      <EmojiMessage v-else-if="message.type === 'emoji'" :data="message.data" />
-      <FileMessage v-else-if="message.type === 'file'" :data="message.data" :messageColors="determineMessageColors()" />
-      <TypingMessage v-else-if="message.type === 'typing'" :messageColors="determineMessageColors()" />
-      <SystemMessage v-else-if="message.type === 'system'" :data="message.data" :messageColors="determineMessageColors()" />
+      <div :title="authorName" class="sc-message--avatar"> {{authorName}} </div>
+      <TextMessage :data="message.textMessage" :messageColors="determineMessageColors()" />
     </div>
   </div>
 </template>
 
 <script>
 import TextMessage from './TextMessage.vue'
-import FileMessage from './FileMessage.vue'
-import EmojiMessage from './EmojiMessage.vue'
-import TypingMessage from './TypingMessage.vue'
-import SystemMessage from './SystemMessage.vue'
 import chatIcon from './assets/chat-icon.svg'
+import UserApiService from '../../services/UserApiService';
 
 export default {
   data () {
@@ -31,10 +23,10 @@ export default {
   },
   components: {
     TextMessage,
-    FileMessage,
-    EmojiMessage,
-    TypingMessage,
-    SystemMessage
+    
+  },
+  computed: {
+    auth: () => UserApiService
   },
   props: {
     message: {
@@ -67,7 +59,7 @@ export default {
       }
     },
     determineMessageColors() {
-      return this.message.author === 'me' ? this.sentColorsStyle() : this.receivedColorsStyle()
+      return this.message.userName === this.auth.pseudo ? this.sentColorsStyle() : this.receivedColorsStyle()
     }
   }
 }

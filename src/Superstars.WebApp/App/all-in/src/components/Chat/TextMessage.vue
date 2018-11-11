@@ -12,7 +12,7 @@ import Autolinker from 'autolinker'
 export default {
   props: {
     data: {
-      type: Object,
+      type: String,
       required: true
     },
     messageColors: {
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     messageText() {
-      return Autolinker.link(escapeGoat.escape(this.data.text), {
+      return Autolinker.link(escapeGoat.escape(this.data), {
         className: 'chatLink',
         truncate: { length: 50, location: 'smart' }
       })
