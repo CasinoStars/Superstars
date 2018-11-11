@@ -77,6 +77,7 @@
       </div>
     </header>
     <router-view></router-view>
+    <chat v-if="auth.isConnected"></chat>
   </div>
 </template>
 
@@ -85,8 +86,12 @@ import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
 import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
+import Chat from './Chat.vue'
 
 export default{
+  components: {
+    Chat
+  },
   computed: {
     ...mapGetters(['isLoading']),
     ...mapGetters(['BTCMoney']),
