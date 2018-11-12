@@ -1,4 +1,4 @@
-import { postAsync, getAsync, getAsyncNoJSON } from "../helpers/apiHelper";
+import { postAsync, getAsync, getAsyncNoJSON, postAxios, postSync } from "../helpers/apiHelper";
 const endpoint = "/api/wallet";
 
 class WalletApiService {
@@ -37,7 +37,7 @@ class WalletApiService {
         return  await getAsyncNoJSON(`${endpoint}/GetAddress`);
     }
 
-    async Withdraw(model){
+    async Withdraw( ){
         var response = await postAsync(`${endpoint}/Withdraw`, model);
         return response.text();
     }
@@ -48,6 +48,10 @@ class WalletApiService {
 
     async GetFakeBankRoll(){
         return await getAsync(`${endpoint}/FakeBankRoll`);   
+    }
+
+     async IsValidAddress(model){
+        return await postAsync(`${endpoint}/AddressValidator`,model);   
     }
 }
 

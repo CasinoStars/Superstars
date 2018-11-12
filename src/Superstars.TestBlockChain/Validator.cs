@@ -4,7 +4,7 @@ using NBitcoin;
 
 namespace Superstars.Wallet
 {
-    class Validator
+    public class Validator
     {
         public static bool IsValidAddress(string Address)
         {

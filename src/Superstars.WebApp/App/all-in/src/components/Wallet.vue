@@ -155,32 +155,41 @@ export default {
     },
 
     closeModal() {
-        withdrawModal.style.display = "none";
+      withdrawModal.style.display = "none";
+    },
+
+    async IsValidAddress(item) {
+      return this.executeAsyncRequest(() =>
+        WalletApiService.IsValidAddress(this.item).then((r)=>r.json())
+      );
     },
 
     async Withdraw(e) {
       e.preventDefault();
       var errors = [];
+      var isValid = await this.IsValidAddress(this.item);
+      console.log(isValid);
       if (this.item.AmountToSend < 100000)
         errors.push("Le retrait minimum est de 100,000 bits");
       else if (this.trueCoins < this.item.AmountToSend)
         errors.push("Vous n'avez pas cette somme");
-
+      else if (isValid === false) {
+        errors.push("L'adresse Bitcoin est invalide");
+      }
+      console.log(isValid + " ISVALIDDDD");
 
       this.errors = errors;
       if (errors.length === 0) {
         try {
           this.Responses = await this.executeAsyncRequest(() =>
             WalletApiService.Withdraw(this.item)
-            
           );
           await this.RefreshBTC();
         } catch (error) {}
-         if(Response != null)this.showModal();
-
+        if (Response != null) this.showModal();
       }
     },
- 
+
     Copy() {
       navigator.clipboard.writeText(this.BTCAddress);
     },
@@ -307,7 +316,7 @@ $br: 4px;
 .wallet .modal-body {
   padding: 20px 16px;
   text-align: center;
-  color : white;
+  color: white;
 }
 
 .wallet .modal-footer {
