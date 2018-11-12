@@ -160,7 +160,7 @@ export default {
 
     async IsValidAddress(item) {
       return this.executeAsyncRequest(() =>
-        WalletApiService.IsValidAddress(this.item).then((r)=>r.json())
+        WalletApiService.IsValidAddress(this.item).then(r => r.json())
       );
     },
 
@@ -183,7 +183,7 @@ export default {
           this.Responses = await this.executeAsyncRequest(() =>
             WalletApiService.Withdraw(this.item)
           );
-        
+
           await this.RefreshBTC();
         } catch (error) {}
         this.showModal();
