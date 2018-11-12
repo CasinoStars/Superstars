@@ -19,6 +19,6 @@ namespace Superstars.DAL
 
         public int Bet { get; set; }
 
-        public bool HasWin { get; set; }
+        public string HasWin { get; set; }
     }
 }
