@@ -35,7 +35,7 @@ namespace Superstars.WebApp
                 o.Issuer = Configuration["JwtBearer:Issuer"];
                 o.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
-
+            services.AddSignalR();
             services.AddSingleton(x => new UserGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton(x => new GameGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton(x => new YamsGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
@@ -48,7 +48,7 @@ namespace Superstars.WebApp
             services.AddSingleton(x => new BlackJackService());
             services.AddSingleton(x =>
                 new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-
+            services.AddSingleton(x => new ChatGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton(x => new RankService());
             services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();
@@ -91,7 +91,10 @@ namespace Superstars.WebApp
             app.UseAuthentication();
 
             app.UseStaticFiles();
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<SignalRHub>("/SignalR");
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
