@@ -6,7 +6,7 @@
         </div>
     </header>
         <div class="warning slide bg-danger" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
-           <p1> <br>Attention, le casino est actuellement en développement et utilise la <a href="https://en.bitcoin.it/wiki/Testnet" style="color:blue"> blockchain test<br> </a> </p1>
+           <p1> <br>Attention, le casino est actuellement en développement et utilise la <a href="https://en.bitcoin.it/wiki/Testnet" style="color:blue" target="_blank"> blockchain test<br> </a> </p1>
            </div>
     
 <br>
