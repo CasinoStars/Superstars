@@ -19,7 +19,7 @@ namespace Superstars.Wallet
             var btcS = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
             var btcS2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
 
-            static HttpClient client = new HttpClient();
+          //  static HttpClient client = new HttpClient();
             var coinInWallet2 = informationSeeker.HowMuchCoinInWallet(btcS, client);
             Console.WriteLine(coinInWallet2);
 

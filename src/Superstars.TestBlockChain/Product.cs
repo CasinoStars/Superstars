@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Info.Blockchain.API.Client;
+//sing Info.Blockchain.API.Client;
 
 namespace ITI.PrimarySchool.WebApp.Services
 {
@@ -27,7 +27,7 @@ namespace ITI.PrimarySchool.WebApp.Services
                     JToken json = JToken.Load(jsonReader);
                     return json.Select(u => (string)u["login"]).ToList();
                 }
-                using blockchainAp
+                //using blockchainAp
             }
         }
     }
