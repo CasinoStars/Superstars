@@ -5,9 +5,7 @@ create procedure sp.sUserCreate
 	@Email nvarchar(68),
 	@PrivateKey nvarchar(64), 
 	@UserId int out,
-	@Country nvarchar(64),
-	@Isingameyams int,
-	@Isingameblackjack int
+	@Country nvarchar(64)
 )
 as 
 begin

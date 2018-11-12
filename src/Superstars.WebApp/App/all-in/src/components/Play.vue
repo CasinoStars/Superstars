@@ -40,22 +40,23 @@ export default {
 
     async DeleteAis() {
 
-      if(await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0 ) {
-         await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-      }
+      //IF IS NOT INGAME BJ
+      await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+      
+      //IF IS NOT INGAME YAMS
+      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+      
 
-      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
-         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      }
-
-      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0 && await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0) {
+      //IF IS NOT INGAME FOR BOTH
          await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-      }
+      
     },
 
     async PlayYams(gametype) {
-      if (await this.executeAsyncRequest(() => YamsApiService.Getisingame()) == 0) {
+
+      //IF IS NOT INGAME YAMS
           await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+      
       try {
          await this.executeAsyncRequest(() => GameApiService.createAiUser());
       } catch (error) {
@@ -63,30 +64,36 @@ export default {
          alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
          return;
       }
+
+      //IF IS NOT INGAME YAMS
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
-      } else {
-        //REPRENDRE LA GAME
-      }
+
+      //ELSE
+      //REPRENDRE LA GAME
+
       this.$router.push({ path: 'yams' });
     },
 
     async PlayBlackJack(gametype) {
-      if(await this.executeAsyncRequest(() => BlackJackApiService.Getisingame()) == 0 ) {
+      //IF IS NOT INGAME BJ
        await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+
        try {
          await this.executeAsyncRequest(() => GameApiService.createAiUser());
        } catch(error) {
          alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
          return;
        }
+
+       //IF IS NOT INGAME BJ
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.InitIa());
-      } else {
+      
         // REPRENDRE LA GAME
-      }
+      
       this.$router.push({ path: 'blackJack' });
     }
   }
