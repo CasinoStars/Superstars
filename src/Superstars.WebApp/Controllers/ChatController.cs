@@ -31,7 +31,7 @@ namespace Superstars.WebApp.Controllers
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var pseudo = User.FindFirst(ClaimTypes.Name).Value;
-            await _hubContext.Clients.All.SendCoreAsync("Message", new object[]{userId, pseudo, message});
+            await _hubContext.Clients.All.SendAsync("Message", pseudo, message);
             Result result = await _chatGateway.CreateMessage(userId, message);
             return this.CreateResult(result);
         }
