@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.1.1" />
@@ -45,6 +49,10 @@
     <Folder Include="App\all-in\src\styles\" />
     <Folder Include="App\all-in\src\store\" />
     <Folder Include="App\all-in\src\services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.json" />
   </ItemGroup>
   
   <ItemGroup>
