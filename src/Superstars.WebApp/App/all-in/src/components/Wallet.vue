@@ -168,7 +168,6 @@ export default {
       e.preventDefault();
       var errors = [];
       var isValid = await this.IsValidAddress(this.item);
-      console.log(isValid);
       if (this.item.AmountToSend < 100000)
         errors.push("Le retrait minimum est de 100,000 bits");
       else if (this.trueCoins < this.item.AmountToSend)
@@ -184,9 +183,10 @@ export default {
           this.Responses = await this.executeAsyncRequest(() =>
             WalletApiService.Withdraw(this.item)
           );
+        
           await this.RefreshBTC();
         } catch (error) {}
-        if (Response != null) this.showModal();
+        this.showModal();
       }
     },
 

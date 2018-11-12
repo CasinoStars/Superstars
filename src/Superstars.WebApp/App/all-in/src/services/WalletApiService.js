@@ -37,7 +37,7 @@ class WalletApiService {
         return  await getAsyncNoJSON(`${endpoint}/GetAddress`);
     }
 
-    async Withdraw( ){
+    async Withdraw(model){
         var response = await postAsync(`${endpoint}/Withdraw`, model);
         return response.text();
     }

@@ -116,7 +116,6 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("AddressValidator")]
         public async Task<bool> AddressValidator([FromBody] WalletViewModel model)
         {
-            Console.WriteLine("okfoapekfa");
             return Validator.IsValidAddress(model.DestinationAddress);
         }
 
