@@ -93,7 +93,7 @@ namespace Superstars.WebApp
             app.UseStaticFiles();
             app.UseSignalR(routes =>
             {
-                routes.MapHub<SignalRHub>("/SignalRHub");
+                routes.MapHub<SignalRHub>("/SignalR");
             });
             app.UseMvc(routes =>
             {

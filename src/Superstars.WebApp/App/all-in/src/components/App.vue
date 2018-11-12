@@ -80,6 +80,8 @@
     <chat v-if="auth.isConnected"></chat>
   </div>
 </template>
+<script src="~/lib/signalr/signalr.js"></script>
+
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -104,6 +106,7 @@ export default{
       this.fakeUser();
       this.BTCUser();
     }
+    
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
   },
 
