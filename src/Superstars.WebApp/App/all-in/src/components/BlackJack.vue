@@ -434,6 +434,8 @@ export default {
           this.playerwin = true;
         } else if(this.handvalue == this.dealerhandvalue) {
           this.winnerlooser = "Egalité";
+          var egalite = true;
+
         }
         this.gameend = true;
         if(this.playerwin == true) {
@@ -449,6 +451,22 @@ export default {
             await this.RefreshBTC();
           }
         }
+        if(egalite != null){
+           var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
+          if(this.trueBet === 0) {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
+            await this.RefreshFakeCoins();
+          }
+          else {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
+            await this.RefreshBTC();
+          } 
+          await this.setisingamefalse();
+          return;
+        }
+        console.log("penis")
         this.updateStats();
       }
     },
