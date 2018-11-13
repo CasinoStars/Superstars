@@ -225,5 +225,19 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+        [HttpGet("getGameEnd")]
+        public async Task<IActionResult> GetGameEnd(int gameid)
+        {
+            var result = await _gameGateway.IsGameEndDefined(gameid);
+            return this.CreateResult(result);
+        }
+
+        //[HttpGet("GameEndUpdate")]
+        //public async Task<IActionResult> GameEndUpdate(int gameid)
+        //{
+        //    var result = await _gameGateway.UpdateGameEnd(gameid);
+        //    return this.CreateResult(result);
+        //}
+
     }
 }

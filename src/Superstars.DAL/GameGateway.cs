@@ -190,5 +190,17 @@ namespace Superstars.DAL
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task<Result<int>> IsGameEndDefined(int gameid)
+        {
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                var data = await con.QueryFirstOrDefaultAsync<int>(
+                    @"select g.EndDate from sp.tGames g where g.GameId = @gameId",
+                    new { gameId = gameid });
+                return Result.Success(data);
+            }
+        }
+        
     }
 }
