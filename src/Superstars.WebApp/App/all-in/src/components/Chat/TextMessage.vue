@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import escapeGoat from 'escape-goat'
 import Autolinker from 'autolinker'
 
 export default {
@@ -22,7 +21,12 @@ export default {
   },
   computed: {
     messageText() {
-      return Autolinker.link(escapeGoat.escape(this.data), {
+      return Autolinker.link(this.data
+        .replace(/&/g, '&amp;')
+	      .replace(/"/g, '&quot;')
+	      .replace(/'/g, '&#39;')
+	      .replace(/</g, '&lt;')
+	      .replace(/>/g, '&gt;'), {
         className: 'chatLink',
         truncate: { length: 50, location: 'smart' }
       })
