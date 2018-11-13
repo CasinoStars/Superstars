@@ -10,7 +10,7 @@
           <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
           <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
-        <router-link class="close"  v-on:click.native="setisingamefalseandredirect()" to="">&times;</router-link>
+        <router-link class="close" to="/play">&times;</router-link>
       </div>
       <ul class="tab-group">
                 <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
@@ -32,7 +32,7 @@
 
         <div class="modal-footer">
           <div style="margin-right: 42%;">
-            <router-link class="btn btn-secondary"  v-on:click.native="setisingamefalseandredirect()" to="">Annuler</router-link>
+            <router-link class="btn btn-secondary"  to="/play">Annuler</router-link>
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
         </div>
@@ -237,7 +237,6 @@ import WalletApiService from '../services/WalletApiService';
 export default {
     data() {
         return {
-            isingame: 0,
             playercards: [],
             dealercards: [],
             handvalue: 0,
@@ -262,23 +261,18 @@ export default {
   },
 
   async mounted() {
-    await this.getFakeCoins();
-    await this.getTrueCoins();
-    await this.getIsingame();
-    if(this.isingame == 0) {
+
+    //IF ISNOT IN GAME
       this.showModal();
-      await this.setisingametrue();
-    } else {
+
+
+    //ELSE
     this.refreshiaturn();
-    }
+    
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
     await this.refreshCards();
     await this.refreshHandValue();
     await this.CheckWinner();
-    console.log(this.handvalue + "   HANDVALUE");
-    console.log(this.dealerhandvalue + " DEALERHANDVALUE");
-    console.log(this.iaturn + "  IATURN");
-    console.log(this.gameend + " GAME END");
   },
 
     methods: {
@@ -286,35 +280,12 @@ export default {
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
 
-    
-    async setisingametrue() {
-        await this.executeAsyncRequest(() => BlackJackApiService.SetIsingameBJ(1));
-    },
-
-    async setisingamefalse() {
-        await this.executeAsyncRequest(() =>  BlackJackApiService.SetIsingameBJ(0));
-    },
-
-    async setisingamefalseandredirect() {
-        await this.executeAsyncRequest(() => BlackJackApiService.SetIsingameBJ(0));
-        this.$router.push({ path: 'play' });
-    },
-
     async getIsingame() {
       this.isingame = await this.executeAsyncRequest(() => BlackJackApiService.Getisingame());
       if(this.isingame == 1) {
         this.playerBet = true;
       }
     },
-
-    async getFakeCoins() {
-      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
-    },
-
-    async getTrueCoins() {
-      this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
-    },
-
 
     changeBet(choice){
       this.realOrFake = choice;
@@ -335,7 +306,7 @@ export default {
           errors.push("La mise maximum est de 10,000,000");
         else if(this.fakeBet <= 0)  
           errors.push("La mise doit être supérieur à 0");
-        else if(this.fakeBet > this.fakeCoins.balance)
+        else if(this.fakeBet > this.fakeMoney)
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
@@ -343,18 +314,18 @@ export default {
           errors.push("La mise maximum est de 10,000,000 bits");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 bits");
-        else if(this.trueBet > this.trueCoins){
+        else if(this.trueBet > this.BTCMoney){
           errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
       this.errors = errors;
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake') {
-            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 'BlackJack'));
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 1));
             await this.RefreshFakeCoins();
           }
           else {
-            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'BlackJack'));
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 1));
             await this.RefreshBTC();
           }
           var modal = document.getElementById('myModal');
@@ -373,9 +344,6 @@ export default {
       if(this.handvalue > 21) {
         this.gameend = true;
       }
-
-      await this.getFakeCoins();
-      await this.getTrueCoins();
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
       await this.refreshCards();
       await this.refreshHandValue();
@@ -454,8 +422,7 @@ export default {
     },
 
     async updateStats() {
-        await this.setisingamefalse();
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats('BlackJack',this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats(1,this.playerwin));
     },
 
     async refreshHandValue() {

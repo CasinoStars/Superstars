@@ -25,12 +25,12 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateGame(string gameType)
+        public async Task<Result<int>> CreateGame(int gameTypeId)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
-                p.Add("@GameType", gameType);
+                p.Add("@GameTypeId", gameTypeId);
                 p.Add("@StartDate", DateTime.UtcNow);
                 p.Add("@GameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
@@ -114,12 +114,12 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateStats(int userid, string gametype, int wins, int losses)
+        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int wins, int losses)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
-                p.Add("@GameType", gametype);
+                p.Add("@GameTypeId", gameTypeId);
                 p.Add("@UserId", userid);
                 p.Add("@Wins", wins);
                 p.Add("@Losses", losses);
@@ -135,24 +135,24 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> GetWins(int userId, string gameType)
+        public async Task<Result<int>> GetWins(int userId, int gameTypeId)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select s.Wins from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
-                    new {userid = userId, gametype = gameType});
+                    @"select s.Wins from sp.tStats s where s.userId = @userid and s.GameTypeId = @gametypeid",
+                    new {userid = userId, gametypeid = gameTypeId});
                 return Result.Success(data);
             }
         }
 
-        public async Task<Result<int>> GetLosses(int userId, string gameType)
+        public async Task<Result<int>> GetLosses(int userId, int gameTypeId)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select s.Losses from sp.tStats s where s.userid = @userid and s.GameType = @gametype",
-                    new {userid = userId, gametype = gameType});
+                    @"select s.Losses from sp.tStats s where s.userId = @userid and s.GameTypeId = @gametypeid",
+                    new {userid = userId, gametypeid = gameTypeId});
                 return Result.Success(data);
             }
         }

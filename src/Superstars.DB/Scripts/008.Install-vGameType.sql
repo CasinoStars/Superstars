@@ -1,6 +1,6 @@
 create view sp.sGameType
 as
    select
-	GameType = g.GameType
-        
+	GameTypeId = g.GameTypeId,
+	GameName = g.GameName
    from sp.tGameType g

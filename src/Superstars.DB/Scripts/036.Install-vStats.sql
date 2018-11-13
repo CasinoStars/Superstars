@@ -1,8 +1,8 @@
 ﻿create view sp.vStats
 as
      select
-          GameType = e.GameType,
-          UserID = e.UserID,
+          GameTypeId = e.GameTypeId,
+          UserId = e.UserId,
           Wins = e.Wins,
 		  Losses = e.Losses,
 		  AverageBet = e.AverageBet,

@@ -1,10 +1,9 @@
 create table sp.tGameType
 (
-	GameType nvarchar(64) not null,
+	GameTypeId int identity(0,1),
+	GameName nvarchar(64) not null,
 
-	constraint PK_GameType primary key(GameType)
+	constraint PK_GameType primary key(GameTypeId)
 );
-
-insert into sp.tGameType(GameType)values('Yams')
-insert into sp.tGameType(GameType)values('BlackJack')
-
+insert into sp.tGameType(GameName) values('Yams');
+insert into sp.tGameType(GameName) values('BlackJack');

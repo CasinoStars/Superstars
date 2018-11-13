@@ -5,9 +5,7 @@ create procedure sp.sUserCreate
 	@Email nvarchar(68),
 	@PrivateKey nvarchar(64), 
 	@UserId int out,
-	@Country nvarchar(64),
-	@Isingameyams int,
-	@Isingameblackjack int
+	@Country nvarchar(64)
 )
 as 
 begin
@@ -24,10 +22,11 @@ begin
 	set @UserId = scope_identity();
 	if(substring(@UserName, 1, 3)  <> '#AI')
 	begin
-	insert into sp.tMoney(MoneyId, MoneyType, Balance, Profit) values(@UserId, 1, 0, 0);
-	insert into sp.tMoney(MoneyId, MoneyType, Balance, Profit) values(@UserId, 2, 0, 0);
-	insert into sp.tStats(GameType, UserId, Wins, Losses) values('Yams', @UserId, 0, 0);
-	insert into sp.tStats(GameType, UserId, Wins, Losses) values('BlackJack', @UserId, 0, 0);
+	insert into sp.tMoney(UserId, MoneyTypeId, Balance, Profit) values(@UserId, 0, 0, 0);
+	insert into sp.tMoney(UserId, MoneyTypeId, Balance, Profit) values(@UserId, 1, 0, 0);
+	insert into sp.tStats(GameTypeId, UserId, Wins, Losses) values(0, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, UserId, Wins, Losses) values(1
+, @UserId, 0, 0);
 	end;
 	commit;
 	return 0;

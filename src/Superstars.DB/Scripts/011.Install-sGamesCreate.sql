@@ -1,7 +1,7 @@
 create procedure sp.sGamesCreate
 (
 	@GameId int out,
-	@GameType nvarchar(64),
+	@GameTypeId int,
 	@StartDate datetime
 )
 as
@@ -15,7 +15,7 @@ begin
                return 1;
        end
 		
-       insert into sp.tGames(GameType,StartDate) values(@Gametype,@StartDate)
+       insert into sp.tGames(GameTypeId,StartDate) values(@GametypeId,@StartDate)
        set @GameId = scope_identity();
 	   commit;
 end;

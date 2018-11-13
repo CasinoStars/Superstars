@@ -30,7 +30,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select m.Profit from sp.tMoney m where m.MoneyType = 1 "
+                    "select m.Profit from sp.tMoney m where m.MoneyTypeId = 1 "
                 );
             }
         }
@@ -40,7 +40,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select m.Profit from sp.tMoney m where m.MoneyType = 2 "
+                    "select m.Profit from sp.tMoney m where m.MoneyTypeId = 0 "
                 );
             }
         }
@@ -50,7 +50,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select s.Wins from sp.tStats s where GameType = 'BlackJack'"
+                    "select s.Wins from sp.tStats s where GameTypeId = 1"
                 );
             }
         }
@@ -60,7 +60,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select s.Losses from sp.tStats s where GameType = 'BlackJack'"
+                    "select s.Losses from sp.tStats s where GameTypeId = 1"
                 );
             }
         }
@@ -70,7 +70,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams'"
+                    "select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameTypeId = 0"
                 );
             }
         }
@@ -80,7 +80,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameType = 'Yams'"
+                    "select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameTypeId = 0"
                 );
             }
         }
@@ -90,7 +90,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<IEnumerable<int>>(
-                    "select s.Pot from sp.tGameYams s left outer join sp.tUser u on s.UserId = @UserId where GameType = 'Yams'",
+                    "select s.Pot from sp.tGameYams s left outer join sp.tUser u on s.UserId = @UserId where GameTypeId = 0",
                     new {UserId = userid});
             }
         }
@@ -100,7 +100,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<IEnumerable<int>>(
-                    "select s.Pot from sp.tGameBlackJack s left outer join sp.tUser u on s.UserId = @UserId where GameType = 'BlackJack'",
+                    "select s.Pot from sp.tGameBlackJack s left outer join sp.tUser u on s.UserId = @UserId where GameTypeId = 1",
                     new {UserId = userid});
             }
         }
