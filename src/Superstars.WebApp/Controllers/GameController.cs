@@ -34,20 +34,19 @@ namespace Superstars.WebApp.Controllers
             _rankGateway = rankGateway;
         }
 
-        [HttpPost("{gametype}")]
-        public async Task<IActionResult> CreateGame(string gametype)
+        [HttpPost("{gameTypeId}")]
+        public async Task<IActionResult> CreateGame(int gameTypeId)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.CreateGame(userId, gametype);
+            Result result = await _gameGateway.CreateGame(gameTypeId);
             return this.CreateResult(result);
         }
 
-        [HttpPost("{bet}/{gameType}/betBTC")]
-        public async Task<IActionResult> BetBTC(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
+        [HttpPost("{bet}/{gameTypeId}/betBTC")]
+        public async Task<IActionResult> BetBTC(int bet, int gameTypeId) // gameTypeId: 0=>Yams - 1=>BlackJack
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (gameType == "Yams")
+            if (gameTypeId == 0)
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
             }
@@ -61,12 +60,12 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result2);
         }
 
-        [HttpPost("{bet}/{gameType}/betFake")]
-        public async Task<IActionResult> FakeBet(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
+        [HttpPost("{bet}/{gameTypeId}/betFake")]
+        public async Task<IActionResult> FakeBet(int bet, int gameTypeId) // gameTypeId: 0=>Yams - 1=>BlackJack
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (gameType == "Yams")
+            if (gameTypeId == 0)
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
             }
@@ -123,12 +122,12 @@ namespace Superstars.WebApp.Controllers
             return Result.Success(game);
         }
 
-        [HttpPost("{gametype}/UpdateStats")]
-        public async Task<Result> UpdateStats(string gametype, [FromBody] bool win)
+        [HttpPost("{gameTypeId}/UpdateStats")]
+        public async Task<Result> UpdateStats(int gameTypeId, [FromBody] bool win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result1 = await _gameGateway.GetWins(userId, gametype);
-            var result2 = await _gameGateway.GetLosses(userId, gametype);
+            var result1 = await _gameGateway.GetWins(userId, gameTypeId);
+            var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
             //int averagebet = 0;
 
             //WIP
@@ -147,7 +146,7 @@ namespace Superstars.WebApp.Controllers
                 wins = wins + 1;
             else
                 losses = losses + 1;
-            var result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses);
+            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses);
             return Result.Success(result3);
         }
 
@@ -181,7 +180,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetWinsBlackJackPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetWins(userId, "BlackJack");
+            var result = await _gameGateway.GetWins(userId, 1);
             return this.CreateResult(result);
         }
 
@@ -189,7 +188,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetLossesBlackJackPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetLosses(userId, "BlackJack");
+            var result = await _gameGateway.GetLosses(userId, 1);
             return this.CreateResult(result);
         }
 
@@ -197,7 +196,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetWinsYamsPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetWins(userId, "Yams");
+            var result = await _gameGateway.GetWins(userId, 0);
             return this.CreateResult(result);
         }
 
@@ -205,7 +204,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetLossesYamsPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetLosses(userId, "Yams");
+            var result = await _gameGateway.GetLosses(userId, 0);
             return this.CreateResult(result);
         }
 

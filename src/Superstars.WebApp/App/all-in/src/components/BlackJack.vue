@@ -321,11 +321,11 @@ export default {
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake') {
-            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 'BlackJack'));
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 1));
             await this.RefreshFakeCoins();
           }
           else {
-            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'BlackJack'));
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 1));
             await this.RefreshBTC();
           }
           var modal = document.getElementById('myModal');
@@ -422,7 +422,7 @@ export default {
     },
 
     async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats('BlackJack',this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats(1,this.playerwin));
     },
 
     async refreshHandValue() {

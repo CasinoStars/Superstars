@@ -2,14 +2,14 @@
   <div id="home">
     <div class="games">
       <div class="yams">
-        <router-link v-on:click.native="PlayYams('Yams')" to="">
+        <router-link v-on:click.native="PlayYams(0)" to="">
           <img src="../img/LOGO1.png" alt="yams" class="imgyams">
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" class="textyams">
       </div>
       
       <div class="blackjack">
-      <router-link v-on:click.native="PlayBlackJack('BlackJack')" to="">
+      <router-link v-on:click.native="PlayBlackJack(1)" to="">
         <img src="../img/LOGO3.png" alt="blackjack" class="imgblackjack">
       </router-link>
       <img src="../img/LOGO4.png" alt="textbj" class="textbj">
@@ -52,10 +52,10 @@ export default {
       
     },
 
-    async PlayYams(gametype) {
+    async PlayYams(gameTypeId) {
 
       //IF IS NOT INGAME YAMS
-          await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+          await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));
       
       try {
          await this.executeAsyncRequest(() => GameApiService.createAiUser());
@@ -75,9 +75,9 @@ export default {
       this.$router.push({ path: 'yams' });
     },
 
-    async PlayBlackJack(gametype) {
+    async PlayBlackJack(gameTypeId) {
       //IF IS NOT INGAME BJ
-       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+       await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));
 
        try {
          await this.executeAsyncRequest(() => GameApiService.createAiUser());

@@ -2,7 +2,7 @@ create view sp.vGames
 as
     select
        GameId = g.GameId,
-       GameType = g.GameType,
+       GameTypeId = g.GameTypeId,
        StartDate = g.StartDate,
        EndDate = g.EndDate,
        Winner = g.Winner

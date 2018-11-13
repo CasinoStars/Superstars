@@ -195,11 +195,11 @@ export default {
       if(errors.length == 0) {
         try {
           if(this.realOrFake === 'fake') {
-            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 'Yams'));
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 0));
             await this.RefreshFakeCoins();
           }
           else {
-            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 0));
             await this.RefreshBTC();
           }
           var modal = document.getElementById('myModal');
@@ -224,7 +224,7 @@ export default {
     },
 
     async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
     },
