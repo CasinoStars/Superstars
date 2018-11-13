@@ -109,13 +109,6 @@ class BlackJackApiService {
         return value;
     }
 
-    async Getisingame() {
-        return await getAsync(`${endpoint}/GetisingameBJ`);
-    }
-
-    async SetIsingameBJ(isingame) {
-        return await postAsync(`${endpoint}/SetIsingameBJ`, isingame);
-    }
 
 }
 

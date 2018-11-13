@@ -14,16 +14,25 @@ namespace Superstars.DAL
             _sqlstring = sqlstring;
         }
 
-        public async Task<Result<int>> AddCoins(int moneyId, int moneyType, int coins, int profit, int credit)
+        /// <summary>
+        /// Add/Update Coins (real or fake) in t.userMoney
+        /// </summary>
+        /// <param name="userId">UserId of specific user</param>
+        /// <param name="moneyTypeId">MoneyType is specified in t.MoneyType (0=> Fakecoin; 1=> Bitcoin)</param>
+        /// <param name="coins">Number of coins to add in t.UserMoney</param>
+        /// <param name="profit">Profit if user win or Loose a game</param>
+        /// <param name="credit">Credit if user win or Loose with Bitcoin (Never credit if moneyType = 0)</param>
+        /// <returns></returns>
+        public async Task<Result<int>> AddCoins(int userId, int moneyTypeId, int coins, int profit, int credit)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@Profit", profit);
                 p.Add("@Credit", credit);
-                p.Add("@MoneyId", moneyId);
+                p.Add("@UserId", userId);
                 p.Add("@Balance", coins);
-                p.Add("@MoneyType", moneyType);
+                p.Add("@MoneyTypeId", moneyTypeId);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sMoneyUpdate", p, commandType: CommandType.StoredProcedure);
 
@@ -66,13 +75,13 @@ namespace Superstars.DAL
         }
 
 
-        public async Task<Result<WalletData>> GetFakeBalance(int moneyId)
+        public async Task<Result<WalletData>> GetFakeBalance(int userId)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var wallet = await con.QueryFirstOrDefaultAsync<WalletData>(
-                    "select m.MoneyId, m.MoneyType, m.Balance from sp.vMoney m where m.MoneyId = @moneyId and m.MoneyType = 2",
-                    new {MoneyId = moneyId});
+                    "select m.UserId, m.MoneyTypeId, m.Balance from sp.vMoney m where m.UserId = @UserId and m.MoneyTypeId = 0",
+                    new {UserId = userId});
                 if (wallet == null) return Result.Failure<WalletData>(Status.NotFound, "Wallet not found.");
                 return Result.Success(wallet);
             }
@@ -95,8 +104,8 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlstring))
             {
                 var credit = await con.QueryFirstOrDefaultAsync<int>(
-                    "select m.Credit from sp.vMoney m where m.MoneyId = @userid and m.MoneyType = 1",
-                    new {userid = userId});
+                    "select m.Credit from sp.vMoney m where m.UserId = @UserId and m.MoneyTypeId = 1",
+                    new {UserId = userId});
                 return Result.Success(credit);
             }
         }

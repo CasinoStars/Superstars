@@ -61,12 +61,12 @@
                 </form>
 
                 <!-- FakeWallet -->
-                <form @submit="onSubmit($event)" :v-model="item.moneyType = 2" v-else>
+                <form @submit="onSubmit($event)" :v-model="item.MoneyType = 0" v-else>
                     <div class="field-wrap">
                         <label>
                             Montant<span class="req">*</span>
                         </label><br><br>
-                        <input type="number" min="0" max="1000000" placeholder="..." v-model="item.fakeCoins" required autocomplete="off"/>
+                        <input type="number" min="0" max="1000000" placeholder="..." v-model="item.AmountToSend" required autocomplete="off"/>
                     </div><br>
                     <button type="submit" class="button button-block">Créditer</button>
 
@@ -117,23 +117,11 @@ export default {
       );
     },
 
-    async refreshFakeCoins() {
-      this.fakeCoins = await this.executeAsyncRequest(() =>
-        WalletApiService.GetFakeBalance()
-      );
-    },
-
-    async refreshTrueCoins() {
-      this.trueCoins = await this.executeAsyncRequest(() =>
-        WalletApiService.GetTrueBalance()
-      );
-    },
-
     async onSubmit(e) {
       e.preventDefault();
 
       var errors = [];
-      if (this.fakeCoins.balance >= 1000000)
+      if (this.fakeMoney >= 1000000)
         errors.push(
           "Le crédit est bloqué lorsque votre solde atteint 1,000,000 de bits"
         );
@@ -155,39 +143,47 @@ export default {
     },
 
     closeModal() {
-        withdrawModal.style.display = "none";
+      withdrawModal.style.display = "none";
+    },
+
+    async IsValidAddress(item) {
+      return this.executeAsyncRequest(() =>
+        WalletApiService.IsValidAddress(this.item).then(r => r.json())
+      );
     },
 
     async Withdraw(e) {
       e.preventDefault();
       var errors = [];
+      var isValid = await this.IsValidAddress(this.item);
       if (this.item.AmountToSend < 100000)
         errors.push("Le retrait minimum est de 100,000 bits");
-      else if (this.trueCoins < this.item.AmountToSend)
+      else if (this.BTCMoney < this.item.AmountToSend)
         errors.push("Vous n'avez pas cette somme");
-
+      else if (isValid === false) {
+        errors.push("L'adresse Bitcoin est invalide");
+      }
+      console.log(isValid + " ISVALIDDDD");
 
       this.errors = errors;
       if (errors.length === 0) {
         try {
           this.Responses = await this.executeAsyncRequest(() =>
             WalletApiService.Withdraw(this.item)
-            
           );
+
           await this.RefreshBTC();
         } catch (error) {}
-         if(Response != null)this.showModal();
-
+        this.showModal();
       }
     },
- 
+
     Copy() {
       navigator.clipboard.writeText(this.BTCAddress);
     },
 
     ChangeWallet(wallet) {
       this.wallet = wallet;
-      this.refreshFakeCoins();
       this.errors = 0;
     }
   }
@@ -307,7 +303,7 @@ $br: 4px;
 .wallet .modal-body {
   padding: 20px 16px;
   text-align: center;
-  color : white;
+  color: white;
 }
 
 .wallet .modal-footer {

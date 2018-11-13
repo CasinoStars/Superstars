@@ -22,7 +22,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Isingameyams, u.Isingameblackjack u from sp.vUser u where u.UserId = @UserId",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.UserId = @UserId",
                     new {UserId = userId});
             }
         }
@@ -32,7 +32,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Isingameyams, u.Isingameblackjack from sp.vUser u where u.UserName = @UserName",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.UserName = @UserName",
                     new {UserName = pseudo});
             }
         }
@@ -42,7 +42,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Isingameyams, u.Isingameblackjack from sp.vUser u where u.Email = @Email",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.Email = @Email",
                     new {Email = email});
             }
         }
@@ -57,8 +57,6 @@ namespace Superstars.DAL
                 p.Add("@UserPassword", password);
                 p.Add("@PrivateKey", privateKey);
                 p.Add("@Country", "France");
-                p.Add("@Isingameyams", 0);
-                p.Add("@Isingameblackjack", 0);
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 

@@ -7,9 +7,7 @@ create table sp.tUser
 	PrivateKey varchar(64) not null,
 	Country varchar(64),
 	LastConnexionDate datetime,
-	LastDeconnexionDate datetime,
-	Isingameyams int default 0,
-	Isingameblackjack int default 0
+	LastDeconnexionDate datetime
 
 
 	constraint PK_tUser primary key(UserId),

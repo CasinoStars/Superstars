@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NBitcoin;
 using QBitNinja.Client;
@@ -9,6 +6,10 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -23,16 +24,20 @@ namespace Superstars.WebApp.Controllers
         {
             _walletGateway = walletGateway;
         }
-
+        
         /// <summary>
-        ///     Add Real or Fake Coins for player
+        /// Add FakeCoin to user
         /// </summary>
+        /// <param name="model">
+        ///     - use model.AmountToSend to add amount
+        ///     - use model.MoneyTypeId to set moneyTypeId in your front-end (0=> Fakecoin; 1=> Bitcoin)
+        /// </param>
         /// <returns></returns>
         [HttpPost("AddCoins")]
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins, 0, 0);
+            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.AmountToSend, 0, 0);
             return this.CreateResult(result);
         }
 
@@ -40,7 +45,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot, pot, 0);
+            Result result = await _walletGateway.AddCoins(userId, 0, pot, pot, 0);
             return this.CreateResult(result);
         }
 
@@ -110,6 +115,12 @@ namespace Superstars.WebApp.Controllers
             var credit = await _walletGateway.GetCredit(userId);
             var realBalance = onBlockchain + credit.Content;
             return realBalance;
+        }
+
+        [HttpPost("AddressValidator")]
+        public async Task<bool> AddressValidator([FromBody] WalletViewModel model)
+        {
+            return Validator.IsValidAddress(model.DestinationAddress);
         }
 
         [HttpGet("FakeBalance")]

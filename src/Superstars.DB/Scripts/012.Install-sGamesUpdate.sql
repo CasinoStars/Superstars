@@ -1,10 +1,11 @@
 create proc sp.sGamesUpdate
 (
-     @GameId int,
-     @GameType nvarchar(64),
-     @StartDate datetime,
-     @EndDate datetime,
-     @Winner int	
+	@GameId int,
+	@UserId int,
+	@GameType nvarchar(64),
+	@StartDate datetime,
+	@EndDate datetime,
+	@Winner int	
 )
 as 
 begin
@@ -22,7 +23,7 @@ begin
               rollback
               return 2;
        end;
-	update sp.tGames set [EndDate] = @EndDate, [Winner] = @Winner  where [GameId] = @GameId;
+	update sp.tGames set [EndDate] = @EndDate, [Winner] = @Winner  where [GameId] = @GameId and [UserId] = @UserId;
 	commit;
     return 0;
 end;
