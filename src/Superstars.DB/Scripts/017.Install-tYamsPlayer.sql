@@ -6,6 +6,6 @@ create table sp.tYamsPlayer
 	Dices varchar(6),
 	DicesValue int
 
-	constraint FK_tYamsPlayer_UserId foreign key (YamsPlayerId) references sp.tUser(UserId),
+	--constraint FK_tYamsPlayer_UserId foreign key (YamsPlayerId) references sp.tGames(UserId),
 	constraint FK_tYamsPlayer_GameId foreign key (YamsGameId) references sp.tGames(GameId)
 )

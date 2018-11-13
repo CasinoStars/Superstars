@@ -24,16 +24,20 @@ namespace Superstars.WebApp.Controllers
         {
             _walletGateway = walletGateway;
         }
-
+        
         /// <summary>
-        ///     Add Real or Fake Coins for player
+        /// Add FakeCoin to user
         /// </summary>
+        /// <param name="model">
+        ///     - use model.AmountToSend to add amount
+        ///     - use model.MoneyTypeId to set moneyTypeId in your front-end (0=> Fakecoin; 1=> Bitcoin)
+        /// </param>
         /// <returns></returns>
         [HttpPost("AddCoins")]
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.FakeCoins, 0, 0);
+            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.AmountToSend, 0, 0);
             return this.CreateResult(result);
         }
 
@@ -41,7 +45,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 2, pot, pot, 0);
+            Result result = await _walletGateway.AddCoins(userId, 0, pot, pot, 0);
             return this.CreateResult(result);
         }
 

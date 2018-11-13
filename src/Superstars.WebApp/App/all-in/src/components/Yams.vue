@@ -11,7 +11,7 @@
           <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
           <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
-        <router-link class="close"  v-on:click.native="setisingamefalseandredirect()" to="">&times;</router-link>
+        <router-link class="close" to="/play">&times;</router-link>
       </div>
       <ul class="tab-group">
                 <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
@@ -33,7 +33,7 @@
 
         <div class="modal-footer">
           <div style="margin-right: 42%;">
-            <router-link class="btn btn-secondary" v-on:click.native="setisingamefalseandredirect()" to="">Annuler</router-link>
+            <router-link class="btn btn-secondary" to="/play">Annuler</router-link>
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
         </div>
@@ -139,23 +139,16 @@ export default {
       profit: 0,
       fakeBet: 0,
       trueBet: 0,
-      errors: [],
-      isingame: 0,
+      errors: []
     }
   },
 
   async mounted() {
-    await this.getFakeCoins();
-    await this.getTrueCoins();
     await this.refreshDices();
     await this.refreshIaDices();
-    await this.getIsingame();
     await this.changeTurn();
-    if(this.isingame == 0) {
+    //IF ISNOT IN GAME
       this.showModal();
-      await this.setisingametrue();
-    }
-
   },
   
   computed: {
@@ -168,35 +161,6 @@ export default {
     ...mapActions(['RefreshFakeCoins']),
     ...mapActions(['RefreshBTC']),
     
-    async setisingametrue() {
-        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyams(1));
-    },
-
-    async setisingamefalse() {
-        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyams(0));
-    },
-
-    async setisingamefalseandredirect() {
-        await this.executeAsyncRequest(() => YamsApiService.SetIsingameyams(0));
-        this.$router.push({ path: 'play' });
-    },
-
-    async getIsingame() {
-      this.isingame = await this.executeAsyncRequest(() => YamsApiService.Getisingame());
-      if(this.isingame == 1) {
-        this.playerBet = true;
-      }
-    },
-
-    async getFakeCoins() {
-      this.fakeCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBalance());
-    },
-
-    async getTrueCoins() {
-      this.trueCoins = await this.executeAsyncRequest(() => WalletApiService.GetTrueBalance());
-    },
-
-
     changeBet(choice){
       this.realOrFake = choice;
       this.errors = 0;
@@ -216,7 +180,7 @@ export default {
           errors.push("La mise maximum est de 1,000,000");
         else if(this.fakeBet <= 0)  
           errors.push("La mise doit être supérieur à 0");
-        else if(this.fakeBet > this.fakeCoins.balance)
+        else if(this.fakeBet > this.fakeMoney)
           errors.push("Vous n'avez pas cette somme sur votre compte");
       }
       else {
@@ -224,7 +188,7 @@ export default {
           errors.push("La mise maximum est de 10,000,000 bits");
         else if(this.trueBet <= 0)  
           errors.push("La mise doit être supérieur à 0 bits");
-        else if(this.trueBet > this.trueCoins){
+        else if(this.trueBet > this.BTCMoney){
           errors.push("Vous n'avez pas cette somme sur votre compte");}
       }
       this.errors = errors;
@@ -261,7 +225,6 @@ export default {
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
-        await this.setisingamefalse();
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
     },

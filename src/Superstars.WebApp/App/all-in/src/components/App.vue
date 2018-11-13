@@ -103,8 +103,8 @@ export default{
   
   async mounted() {
     if(UserApiService.isConnected) {
-      this.fakeUser();
-      this.BTCUser();
+      await this.RefreshBTC();
+      await this.RefreshFakeCoins();
     }
     
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
@@ -115,23 +115,17 @@ export default{
   },
 
   methods: {
-    async BTCUser() {
-      this.UserBTCoins = await WalletApiService.GetTrueBalance();
-    },
-
-    async fakeUser() {
-      var dataUser = await WalletApiService.GetFakeBalance();
-      this.UserfakeCoins = dataUser.balance;
-    },
-
+    ...mapActions(['RefreshFakeCoins']),
+    ...mapActions(['RefreshBTC']),
+    
     log(selectedBase) {
       UserApiService.log(selectedBase);
     },
     
-    onAuthenticated() {
+    async onAuthenticated() {
       this.isConnected = true;
-      this.fakeUser();
-      this.BTCUser();
+      await this.RefreshBTC();
+      await this.RefreshFakeCoins();
       this.$router.replace('/play');
     }
   }

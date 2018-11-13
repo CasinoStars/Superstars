@@ -30,7 +30,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select m.Profit from sp.tMoney m where m.MoneyType = 1 "
+                    "select m.Profit from sp.tMoney m where m.MoneyTypeId = 1 "
                 );
             }
         }
@@ -40,7 +40,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_connectionString))
             {
                 return await con.QueryAsync<int>(
-                    "select m.Profit from sp.tMoney m where m.MoneyType = 2 "
+                    "select m.Profit from sp.tMoney m where m.MoneyTypeId = 0 "
                 );
             }
         }

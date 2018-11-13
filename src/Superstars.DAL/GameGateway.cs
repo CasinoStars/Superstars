@@ -25,11 +25,12 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> CreateGame(string gameType)
+        public async Task<Result<int>> CreateGame(int userId, string gameType)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
+                p.Add("@UserId", userId);
                 p.Add("@GameType", gameType);
                 p.Add("@StartDate", DateTime.UtcNow);
                 p.Add("@GameId", dbType: DbType.Int32, direction: ParameterDirection.Output);
