@@ -238,6 +238,7 @@ export default {
             await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 'Yams'));
             await this.RefreshBTC();
           }
+          console.log("WTFHAPPENNNNNN")
           modal.style.display = "none";
           this.playerBet = true;
         }
