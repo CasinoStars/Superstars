@@ -17,8 +17,8 @@
             </ul>
       
             <div class="tab-content">
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{BTCMoney}} BTC</h5>
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
+                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{BTCMoney.toLocaleString('en')}} BTC</h5>
+                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress.toLocaleString('en')}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
                 <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeMoney}} all'in</h5>
   <div id="withdrawModal" class="modal">
     <!-- Modal content -->

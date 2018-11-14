@@ -7,8 +7,8 @@
 
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
-          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
         <router-link class="close" to="/play">&times;</router-link>
       </div>
