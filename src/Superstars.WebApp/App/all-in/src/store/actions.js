@@ -43,8 +43,7 @@ export async function executeAsyncRequest({ commit }, asyncCallback) {
 
 export async function RefreshFakeCoins({ commit }) {
     try {
-        var response = await services.GetFakeBalance();
-        commit(types.FAKE_MONEY, response.balance);
+        commit(types.FAKE_MONEY, (await services.GetFakeBalance()).balance.toLocaleString('en'));
     }
     catch (error) {
         commit(types.ERROR_HAPPENED, error.message);
@@ -54,7 +53,7 @@ export async function RefreshFakeCoins({ commit }) {
 
 export async function RefreshBTC({ commit }) {
     try {
-        commit(types.BTC_MONEY, await services.GetTrueBalance());
+        commit(types.BTC_MONEY, (await services.GetTrueBalance()).toLocaleString('en'));
     }
     catch (error) {
         commit(types.ERROR_HAPPENED, error.message);
