@@ -267,6 +267,20 @@ export default {
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
             await this.RefreshBTC();
           }
+      } else {
+        await this.setisingamefalse();
+        await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+         if(this.trueBet === 0) {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
+            await this.RefreshFakeCoins();
+          }
+          else {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
+            await this.RefreshBTC();
+          }
       }
     },
 

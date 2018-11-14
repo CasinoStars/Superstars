@@ -9,7 +9,7 @@ using Superstars.WebApp.Authentication;
 
 namespace Superstars.WebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] 
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class GameController : Controller
     {
