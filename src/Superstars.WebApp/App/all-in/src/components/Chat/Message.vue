@@ -66,7 +66,7 @@ export default {
 </script>
 <style lang="scss">
 .sc-message {
-  width: 300px;
+  width: 500px;
   margin: auto;
   padding-bottom: 10px;
   display: flex;
@@ -97,7 +97,7 @@ export default {
   min-height: 30px;
   border-radius: 50%;
   align-self: center;
-  margin-right: 15px;
+  margin-right: 50px;
 }
 
 .sc-message--meta {

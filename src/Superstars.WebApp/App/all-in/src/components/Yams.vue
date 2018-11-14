@@ -145,7 +145,7 @@ export default {
 
   async mounted() {
     await this.refreshDices();
-    await this.refreshIaDices();
+    setTimeout(await this.refreshIaDices(), 3000);
     await this.changeTurn();
     //IF ISNOT IN GAME
       this.showModal();
@@ -218,6 +218,7 @@ export default {
     
     async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
+
     },
 
     async changeTurn() {
@@ -305,7 +306,7 @@ export default {
         // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-        await this.refreshIaDices();
+        setTimeout(await this.refreshIaDices(), 3000);
       }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
