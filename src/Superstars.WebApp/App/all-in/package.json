@@ -29,6 +29,7 @@
     "webpack-dev-server": "^2.11.2"
   },
   "dependencies": {
+    "@aspnet/signalr": "^1.0.4",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.1.0",
@@ -39,6 +40,7 @@
     "npm": "^6.4.1",
     "popper.js": "^1.14.3",
     "vue": "^2.5.16",
+    "vue-beautiful-chat": "^2.0.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "whatwg-fetch": "^2.0.4"

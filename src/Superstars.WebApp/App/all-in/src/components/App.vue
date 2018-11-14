@@ -77,16 +77,23 @@
       </div>
     </header>
     <router-view></router-view>
+    <chat v-if="auth.isConnected"></chat>
   </div>
 </template>
+<script src="~/lib/signalr/signalr.js"></script>
+
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
 import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
+import Chat from './Chat.vue'
 
 export default{
+  components: {
+    Chat
+  },
   computed: {
     ...mapGetters(['isLoading']),
     ...mapGetters(['BTCMoney']),
@@ -99,6 +106,7 @@ export default{
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
     }
+    
     UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
   },
 

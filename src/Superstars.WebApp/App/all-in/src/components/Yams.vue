@@ -145,7 +145,7 @@ export default {
 
   async mounted() {
     await this.refreshDices();
-    await this.refreshIaDices();
+    setTimeout(await this.refreshIaDices(), 3000);
     await this.changeTurn();
     //IF ISNOT IN GAME
       this.showModal();
@@ -202,6 +202,7 @@ export default {
             await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 0));
             await this.RefreshBTC();
           }
+          console.log("WTFHAPPENNNNNN");
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
@@ -217,6 +218,7 @@ export default {
     
     async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
+
     },
 
     async changeTurn() {
@@ -249,6 +251,20 @@ export default {
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
+            await this.RefreshBTC();
+          }
+      } else {
+        await this.setisingamefalse();
+        await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+         if(this.trueBet === 0) {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
+            await this.RefreshFakeCoins();
+          }
+          else {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
             await this.RefreshBTC();
           }
       }
@@ -290,7 +306,7 @@ export default {
         // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-        await this.refreshIaDices();
+        setTimeout(await this.refreshIaDices(), 3000);
       }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
