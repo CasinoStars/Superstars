@@ -29,45 +29,64 @@ import BlackJackApiService from '../services/BlackJackApiService';
 import Vue from 'vue';
 
 export default {
-
+  data() {
+    return {
+      isInGameYams: false,
+      isInGameBlackJack: false
+    }
+  },
 
   async mounted() {
+    
+    await this.GetisInGame();
     await this.DeleteAis();
+    
   },
 
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
-    async DeleteAis() {
+      async GetisInGame() {
+        this.isInGameYams = await this.executeAsyncRequest(() => GameApiService.isInGame('Yams'))
+        this.isInGameBlackJack = await this.executeAsyncRequest(() => GameApiService.isInGame('BlackJack'));
+      },
 
-      //IF IS NOT INGAME BJ
-      await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-      
-      //IF IS NOT INGAME YAMS
-      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      
+      async DeleteAis() {
 
-      //IF IS NOT INGAME FOR BOTH
+      if(this.isInGameBlackJack != true) {
+         await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+         console.log("condition 1");
+      }
+      
+      if(this.isInGameYams != true) {
+         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+         console.log("condition 2");
+      }
+      
+      if(this.isInGameBlackJack != true && this.isInGameYams != true) {
          await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-      
+         console.log("condition 3");
+      }   
     },
 
     async PlayYams(gametype) {
 
-      //IF IS NOT INGAME YAMS
-          await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
-      
-      try {
-         await this.executeAsyncRequest(() => GameApiService.createAiUser());
-      } catch (error) {
-         console.log(error);
-         alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
-         return;
+      if(this.isInGameYams != true) {
+          await this.executeAsyncRequest(() => GameApiService.createGame(gametype));      
+          await this.executeAsyncRequest(() => GameApiService.createAiUser());
+          await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
+          await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
       }
 
+
+      // } catch (error) {
+      //    console.log(error);
+      //    alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
+      //    return;
+      // }
+
       //IF IS NOT INGAME YAMS
-      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
-      await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
+
 
       //ELSE
       //REPRENDRE LA GAME
@@ -76,21 +95,17 @@ export default {
     },
 
     async PlayBlackJack(gametype) {
-      //IF IS NOT INGAME BJ
+      
+      if(this.isInGameBlackJack != true) {
        await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+       await this.executeAsyncRequest(() => GameApiService.createAiUser());
 
-       try {
-         await this.executeAsyncRequest(() => GameApiService.createAiUser());
-       } catch(error) {
-         alert("Vous devez finir vos parties en cours avant de relancer une autre partie");
-         return;
-       }
-
-       //IF IS NOT INGAME BJ
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.InitIa());
+      }
+
       
         // REPRENDRE LA GAME
       

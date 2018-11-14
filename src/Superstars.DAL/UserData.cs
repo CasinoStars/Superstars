@@ -14,8 +14,5 @@
 
         public string Country { get; set; }
 
-        public int Isingameyams { get; set; }
-
-        public int Isingameblackjack { get; set; }
     }
 }

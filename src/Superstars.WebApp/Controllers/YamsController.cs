@@ -19,16 +19,18 @@ namespace Superstars.WebApp.Controllers
         private readonly YamsGateway _yamsGateway;
         private readonly YamsIAService _yamsIAService;
         private readonly YamsService _yamsService;
+        private readonly GameGateway _gameGateway;
 
 
         public YamsController(YamsGateway yamsGateway, YamsService yamsService, YamsIAService yamsIAService,
-            UserGateway userGateway, PasswordHasher passwordHasher)
+            UserGateway userGateway, GameGateway gameGateway, PasswordHasher passwordHasher)
         {
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
             _yamsService = yamsService;
             _yamsIAService = yamsIAService;
             _passwordHasher = passwordHasher;
+            _gameGateway = gameGateway;
         }
 
 
@@ -170,6 +172,14 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _yamsGateway.CreateYamsPlayer(userId, 0, "12345", 0);
             return this.CreateResult(result);
+        }
+
+        [HttpDelete("deleteYamsPlayer")]
+        public async Task<Result> DeleteYamsPlayer()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            GameData game = await _gameGateway.GetGameByPlayerId(userId, "Yams");
+            return await _yamsGateway.DeleteYamsPlayer(game.GameId);           
         }
 
         // Create a IA YamsPlayer in t.YamsPlayer

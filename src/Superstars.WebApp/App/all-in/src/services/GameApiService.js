@@ -1,4 +1,5 @@
-import { postAsync, deleteAsync, getAsync } from "../helpers/apiHelper";
+import { postAsync, deleteAsync, getAsync, getboolasync, getAsyncNoJSON } from "../helpers/apiHelper";
+import { get } from "https";
 const endpoint = "/api/game";
 
  class GameApiService {
@@ -7,6 +8,14 @@ const endpoint = "/api/game";
 
 async createGame(gametype) {
     return await postAsync(`${endpoint}/${gametype}`);
+}
+
+async deleteGame(gametype) {
+    return await deleteAsync(`${endpoint}/deleteGame/${gametype}`);
+}
+
+async deleteYamsGame() {
+    return await deleteAsync(`${endpoint}/deleteYamsGame`);
 }
 
 async getYamsPot() {
@@ -59,6 +68,16 @@ async getTrueProfitPlayer() {
 
 async getFakeProfitPlayer() {
     return await getAsync(`${endpoint}/getfakeprofitplayer`);
+}
+
+async isInGame(gametype) {
+    var data = await getAsync(`${endpoint}/isInGame/${gametype}`);
+    return data;    
+}
+
+async gameEndUpdate(gametype, win) {
+    console.log("PUTEPUTE");
+    return await postAsync(`${endpoint}/GameEndUpdate/${gametype}/${win}`);
 }
 
 }

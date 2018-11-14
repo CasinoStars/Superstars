@@ -19,7 +19,7 @@ begin
                  return 1;
          end;  
 		 
-      update sp.tStats  set Wins = @Wins, Losses = @Losses where UserId = @UserId and GameType = @GameType;
+      update sp.tStats set Wins = @Wins, Losses = @Losses where UserId = @UserId and GameType = @GameType;
          commit;
       return 0;
 end;

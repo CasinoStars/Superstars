@@ -147,45 +147,5 @@ namespace Superstars.DAL
                     commandType: CommandType.StoredProcedure);
             }
         }
-
-        public async Task<int> GetIsingameyams(int userid)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<int>(
-                    "select u.Isingameyams from sp.vUser u where u.UserId = @UserID",
-                    new {UserID = userid});
-            }
-        }
-
-        public async Task<int> GetIsingameblackjack(int userid)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<int>(
-                    "select u.Isingameblackjack from sp.vUser u where u.UserId = @UserID",
-                    new {UserID = userid});
-            }
-        }
-
-        public async Task UpdateIsingameyams(int userId, int isingame)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                await con.QueryFirstOrDefaultAsync<Task>(
-                    "update sp.tUser set Isingameyams = @Isingameyams where UserId = @UserID",
-                    new {UserID = userId, Isingameyams = isingame});
-            }
-        }
-
-        public async Task UpdateIsingameblackjack(int userId, int isingame)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                await con.QueryFirstOrDefaultAsync<Task>(
-                    "update sp.tUser set Isingameblackjack = @Isingamebj where UserId = @UserID",
-                    new { UserID = userId, Isingamebj = isingame });
-            }
-        }
     }
 }

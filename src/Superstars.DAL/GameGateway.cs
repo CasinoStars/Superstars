@@ -25,6 +25,34 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<GameData> GetGameByPlayerId(int playerId, string gametype)
+        {
+            using ( var con = new SqlConnection(_sqlstring))
+            {
+                return await con.QueryFirstOrDefaultAsync<GameData>(
+                    "select top 1 g.GameId, g.UserId, g.GameType, g.StartDate, g.EndDate, g.Winner from sp.tGames g where g.UserId = @PlayerId and g.GameType = @Gametype order by g.StartDate desc",
+                    new { PlayerId = playerId, Gametype = gametype });
+            }
+        }
+        public async Task<Result> DeleteGameByPlayerId(int playerId, string gametype)
+        {
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result> (
+                    "delete from sp.tGames where UserId = @PlayerId and GameType = @Gametype",
+                    new { PlayerId = playerId, Gametype = gametype });
+            }
+        }
+
+        public async Task<Result> DeleteYamsGameByPlayerId(int gameid)
+        {
+            using (var con = new SqlConnection(_sqlstring))
+            {
+               return await con.QueryFirstOrDefaultAsync<Result>(
+                    "delete from sp.tGameYams  where YamsGameId = @GameID",
+                    new { GameID = gameid });
+            }
+        }
         public async Task<Result<int>> CreateGame(int userId, string gameType)
         {
             using (var con = new SqlConnection(_sqlstring))
@@ -180,27 +208,37 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task UpdateGameEnd(int gameid)
+        public async Task<Result> UpdateGameEnd(int gameid, int userId, string win)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
-                await con.ExecuteAsync(
-                    "sp.sGamesUpdate",
-                    new {GameId = gameid, EndDate = DateTime.UtcNow},
-                    commandType: CommandType.StoredProcedure);
+                var p = new DynamicParameters();
+                p.Add("@GameId", gameid);
+                p.Add("@UserId", userId);
+                p.Add("@EndDate", DateTime.UtcNow);
+                p.Add("@Winner", win);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGamesUpdate", p, commandType: CommandType.StoredProcedure);
+
+                var status = p.Get<int>("@Status");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "Game doesn't exist.");
+
+                return Result.Success(p.Get<int>("@Status"));
             }
         }
 
-        public async Task<Result<int>> IsGameEndDefined(int gameid)
+        public async Task<Result<DateTime>> IsGameEndDefined(int gameid, string gametype)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
-                var data = await con.QueryFirstOrDefaultAsync<int>(
-                    @"select g.EndDate from sp.tGames g where g.GameId = @gameId",
-                    new { gameId = gameid });
+                var data = await con.QueryFirstOrDefaultAsync<DateTime>(
+                    @"select g.EndDate from sp.tGames g where g.GameId = @gameId and g.GameType = @gametype",
+                    new { gameId = gameid, GameType = gametype });
                 return Result.Success(data);
             }
         }
-        
+
+
+
     }
 }

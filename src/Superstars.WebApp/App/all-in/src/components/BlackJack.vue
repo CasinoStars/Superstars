@@ -423,6 +423,7 @@ export default {
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats('BlackJack',this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(this.playerwin,'BlackJack'));
     },
 
     async refreshHandValue() {
