@@ -8,6 +8,6 @@ create table sp.tBlackJackPlayer
 	HandValue int,
 	SecondHandValue int,
 
-	--constraint FK_tBlackJackPlayer_UserId foreign key (BlackJackPlayerId) references sp.tGames(UserId),
+	constraint FK_tBlackJackPlayer_UserId foreign key (BlackJackPlayerId) references sp.tUser(UserId),
 	constraint FK_tBlackJackPlayer_GameId foreign key (BlackJackGameId) references sp.tGames(GameId)
 );

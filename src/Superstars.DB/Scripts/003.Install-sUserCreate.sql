@@ -24,8 +24,9 @@ begin
 	begin
 	insert into sp.tMoney(UserId, MoneyTypeId, Balance, Profit) values(@UserId, 0, 0, 0);
 	insert into sp.tMoney(UserId, MoneyTypeId, Balance, Profit) values(@UserId, 1, 0, 0);
-	insert into sp.tStats(GameType, UserId, Wins, Losses) values('Yams', @UserId, 0, 0);
-	insert into sp.tStats(GameType, UserId, Wins, Losses) values('BlackJack', @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, UserId, Wins, Losses) values(0, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, UserId, Wins, Losses) values(1
+, @UserId, 0, 0);
 	end;
 	commit;
 	return 0;

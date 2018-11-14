@@ -6,8 +6,8 @@ const endpoint = "/api/game";
    constructor() {
 }
 
-async createGame(gametype) {
-    return await postAsync(`${endpoint}/${gametype}`);
+async createGame(gameTypeId) {
+    return await postAsync(`${endpoint}/${gameTypeId}`);
 }
 
 async deleteGame(gametype) {
@@ -34,16 +34,16 @@ async createAiUser() {
     return await postAsync(`${endpoint}/createAiUser`);
 }
 
-async UpdateStats(gametype, win) {
-    return await postAsync(`${endpoint}/${gametype}/UpdateStats`, win);
+async UpdateStats(gameTypeId, win) {
+    return await postAsync(`${endpoint}/${gameTypeId}/UpdateStats`, win);
 }
 
-async BetBTC(bet, gameType) {
-    return await postAsync(`${endpoint}/${bet}/${gameType}/betBTC`);
+async BetBTC(bet, gameTypeId) {
+    return await postAsync(`${endpoint}/${bet}/${gameTypeId}/betBTC`);
 }
 
-async BetFake(bet, gameType) {
-    return await postAsync(`${endpoint}/${bet}/${gameType}/betFake`);
+async BetFake(bet, gameTypeId) {
+    return await postAsync(`${endpoint}/${bet}/${gameTypeId}/betFake`);
 }
 
 async getWinsBlackJackPlayer() {

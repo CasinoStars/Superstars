@@ -2,14 +2,14 @@
   <div id="home">
     <div class="games">
       <div class="yams">
-        <router-link v-on:click.native="PlayYams('Yams')" to="">
+        <router-link v-on:click.native="PlayYams(0)" to="">
           <img src="../img/LOGO1.png" alt="yams" class="imgyams">
         </router-link>
         <img src="../img/LOGO2.png" alt="textyams" class="textyams">
       </div>
       
       <div class="blackjack">
-      <router-link v-on:click.native="PlayBlackJack('BlackJack')" to="">
+      <router-link v-on:click.native="PlayBlackJack(1)" to="">
         <img src="../img/LOGO3.png" alt="blackjack" class="imgblackjack">
       </router-link>
       <img src="../img/LOGO4.png" alt="textbj" class="textbj">
@@ -69,7 +69,7 @@ export default {
       }   
     },
 
-    async PlayYams(gametype) {
+    async PlayYams(gameTypeId) {
 
       if(this.isInGameYams != true) {
           await this.executeAsyncRequest(() => GameApiService.createGame(gametype));      
