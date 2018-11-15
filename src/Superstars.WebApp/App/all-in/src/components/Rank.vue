@@ -1,11 +1,21 @@
 <template>
-    <div>
-      <br><br>
-        <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-          <h1 style="font-variant: small-caps; font-size: 45px;"> <strong>Classement</strong></h1>
-        </div>
-  <br><br>
-  <button v-on:click="SwapTrueOrFake()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">Vrai Argent / Faux Argent</button>
+  <div class="rank">
+    <br><br>
+    <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
+        <h1 style="font-variant: small-caps; font-size: 45px;">
+      <i class="fa fa-chevron-left" @click="SwapTrueOrFake()" id="chevron"></i>
+
+          <strong v-if="TrueOrFake">Classement En Bits</strong>
+          <strong v-else>Classement En FakeCoins</strong>
+      <i class="fa fa-chevron-right" @click="SwapTrueOrFake()" id="chevron"></i>
+        </h1>
+    </div>
+    <div style="margin-left: 50%;">
+    <div v-if="TrueOrFake" id="blueCircle"><div v-if="TrueOrFake" style="margin-top: -2px; margin-left:10px;" id="whiteCircle"></div></div>
+    <div v-if="!TrueOrFake" id="whiteCircle"><div v-if="!TrueOrFake" style="margin-top: -2px; margin-left:10px;" id="blueCircle"></div></div>
+    </div>
+    
+    <br><br>
 
 <table v-if=TrueOrFake>
   <tr>
@@ -17,7 +27,7 @@
   <tr>
     <th>
     <div v-for="(e,index) of pseudos" :key='index'>
-       <td>{{e}}</td>
+       <td><router-link style="color: white;" class="nav-link" :to="'/statistics?pseudo='+e"> {{e}} </router-link></td>
     </div>
     </th>
     <th>
@@ -52,7 +62,7 @@
     </th>
     <th>
     <div v-for="(e,index) of profits" :key='index'>
-       <td>{{e}}</td>
+      <td>{{e}}</td>
     </div>
     </th>
      <th>
@@ -123,7 +133,31 @@ export default {
 }
 </script>
 
- <style>
- 
+ <style lang="css">
+ .rank .nav-link:hover {
+  opacity: 0.5;
+}
+ .rank #chevron {
+   color: gray;
+   font-size: 50%;
+ }
+ .rank #chevron:hover {
+    cursor: pointer;
+    opacity: 0.5;
+ }
+ .rank #blueCircle {
+  background:#f1f3f3;
+  border-radius:40%;
+  width:10px;
+  height:10px;
+  border:2px solid #0e97d7;
+}
+  .rank #whiteCircle {
+      background:#f1f3f3;
+  border-radius:40%;
+  width:10px;
+  height:10px;
+  border:2px solid #81888b;
+}
  </style>
  

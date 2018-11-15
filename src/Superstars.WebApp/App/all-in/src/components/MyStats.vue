@@ -54,6 +54,7 @@
 import { mapActions } from 'vuex';
 import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
+import UserApiService from '../services/UserApiService';
 import Chart from 'chart.js';
 
 export default {
@@ -68,14 +69,18 @@ export default {
             playerratioy: 0,
             playerratioynum: 0,
             playerratiobjnum: 0,
-            playernbgamesy: 0
+            playernbgamesy: 0,
+            queryPseudo: '',
         }
     },
 
   async mounted() {
+    if(this.$route.query.pseudo)
+      this.queryPseudo = this.$route.query.pseudo;
+    else
+      this.queryPseudo = UserApiService.pseudo;
     await this.refreshBlackJackstats();
     await this.refreshYamsstats();
-
 new Chart(document.getElementById("pie-chart"), {
     type: 'pie',
     data: {
@@ -111,7 +116,6 @@ new Chart(document.getElementById("pie-chart2"), {
       }
     }
 });
-
   },
 
     
@@ -119,8 +123,8 @@ new Chart(document.getElementById("pie-chart2"), {
     ...mapActions(['executeAsyncRequest']),
 
     async refreshBlackJackstats() {
-      this.playerwinsbj = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer());
-      this.playerlossesbj = await this.executeAsyncRequest(() => GameApiService.getLossesBlackJackPlayer());
+      this.playerwinsbj = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer(this.queryPseudo));
+      this.playerlossesbj = await this.executeAsyncRequest(() => GameApiService.getLossesBlackJackPlayer(this.queryPseudo));
       this.playernbgamesbj = this.playerwinsbj + this.playerlossesbj;
       this.playerratiobj = this.playerwinsbj / (this.playerwinsbj + this.playerlossesbj);
       this.playerratiobjnum = this.playerratiobj.toFixed(3) * 100;
@@ -131,8 +135,8 @@ new Chart(document.getElementById("pie-chart2"), {
     },
 
         async refreshYamsstats() {
-      this.playerwinsy = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer());
-      this.playerlossesy = await this.executeAsyncRequest(() => GameApiService.getLossesYamsPlayer());
+      this.playerwinsy = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer(this.queryPseudo));
+      this.playerlossesy = await this.executeAsyncRequest(() => GameApiService.getLossesYamsPlayer(this.queryPseudo));
       this.playernbgamesy = this.playerwinsy + this.playerlossesy;
       this.playerratioy = this.playerwinsy / (this.playerwinsy + this.playerlossesy);
       this.playerratioynum = this.playerratioy.toFixed(3) * 100;
