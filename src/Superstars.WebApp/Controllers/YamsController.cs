@@ -178,7 +178,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<Result> DeleteYamsPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            GameData game = await _gameGateway.GetGameByPlayerId(userId, "Yams");
+            GameData game = await _gameGateway.GetGameByPlayerId(userId, 0);
             return await _yamsGateway.DeleteYamsPlayer(game.GameId);           
         }
 

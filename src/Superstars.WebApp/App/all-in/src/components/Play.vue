@@ -47,8 +47,8 @@ export default {
     ...mapActions(['executeAsyncRequest']),
 
       async GetisInGame() {
-        this.isInGameYams = await this.executeAsyncRequest(() => GameApiService.isInGame('Yams'))
-        this.isInGameBlackJack = await this.executeAsyncRequest(() => GameApiService.isInGame('BlackJack'));
+        this.isInGameYams = await this.executeAsyncRequest(() => GameApiService.isInGame(0))
+        this.isInGameBlackJack = await this.executeAsyncRequest(() => GameApiService.isInGame(1));
       },
 
       async DeleteAis() {
@@ -72,7 +72,7 @@ export default {
     async PlayYams(gameTypeId) {
 
       if(this.isInGameYams != true) {
-          await this.executeAsyncRequest(() => GameApiService.createGame(gametype));      
+          await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));      
           await this.executeAsyncRequest(() => GameApiService.createAiUser());
           await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
           await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
@@ -94,10 +94,10 @@ export default {
       this.$router.push({ path: 'yams' });
     },
 
-    async PlayBlackJack(gametype) {
+    async PlayBlackJack(gameTypeId) {
       
       if(this.isInGameBlackJack != true) {
-       await this.executeAsyncRequest(() => GameApiService.createGame(gametype));
+       await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));
        await this.executeAsyncRequest(() => GameApiService.createAiUser());
 
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());

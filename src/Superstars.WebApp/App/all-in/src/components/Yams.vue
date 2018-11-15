@@ -145,7 +145,7 @@ export default {
   },
 
   async mounted() {
-    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame('Yams'));
+    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(0));
     await this.refreshDices();
     await this.refreshIaDices();
     await this.changeTurn();
@@ -172,7 +172,7 @@ export default {
     async RedirectandDelete() {
       await this.executeAsyncRequest(() => YamsApiService.DeleteYamsPlayer());
       //await this.executeAsyncRequest(() => GameApiService.deleteYamsGame());
-      await this.executeAsyncRequest(() => GameApiService.deleteGame('Yams'));
+      await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
       this.$router.push({ path: 'play' });
     },
 
@@ -239,8 +239,8 @@ export default {
     },
 
     async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats('Yams',this.playerwin));
-        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate('Yams',this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(0,this.playerwin));
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
     },
@@ -287,7 +287,7 @@ export default {
     async RePlay() {
       await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
       await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-      await this.executeAsyncRequest(() => GameApiService.createGame('Yams'));
+      await this.executeAsyncRequest(() => GameApiService.createGame(0));
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());

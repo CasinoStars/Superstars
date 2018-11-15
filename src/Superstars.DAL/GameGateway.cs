@@ -25,22 +25,50 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<GameData> GetGameByPlayerId(int playerId, string gametype)
+        public async Task<GameData> GetGameByPlayerId(int playerId, int gametype)
         {
-            using ( var con = new SqlConnection(_sqlstring))
+            if(gametype == 0)
             {
-                return await con.QueryFirstOrDefaultAsync<GameData>(
-                    "select top 1 g.GameId, g.UserId, g.GameType, g.StartDate, g.EndDate, g.Winner from sp.tGames g where g.UserId = @PlayerId and g.GameType = @Gametype order by g.StartDate desc",
-                    new { PlayerId = playerId, Gametype = gametype });
+                using (var con = new SqlConnection(_sqlstring))
+                {
+                    return await con.QueryFirstOrDefaultAsync<GameData>(
+                        "select top 1 g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g left join sp.tYamsPlayer y on g.GameId = y.YamsGameId where y.YamsPlayerId = @PlayerId and g.GameTypeId = @Gametype order by g.StartDate desc",
+                        new { PlayerId = playerId, Gametype = gametype });
+                }
+            } else if (gametype == 1) {
+
+                using (var con = new SqlConnection(_sqlstring))
+                {
+                    return await con.QueryFirstOrDefaultAsync<GameData>(
+                        "select top 1 g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.BlackJackGameId where b.BlackJackPlayerId = @PlayerId and g.GameTypeId = @Gametype order by g.StartDate desc",
+                        new { PlayerId = playerId, Gametype = gametype });
+                }
             }
+            throw new Exception("Gametype is not defined");
         }
-        public async Task<Result> DeleteGameByPlayerId(int playerId, string gametype)
+        public async Task<Result> DeleteGameByPlayerId(int playerId, int gametype)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            if(gametype == 0)
             {
-                return await con.QueryFirstOrDefaultAsync<Result> (
-                    "delete from sp.tGames where UserId = @PlayerId and GameType = @Gametype",
-                    new { PlayerId = playerId, Gametype = gametype });
+                using (var con = new SqlConnection(_sqlstring))
+                {
+                    return await con.QueryFirstOrDefaultAsync<Result>(
+                        "delete g from sp.tGames g left join sp.tYamsPlayer y on g.GameId = y.YamsGameId where y.YamsPlayerId = @PlayerId and g.GameTypeId = @GametypeId",
+                        new { PlayerId = playerId, GametypeId = gametype });
+                }
+            }
+            else if(gametype == 1)
+            {
+                using (var con = new SqlConnection(_sqlstring))
+                {
+                    return await con.QueryFirstOrDefaultAsync<Result>(
+                        "delete g from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.YamsGameId where b.YamsPlayerId = @PlayerId and g.GameTypeId = @GametypeId",
+                        new { PlayerId = playerId, GametypeId = gametype });
+                }
+            }
+            else
+            {
+                throw new Exception("Gametype is not defined");
             }
         }
 
@@ -207,13 +235,13 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result> UpdateGameEnd(int gameid, int userId, string win)
+        public async Task<Result> UpdateGameEnd(int gameid, int gametypeId, string win)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameId", gameid);
-                p.Add("@UserId", userId);
+                p.Add("@GameTypeId", gametypeId);
                 p.Add("@EndDate", DateTime.UtcNow);
                 p.Add("@Winner", win);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);

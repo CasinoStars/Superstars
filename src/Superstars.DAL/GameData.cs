@@ -6,14 +6,12 @@ namespace Superstars.DAL
     {
         public int GameId { get; set; }
 
-        public int UserId { get; set; }
-
-        public string GameType { get; set; }
+        public int GameTypeId { get; set; }
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
-        public int ResultWinner { get; set; }
+        public string Winner { get; set; }
     }
 }
