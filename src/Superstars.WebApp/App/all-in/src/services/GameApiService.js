@@ -18,6 +18,10 @@ async deleteYamsGame() {
     return await deleteAsync(`${endpoint}/deleteYamsGame`);
 }
 
+async deleteBlackJackGame() {
+    return await deleteAsync(`${endpoint}/deleteBlackJackGame`);
+}
+
 async getYamsPot() {
     return await getAsync(`${endpoint}/getYamsPot`);
 }

@@ -224,6 +224,15 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
+
+        //[HttpDelete("cancelBlackJack")]
+        //public async Task<Result> DeleteBlackJackPlayer()
+        //{
+        //    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        //    int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userId, 1);
+        //    return await _blackJackGateway.DeleteBlackJackPlayer(gameId);
+        //}
+
         [HttpDelete("deleteGame/{gametype}")]
         public async Task<Result> deleteGame(int gametype)
         {
@@ -232,12 +241,19 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpDelete("deleteYamsGame")]
-        public async Task<IActionResult> deleteYamsGame()
+        public async Task<Result> deleteYamsGame()
         {
             var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            GameData gamedata = await _gameGateway.GetGameByPlayerId(userid, 0);
-            var res = await _gameGateway.DeleteYamsGameByPlayerId(gamedata.GameId);
-            return this.CreateResult(res);
+            int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userid, 0);
+            return await _gameGateway.DeleteYamsGameByGameId(gameId);           
+        }
+
+        [HttpDelete("deleteBlackJackGame")]
+        public async Task<Result> deleteBlackJackGame()
+        {
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userid, 1);
+            return await _gameGateway.DeleteBlackJackGameByGameId(gameId);         
         }
 
         [HttpGet("isInGame/{gametype}")]
@@ -255,17 +271,21 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("GameEndUpdate/{gametype}/{win}")]
-        public async Task<IActionResult> GameEndUpdate(int gametype, bool win)
+        public async Task<IActionResult> GameEndUpdate(int gametype, string win)
         {
             var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             GameData data = await _gameGateway.GetGameByPlayerId(userid,gametype);
             UserData udata = await _userGateway.FindById(userid);
             Result result;
-            if (win)
+            if (win == "Player")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
             }
-            else
+            else if (win == "Draw")
+            {
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Draw");
+
+            } else
             {
                 var IA = await _userGateway.FindByName("#AI" + userid);
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid);

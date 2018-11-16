@@ -14,13 +14,15 @@ namespace Superstars.WebApp.Controllers
         private readonly BlackJackGateway _blackJackGateway;
         private readonly BlackJackService _blackJackService;
         private readonly UserGateway _userGateway;
+        private readonly GameGateway _gameGateway;
 
         public BlackJackController(BlackJackService blackJackService, BlackJackGateway blackJackGateway,
-            UserGateway userGateway)
+            UserGateway userGateway, GameGateway gameGateway)
         {
             _blackJackGateway = blackJackGateway;
             _userGateway = userGateway;
             _blackJackService = blackJackService;
+            _gameGateway = gameGateway;
         }
 
         // Create a BlackJackPlayer in t.BlackJackPlayer
@@ -31,6 +33,14 @@ namespace Superstars.WebApp.Controllers
             Result result = await _blackJackGateway.CreateJackPlayer(userId, 0);
             return this.CreateResult(result);
         }
+
+        //[HttpDelete("deleteBlackJackPlayer")]
+        //public async Task<Result> DeleteBlackJackPlayer()
+        //{
+        //    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        //    int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userId, 1);
+        //    return await _blackJackGateway.DeleteBlackJackPlayer(gameId);
+        //}
 
         // Create a IA BlackJackPlayer in t.BlackJackPlayer
         [HttpPost("CreateAi")]

@@ -35,7 +35,15 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@BlackJackPlayerId"));
             }
         }
-
+        public async Task<Result> DeleteBlackJackPlayer(int gameid)
+        {
+            using (var con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result>(
+                    "delete from sp.tBlackJackPlayer where BlackJackGameId = @GameID",
+                    new { GameID = gameid });
+            }
+        }
         public async Task<Result<int>> CreateJackAi(int userId, int nbturn, string[] cards = null)
         {
             using (var con = new SqlConnection(_connectionString))

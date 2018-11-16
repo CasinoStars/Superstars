@@ -25,6 +25,33 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<int> GetGameIdToDeleteByPlayerId(int playerId, int gametype)
+        {
+            if (gametype == 0)
+            {
+                using (var con = new SqlConnection(_sqlstring))
+                {
+                    return await con.QueryFirstOrDefaultAsync<int>( 
+                        "select top 1 y.YamsGameId from sp.tYamsPlayer y where y.YamsPlayerId = @PlayerId",
+                        new { PlayerId = playerId});
+                }
+            }
+            else if (gametype == 1)
+            {
+
+                using (var con = new SqlConnection(_sqlstring))
+                {
+                    return await con.QueryFirstOrDefaultAsync<int>(
+                       "select top 1 b.BlackJackGameId from sp.tBlackJackPlayer b where b.BlackJackPlayerId = @PlayerId",
+                        new { PlayerId = playerId });
+                }
+            }
+            else
+            {
+                throw new Exception("PRoblem");
+            }
+        }
+
         public async Task<GameData> GetGameByPlayerId(int playerId, int gametype)
         {
             if(gametype == 0)
@@ -43,9 +70,12 @@ namespace Superstars.DAL
                         "select top 1 g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.BlackJackGameId where b.BlackJackPlayerId = @PlayerId and g.GameTypeId = @Gametype order by g.StartDate desc",
                         new { PlayerId = playerId, Gametype = gametype });
                 }
+            } else
+            {
+                throw new Exception("Gametype is not defined");
             }
-            throw new Exception("Gametype is not defined");
         }
+
         public async Task<Result> DeleteGameByPlayerId(int playerId, int gametype)
         {
             if(gametype == 0)
@@ -62,7 +92,7 @@ namespace Superstars.DAL
                 using (var con = new SqlConnection(_sqlstring))
                 {
                     return await con.QueryFirstOrDefaultAsync<Result>(
-                        "delete g from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.YamsGameId where b.YamsPlayerId = @PlayerId and g.GameTypeId = @GametypeId",
+                        "delete g from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.BlackJackGameId where b.BlackJackPlayerId = @PlayerId and g.GameTypeId = @GametypeId",
                         new { PlayerId = playerId, GametypeId = gametype });
                 }
             }
@@ -72,13 +102,23 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result> DeleteYamsGameByPlayerId(int gameid)
+        public async Task<Result> DeleteYamsGameByGameId(int gameid)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                return await con.QueryFirstOrDefaultAsync<Result>(
-                    "delete from sp.tGameYams  where YamsGameId = @GameID",
+                    "delete from sp.tGameYams where YamsGameId = @GameID",
                     new { GameID = gameid });
+            }
+        }
+
+        public async Task<Result> DeleteBlackJackGameByGameId(int gameid)
+        {
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result>(
+                     "delete from sp.tBlackJackPlayer where BlackJackGameId = @GameID",
+                     new { GameID = gameid });
             }
         }
         public async Task<Result<int>> CreateGame(int gameTypeId)

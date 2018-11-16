@@ -133,7 +133,7 @@ export default {
       playerFigure: '',
       IaFigure: '',
       wait: '',
-      playerwin: false,
+      playerwin: '',
       playerBet: false,
       realOrFake: 'real',
       profit: 0,
@@ -150,8 +150,8 @@ export default {
     await this.refreshIaDices();
     await this.changeTurn();
 
-    this.pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
-    if(this.pot == 0) {
+    var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+    if(pot == 0) {
       this.showModal();
     } else {
       this.playerBet = true;
@@ -170,7 +170,6 @@ export default {
     ...mapActions(['RefreshBTC']),
     
     async RedirectandDelete() {
-      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsPlayer());
       //await this.executeAsyncRequest(() => GameApiService.deleteYamsGame());
       await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
       this.$router.push({ path: 'play' });
@@ -252,10 +251,11 @@ export default {
       this.winOrLose = tableResult[2];
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
       if(this.winOrLose == "You Lose") {
+          this.playerwin = 'AI';
           await this.updateStats();
       }
       else if(this.winOrLose == "You Win"){
-        this.playerwin = true;
+        this.playerwin = 'Player';
         await this.updateStats();
           if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
@@ -268,7 +268,6 @@ export default {
             await this.RefreshBTC();
           }
       } else {
-        await this.setisingamefalse();
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis());
          if(this.trueBet === 0) {
