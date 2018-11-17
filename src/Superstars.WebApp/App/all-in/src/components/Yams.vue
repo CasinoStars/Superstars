@@ -241,7 +241,7 @@ export default {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
         await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(0,this.playerwin));
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
     },
 
     async getFinalResult() {
@@ -269,7 +269,7 @@ export default {
           }
       } else {
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
@@ -285,7 +285,7 @@ export default {
 
     async RePlay() {
       await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
       await this.executeAsyncRequest(() => GameApiService.createGame(0));
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());

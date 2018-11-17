@@ -10,7 +10,7 @@ create proc sp.sBlackJackAICreate
 )
 as
 	declare @BlackJackPlayerId int;
-	set @BlackJackPlayerId = (select t.UserId from sp.tUser t where t.UserName = (select CONCAT('#AI', @UserId) AS ConcatenatedString));
+	set @BlackJackPlayerId = (select t.UserId from sp.tUser t where t.UserName = (select CONCAT('#AI', CONVERT(VARCHAR, @UserId) + CONVERT(VARCHAR, 1)) AS ConcatenatedString));
 	declare @BlackJackGameId int;
 	set @BlackJackGameId = (select top 1 GameId from sp.tGames order by StartDate desc);
 

@@ -30,12 +30,12 @@ async getBlackJackPot() {
     return await getAsync(`${endpoint}/getBlackJackPot`);
 }
 
-async DeleteAis() {
-    return await deleteAsync(`${endpoint}/DeleteAis`);
+async DeleteAis(gameTypeId) {
+    return await deleteAsync(`${endpoint}/${gameTypeId}/DeleteAis`);
 }
 
-async createAiUser() {
-    return await postAsync(`${endpoint}/createAiUser`);
+async createAiUser(gameTypeId) {
+    return await postAsync(`${endpoint}/createAiUser`,gameTypeId);
 }
 
 async UpdateStats(gameTypeId, win) {

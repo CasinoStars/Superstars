@@ -266,9 +266,7 @@ export default {
     this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(1));
     var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
-    await this.refreshCards();
-    await this.refreshHandValue();
-    await this.CheckWinner();
+
     this.refreshiaturn();
     console.log("POT " + pot);
     console.log("nbturn " + this.nbturn);
@@ -277,6 +275,9 @@ export default {
       this.showModal();
     } else {   
       this.playerBet = true;
+      await this.CheckWinner();
+      await this.refreshCards();
+      await this.refreshHandValue(); 
     }
   },
 
@@ -327,15 +328,17 @@ export default {
         try {
           if(this.realOrFake === 'fake') {
             await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 1));
-            await this.RefreshFakeCoins();
+            await this.RefreshFakeCoins(); 
           }
           else {
             await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 1));
-            await this.RefreshBTC();
+            await this.RefreshBTC(); 
           }
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
+          await this.refreshCards();
+          await this.refreshHandValue();
         }
         catch(error) {
         }
@@ -442,7 +445,7 @@ export default {
           }
           await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin));
           await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-          await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+          await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
           return;
         }
         this.updateStats();
@@ -453,7 +456,7 @@ export default {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats(1,this.playerwin));
         await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin));
         await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());        
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));        
     },
 
     async refreshHandValue() {

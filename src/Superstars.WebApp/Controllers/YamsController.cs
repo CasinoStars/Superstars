@@ -40,7 +40,7 @@ namespace Superstars.WebApp.Controllers
         {
             // Get IA data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var IA = await _userGateway.FindByName("#AI" + userId);
+            var IA = await _userGateway.FindByName("#AI" + userId.ToString() + "0");
             var data = await _yamsGateway.GetPlayer(IA.UserId);
 
             // Roll new dices
@@ -111,7 +111,7 @@ namespace Superstars.WebApp.Controllers
         {
             // Get data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var Ia = await _userGateway.FindByName("#AI" + userId);
+            var Ia = await _userGateway.FindByName("#AI" + userId + "0");
             var playerData = await _yamsGateway.GetPlayer(userId);
             var IaData = await _yamsGateway.GetPlayer(Ia.UserId);
 
@@ -147,7 +147,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetIaDices()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId);
+            var user = await _userGateway.FindByName("#AI" + userId + "0");
             var data = await _yamsGateway.GetGameId(userId);
 
             var result = await _yamsGateway.GetIaDices(user.UserId, data.YamsGameId);

@@ -102,7 +102,7 @@ namespace Superstars.WebApp.Controllers
         {
             // Get data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId);
+            var user = await _userGateway.FindByName("#AI" + userId + "1");
             var data = await _blackJackGateway.GetPlayer(user.UserId);
 
             // Draw one card for IA hand
@@ -236,7 +236,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<string> GetAiCards()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId);
+            var user = await _userGateway.FindByName("#AI" + userId + "1");
             var data = await _blackJackGateway.GetPlayer(user.UserId);
             var playercards = await _blackJackGateway.GetPlayerCards(user.UserId, data.BlackJackGameId);
             return playercards;
@@ -276,7 +276,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<int> GetAiHandValue()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId);
+            var user = await _userGateway.FindByName("#AI" + userId + "1");
             var data = await _blackJackGateway.GetGameId(user.UserId);
             var handv = await _blackJackGateway.GetPlayerHandValue(user.UserId, data.BlackJackGameId);
             return handv;
@@ -350,7 +350,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> PlayAi()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId);
+            var user = await _userGateway.FindByName("#AI" + userId + "1");
             var data = await _blackJackGateway.GetPlayer(user.UserId);
 
             if (_blackJackService._dealerTurn)

@@ -8,7 +8,7 @@ create proc sp.sYamsAICreate
 )
 as
 	declare @YamsPlayerId int;
-	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = (select CONCAT('#AI', @UserId) AS ConcatenatedString));
+	set @YamsPlayerId = (select t.UserId from sp.tUser t where t.UserName = (select CONCAT('#AI',CONVERT(VARCHAR, @UserId) + CONVERT(VARCHAR, 0)) AS ConcatenatedString));
 	declare @GameId int;
 	set @GameId = (select top 1 GameId from sp.tGames order by StartDate desc);
 

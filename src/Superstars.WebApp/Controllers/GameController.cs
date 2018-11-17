@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NBitcoin;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 
@@ -108,19 +109,21 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("createAiUser")]
-        public async Task<IActionResult> CreateAiUser()
+        public async Task<IActionResult> CreateAiUser([FromBody]int gametypeid)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _userGateway.CreateUser("#AI" + userId,
-                _passwordHasher.HashPassword("azertyuiop" + userId), "", "");
+            var privateKey = new Key().GetBitcoinSecret(Network.TestNet);
+            var privateKeyString = privateKey.ToString();
+            var result = await _userGateway.CreateUser("#AI" + userId + gametypeid.ToString(),
+                _passwordHasher.HashPassword("azertyuiop" + userId), "", privateKeyString);
             return this.CreateResult(result);
         }
 
-        [HttpDelete("DeleteAis")]
-        public async Task<IActionResult> DeleteAI()
+        [HttpDelete("{gametypeid}/DeleteAis")]
+        public async Task<IActionResult> DeleteAI(int gametypeid)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.DeleteAis(userId);
+            Result result = await _gameGateway.DeleteAis(userId, gametypeid);
             return this.CreateResult(result);
         }
 
@@ -133,7 +136,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("{gameTypeId}/UpdateStats")]
-        public async Task<Result> UpdateStats(int gameTypeId, [FromBody] bool win)
+        public async Task<Result> UpdateStats(int gameTypeId, [FromBody] string win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result1 = await _gameGateway.GetWins(userId, gameTypeId);
@@ -152,10 +155,15 @@ namespace Superstars.WebApp.Controllers
 
             var wins = result1.Content;
             var losses = result2.Content;
-            if (win)
+            if (win == "Player")
+            {
                 wins = wins + 1;
-            else
-                losses = losses + 1;
+            }
+            else if(win == "AI")
+            {
+              losses = losses + 1;
+            }
+
             var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses);
             return Result.Success(result3);
         }
@@ -297,8 +305,8 @@ namespace Superstars.WebApp.Controllers
 
             } else
             {
-                var IA = await _userGateway.FindByName("#AI" + userid);
-                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid);
+                var IA = await _userGateway.FindByName("#AI" + userid + gametype.ToString());
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid + gametype.ToString());
             }
 
             return this.CreateResult(result);

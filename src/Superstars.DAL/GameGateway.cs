@@ -276,12 +276,13 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> DeleteAis(int userId)
+        public async Task<Result<int>> DeleteAis(int userId, int gametypeid)
         {
             using (var con = new SqlConnection(_sqlstring))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
+                p.Add("@GameType", gametypeid);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sUserAIDelete", p, commandType: CommandType.StoredProcedure);
 
