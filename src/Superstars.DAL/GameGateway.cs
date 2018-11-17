@@ -141,6 +141,87 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task ActionStartGameFake(int userid, string username, DateTime date, string gametype, int gameid)
+        {
+            Result<string> pot;
+            int bet = 0;
+            if (gametype == "Yams")
+            {
+                pot = await GetYamsPot(gameid);
+                bet = Convert.ToInt32(pot.Content);
+                bet = bet / 2;
+            }
+            else
+            {
+                pot = await GetBlackJackPot(gameid);
+                bet = Convert.ToInt32(pot.Content);
+                bet = bet / 2;
+            }
+
+            string action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid +
+                " and a bet of " + bet + " All`in Coins at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionStartGameBTC(int userid, string username, DateTime date, string gametype, int gameid)
+        {
+            Result<string> pot;
+            decimal bet;
+
+            if (gametype == "Yams")
+            { 
+                pot = await GetYamsPot(gameid);
+                bet = Convert.ToDecimal(pot.Content);
+                bet = bet/2;
+            } else {
+                pot = await GetBlackJackPot(gameid);
+                bet = Convert.ToDecimal(pot.Content);
+                bet = bet/2;
+            }
+
+            string action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid + 
+                " and a bet of " + bet + " bits (BTC) at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionEndGame(int userid, string username, DateTime date, string gametype, int gameid, bool haswin, bool trueOrFake)
+        {
+            Result<string> pot;
+            decimal bet;
+
+            if (gametype == "Yams")
+            {
+                pot = await GetYamsPot(gameid);
+                bet = Convert.ToDecimal(pot.Content);
+                bet = bet / 2;
+            }
+            else
+            {
+                pot = await GetBlackJackPot(gameid);
+                bet = Convert.ToDecimal(pot.Content);
+                bet = bet / 2;
+            }
+
+            string action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
+                " and has " + haswin + " a bet of " + bet + " bits (BTC) at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task<Result<string>> GetYamsPot(int gameId)
         {
             using (var con = new SqlConnection(_sqlstring))
