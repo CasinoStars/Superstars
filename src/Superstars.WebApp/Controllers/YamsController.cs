@@ -67,12 +67,7 @@ namespace Superstars.WebApp.Controllers
             //Update SQL
             Result result =
                 await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
-            var timer = new Stopwatch();
-            timer.Start();
-            while (timer.Elapsed.TotalSeconds < 3)
-            {
-                //Waitting for Ia RollDices
-            }
+
 
             return this.CreateResult(result);
         }

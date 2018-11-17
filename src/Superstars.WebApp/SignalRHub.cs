@@ -9,9 +9,9 @@ namespace Superstars.WebApp
 {
     public class SignalRHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage()
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            if (Clients != null) await Clients.All.SendAsync("Send", "loltest");
         }
     }
 }

@@ -17,8 +17,8 @@
             </ul>
       
             <div class="tab-content">
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{BTCMoney}} BTC</h5>
-                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
+                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{BTCMoney.toLocaleString('en')}} BTC</h5>
+                <h5 style="color: white" v-if="this.wallet == 'real'"><span style="font-weight: bold; font-style: italic;">Adresse de dépots BTC:</span><br>{{BTCAddress.toLocaleString('en')}} <a style="cursor: pointer;" @click="Copy()"><i class="fa fa-files-o"></i></a><br><br></h5>
                 <h5 style="color: white" v-else><span style="font-weight: bold; font-style: italic;">Solde du compte:</span><br>{{fakeMoney}} all'in</h5>
   <div id="withdrawModal" class="modal">
     <!-- Modal content -->
@@ -143,32 +143,41 @@ export default {
     },
 
     closeModal() {
-        withdrawModal.style.display = "none";
+      withdrawModal.style.display = "none";
+    },
+
+    async IsValidAddress(item) {
+      return this.executeAsyncRequest(() =>
+        WalletApiService.IsValidAddress(this.item).then(r => r.json())
+      );
     },
 
     async Withdraw(e) {
       e.preventDefault();
       var errors = [];
+      var isValid = await this.IsValidAddress(this.item);
       if (this.item.AmountToSend < 100000)
         errors.push("Le retrait minimum est de 100,000 bits");
       else if (this.BTCMoney < this.item.AmountToSend)
         errors.push("Vous n'avez pas cette somme");
-
+      else if (isValid === false) {
+        errors.push("L'adresse Bitcoin est invalide");
+      }
+      console.log(isValid + " ISVALIDDDD");
 
       this.errors = errors;
       if (errors.length === 0) {
         try {
           this.Responses = await this.executeAsyncRequest(() =>
             WalletApiService.Withdraw(this.item)
-            
           );
+
           await this.RefreshBTC();
         } catch (error) {}
-         if(Response != null)this.showModal();
-
+        this.showModal();
       }
     },
- 
+
     Copy() {
       navigator.clipboard.writeText(this.BTCAddress);
     },
@@ -294,7 +303,7 @@ $br: 4px;
 .wallet .modal-body {
   padding: 20px 16px;
   text-align: center;
-  color : white;
+  color: white;
 }
 
 .wallet .modal-footer {

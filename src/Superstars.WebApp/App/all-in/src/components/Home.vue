@@ -5,6 +5,10 @@
             <h1>Bienvenue sur ALL`IN</h1>
         </div>
     </header>
+        <div class="warning slide bg-danger" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
+           <p1> <br>Attention, le casino est actuellement en développement et utilise la <a href="https://en.bitcoin.it/wiki/Testnet" style="color:blue" target="_blank"> blockchain test<br> </a> </p1>
+           </div>
+    
 <br>
     <div class="bs-example">
         <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel" data-interval=4000>
@@ -114,6 +118,13 @@ export default {
     min-height: 350px;/* Prevent carousel from being distorted if for some reason image doesn't load */
 }
 
+
+.home .warning{
+    height: 40px;
+    min-height: 70px;/* Prevent carousel from being distorted if for some reason image doesn't load */
+}
+
+
 .home .carousel .carousel-item img{
     margin-top: 5%; /* Align slide image horizontally center */
 }
@@ -145,6 +156,7 @@ export default {
     width: 150px;
     height: 190px;
 }
+
 </style>
 
 

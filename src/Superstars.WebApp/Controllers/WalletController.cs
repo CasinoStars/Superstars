@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NBitcoin;
 using QBitNinja.Client;
@@ -9,6 +6,10 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -114,6 +115,12 @@ namespace Superstars.WebApp.Controllers
             var credit = await _walletGateway.GetCredit(userId);
             var realBalance = onBlockchain + credit.Content;
             return realBalance;
+        }
+
+        [HttpPost("AddressValidator")]
+        public async Task<bool> AddressValidator([FromBody] WalletViewModel model)
+        {
+            return Validator.IsValidAddress(model.DestinationAddress);
         }
 
         [HttpGet("FakeBalance")]

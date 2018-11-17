@@ -8,8 +8,8 @@
 
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
-          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
         <router-link class="close" v-on:click.native="RedirectandDelete()" to="">&times;</router-link>
       </div>
@@ -147,7 +147,7 @@ export default {
   async mounted() {
     this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(0));
     await this.refreshDices();
-    await this.refreshIaDices();
+    setTimeout(await this.refreshIaDices(), 3000);
     await this.changeTurn();
 
     var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
@@ -216,6 +216,7 @@ export default {
             await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 0));
             await this.RefreshBTC();
           }
+          console.log("WTFHAPPENNNNNN");
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
@@ -231,6 +232,7 @@ export default {
     
     async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
+
     },
 
     async changeTurn() {
@@ -319,7 +321,7 @@ export default {
         // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-        await this.refreshIaDices();
+        setTimeout(await this.refreshIaDices(), 3000);
       }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();

@@ -100,7 +100,7 @@
 
 
           
- <div class="tab-content" v-else>
+ <div class="tab-content" v-if="this.view == 'provablyFairCode'"">
 <h6 style="color: white"><span style="font-weight: bold; font-style: italic;"><pre style="color: white">
 using System;
 using System.Collections.Generic;

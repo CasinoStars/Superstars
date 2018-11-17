@@ -67,6 +67,7 @@ export async function getAsync(url) {
     .then(toJSON);
 }
 
+
 export async function getboolasync(url) {
     return await fetch(url, {
         method: 'GET',

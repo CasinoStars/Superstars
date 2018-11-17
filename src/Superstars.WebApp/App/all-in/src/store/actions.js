@@ -43,8 +43,7 @@ export async function executeAsyncRequest({ commit }, asyncCallback) {
 
 export async function RefreshFakeCoins({ commit }) {
     try {
-        var response = await services.GetFakeBalance();
-        commit(types.FAKE_MONEY, response.balance);
+        commit(types.FAKE_MONEY, (await services.GetFakeBalance()).balance);
     }
     catch (error) {
         commit(types.ERROR_HAPPENED, error.message);
