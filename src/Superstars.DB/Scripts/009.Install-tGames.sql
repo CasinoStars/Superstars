@@ -4,7 +4,7 @@ create table sp.tGames
 	GameTypeId int not null,
 	StartDate datetime not null,
 	EndDate datetime,
-	Winner int,
+	Winner NVARCHAR(64),
 
 	constraint PK_tGames primary key(GameId),
 	constraint FK_tGames_GameTypeId foreign key(GameTypeId) references sp.tGameType(GameTypeId)

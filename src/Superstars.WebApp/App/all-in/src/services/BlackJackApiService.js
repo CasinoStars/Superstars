@@ -18,6 +18,10 @@ class BlackJackApiService {
         await deleteAsync(`${endpoint}/DeleteAi`);
     }
     
+    async DeleteBlackJackPlayer() {
+        return await deleteAsync(`${endpoint}/deleteBlackJackPlayer`);
+    }
+
     async InitPlayer() {
         await postAsync(`${endpoint}/InitPlayer`);
     }

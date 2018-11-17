@@ -30,6 +30,10 @@ class YamsApiService {
         return await postAsync(`${endpoint}/createAI`);
     }
 
+    async DeleteYamsPlayer() {
+        return await deleteAsync(`${endpoint}/deleteYamsPlayer`);
+    }
+
     async DeleteYamsAiPlayer() {
         return await deleteAsync(`${endpoint}/deleteAI`);
     }

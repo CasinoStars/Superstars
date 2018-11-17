@@ -1,9 +1,10 @@
 create procedure sp.sUserAIDelete
 (
-    @UserId int
+    @UserId int,
+	@GameType int
 )
 as
-begin
-    delete sp.tUser from sp.tUser u where u.UserName = (select CONCAT('#AI', @UserId) AS ConcatenatedString)
+BEGIN
+    delete sp.tUser from sp.tUser u where u.UserName = (select CONCAT('#AI', CONVERT(VARCHAR, @UserId) + CONVERT(VARCHAR, @GameType) ) AS ConcatenatedString)
     return 0;
 end;
