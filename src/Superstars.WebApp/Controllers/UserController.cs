@@ -108,7 +108,14 @@ namespace Superstars.WebApp.Controllers
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData data = await _userGateway.FindById(userId);
-            await _userGateway.ActionDeconnexion(data.UserId, data.UserName, DateTime.UtcNow);
+            //FOR DEVELOPEMENT
+            try
+            {
+                await _userGateway.ActionDeconnexion(data.UserId, data.UserName, DateTime.UtcNow);
+            } catch
+            {
+                
+            }
             await HttpContext.SignOutAsync(CookieAuthentication.AuthenticationScheme);
             ViewData["NoLayout"] = true;
             return View();

@@ -141,11 +141,11 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task ActionStartGameFake(int userid, string username, DateTime date, string gametype, int gameid)
+        public async Task ActionStartGameFake(int userid, string username, DateTime date, int gametype, int gameid)
         {
             Result<string> pot;
             int bet = 0;
-            if (gametype == "Yams")
+            if (gametype == 0)
             {
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToInt32(pot.Content);
@@ -168,12 +168,12 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task ActionStartGameBTC(int userid, string username, DateTime date, string gametype, int gameid)
+        public async Task ActionStartGameBTC(int userid, string username, DateTime date, int gametype, int gameid)
         {
             Result<string> pot;
             decimal bet;
 
-            if (gametype == "Yams")
+            if (gametype == 0)
             { 
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);

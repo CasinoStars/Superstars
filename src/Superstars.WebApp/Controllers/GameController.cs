@@ -46,17 +46,18 @@ namespace Superstars.WebApp.Controllers
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
             if (gameTypeId == 0)
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
                 var data = await _yamsGateway.GetPlayer(userId);
-                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.YamsGameId);
+                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
                 var data = await _blackJackGateWay.GetPlayer(userId);
-                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.BlackJackGameId);
+                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
             Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
@@ -69,17 +70,18 @@ namespace Superstars.WebApp.Controllers
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
             if (gameTypeId == 0)
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
                 var data = await _yamsGateway.GetPlayer(userId);
-                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.YamsGameId);
+                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
                 var data = await _blackJackGateWay.GetPlayer(userId);
-                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameType, data.BlackJackGameId);
+                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
             Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
