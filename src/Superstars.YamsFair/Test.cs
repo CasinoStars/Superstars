@@ -31,14 +31,16 @@ namespace Superstars.YamsFair
         /// <param name="nonce"></param>
         /// <param name="nbOfTest"></param>
         /// <returns></returns>
-        public static void TestRandomness(string clientSeed, string serverSeed, int nbOfTest)
+        public static void TestRandomness(string clientSeed, string serverSeed, int nbOfTest, int maxRand)
         {
-            double[] test = {0, 0, 0, 0, 0, 0};
-            var nonce = 0;
+
+            double[] test = new double[maxRand];
+
+        var nonce = 0;
 
             for (var i = 0; i < nbOfTest; i++)
             {
-                var dicesFromHash = HashManager.GetDiceFromHash(clientSeed, serverSeed, nonce);
+                var dicesFromHash = HashManager.GetDiceFromHash(clientSeed, serverSeed, nonce, maxRand);
                 test[dicesFromHash - 1]++;
                 nonce++;
             }

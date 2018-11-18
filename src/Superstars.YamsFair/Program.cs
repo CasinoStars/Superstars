@@ -6,12 +6,19 @@ namespace Superstars.YamsFair
     {
         private static void Main(string[] args)
         {
-            var dicesFromSeeds = HashManager.RetriveDicesFromSeeds(
-                "ff0b463695f88ecd9a8946327b764a3a0acf935d1f6a527e9359643950bd025900495acd3c4a1e727f4ac5be9713e313700993878b0960a59a05627b9a51268b",
-                "AlbinSeed", 5);
+          
 
-            foreach (var item in dicesFromSeeds) Console.WriteLine(item);
+            int maxValue = 54;
 
+
+            //for (int i =0; i < 1000; i++)
+            //{
+            //   int test = HashManager.GetDiceFromHash("okpesk", "fesopkfsek", i, 54);
+            //    if (maxValue < test) maxValue = test;
+            //}
+            Test.TestRandomness("okpkfe", "esffes", 10000, 6);
+
+            
             Console.ReadKey();
         }
     }

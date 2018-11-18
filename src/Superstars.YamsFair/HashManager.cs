@@ -31,7 +31,7 @@ namespace Superstars.YamsFair
         /// <param name="serverSeed"></param>
         /// <param name="clientSeedWithNonce"></param>
         /// <returns></returns>
-        public static int GetDiceFromHash(string serverSeed, string clientSeed, int nonce)
+        public static int GetDiceFromHash(string serverSeed, string clientSeed, int nonce, int maxRand)
         {
             var clientSeedWithNonce = clientSeed + nonce;
             var hash = getHashSha512(serverSeed + clientSeedWithNonce);
@@ -52,28 +52,36 @@ namespace Superstars.YamsFair
             foreach (var item in results)
             {
                 var candidate = int.Parse(item, NumberStyles.HexNumber);
-                if (int.Parse(item, NumberStyles.HexNumber) > 609999)
+                if (int.Parse(item, NumberStyles.HexNumber) > /*550000 */(maxRand)*10000)
                 {
                 }
                 else
                 {
                     candidate = candidate / 10000;
-                    if (candidate > 60) throw new Exception("value must be lower then 60");
+                    if (candidate > maxRand) throw new Exception("value must be lower or equal  maxRand");
                     if (candidate < 1) continue;
-                    if (candidate < 1) throw new Exception("candidate must greater then 1");
-                    if (candidate < 11 && candidate > 0) result = 1;
+                    //if (candidate < 1) throw new Exception("candidate must greater then 1");
 
-                    else if (candidate < 21) result = 2;
-                    else if (candidate < 31) result = 3;
-                    else if (candidate < 41) result = 4;
-                    else if (candidate < 51) result = 5;
-                    else if (candidate < 61) result = 6;
+                    //if (candidate <= 1 && candidate > 0) result = 1;
+                    //else if (candidate <= 2) result = 2;
+                    //else if (candidate <= 3) result = 3;
+                    //else if (candidate <= 4) result = 4;
+                    //else if (candidate <= 5) result = 5;
+                    //else if (candidate <= 6) result = 6;
+                    for (int index = 0; index < maxRand; index++)
+                    {
+                        if (candidate <= index) {
+                            result = index;
+                            break;
+                                }
+
+                    }
+
                     break;
                 }
             }
-
-            if (i == 0) return GetDiceFromHash(serverSeed, clientSeed, nonce += 1);
-            return result;
+            if (i == 0) return GetDiceFromHash(serverSeed, clientSeed, nonce += 1, maxRand);
+            return result+1;
         }
 
         /// <summary>
@@ -83,10 +91,10 @@ namespace Superstars.YamsFair
         /// <param name="clientSeed"></param>
         /// <param name="nbOfDices"></param>
         /// <returns></returns>
-        public static List<int> RetriveDicesFromSeeds(string serveurSeed, string clientSeed, int nbOfDices)
+        public static List<int> RetriveDicesFromSeeds(string serveurSeed, string clientSeed, int nbOfDices, int maxRand)
         {
             var retriveDicesFromSeeds = new List<int>();
-            for (var i = 0; i < nbOfDices; i++) retriveDicesFromSeeds.Add(GetDiceFromHash(serveurSeed, clientSeed, i));
+            for (var i = 0; i < nbOfDices; i++) retriveDicesFromSeeds.Add(GetDiceFromHash(serveurSeed, clientSeed, i, maxRand));
 
             return retriveDicesFromSeeds;
         }

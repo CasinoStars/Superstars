@@ -17,7 +17,7 @@
             var i = 0;
             foreach (var dice in dices)
             {
-                random = HashManager.GetDiceFromHash(_seedmanager.CryptedServerSeed, _seedmanager.ClientSeed, nonce);
+                random = HashManager.GetDiceFromHash(_seedmanager.CryptedServerSeed, _seedmanager.ClientSeed, nonce, 6);
                 nonce++;
                 dices[i] = random;
                 i++;
