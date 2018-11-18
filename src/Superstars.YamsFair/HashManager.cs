@@ -37,11 +37,11 @@ namespace Superstars.YamsFair
             var hash = getHashSha512(serverSeed + clientSeedWithNonce);
             var result = 0;
             var i = 0;
-            var results = new string[hash.Length / 5];
+            var results = new string[hash.Length / 4];
             var z = 0;
-            for (var p = 0; p < hash.Length / 5; p++)
+            for (var p = 0; p < hash.Length / 4; p++)
             {
-                z += 5;
+                z += 4;
                 while (i < z)
                 {
                     results[p] += hash[i];
@@ -52,14 +52,54 @@ namespace Superstars.YamsFair
             foreach (var item in results)
             {
                 var candidate = int.Parse(item, NumberStyles.HexNumber);
-                if (int.Parse(item, NumberStyles.HexNumber) > /*550000 */(maxRand)*10000)
+                if (int.Parse(item, NumberStyles.HexNumber) >=/*550000 */(maxRand)*1000)
                 {
                 }
                 else
                 {
-                    candidate = candidate / 10000;
-                    if (candidate > maxRand) throw new Exception("value must be lower or equal  maxRand");
-                    if (candidate < 1) continue;
+
+                    for (int y = 1; y <= maxRand; y++)
+                    {
+                        if(candidate <= (y*1000)-1)
+                        {
+                            result = y;
+                            break;
+                        }
+                    }
+                    // result = (candidate / 1000);
+                    //if (candidate <= 999)
+                    //{
+                    //    result = 1;
+                    //    break;
+                    //}
+                    //if (candidate <= 1999)
+                    //{
+                    //    result = 2;
+                    //    break;
+                    //}
+                    //if (candidate <= 2999)
+                    //{
+                    //    result = 3;
+                    //    break;
+                    //}
+                    //if (candidate <= 3999)
+                    //{
+                    //    result = 4;
+                    //    break;
+                    //}
+                    //if (candidate <= 4999)
+                    //{
+                    //    result = 5;
+                    //    break;
+                    //}
+                    //if (candidate <= 5999)
+                    //{
+                    //    result = 6;
+                    //    break;
+                    //}
+
+                    if (result > maxRand) throw new Exception("value must be lower or equal  maxRand");
+                    //if (candidate < 1) continue;
                     //if (candidate < 1) throw new Exception("candidate must greater then 1");
 
                     //if (candidate <= 1 && candidate > 0) result = 1;
@@ -68,20 +108,20 @@ namespace Superstars.YamsFair
                     //else if (candidate <= 4) result = 4;
                     //else if (candidate <= 5) result = 5;
                     //else if (candidate <= 6) result = 6;
-                    for (int index = 0; index < maxRand; index++)
-                    {
-                        if (candidate <= index) {
-                            result = index;
-                            break;
-                                }
+                    //for (int index = 0; index < maxRand; index++)
+                    //{
+                    //    if (candidate <= index) {
+                    //        result = index;
+                    //        break;
+                    //            }
 
-                    }
+                    //}
 
-                    break;
+                    
                 }
             }
-            if (i == 0) return GetDiceFromHash(serverSeed, clientSeed, nonce += 1, maxRand);
-            return result+1;
+            if (result == 0) return GetDiceFromHash(serverSeed, clientSeed, nonce += 1, maxRand);
+            return result;
         }
 
         /// <summary>
