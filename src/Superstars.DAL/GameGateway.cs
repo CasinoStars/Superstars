@@ -198,6 +198,15 @@ namespace Superstars.DAL
         {
             Result<string> pot;
             decimal bet;
+            string money;
+
+            if (trueOrFake)
+            {
+                money = " bits (BTC) ";
+            }else
+            {
+                money = " All`in Coins ";
+            }
 
             if (gametype == "Yams")
             {
@@ -213,7 +222,7 @@ namespace Superstars.DAL
             }
 
             string action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
-                " and has " + haswin + " a bet of " + bet + " bits (BTC) at " + date.ToString();
+                " and has " + haswin + " a bet of " + bet +  money + "at " + date.ToString();
 
             using (var con = new SqlConnection(_sqlstring))
             {

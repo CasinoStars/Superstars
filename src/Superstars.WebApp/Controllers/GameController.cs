@@ -242,15 +242,6 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-
-        //[HttpDelete("cancelBlackJack")]
-        //public async Task<Result> DeleteBlackJackPlayer()
-        //{
-        //    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //    int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userId, 1);
-        //    return await _blackJackGateway.DeleteBlackJackPlayer(gameId);
-        //}
-
         [HttpDelete("deleteGame/{gametype}")]
         public async Task<Result> deleteGame(int gametype)
         {
