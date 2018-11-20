@@ -36,12 +36,12 @@ namespace Superstars.YamsFair
 
             double[] test = new double[maxRand];
 
-        var nonce = 0;
+        var nonce = 10000000;
 
             for (var i = 0; i < nbOfTest; i++)
             {
                 var dicesFromHash = HashManager.GetDiceFromHash(clientSeed, serverSeed, nonce, maxRand);
-                test[dicesFromHash - 1]++;
+                test[dicesFromHash-1]++;
                 nonce++;
             }
 

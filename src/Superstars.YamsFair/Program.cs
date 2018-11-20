@@ -16,7 +16,7 @@ namespace Superstars.YamsFair
             //   int test = HashManager.GetDiceFromHash("okpesk", "fesopkfsek", i, 54);
             //    if (maxValue < test) maxValue = test;
             //}
-            Test.TestRandomness("okpkfe", "esffes", 10000, 6);
+            Test.TestRandomness("okpkfe", "esffes", 10000000, 54);
 
             
             Console.ReadKey();
