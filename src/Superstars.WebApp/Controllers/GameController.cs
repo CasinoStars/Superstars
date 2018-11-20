@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NBitcoin;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 
@@ -34,26 +35,30 @@ namespace Superstars.WebApp.Controllers
             _rankGateway = rankGateway;
         }
 
-        [HttpPost("{gametype}")]
-        public async Task<IActionResult> CreateGame(string gametype)
+        [HttpPost("{gameTypeId}")]
+        public async Task<IActionResult> CreateGame(int gameTypeId)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.CreateGame(userId, gametype);
+            Result result = await _gameGateway.CreateGame(gameTypeId);
             return this.CreateResult(result);
         }
 
-        [HttpPost("{bet}/{gameType}/betBTC")]
-        public async Task<IActionResult> BetBTC(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
+        [HttpPost("{bet}/{gameTypeId}/betBTC")]
+        public async Task<IActionResult> BetBTC(int bet, int gameTypeId) // gameTypeId: 0=>Yams - 1=>BlackJack
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (gameType == "Yams")
+            var user = await _userGateway.FindById(userId);
+            if (gameTypeId == 0)
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
+                var data = await _yamsGateway.GetPlayer(userId);
+                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
+                var data = await _blackJackGateWay.GetPlayer(userId);
+                await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
             Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
@@ -61,18 +66,23 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result2);
         }
 
-        [HttpPost("{bet}/{gameType}/betFake")]
-        public async Task<IActionResult> FakeBet(int bet, string gameType) // gameType = 'Yams' or 'BlackJack'
+        [HttpPost("{bet}/{gameTypeId}/betFake")]
+        public async Task<IActionResult> FakeBet(int bet, int gameTypeId) // gameTypeId: 0=>Yams - 1=>BlackJack
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (gameType == "Yams")
+            var user = await _userGateway.FindById(userId);
+            if (gameTypeId == 0)
             {
                 Result result = await _gameGateway.CreateYamsGame(stringBet);
+                var data = await _yamsGateway.GetPlayer(userId);
+                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
                 Result result = await _gameGateway.CreateBlackJackGame(stringBet);
+                var data = await _blackJackGateWay.GetPlayer(userId);
+                await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
             Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
@@ -99,19 +109,21 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("createAiUser")]
-        public async Task<IActionResult> CreateAiUser()
+        public async Task<IActionResult> CreateAiUser([FromBody]int gametypeid)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _userGateway.CreateUser("#AI" + userId,
-                _passwordHasher.HashPassword("azertyuiop" + userId), "", "");
+            var privateKey = new Key().GetBitcoinSecret(Network.TestNet);
+            var privateKeyString = privateKey.ToString();
+            var result = await _userGateway.CreateUser("#AI" + userId + gametypeid.ToString(),
+                _passwordHasher.HashPassword("azertyuiop" + userId), "", privateKeyString);
             return this.CreateResult(result);
         }
 
-        [HttpDelete("DeleteAis")]
-        public async Task<IActionResult> DeleteAI()
+        [HttpDelete("{gametypeid}/DeleteAis")]
+        public async Task<IActionResult> DeleteAI(int gametypeid)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _gameGateway.DeleteAis(userId);
+            Result result = await _gameGateway.DeleteAis(userId, gametypeid);
             return this.CreateResult(result);
         }
 
@@ -123,12 +135,12 @@ namespace Superstars.WebApp.Controllers
             return Result.Success(game);
         }
 
-        [HttpPost("{gametype}/UpdateStats")]
-        public async Task<Result> UpdateStats(string gametype, [FromBody] bool win)
+        [HttpPost("{gameTypeId}/UpdateStats")]
+        public async Task<Result> UpdateStats(int gameTypeId, [FromBody] string win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result1 = await _gameGateway.GetWins(userId, gametype);
-            var result2 = await _gameGateway.GetLosses(userId, gametype);
+            var result1 = await _gameGateway.GetWins(userId, gameTypeId);
+            var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
             //int averagebet = 0;
 
             //WIP
@@ -143,11 +155,16 @@ namespace Superstars.WebApp.Controllers
 
             var wins = result1.Content;
             var losses = result2.Content;
-            if (win)
+            if (win == "Player")
+            {
                 wins = wins + 1;
-            else
-                losses = losses + 1;
-            var result3 = await _gameGateway.UpdateStats(userId, gametype, wins, losses);
+            }
+            else if(win == "AI")
+            {
+              losses = losses + 1;
+            }
+
+            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses);
             return Result.Success(result3);
         }
 
@@ -181,7 +198,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetWinsBlackJackPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetWins(userId, "BlackJack");
+            var result = await _gameGateway.GetWins(userId, 1);
             return this.CreateResult(result);
         }
 
@@ -189,7 +206,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetLossesBlackJackPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetLosses(userId, "BlackJack");
+            var result = await _gameGateway.GetLosses(userId, 1);
             return this.CreateResult(result);
         }
 
@@ -197,7 +214,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetWinsYamsPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetWins(userId, "Yams");
+            var result = await _gameGateway.GetWins(userId, 0);
             return this.CreateResult(result);
         }
 
@@ -205,7 +222,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetLossesYamsPlayer()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await _gameGateway.GetLosses(userId, "Yams");
+            var result = await _gameGateway.GetLosses(userId, 0);
             return this.CreateResult(result);
         }
 
@@ -222,6 +239,67 @@ namespace Superstars.WebApp.Controllers
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result = await _gameGateway.GetFakeProfit(userId);
+            return this.CreateResult(result);
+        }
+
+        [HttpDelete("deleteGame/{gametype}")]
+        public async Task<Result> deleteGame(int gametype)
+        {
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return await _gameGateway.DeleteGameByPlayerId(userid, gametype);                   
+        }
+
+        [HttpDelete("deleteYamsGame")]
+        public async Task<Result> deleteYamsGame()
+        {
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userid, 0);
+            return await _gameGateway.DeleteYamsGameByGameId(gameId);           
+        }
+
+        [HttpDelete("deleteBlackJackGame")]
+        public async Task<Result> deleteBlackJackGame()
+        {
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int gameId = await _gameGateway.GetGameIdToDeleteByPlayerId(userid, 1);
+            return await _gameGateway.DeleteBlackJackGameByGameId(gameId);         
+        }
+
+        [HttpGet("isInGame/{gametype}")]
+        public async Task<IActionResult> isInGame(int gametype)
+        {
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            GameData data = await _gameGateway.GetGameByPlayerId(userid,gametype);
+
+            if (data == null) return this.Ok(false);
+            //var result = await _gameGateway.IsGameEndDefined(data.GameId, gametype);
+            if (data.EndDate == DateTime.MinValue)
+                return Ok(true);
+            else
+                return Ok(false);
+        }
+
+        [HttpPost("GameEndUpdate/{gametype}/{win}")]
+        public async Task<IActionResult> GameEndUpdate(int gametype, string win)
+        {
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            GameData data = await _gameGateway.GetGameByPlayerId(userid,gametype);
+            UserData udata = await _userGateway.FindById(userid);
+            Result result;
+            if (win == "Player")
+            {
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
+            }
+            else if (win == "Draw")
+            {
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Draw");
+
+            } else
+            {
+                var IA = await _userGateway.FindByName("#AI" + userid + gametype.ToString());
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid + gametype.ToString());
+            }
+
             return this.CreateResult(result);
         }
 

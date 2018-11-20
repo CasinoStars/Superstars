@@ -19,16 +19,18 @@ namespace Superstars.WebApp.Controllers
         private readonly YamsGateway _yamsGateway;
         private readonly YamsIAService _yamsIAService;
         private readonly YamsService _yamsService;
+        private readonly GameGateway _gameGateway;
 
 
         public YamsController(YamsGateway yamsGateway, YamsService yamsService, YamsIAService yamsIAService,
-            UserGateway userGateway, PasswordHasher passwordHasher)
+            UserGateway userGateway, GameGateway gameGateway, PasswordHasher passwordHasher)
         {
             _yamsGateway = yamsGateway;
             _userGateway = userGateway;
             _yamsService = yamsService;
             _yamsIAService = yamsIAService;
             _passwordHasher = passwordHasher;
+            _gameGateway = gameGateway;
         }
 
 
@@ -38,7 +40,7 @@ namespace Superstars.WebApp.Controllers
         {
             // Get IA data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var IA = await _userGateway.FindByName("#AI" + userId);
+            var IA = await _userGateway.FindByName("#AI" + userId.ToString() + "0");
             var data = await _yamsGateway.GetPlayer(IA.UserId);
 
             // Roll new dices
@@ -65,12 +67,7 @@ namespace Superstars.WebApp.Controllers
             //Update SQL
             Result result =
                 await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
-            var timer = new Stopwatch();
-            timer.Start();
-            while (timer.Elapsed.TotalSeconds < 3)
-            {
-                //Waitting for Ia RollDices
-            }
+
 
             return this.CreateResult(result);
         }
@@ -109,7 +106,7 @@ namespace Superstars.WebApp.Controllers
         {
             // Get data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var Ia = await _userGateway.FindByName("#AI" + userId);
+            var Ia = await _userGateway.FindByName("#AI" + userId + "0");
             var playerData = await _yamsGateway.GetPlayer(userId);
             var IaData = await _yamsGateway.GetPlayer(Ia.UserId);
 
@@ -145,7 +142,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetIaDices()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId);
+            var user = await _userGateway.FindByName("#AI" + userId + "0");
             var data = await _yamsGateway.GetGameId(userId);
 
             var result = await _yamsGateway.GetIaDices(user.UserId, data.YamsGameId);
@@ -170,6 +167,14 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Result result = await _yamsGateway.CreateYamsPlayer(userId, 0, "12345", 0);
             return this.CreateResult(result);
+        }
+
+        [HttpDelete("deleteYamsPlayer")]
+        public async Task<Result> DeleteYamsPlayer()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int gameid = await _gameGateway.GetGameIdToDeleteByPlayerId(userId, 0);
+            return await _yamsGateway.DeleteYamsPlayer(gameid);           
         }
 
         // Create a IA YamsPlayer in t.YamsPlayer

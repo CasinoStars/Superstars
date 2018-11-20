@@ -11,6 +11,7 @@ using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models.AccountViewModels;
 using Superstars.WebApp.Services;
+using System.Xml;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -58,11 +59,9 @@ namespace Superstars.WebApp.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-
                 await SignIn(user.UserName, user.UserId.ToString());
                 return RedirectToAction(nameof(Authenticated));
-            }
-
+            }          
             return View(model);
         }
 
@@ -107,6 +106,16 @@ namespace Superstars.WebApp.Controllers
         [Authorize(AuthenticationSchemes = CookieAuthentication.AuthenticationScheme)]
         public async Task<IActionResult> LogOff()
         {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UserData data = await _userGateway.FindById(userId);
+            //FOR DEVELOPEMENT
+            try
+            {
+                await _userGateway.ActionDeconnexion(data.UserId, data.UserName, DateTime.UtcNow);
+            } catch
+            {
+                
+            }
             await HttpContext.SignOutAsync(CookieAuthentication.AuthenticationScheme);
             ViewData["NoLayout"] = true;
             return View();
@@ -137,6 +146,7 @@ namespace Superstars.WebApp.Controllers
                 string.Empty);
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthentication.AuthenticationScheme, principal);
+            await _userGateway.ActionConnexion(int.Parse(userId), pseudo, DateTime.UtcNow);
         }
 
         private string GetBreachPadding()

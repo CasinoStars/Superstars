@@ -33,6 +33,16 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result> DeleteYamsPlayer(int gameid)
+        {
+            using (var con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result>(
+                    "delete from sp.tYamsPlayer where YamsGameId = @GameID",
+                    new { GameID = gameid });
+            }
+        }
+
         public async Task<Result<int>> CreateYamsAI(int userId, int nbturn, string dices, int dicesvalue)
         {
             using (var con = new SqlConnection(_connectionString))

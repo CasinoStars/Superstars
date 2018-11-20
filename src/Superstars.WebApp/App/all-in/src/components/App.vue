@@ -42,7 +42,7 @@
           <ul class="navbar-nav ml-auto">
               <li class="nav-item">
               <router-link class="nav-link" to="/wallet" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
-                SOLDE DU COMPTE : {{BTCMoney}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeMoney}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
+                SOLDE DU COMPTE : {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
