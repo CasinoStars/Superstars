@@ -60,23 +60,14 @@ namespace Superstars.YamsFair
                     candidate = candidate / 10000;
                     if (candidate > maxRand) throw new Exception("value must be lower or equal  maxRand");
                     if (candidate < 1) continue;
-                    //if (candidate < 1) throw new Exception("candidate must greater then 1");
 
-                    //if (candidate <= 1 && candidate > 0) result = 1;
-                    //else if (candidate <= 2) result = 2;
-                    //else if (candidate <= 3) result = 3;
-                    //else if (candidate <= 4) result = 4;
-                    //else if (candidate <= 5) result = 5;
-                    //else if (candidate <= 6) result = 6;
                     for (int index = 0; index < maxRand; index++)
                     {
                         if (candidate <= index) {
                             result = index;
                             break;
                                 }
-
                     }
-
                     break;
                 }
             }

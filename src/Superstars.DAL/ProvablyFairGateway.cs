@@ -72,12 +72,12 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<int> GetDicesFromHash(int userId)
+        public async Task<int> GetRandFromHash(int userId, int maxRand)
         {
             var seeds = GetSeeds(userId).Result;
             var seedManager = new SeedManager(seeds.UncryptedServerSeed, seeds.UncryptedPreviousServerSeed,
                 seeds.ClientSeed, seeds.CryptedServerSeed, seeds.PreviousClientSeed, seeds.PreviousCryptedServerSeed);
-            var dice = HashManager.GetDiceFromHash(seeds.UncryptedServerSeed, seeds.ClientSeed, seeds.Nonce);
+            var dice = HashManager.GetDiceFromHash(seeds.UncryptedServerSeed, seeds.ClientSeed, seeds.Nonce, maxRand);
             using (var con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();

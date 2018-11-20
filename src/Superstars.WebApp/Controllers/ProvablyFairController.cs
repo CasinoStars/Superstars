@@ -46,7 +46,7 @@ namespace Superstars.WebApp.Controllers
         [HttpPost("{clientSeedTest}/{serverSeedTest}/{nbOfDices}/RetriveDicesFromSeeds")]
         public int[] RetriveDicesFromSeeds(string clientSeedTest, string serverSeedTest, int nbOfDices)
         {
-            var dicesFromSeeds = HashManager.RetriveDicesFromSeeds(clientSeedTest, serverSeedTest, nbOfDices);
+            var dicesFromSeeds = HashManager.RetriveDicesFromSeeds(clientSeedTest, serverSeedTest, nbOfDices,6);
             var dicesFromSeedsArray = dicesFromSeeds.ToArray();
             return dicesFromSeedsArray;
         }

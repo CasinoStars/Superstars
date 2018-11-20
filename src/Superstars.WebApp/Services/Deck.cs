@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Superstars.WebApp.Controllers;
+using Superstars.YamsFair;
 
 namespace Superstars.WebApp
 {
     public class Deck
     {
+        
+
         public string[] Symbole = {"c", "h", "p", "t"};
 
         public int[] Valeur = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
@@ -42,11 +45,13 @@ namespace Superstars.WebApp
         }
 
         //Draw the top Card
-        public Card Draw()
-        {
+        public Card Draw(int userid, int rand)
+        {           
             var top = DeckCards.Count;
-            var drawedcard = DeckCards.ElementAt(top - 1);
-            DeckCards.RemoveAt(top - 1);
+          var drawedcard = DeckCards.ElementAt(rand - 1);
+            /// apeller le random des famille 
+            /// r
+            DeckCards.RemoveAt(rand - 1);
             return drawedcard;
         }
     }

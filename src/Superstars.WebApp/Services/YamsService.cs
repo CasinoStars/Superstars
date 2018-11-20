@@ -66,7 +66,7 @@ namespace Superstars.WebApp.Services
         {
             Random rdn = new Random();
             int value;
-            value = await  _provablyFairGateway.GetDicesFromHash(userId);
+            value = await  _provablyFairGateway.GetRandFromHash(userId,6);
             return value;
         }
 

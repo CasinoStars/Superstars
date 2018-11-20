@@ -60,10 +60,9 @@ namespace Superstars.WebApp.Controllers
 
             // Init obj BlackJackService 
             _blackJackService.InitGame();
-
             //Draw 2 cards for player's hand
-            _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
-            _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
+            _blackJackService._ennemyhand = await _blackJackService.DrawCard(_blackJackService._ennemyhand, userId);
+            _blackJackService._ennemyhand = await _blackJackService.DrawCard(_blackJackService._ennemyhand, userId);
 
             var _cards = "";
             var i = 0;
@@ -96,8 +95,7 @@ namespace Superstars.WebApp.Controllers
             var data = await _blackJackGateway.GetPlayer(user.UserId);
 
             // Draw one card for IA hand
-            _blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
-            //_blackJackService._myhand = _blackJackService.DrawCard(_blackJackService._myhand);
+            _blackJackService._myhand = await _blackJackService.DrawCard(_blackJackService._myhand, userId);
 
             var _cards = "";
             var i = 0;
@@ -129,7 +127,7 @@ namespace Superstars.WebApp.Controllers
             var data = await _blackJackGateway.GetPlayer(userId);
 
             //Draw one card for player hand
-            _blackJackService._ennemyhand = _blackJackService.DrawCard(_blackJackService._ennemyhand);
+            _blackJackService._ennemyhand = await _blackJackService.DrawCard(_blackJackService._ennemyhand, userId);
 
             var _cards = "";
             var i = 0;
@@ -345,7 +343,7 @@ namespace Superstars.WebApp.Controllers
 
             if (_blackJackService._dealerTurn)
                 _blackJackService._myhand =
-                    _blackJackService.PlayIA(_blackJackService._myhand, _blackJackService._ennemyhand);
+                    _blackJackService.PlayIA(_blackJackService._myhand, _blackJackService._ennemyhand, userId);
 
             var _cards = "";
             var i = 0;

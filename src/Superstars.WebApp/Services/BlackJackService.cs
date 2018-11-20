@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Superstars.WebApp.Controllers;
+using Superstars.DAL;
+using System.Threading.Tasks;
 
 namespace Superstars.WebApp
 {
@@ -9,6 +11,8 @@ namespace Superstars.WebApp
         private Deck _deck;
         public bool _hassplit;
         public int _pot;
+        private ProvablyFairGateway _provablyFairGateway;
+
 
         private Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
@@ -26,7 +30,8 @@ namespace Superstars.WebApp
             _deck = new Deck();
             _deck.CreateDeck();
             _values = Valueforcards(_values);
-            _deck.Shuffle();
+           // _deck.Shuffle();
+
             _myhand = new List<Card>();
            // _ennemysecondhand = new List<Card>();
             _ennemyhand = new List<Card>();
@@ -46,9 +51,10 @@ namespace Superstars.WebApp
             return valuesdic;
         }
 
-        public List<Card> DrawCard(List<Card> hand)
+        public async Task<List<Card>> DrawCard(List<Card> hand, int userId)
         {
-            var card = _deck.Draw();
+            int rand = await _provablyFairGateway.GetRandFromHash(userId, 6);
+            var card = _deck.Draw(userId, rand);
             hand.Add(card);
             return hand;
         }
@@ -156,13 +162,13 @@ namespace Superstars.WebApp
             return false;
         }
 
-        public List<Card> PlayIA(List<Card> myhand, List<Card> ennemyhand)
+        public List<Card> PlayIA(List<Card> myhand, List<Card> ennemyhand, int userId)
         {
             if (BlackJackCheck(myhand)) return myhand;
 
             while (GetHandValue(myhand) < 17 || GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn)
             {
-                DrawCard(myhand);
+                DrawCard(myhand, userId);
 
                 if (BlackJackCheck(myhand)) return myhand;
             }
