@@ -16,8 +16,9 @@ namespace Superstars.WebApp
 
         private Dictionary<Card, int> _values = new Dictionary<Card, int>();
 
-        public BlackJackService()
+        public BlackJackService(ProvablyFairGateway provablyFairGateway)
         {
+            _provablyFairGateway = provablyFairGateway;
             InitGame();
         }
 
@@ -53,7 +54,7 @@ namespace Superstars.WebApp
 
         public async Task<List<Card>> DrawCard(List<Card> hand, int userId)
         {
-            int rand = await _provablyFairGateway.GetRandFromHash(userId, 6);
+            int rand = await this._provablyFairGateway.GetRandFromHash(userId, 54);
             var card = _deck.Draw(userId, rand);
             hand.Add(card);
             return hand;
