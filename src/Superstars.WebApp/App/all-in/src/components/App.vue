@@ -41,7 +41,7 @@
           </ul>
           <ul class="navbar-nav ml-auto">
               <li class="nav-item">
-              <router-link class="nav-link" to="/wallet" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
+              <router-link class="nav-link" to="/wallet" id="borderSolde" style="letter-spacing: 2px; font-size: 12px;">
                 SOLDE DU COMPTE : {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
@@ -53,7 +53,7 @@
               </a>
               <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:120%;">
                 <router-link style="margin-left: -2px;" class="dropdown-item" to="/wallet"><i class="fa fa-diamond"> Porte-feuille</i></router-link>
-                <!-- <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"> Régagles</i></router-link> -->
+                <router-link class="dropdown-item" to="" data-toggle="modal" data-target="#myModal"><i class="fa fa-cog"> Régagles</i></router-link>
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"> Déconnexion</i></router-link>
               </div>
@@ -78,6 +78,43 @@
     </header>
     <router-view></router-view>
     <chat v-if="auth.isConnected"></chat>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Gestion de compte</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul class="tab-group" v-if="!editMail && !editPassword">
+              <li class="tab"><a v-on:click="editPassword=true">Mot De Passe</a></li>
+              <li class="tab"><a v-on:click="editMail=true">Adresse Email</a></li>
+            </ul>
+            <form v-else-if="editPassword">
+              <div class="field-wrap">
+                <label>
+                  Mot de Passe Actuel<span class="req">*</span>
+                </label><br><br>
+                <input v-model="oldPass" required/>
+              </div>
+              <div class="field-wrap">
+                <label>
+                  Nouveau Mot de Passe<span class="req">*</span>
+                </label><br><br>
+                <input v-model="newPass" required/>
+              </div><br>
+              <button type="submit" class="btn btn-block">Sauvegarder</button>
+            </form>
+            <form v-else>email
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
@@ -91,6 +128,13 @@ import Vue from 'vue';
 import Chat from './Chat.vue'
 
 export default{
+  data() {
+    return {
+      editPassword: false,
+      editMail: false,
+      errors: []
+    }
+  },
   components: {
     Chat
   },
@@ -123,10 +167,17 @@ export default{
     },
     
     async onAuthenticated() {
-      this.isConnected = true;
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.$router.replace('/play');
+    },
+
+    showSetPassword(){
+      this.showSetPasswords = true;
+    },
+
+    showSetMail() {
+      this.showSetMail = true
     }
   }
 }
@@ -138,6 +189,16 @@ export default{
     background-color: black;
 }
 
+#borderSolde{
+  border-style:solid; 
+  border-width:0.7px;
+  border-color: rgb(74, 80, 180);
+}
+
+#borderSolde:hover{
+  border-color: rgb(54, 114, 5);
+}
+
 .progress {
   margin: 0px;
   padding: 0px;
@@ -147,7 +208,6 @@ export default{
 a.router-link-active {
   font-weight: bold;
 }
-
 
 </style>
 
