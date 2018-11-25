@@ -11,7 +11,7 @@
           <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
           <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
         </div>
-        <router-link class="close" to="/play">&times;</router-link>
+        <router-link class="close" v-on:click.native="RedirectandDelete()" to="">&times;</router-link>
       </div>
       <ul class="tab-group">
                 <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
@@ -33,7 +33,7 @@
 
         <div class="modal-footer">
           <div style="margin-right: 42%;">
-            <router-link class="btn btn-secondary" to="/play">Annuler</router-link>
+            <router-link class="btn btn-secondary" v-on:click.native="RedirectandDelete()" to="">Annuler</router-link>
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
         </div>
@@ -133,22 +133,30 @@ export default {
       playerFigure: '',
       IaFigure: '',
       wait: '',
-      playerwin: false,
+      playerwin: '',
       playerBet: false,
       realOrFake: 'real',
       profit: 0,
       fakeBet: 0,
       trueBet: 0,
-      errors: []
+      errors: [],
+      wasingame: false
     }
   },
 
   async mounted() {
+    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(0));
     await this.refreshDices();
     setTimeout(await this.refreshIaDices(), 3000);
     await this.changeTurn();
-    //IF ISNOT IN GAME
+
+    var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+    if(pot == 0) {
       this.showModal();
+    } else {
+      this.playerBet = true;
+    }
+    
   },
   
   computed: {
@@ -161,6 +169,12 @@ export default {
     ...mapActions(['RefreshFakeCoins']),
     ...mapActions(['RefreshBTC']),
     
+    async RedirectandDelete() {
+      //await this.executeAsyncRequest(() => GameApiService.deleteYamsGame());
+      await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
+      this.$router.push({ path: 'play' });
+    },
+
     changeBet(choice){
       this.realOrFake = choice;
       this.errors = 0;
@@ -226,8 +240,9 @@ export default {
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(0,this.playerwin));
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
     },
 
     async getFinalResult() {
@@ -237,10 +252,11 @@ export default {
       this.winOrLose = tableResult[2];
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
       if(this.winOrLose == "You Lose") {
+          this.playerwin = 'AI';
           await this.updateStats();
       }
       else if(this.winOrLose == "You Win"){
-        this.playerwin = true;
+        this.playerwin = 'Player';
         await this.updateStats();
           if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
@@ -253,9 +269,8 @@ export default {
             await this.RefreshBTC();
           }
       } else {
-        await this.setisingamefalse();
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
@@ -271,8 +286,8 @@ export default {
 
     async RePlay() {
       await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-      await this.executeAsyncRequest(() => GameApiService.createGame('Yams'));
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
+      await this.executeAsyncRequest(() => GameApiService.createGame(0));
       await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());

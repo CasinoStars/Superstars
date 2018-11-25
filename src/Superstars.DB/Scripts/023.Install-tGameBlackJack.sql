@@ -1,7 +1,7 @@
 create table sp.tGameBlackJack
 (
-	BlackJackGameId int identity(0,1),
+	BlackJackGameId int,
 	Pot varchar(20)
 
-	constraint PK_tGameBlackJack foreign key (BlackJackGameId) references sp.tGames(GameId)
+	constraint PK_tGameBlackJack foreign key (BlackJackGameId) references sp.tGames(GameId) ON DELETE CASCADE
 )

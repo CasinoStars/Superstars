@@ -7,5 +7,5 @@ create table sp.tYamsPlayer
 	DicesValue int
 
 	constraint FK_tYamsPlayer_UserId foreign key (YamsPlayerId) references sp.tUser(UserId),
-	constraint FK_tYamsPlayer_GameId foreign key (YamsGameId) references sp.tGames(GameId)
+	constraint FK_tYamsPlayer_GameId foreign key (YamsGameId) references sp.tGames(GameId) ON DELETE CASCADE
 )

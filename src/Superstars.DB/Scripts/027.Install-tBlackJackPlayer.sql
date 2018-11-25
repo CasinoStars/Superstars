@@ -9,5 +9,5 @@ create table sp.tBlackJackPlayer
 	SecondHandValue int,
 
 	constraint FK_tBlackJackPlayer_UserId foreign key (BlackJackPlayerId) references sp.tUser(UserId),
-	constraint FK_tBlackJackPlayer_GameId foreign key (BlackJackGameId) references sp.tGames(GameId)
+	constraint FK_tBlackJackPlayer_GameId foreign key (BlackJackGameId) references sp.tGames(GameId) ON DELETE CASCADE
 );
