@@ -42,8 +42,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="button" v-if="editPassword" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" id="button" v-if="editPassword" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                            <button type="button" v-if="editPassword" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
+                            <button type="submit" v-if="editPassword" class="btn btn-outline-success mx-auto">Sauvegarder</button>
                         </div>
                     </form>
                     <form @submit="changeEmail($event)" v-else>
@@ -57,8 +57,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="editMail" type="button" id="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" id="button" v-if="editMail" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                            <button v-if="editMail" type="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
+                            <button type="submit" v-if="editMail" class="btn btn-outline-success mx-auto">Sauvegarder</button>
                         </div>
                     </form>
                 </div>
@@ -198,7 +198,9 @@ $main-dark: darken($main,5%);
 .settings .close {
     color: white;
 }
-.settings #button{
-    width: 30%;
+.settings {
+    button{
+        width: 30%;
+    }
 }
 </style>
