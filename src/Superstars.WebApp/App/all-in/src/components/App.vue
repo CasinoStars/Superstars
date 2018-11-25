@@ -40,23 +40,19 @@
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-              <router-link class="nav-link" to="/wallet" style="border-style: solid; border-width:0.7px; border-color: rgb(74, 80, 180); letter-spacing: 2px; font-size: 12px;">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/wallet" id="borderSolde" style="letter-spacing: 2px; font-size: 12px;">
                 SOLDE DU COMPTE : {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> || {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" style="font-size: 0.8rem;"></i>
               </router-link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
-              <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="modal" data-target="#myModal" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user" style="font-size: 1.4rem;"></i> {{ auth.pseudo }}
               </a>
-              <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="basic-nav-dropdown" style="top:120%;">
-                <router-link style="margin-left: -2px;" class="dropdown-item" to="/wallet"><i class="fa fa-diamond"> Porte-feuille</i></router-link>
-                <!-- <router-link class="dropdown-item" to="/settings"><i class="fa fa-cog"> Régagles</i></router-link> -->
-                <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" to="/logout"><i class="fa fa-sign-out"> Déconnexion</i></router-link>
-              </div>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/logout"><i class="fa fa-sign-out" style="font-size: 0.9rem;"></i></router-link>
             </li>
           </ul>
         </div>
@@ -66,9 +62,6 @@
             <li class="nav-item">
               <router-link class="nav-link" v-on:click.native="log('Login')" to="/#" style="letter-spacing: 2px; font-size: 12px;"><i class="fa fa-sign-in" style="font-size: 1.4rem;"></i> CONNEXION</router-link>
             </li>
-            <!-- <li class="nav-item">
-              <router-link class="nav-link" v-on:click.native="log('Register')" to="/">INSCRIPTION</router-link>
-            </li> -->
           </ul>
         </div>
       </nav>
@@ -78,6 +71,7 @@
     </header>
     <router-view></router-view>
     <chat v-if="auth.isConnected"></chat>
+    <settings/>
   </div>
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
@@ -89,11 +83,14 @@ import UserApiService from '../services/UserApiService';
 import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 import Chat from './Chat.vue'
+import Settings from './Settings.vue'
 
 export default{
+  
   components: {
-    Chat
+    Chat, Settings
   },
+
   computed: {
     ...mapGetters(['isLoading']),
     ...mapGetters(['BTCMoney']),
@@ -115,6 +112,7 @@ export default{
   },
 
   methods: {
+    ...mapActions(['executeAsyncRequest']),
     ...mapActions(['RefreshFakeCoins']),
     ...mapActions(['RefreshBTC']),
     
@@ -123,11 +121,10 @@ export default{
     },
     
     async onAuthenticated() {
-      this.isConnected = true;
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.$router.replace('/play');
-    }
+    },
   }
 }
 </script>
@@ -136,6 +133,16 @@ export default{
 
 .app {
     background-color: black;
+}
+
+#borderSolde{
+  border-style:solid; 
+  border-width:0.7px;
+  border-color: rgb(74, 80, 180);
+}
+
+#borderSolde:hover{
+  border-color: rgb(54, 114, 5);
 }
 
 .progress {
@@ -147,7 +154,6 @@ export default{
 a.router-link-active {
   font-weight: bold;
 }
-
 
 </style>
 

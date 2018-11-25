@@ -194,34 +194,70 @@ namespace Superstars.WebApp.Controllers
             return sommeBJ;
         }
 
-        [HttpGet("getwinsBlackJackPlayer")]
-        public async Task<IActionResult> GetWinsBlackJackPlayer()
+        [HttpGet("{pseudo}/getwinsBlackJackPlayer")]
+        public async Task<IActionResult> GetWinsBlackJackPlayer(string pseudo="")
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int userId;
+            if (pseudo == "")
+            {
+                userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            }
+            else
+            {
+                var userData = await _userGateway.FindByName(pseudo);
+                userId = userData.UserId;
+            }
             var result = await _gameGateway.GetWins(userId, 1);
             return this.CreateResult(result);
         }
 
-        [HttpGet("getlossesBlackJackPlayer")]
-        public async Task<IActionResult> GetLossesBlackJackPlayer()
+        [HttpGet("{pseudo}/getlossesBlackJackPlayer")]
+        public async Task<IActionResult> GetLossesBlackJackPlayer(string pseudo)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int userId;
+            if (pseudo == "")
+            {
+                userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            }
+            else
+            {
+                var userData = await _userGateway.FindByName(pseudo);
+                userId = userData.UserId;
+            }
             var result = await _gameGateway.GetLosses(userId, 1);
             return this.CreateResult(result);
         }
 
-        [HttpGet("getwinsYamsPlayer")]
-        public async Task<IActionResult> GetWinsYamsPlayer()
+        [HttpGet("{pseudo}/getwinsYamsPlayer")]
+        public async Task<IActionResult> GetWinsYamsPlayer(string pseudo)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int userId;
+            if (pseudo == "")
+            {
+                userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            }
+            else
+            {
+                var userData = await _userGateway.FindByName(pseudo);
+                userId = userData.UserId;
+            }
             var result = await _gameGateway.GetWins(userId, 0);
             return this.CreateResult(result);
         }
 
-        [HttpGet("getlossesYamsPlayer")]
-        public async Task<IActionResult> GetLossesYamsPlayer()
+        [HttpGet("{pseudo}/getlossesYamsPlayer")]
+        public async Task<IActionResult> GetLossesYamsPlayer(string pseudo)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int userId;
+            if (pseudo == "")
+            {
+                userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            }
+            else
+            {
+                var userData = await _userGateway.FindByName(pseudo);
+                userId = userData.UserId;
+            }
             var result = await _gameGateway.GetLosses(userId, 0);
             return this.CreateResult(result);
         }

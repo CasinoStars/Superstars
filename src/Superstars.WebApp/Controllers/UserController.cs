@@ -20,16 +20,13 @@ namespace Superstars.WebApp.Controllers
         private readonly ProvablyFairGateway _provablyFairGateway;
         private readonly Random _random;
         private readonly TokenService _tokenService;
-        private readonly UserGateway _userGateway;
         private readonly UserService _userService;
 
-        public UserController(UserService userService, TokenService tokenService, UserGateway userGateway,
-            ProvablyFairGateway provablyFairGateway)
+        public UserController(UserService userService, TokenService tokenService, ProvablyFairGateway provablyFairGateway)
         {
             _provablyFairGateway = provablyFairGateway;
             _userService = userService;
             _tokenService = tokenService;
-            _userGateway = userGateway;
             _random = new Random();
         }
 
@@ -107,11 +104,11 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> LogOff()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            UserData data = await _userGateway.FindById(userId);
+            UserData data = await _userService.FindByUserId(userId);
             //FOR DEVELOPEMENT
             try
             {
-                await _userGateway.ActionDeconnexion(data.UserId, data.UserName, DateTime.UtcNow);
+                await _userService.ActionDeconnexion(data.UserId, data.UserName, DateTime.UtcNow);
             } catch
             {
                 
@@ -146,7 +143,7 @@ namespace Superstars.WebApp.Controllers
                 string.Empty);
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthentication.AuthenticationScheme, principal);
-            await _userGateway.ActionConnexion(int.Parse(userId), pseudo, DateTime.UtcNow);
+            await _userService.ActionConnexion(int.Parse(userId), pseudo, DateTime.UtcNow);
         }
 
         private string GetBreachPadding()

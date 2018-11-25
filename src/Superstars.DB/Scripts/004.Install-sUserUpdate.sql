@@ -1,18 +1,18 @@
 create procedure sp.sUserUpdate
 (
     @UserId int,
-	@UserPassword varbinary(128),
-	@UserName nvarchar(64),
-    @Email  nvarchar(64),
-	@Country nvarchar(64),
-	@LastConnexionDate datetime,
-	@LastDeconnexionDate datetime
+	@UserPassword varbinary(128) = null,
+	@UserName nvarchar(64) = null,
+    @Email  nvarchar(64) = null,
+	@Country nvarchar(64) = null,
+	@LastConnexionDate datetime = null,
+	@LastDeconnexionDate datetime = null
 )
 as
 begin
     update sp.tUser
-    set Email = @Email, UserName = @UserName, UserPassword = @UserPassword, Country = @Country, LastConnexionDate = @LastConnexionDate, 
-	LastDeconnexionDate = @LastDeconnexionDate
+    set Email = isNull(@Email, Email), UserName = isNull(@UserName, UserName), UserPassword = isNull(@UserPassword, UserPassword), Country = isNull(@Country, Country), LastConnexionDate = isNull(@LastConnexionDate, LastConnexionDate),
+	LastDeconnexionDate = isNull(@LastDeconnexionDate, LastDeconnexionDate)
     where UserId = @UserId;
     return 0;
 	

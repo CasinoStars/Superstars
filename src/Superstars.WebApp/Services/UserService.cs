@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Superstars.DAL;
 
 namespace Superstars.WebApp.Services
@@ -25,6 +26,31 @@ namespace Superstars.WebApp.Services
             if (user != null && _passwordHasher.VerifyHashedPassword(user.UserPassword, password) ==
                 PasswordVerificationResult.Success) return user;
             return null;
+        }
+
+        public async Task<Result> UpdatePassword(int userId, string password)
+        {
+            return await _userGateway.UpdatePassword(userId, _passwordHasher.HashPassword(password));
+        }
+
+        public async Task<Result> UpdateMail(int userId, string mail)
+        {
+            return await _userGateway.UpdateEmail(userId, mail);
+        }
+
+        public async Task<UserData> FindByUserId(int userId)
+        {
+            return await _userGateway.FindById(userId);
+        }
+
+        public async Task ActionDeconnexion(int userId, string userName, DateTime utcNow)
+        {
+            await _userGateway.ActionDeconnexion(userId, userName, utcNow);
+        }
+
+        public async Task ActionConnexion(int userId, string userName, DateTime utcNow)
+        {
+            await _userGateway.ActionConnexion(userId, userName, utcNow);
         }
     }
 }

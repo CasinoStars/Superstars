@@ -50,20 +50,20 @@ async BetFake(bet, gameTypeId) {
     return await postAsync(`${endpoint}/${bet}/${gameTypeId}/betFake`);
 }
 
-async getWinsBlackJackPlayer() {
-    return await getAsync(`${endpoint}/getwinsBlackJackPlayer`);
+async getWinsBlackJackPlayer(pseudo) {
+    return await getAsync(`${endpoint}/${pseudo}/getwinsBlackJackPlayer`);
 }
 
-async getLossesBlackJackPlayer() {
-    return await getAsync(`${endpoint}/getlossesBlackJackPlayer`);
+async getLossesBlackJackPlayer(pseudo) {
+    return await getAsync(`${endpoint}/${pseudo}/getlossesBlackJackPlayer`);
 }
 
-async getWinsYamsPlayer() {
-    return await getAsync(`${endpoint}/getwinsYamsPlayer`);
+async getWinsYamsPlayer(pseudo) {
+    return await getAsync(`${endpoint}/${pseudo}/getwinsYamsPlayer`);
 }
 
-async getLossesYamsPlayer() {
-    return await getAsync(`${endpoint}/getlossesYamsPlayer`);
+async getLossesYamsPlayer(pseudo) {
+    return await getAsync(`${endpoint}/${pseudo}/getlossesYamsPlayer`);
 }
 
 async getTrueProfitPlayer() {

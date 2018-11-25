@@ -3,9 +3,10 @@
   <br>
   <br>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;" class="container">
-    <div>
-      <h1 style="font-variant: small-caps; font-size: 45px;"> <strong> Mes statistiques </strong></h1>
-    </div>
+    <h1 style="font-variant: small-caps; font-size: 45px;"> 
+      <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
+      <strong v-else>Mes statistiques</strong>
+    </h1>
   </div>
   <br><br>
 <table>
@@ -46,6 +47,7 @@
 <canvas id="pie-chart2" class="chartjs" width="770px" height="385px" ></canvas>
 </div>
 </center>
+<router-view :key="$route.fullPath"> </router-view>
 </div>
 </template>
 
@@ -54,73 +56,92 @@
 import { mapActions } from 'vuex';
 import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
+import UserApiService from '../services/UserApiService';
 import Chart from 'chart.js';
 
 export default {
-      data() {
-        return {
-            playerwinsbj: 0,
-            playerlossesbj:0,
-            playerratiobj: 0,
-            playernbgamesbj: 0,
-            playerwinsy: 0,
-            playerlossesy:0,
-            playerratioy: 0,
-            playerratioynum: 0,
-            playerratiobjnum: 0,
-            playernbgamesy: 0
-        }
-    },
-
-  async mounted() {
-    await this.refreshBlackJackstats();
-    await this.refreshYamsstats();
-
-new Chart(document.getElementById("pie-chart"), {
-    type: 'pie',
-    data: {
-      labels: ["Victoires", "Defaites"],
-      datasets: [{
-        label: "Ratio (percentage)",
-        backgroundColor: ["#c3c3d5", "#343a40"],
-        data: [this.playerratioynum.toFixed(2), (100 - this.playerratioynum).toFixed(2)]
-      }]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Ratio (%) for Yams'
-      }
+  data() {
+    return {
+      playerwinsbj: 0,
+      playerlossesbj:0,
+      playerratiobj: 0,
+      playernbgamesbj: 0,
+      playerwinsy: 0,
+      playerlossesy:0,
+      playerratioy: 0,
+      playerratioynum: 0,
+      playerratiobjnum: 0,
+      playernbgamesy: 0,
+      queryPseudo: '',
     }
-});
-
-new Chart(document.getElementById("pie-chart2"), {
-    type: 'pie',
-    data: {
-      labels: ["Victoires", "Defaites"],
-      datasets: [{
-        label: "Ratio (percentage)",
-        backgroundColor: ["#c3c3d5", "#343a40"],
-        data: [this.playerratiobjnum.toFixed(2),(100 - this.playerratiobjnum).toFixed(2)]
-      }]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Ratio (%) for BlackJack'
-      }
-    }
-});
-
   },
 
-    
+  async mounted() {
+    if(this.$route.query.pseudo)
+      this.queryPseudo = this.$route.query.pseudo;
+    else
+      this.queryPseudo = UserApiService.pseudo;
+    await this.refreshBlackJackstats();
+    await this.refreshYamsstats();
+    this.drawDiagram();
+  },
+
+  watch: {
+    $route : async function() {
+      if(this.$route.query.pseudo)
+        this.queryPseudo = this.$route.query.pseudo;
+      else
+        this.queryPseudo = UserApiService.pseudo;
+      await this.refreshBlackJackstats();
+      await this.refreshYamsstats();
+      this.drawDiagram();
+    }
+  },
+
   methods: {
     ...mapActions(['executeAsyncRequest']),
 
+    drawDiagram(){
+      new Chart(document.getElementById("pie-chart"), {
+        type: 'pie',
+        data: {
+          labels: ["Victoires", "Defaites"],
+          datasets: [{
+            label: "Ratio (percentage)",
+            backgroundColor: ["#c3c3d5", "#343a40"],
+            data: [this.playerratioynum.toFixed(2), (100 - this.playerratioynum).toFixed(2)]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Ratio (%) for Yams'
+          }
+        }
+      });
+
+      new Chart(document.getElementById("pie-chart2"), {
+        type: 'pie',
+        data: {
+          labels: ["Victoires", "Defaites"],
+          datasets: [{
+            label: "Ratio (percentage)",
+            backgroundColor: ["#c3c3d5", "#343a40"],
+            data: [this.playerratiobjnum.toFixed(2),(100 - this.playerratiobjnum).toFixed(2)]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Ratio (%) for BlackJack'
+          }
+        }
+      });
+    },
+
     async refreshBlackJackstats() {
-      this.playerwinsbj = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer());
-      this.playerlossesbj = await this.executeAsyncRequest(() => GameApiService.getLossesBlackJackPlayer());
+      this.playerwinsbj = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer(this.queryPseudo));
+      this.playerlossesbj = await this.executeAsyncRequest(() => GameApiService.getLossesBlackJackPlayer(this.queryPseudo));
       this.playernbgamesbj = this.playerwinsbj + this.playerlossesbj;
       this.playerratiobj = this.playerwinsbj / (this.playerwinsbj + this.playerlossesbj);
       this.playerratiobjnum = this.playerratiobj.toFixed(3) * 100;
@@ -130,9 +151,9 @@ new Chart(document.getElementById("pie-chart2"), {
       }
     },
 
-        async refreshYamsstats() {
-      this.playerwinsy = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer());
-      this.playerlossesy = await this.executeAsyncRequest(() => GameApiService.getLossesYamsPlayer());
+    async refreshYamsstats(pseudo) {
+      this.playerwinsy = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer(this.queryPseudo));
+      this.playerlossesy = await this.executeAsyncRequest(() => GameApiService.getLossesYamsPlayer(this.queryPseudo));
       this.playernbgamesy = this.playerwinsy + this.playerlossesy;
       this.playerratioy = this.playerwinsy / (this.playerwinsy + this.playerlossesy);
       this.playerratioynum = this.playerratioy.toFixed(3) * 100;
@@ -142,7 +163,6 @@ new Chart(document.getElementById("pie-chart2"), {
       }
     }
   }
-  
 }
 </script>
 
