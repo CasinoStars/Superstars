@@ -26,5 +26,20 @@ namespace Superstars.WebApp.Services
                 PasswordVerificationResult.Success) return user;
             return null;
         }
+
+        public async Task<Result> UpdatePassword(int userId, string password)
+        {
+            return await _userGateway.UpdatePassword(userId, _passwordHasher.HashPassword(password));
+        }
+
+        public async Task<Result> UpdateMail(int userId, string mail)
+        {
+            return await _userGateway.UpdateEmail(userId, mail);
+        }
+
+        public async Task<UserData> FindMailByUserId(int userId)
+        {
+            return await _userGateway.FindById(userId);
+        }
     }
 }

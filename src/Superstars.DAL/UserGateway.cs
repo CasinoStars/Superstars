@@ -81,7 +81,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task UpdateEmail(int userId, string email)
+        public async Task<Result> UpdateEmail(int userId, string email)
         {
             using (var con = new SqlConnection(_connectionString))
             {
@@ -89,10 +89,11 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, Email = email},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
-        public async Task UpdateName(int userId, string pseudo)
+        public async Task<Result> UpdateName(int userId, string pseudo)
         {
             using (var con = new SqlConnection(_connectionString))
             {
@@ -100,10 +101,11 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, UserName = pseudo},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
-        public async Task UpdatePassword(int userId, byte[] password)
+        public async Task<Result> UpdatePassword(int userId, byte[] password)
         {
             using (var con = new SqlConnection(_connectionString))
             {
@@ -111,6 +113,7 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, UserPassword = password},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
