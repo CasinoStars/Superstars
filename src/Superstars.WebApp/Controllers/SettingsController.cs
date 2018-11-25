@@ -53,7 +53,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<string> GetMail()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userService.FindMailByUserId(userId);
+            var user = await _userService.FindByUserId(userId);
             return user.Email;
         }
     }

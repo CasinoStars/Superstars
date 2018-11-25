@@ -51,7 +51,7 @@
           <label>
             Montant<span class="req">*</span>
           </label><br><br>
-          <input type="decimal" min="0" max="1000000" placeholder="Montant" v-model="item.AmountToSend" required
+          <input type="number" min="0" placeholder="Montant" v-model="item.AmountToSend" required
             autocomplete="off" />
         </div>
         <div class="field-wrap">

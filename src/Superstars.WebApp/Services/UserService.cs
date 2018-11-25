@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Superstars.DAL;
 
 namespace Superstars.WebApp.Services
@@ -37,9 +38,19 @@ namespace Superstars.WebApp.Services
             return await _userGateway.UpdateEmail(userId, mail);
         }
 
-        public async Task<UserData> FindMailByUserId(int userId)
+        public async Task<UserData> FindByUserId(int userId)
         {
             return await _userGateway.FindById(userId);
+        }
+
+        public async Task ActionDeconnexion(int userId, string userName, DateTime utcNow)
+        {
+            await _userGateway.ActionDeconnexion(userId, userName, utcNow);
+        }
+
+        public async Task ActionConnexion(int userId, string userName, DateTime utcNow)
+        {
+            await _userGateway.ActionConnexion(userId, userName, utcNow);
         }
     }
 }

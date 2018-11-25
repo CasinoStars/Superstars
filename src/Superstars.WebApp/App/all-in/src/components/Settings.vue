@@ -26,19 +26,19 @@
                                 <label>
                                     Mot de Passe Actuel<span class="req">*</span>
                                 </label><br>
-                                <input v-model="item.oldPass" required />
+                                <input type="password" v-model="item.oldPass" required />
                             </div>
                             <div class="field-wrap">
                                 <label>
                                     Nouveau Mot de Passe<span class="req">*</span>
                                 </label><br>
-                                <input v-model="item.newPass" required />
+                                <input type="password" v-model="item.newPass" required />
                             </div>
                             <div class="field-wrap">
                                 <label>
                                     Confirmer le Mot de Passe<span class="req">*</span>
                                 </label><br>
-                                <input v-model="item.confirmPass" required />
+                                <input type="password" v-model="item.confirmPass" required />
                             </div>
                         </div>
                         <div class="modal-footer">
