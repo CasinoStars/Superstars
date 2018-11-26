@@ -139,6 +139,7 @@ export default{
   border-style:solid; 
   border-width:0.7px;
   border-color: rgb(74, 80, 180);
+  border-radius: 5px;
 }
 
 #borderSolde:hover{
