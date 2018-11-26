@@ -131,7 +131,8 @@ export default {
       trueBet: 0,
       errors: [],
       wasingame: false,
-      success: ''
+      success: '',
+      rollDices: false
     }
   },
 
@@ -223,6 +224,10 @@ export default {
 
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
+      this.rollDices = false;
+      this.selected = [];
+      if(this.nbTurn < 3)
+        await this.changeTurn();
     },
     
     async refreshIaDices() {
@@ -316,7 +321,8 @@ export default {
         // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-        setTimeout(await this.refreshIaDices(), 3000);
+        await new Promise(f => setTimeout(f, 3000)); //Pause de 3s;
+        await this.refreshIaDices();
       }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
@@ -324,18 +330,19 @@ export default {
 
     async onSubmit(e) {
       e.preventDefault();
-      if(this.nbTurn === 0)
-        await this.executeAsyncRequest(() => YamsApiService.RollDices([1,2,3,4,5]));
+      this.rollDices = true;
+      if(this.nbTurn === 0) {
+        this.selected = [1,2,3,4,5];
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
+      }
       else
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
-      //await this.refreshDices();
-      this.selected = [];
-      if(this.nbTurn < 3)
-        await this.changeTurn();
+      await new Promise(f => setTimeout(f, 3000));
+      await this.refreshDices();
     },
 
     getDiceImage(value, index) {
-      let image = this.selected.findIndex(x => x === index + 1) === -1 ? `dice${value}.png` : `dicePlayerRoll.gif`;
+      let image = this.selected.findIndex(x => x === index + 1) !== -1 && this.rollDices ? `dicePlayerRoll.gif` : `dice${value}.png`;
       return require(`../img/${image}`);
     }
   }
