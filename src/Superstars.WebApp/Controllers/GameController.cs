@@ -315,25 +315,29 @@ namespace Superstars.WebApp.Controllers
                 return Ok(false);
         }
 
-        [HttpPost("GameEndUpdate/{gametype}/{win}")]
-        public async Task<IActionResult> GameEndUpdate(int gametype, string win)
+        [HttpPost("GameEndUpdate/{gametype}/{win}/{trueOrFake}")]
+        public async Task<IActionResult> GameEndUpdate(int gametype, string win, string trueOrFake)
         {
             var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             GameData data = await _gameGateway.GetGameByPlayerId(userid,gametype);
             UserData udata = await _userGateway.FindById(userid);
             Result result;
+
             if (win == "Player")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake);
             }
             else if (win == "Draw")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Draw");
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "draw", trueOrFake);
 
             } else
             {
                 var IA = await _userGateway.FindByName("#AI" + userid + gametype.ToString());
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid + gametype.ToString());
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake);
             }
 
             return this.CreateResult(result);

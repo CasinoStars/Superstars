@@ -49,7 +49,6 @@ export default {
       async GetisInGame() {
         this.isInGameYams = await this.executeAsyncRequest(() => GameApiService.isInGame(0))
         this.isInGameBlackJack = await this.executeAsyncRequest(() => GameApiService.isInGame(1));
-        console.log(this.isInGameBlackJack);
       },
 
       async DeleteAis() {
@@ -57,19 +56,16 @@ export default {
       if(this.isInGameBlackJack != true) {
          await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
          await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
-         console.log("condition 1");
       }
       
       if(this.isInGameYams != true) {
          await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-         console.log("condition 2");
       }
       
       if(this.isInGameBlackJack != true && this.isInGameYams != true) {
          await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
-         console.log("condition 3");
       }   
     },
 

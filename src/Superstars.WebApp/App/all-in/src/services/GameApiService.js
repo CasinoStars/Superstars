@@ -79,9 +79,8 @@ async isInGame(gametype) {
     return data;    
 }
 
-async gameEndUpdate(gametype, win) {
-    console.log("PUTEPUTE");
-    return await postAsync(`${endpoint}/GameEndUpdate/${gametype}/${win}`);
+async gameEndUpdate(gametype, win, trueOrFake) {
+    return await postAsync(`${endpoint}/GameEndUpdate/${gametype}/${win}/${trueOrFake}`);
 }
 
 }
