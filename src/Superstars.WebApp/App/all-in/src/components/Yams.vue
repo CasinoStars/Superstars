@@ -45,12 +45,7 @@
   
   <form @submit="onSubmitAI($event)" id="PlayAI">
     <div v-for="(i, index) of iadices" :key="index" class="iadices">
-      <img v-if="i == 1" src="../img/diceia1.png">
-      <img v-if="i == 2" src="../img/diceia2.png">
-      <img v-if="i == 3" src="../img/diceia3.png">
-      <img v-if="i == 4" src="../img/diceia4.png">
-      <img v-if="i == 5" src="../img/diceia5.png">
-      <img v-if="i == 6" src="../img/diceia6.png">
+      <img :src="require(`../img/diceia${i}.png`)">
     </div>
   </form>
   
@@ -60,12 +55,7 @@
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
       <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
       <label class="image-checkbox" :for="index+1">
-        <img v-if="i == 1" src="../img/dice1.png">
-        <img v-if="i == 2" src="../img/dice2.png">
-        <img v-if="i == 3" src="../img/dice3.png">
-        <img v-if="i == 4" src="../img/dice4.png">
-        <img v-if="i == 5" src="../img/dice5.png">
-        <img v-if="i == 6" src="../img/dice6.png">
+        <img :src="getDiceImage(i, index)" :id="index">
       </label>
     </div>
   </form>
@@ -338,10 +328,15 @@ export default {
         await this.executeAsyncRequest(() => YamsApiService.RollDices([1,2,3,4,5]));
       else
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
-      await this.refreshDices();
+      //await this.refreshDices();
       this.selected = [];
       if(this.nbTurn < 3)
         await this.changeTurn();
+    },
+
+    getDiceImage(value, index) {
+      let image = this.selected.findIndex(x => x === index + 1) === -1 ? `dice${value}.png` : `dicePlayerRoll.gif`;
+      return require(`../img/${image}`);
     }
   }
 }
