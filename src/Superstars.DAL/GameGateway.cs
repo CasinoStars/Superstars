@@ -194,13 +194,13 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task ActionEndGame(int userid, string username, DateTime date, string gametype, int gameid, bool haswin, bool trueOrFake)
+        public async Task ActionEndGame(int userid, string username, DateTime date, int gametype, int gameid, string haswin, string trueOrFake)
         {
             Result<string> pot;
             decimal bet;
             string money;
 
-            if (trueOrFake)
+            if (trueOrFake == "real")
             {
                 money = " bits (BTC) ";
             }else
@@ -208,7 +208,7 @@ namespace Superstars.DAL
                 money = " All`in Coins ";
             }
 
-            if (gametype == "Yams")
+            if (gametype == 0)
             {
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);

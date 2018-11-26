@@ -268,8 +268,6 @@ export default {
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
     this.refreshiaturn();
-    console.log("POT " + pot);
-    console.log("nbturn " + this.nbturn);
 
     if(pot == 0 || pot == null) {
       this.showModal();
@@ -443,7 +441,7 @@ export default {
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
             await this.RefreshBTC();
           }
-          await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin));
+          await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
           await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
           await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
           return;
@@ -454,7 +452,7 @@ export default {
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats(1,this.playerwin));
-        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
         await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));        
     },
