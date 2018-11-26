@@ -48,7 +48,7 @@
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
-              <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="modal" data-target="#myModal" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="modal" data-target="#settingsModal" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user" style="font-size: 1.4rem;"></i> {{ auth.pseudo }}
               </a>
             <li class="nav-item">

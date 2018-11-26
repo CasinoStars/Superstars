@@ -1,7 +1,7 @@
 <template>
     <div class="settings">
         <!-- Modal Settings -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="false">
+        <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-hidden="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -225,10 +225,10 @@ $main-dark: darken($main,5%);
 }
 
 /* The snackbar - position it at the bottom and in the middle of the screen */
-.settings #snackbar {
+#snackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 300px; /* Set a default minimum width */
-    margin-left: -150px; /* Divide value of min-width by 2 */
+    min-width: 400px; /* Set a default minimum width */
+    margin-left: -200px; /* Divide value of min-width by 2 */
     background-color: #333; /* Black background color */
     color: #fff; /* White text color */
     text-align: center; /* Centered text */
@@ -241,7 +241,7 @@ $main-dark: darken($main,5%);
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
-.settings #snackbar.show {
+#snackbar.show {
     visibility: visible; /* Show the snackbar */
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
    However, delay the fade out process for 2.5 seconds */

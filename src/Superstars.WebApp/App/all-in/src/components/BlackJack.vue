@@ -326,12 +326,17 @@ export default {
         try {
           if(this.realOrFake === 'fake') {
             await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 1));
-            await this.RefreshFakeCoins(); 
+            await this.RefreshFakeCoins();
+            this.success = 'Vous venez de parier: '+this.fakeBet+' All`In Coins';
           }
           else {
             await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 1));
-            await this.RefreshBTC(); 
+            await this.RefreshBTC();
+            this.success = 'Vous venez de parier: '+this.trueBet+' Bits';
           }
+          var x = document.getElementById("snackbar");
+          x.className = "show";
+          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
           this.playerBet = true;
