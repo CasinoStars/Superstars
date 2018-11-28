@@ -17,4 +17,5 @@ begin
 
     insert into sp.tLogTable(UserId, ActionDate, ActionDescription) values(@UserId, @ActionDate, @ActionDescription);
 	commit;
+	return 0;
 end;

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
@@ -26,7 +27,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async void UpdateSeeds(int userId, string clientSeed = null)
+        public async Task<Result<int>> UpdateSeeds(int userId, string clientSeed = null)
         {
             var seeds = GetSeeds(userId).Result;
             var seedManager = new SeedManager(seeds.UncryptedServerSeed, seeds.UncryptedPreviousServerSeed,
@@ -43,8 +44,30 @@ namespace Superstars.DAL
                 p.Add("@PreviousClientSeed", seedManager.PreviousClientSeeds);
                 p.Add("@PreviousCryptedServerSeed", seedManager.PreviousCryptedServerSeed);
                 p.Add("@Nonce", 0);
-//                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
                 await con.ExecuteAsync("sp.sProvablyFairUpdate", p, commandType: CommandType.StoredProcedure);
+
+                var status = p.Get<int>("@Status");
+                if (status != 0) return Result.Failure<int>(Status.BadRequest, "Il y a une erreur poto");
+
+                return Result.Success(p.Get<int>("@Status"));
+            }
+        }
+
+        public async Task<Result> ActionChangeSeeds(int userid, string username, DateTime date, string clientSeed, string previousClientSeed, string serverSeed, string previousServerSeed)
+        {
+            string action = "Player named " + username + " with UserID " + userid + " changed his client seed from " + previousClientSeed + 
+                " to " + clientSeed + " and his server seed from " + previousServerSeed + " to " + serverSeed + " at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                var res = await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+
+                if (res == 1) return Result.Failure<int>(Status.BadRequest, "Il y a déjà un log");
+
+                return Result.Success(res);
             }
         }
 
