@@ -29,7 +29,7 @@
         </th>
         <th>
         <div v-for="(e,index) of profits" :key='index'>
-          <td>{{e}}</td>
+          <td>{{e.toLocaleString('en')}}</td>
         </div>
         </th>
         <th>

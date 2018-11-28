@@ -321,7 +321,7 @@ export default {
         // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-        await new Promise(f => setTimeout(f, 3000)); //Pause de 3s;
+        await new Promise(f => setTimeout(f, 2000)); //Pause de 3s;
         await this.refreshIaDices();
       }
       if(this.nbTurnIa === 3)
@@ -337,7 +337,7 @@ export default {
       }
       else
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
-      await new Promise(f => setTimeout(f, 3000));
+      await new Promise(f => setTimeout(f, 1500));
       await this.refreshDices();
     },
 
