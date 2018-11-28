@@ -53,15 +53,24 @@
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
 
-          <div class="modal-footer">
-            <div style="margin-right: 42%;">
-              <router-link class="btn btn-secondary" to="/play">Annuler</router-link>
-              <button type="submit" class="btn btn-light">Confirmer</button>
-            </div>
-          </div>
-        </form>
-      </div>
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
+  
+  <form @submit="onSubmitAI($event)" id="PlayAI">
+    <div v-for="(i, index) of iadices" :key="index" class="iadices">
+      <img :src="require(`../img/diceia${i}.png`)">
     </div>
+  </form>
+  
+  <br><br><br><br>
+  
+  <form @submit="onSubmit($event)" id="PlayPlayer">
+    <div v-for="(i, index) of dices" :key="index" class="playerdices">
+      <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
+      <label class="image-checkbox" :for="index+1">
+        <img :src="getDiceImage(i, index)" :id="index">
+      </label>
+    </div>
+  </form>
 
     <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
 
@@ -170,7 +179,8 @@ export default {
       trueBet: 0,
       errors: [],
       wasingame: false,
-      success: ''
+      success: '',
+      rollDices: false
     }
   },
 
@@ -273,9 +283,16 @@ export default {
         }
       },
 
-      async refreshDices() {
-        this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
-      },
+    async refreshDices() {
+      this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
+      this.rollDices = false;
+      this.selected = [];
+      if(this.nbTurn < 3)
+        await this.changeTurn();
+    },
+    
+    async refreshIaDices() {
+      this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
 
       async refreshIaDices() {
         this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
@@ -374,17 +391,47 @@ export default {
           await this.getFinalResult();
       },
 
-      async onSubmit(e) {
-        e.preventDefault();
-        if (this.nbTurn === 0)
-          await this.executeAsyncRequest(() => YamsApiService.RollDices([1, 2, 3, 4, 5]));
-        else
-          await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
-        await this.refreshDices();
-        this.selected = [];
-        if (this.nbTurn < 3)
-          await this.changeTurn();
+    async onSubmitAI(e) {
+      e.preventDefault();
+      while(this.nbTurnIa < 3) {
+        // setTimeout(this.waiting, 400);
+        // setTimeout(this.waiting, 800);
+        // setTimeout(this.waiting, 1200);
+        // setTimeout(this.waiting, 1600);
+        // setTimeout(this.waiting, 2000);
+        // setTimeout(this.waiting, 2400);
+        // setTimeout(this.waiting, 2800);
+        // setTimeout(this.waiting, 3200);      
+        let arraydice = [this.iadices, this.dices];
+        // while(this.wait != '') {
+        //   //Wait end of dynamic '...' for roll dices
+        //   setTimeout(this.waiting, 400);
+        // }
+        this.nbTurnIa = this.nbTurnIa + 1;
+        await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
+        await new Promise(f => setTimeout(f, 3000)); //Pause de 3s;
+        await this.refreshIaDices();
       }
+      if(this.nbTurnIa === 3)
+        await this.getFinalResult();
+    },
+
+    async onSubmit(e) {
+      e.preventDefault();
+      this.rollDices = true;
+      if(this.nbTurn === 0) {
+        this.selected = [1,2,3,4,5];
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
+      }
+      else
+        await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
+      await new Promise(f => setTimeout(f, 3000));
+      await this.refreshDices();
+    },
+
+    getDiceImage(value, index) {
+      let image = this.selected.findIndex(x => x === index + 1) !== -1 && this.rollDices ? `dicePlayerRoll.gif` : `dice${value}.png`;
+      return require(`../img/${image}`);
     }
   }
 </script>
