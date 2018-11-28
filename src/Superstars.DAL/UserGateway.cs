@@ -109,6 +109,28 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task ActionChangeEmail(int userid, string username, DateTime date, string newEmail)
+        {
+            string action = "Player named " + username + " with UserID " + userid + " changed his email to " + newEmail + " at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionChangePaswword(int userid, string username, DateTime date, string newPassword)
+        {
+            string action = "Player named " + username + " with UserID " + userid + " changed his password to " + newPassword + " at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task Delete(int userId)
         {
             using (var con = new SqlConnection(_connectionString))

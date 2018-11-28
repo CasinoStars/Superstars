@@ -43,14 +43,24 @@ namespace Superstars.WebApp.Services
             return await _userGateway.FindById(userId);
         }
 
-        public async Task ActionDeconnexion(int userId, string userName, DateTime utcNow)
+        public async Task ActionDeconnexion(int userId, string userName, DateTime date)
         {
-            await _userGateway.ActionDeconnexion(userId, userName, utcNow);
+            await _userGateway.ActionDeconnexion(userId, userName, date);
         }
 
-        public async Task ActionConnexion(int userId, string userName, DateTime utcNow)
+        public async Task ActionConnexion(int userId, string userName, DateTime date)
         {
-            await _userGateway.ActionConnexion(userId, userName, utcNow);
+            await _userGateway.ActionConnexion(userId, userName, date);
+        }
+
+        public async Task ActionChangeEmail(int userId, string userName, DateTime date, string email)
+        {
+            await _userGateway.ActionChangeEmail(userId, userName, date, email);
+        }
+
+        public async Task ActionChangePassword(int userId, string userName, DateTime date, string password)
+        {
+            await _userGateway.ActionChangePaswword(userId, userName, date, password);
         }
     }
 }

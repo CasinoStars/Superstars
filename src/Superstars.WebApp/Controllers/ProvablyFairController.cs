@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace Superstars.WebApp.Controllers
     public class ProvablyFairController : Controller
     {
         private readonly ProvablyFairGateway _provablyFairGateway;
+        private readonly UserGateway _userGateway;
 
-        public ProvablyFairController(ProvablyFairGateway provablyFairGateway)
+        public ProvablyFairController(ProvablyFairGateway provablyFairGateway, UserGateway userGateway)
         {
             _provablyFairGateway = provablyFairGateway;
+            _userGateway = userGateway;
         }
 
 
@@ -37,10 +40,13 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpPost("UpdateSeeds")]
-        public void UpdateSeeds([FromBody] string ClientSeed = null)
+        public async void UpdateSeeds([FromBody] string ClientSeed = null)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
+            UserData data = await _userGateway.FindById(userId);
+            Result res = await _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
+            var seedData = await GetSeeds();
+            Result actionRes = await _provablyFairGateway.ActionChangeSeeds(data.UserId, data.UserName, DateTime.UtcNow, seedData.ClientSeed, seedData.PreviousClientSeed, seedData.UncryptedServerSeed, seedData.UncryptedPreviousServerSeed);
         }
 
         [HttpPost("{clientSeedTest}/{serverSeedTest}/{nbOfDices}/RetriveDicesFromSeeds")]

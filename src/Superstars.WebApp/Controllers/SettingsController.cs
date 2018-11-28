@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Services;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -27,6 +28,7 @@ namespace Superstars.WebApp.Controllers
             if (user != null)
             {
                 await _userService.UpdatePassword(user.UserId, newPassword);
+                await _userService.ActionChangePassword(user.UserId, user.UserName, DateTime.UtcNow, newPassword);
                 return true;
             }
             else
@@ -40,7 +42,9 @@ namespace Superstars.WebApp.Controllers
             {
                 var addr = new System.Net.Mail.MailAddress(newMail);
                 int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                await _userService.UpdateMail(userId, newMail);
+                UserData data = await _userService.FindByUserId(userId);
+                await _userService.UpdateMail(data.UserId, newMail);
+                await _userService.ActionChangeEmail(data.UserId, data.UserName, DateTime.UtcNow, newMail);
                 return addr.Address == newMail;
             }
             catch
