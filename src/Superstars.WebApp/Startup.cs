@@ -50,7 +50,7 @@ namespace Superstars.WebApp
             services.AddSingleton(x =>
                 new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton(x => new ChatGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton<CrashService>();
+            services.AddHostedService<CrashService>();
             services.AddSingleton(x => new RankService());
             services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();

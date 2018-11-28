@@ -39,6 +39,9 @@
             this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel.Error).build();
             this.connection.on("Newgame", ite => {
                 console.log(ite)
+                this.chart.destroy();
+                this.initializeChart();
+                this.i = 0
                 this.myLoop(ite);
             });
             this.connection.start();
@@ -119,9 +122,7 @@
                         clearInterval(this.fn);
                     }
                 }, 100);
-                this.chart.destroy();
-                this.initializeChart();
-                this.i = 0
+                
             }
         }
     }

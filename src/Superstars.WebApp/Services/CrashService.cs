@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CrashGameMath;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Hosting;
 
 namespace Superstars.WebApp.Services
 {
-    public class CrashService
+    public class CrashService : IHostedService
     {
         private readonly IHubContext<SignalRHub> _signalR;
         private double _crashValue;
@@ -20,7 +22,6 @@ namespace Superstars.WebApp.Services
             _signalR = signalR;
             _crashValue = crashBuilder.NextCrashValue();
             _crashBuilder = crashBuilder;
-            GameLoop();
         }
 
         private async void LaunchNewGame()
@@ -53,6 +54,16 @@ namespace Superstars.WebApp.Services
                 stopWatch.Stop();
                 stopWatch.Reset();
             }       
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            await GameLoop();
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            
         }
     }
 }

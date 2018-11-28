@@ -17,7 +17,7 @@ namespace Superstars.WebApp.Controllers
     {
         private CrashBuilder _crash;
 
-        public CrashController(CrashBuilder crash, CrashService service)
+        public CrashController(CrashBuilder crash)
         {
             _crash = crash;
             
