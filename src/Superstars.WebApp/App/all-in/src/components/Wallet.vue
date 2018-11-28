@@ -77,6 +77,7 @@
 
       </form>
     </div>
+    <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
   </div>
 </template>
 
@@ -96,6 +97,7 @@
         item: {},
         wallet: "",
         BTCAddress: "",
+        success :'',
         errors: [],
         Responses: []
       };
@@ -140,6 +142,10 @@
               WalletApiService.AddCoins(this.item)
             );
             await this.RefreshFakeCoins();
+            this.success = "Votre compte a bien été crédité"
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
           } catch (error) {}
         }
       },
@@ -178,8 +184,11 @@
             this.Responses = await this.executeAsyncRequest(() =>
               WalletApiService.Withdraw(this.item)
             );
-
             await this.RefreshBTC();
+            this.success = "Votre retrait a bien été effectué"
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
           } catch (error) {}
           this.showModal();
         }
