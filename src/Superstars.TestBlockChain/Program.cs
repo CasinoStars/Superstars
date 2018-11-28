@@ -5,6 +5,7 @@ using NBitcoin.RPC;
 using Newtonsoft.Json.Linq;
 using QBitNinja.Client;
 
+
 namespace Superstars.Wallet
 {
     internal class Program
@@ -31,9 +32,6 @@ namespace Superstars.Wallet
                 if(Validator.IsValidAddress(tktmagl.PubKey.GetAddress(Network.TestNet).ToString()) == true) Console.WriteLine("TRUE");
                 else { throw new Exception("FASLE"); }
             }
-
-
-
 
             bool hugo = Validator.IsValidAddress("mzRnZHJodRUmE6cSPvGrhtcsgvhdVFYroa");
             bool loiseau = Validator.IsValidAddress("mh2e7YHio7fTjLXHZ3KRXDfU52RbwQbhtK");

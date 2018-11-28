@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -75,6 +76,11 @@ namespace Superstars.WebApp
                             AuthenticationType = JwtBearerAuthentication.AuthenticationType
                         };
                     });
+
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy("IsAdmin", b => b.RequireClaim("isAdmin", true.ToString()));
+            });
         }
 
         //This method gets called by the runtime.Use this method to configure the HTTP request pipeline.

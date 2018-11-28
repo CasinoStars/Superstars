@@ -59,7 +59,7 @@ namespace Superstars.WebApp.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-                await SignIn(user.UserName, user.UserId.ToString());
+                await SignIn(user.UserName, user.UserId.ToString(), user.IsAdmin);
                 return RedirectToAction(nameof(Authenticated));
             }          
             return View(model);
@@ -94,7 +94,7 @@ namespace Superstars.WebApp.Controllers
                 }
 
                 var user = await _userService.FindUser(model.Pseudo, model.Password);
-                await SignIn(model.Pseudo, user.UserId.ToString());
+                await SignIn(model.Pseudo, user.UserId.ToString(), false);
                 await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));
             }
@@ -127,7 +127,9 @@ namespace Superstars.WebApp.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var pseudo = User.FindFirst(ClaimTypes.Name).Value;
-            var token = _tokenService.GenerateToken(userId, pseudo);
+            string isAdminClaim = User.FindFirst("isAdmin").Value;
+            bool isAdmin = isAdminClaim != null && bool.Parse(isAdminClaim);
+            var token = _tokenService.GenerateToken(userId, pseudo, isAdmin);
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
             ViewData["Pseudo"] = pseudo;
@@ -135,12 +137,13 @@ namespace Superstars.WebApp.Controllers
             return View();
         }
 
-        private async Task SignIn(string pseudo, string userId)
+        private async Task SignIn(string pseudo, string userId, bool isAdmin)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, pseudo, ClaimValueTypes.String),
-                new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String)
+                new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String),
+                new Claim("isAdmin", isAdmin.ToString(), ClaimValueTypes.Boolean)
             };
             var identity = new ClaimsIdentity(claims, CookieAuthentication.AuthenticationType, ClaimTypes.Name,
                 string.Empty);

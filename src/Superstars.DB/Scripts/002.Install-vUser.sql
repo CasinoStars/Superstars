@@ -7,5 +7,6 @@ as
 		   PrivateKey = u.PrivateKey,
 		   Country = u.Country,
 		   LastConnexionDate = u.LastConnexionDate,
-		   LastDeconnexionDate = u.LastDeconnexionDate
+		   LastDeconnexionDate = u.LastDeconnexionDate,
+		   IsAdmin = u.IsAdmin
 	from sp.tUser u

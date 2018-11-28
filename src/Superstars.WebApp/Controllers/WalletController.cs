@@ -34,6 +34,7 @@ namespace Superstars.WebApp.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("AddCoins")]
+        [Authorize( AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme, Policy = "IsAdmin" )]
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);

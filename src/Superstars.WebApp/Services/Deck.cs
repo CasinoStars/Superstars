@@ -50,7 +50,7 @@ namespace Superstars.WebApp
             var top = DeckCards.Count;
           var drawedcard = DeckCards.ElementAt(rand - 1);
             /// apeller le random des famille 
-            /// r
+
             DeckCards.RemoveAt(rand - 1);
             return drawedcard;
         }

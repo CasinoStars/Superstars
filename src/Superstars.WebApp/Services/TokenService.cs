@@ -15,7 +15,7 @@ namespace Superstars.WebApp.Services
             _options = options.Value;
         }
 
-        public Token GenerateToken(string userId, string pseudo)
+        public Token GenerateToken(string userId, string pseudo, bool isAdmin)
         {
             var now = DateTime.UtcNow;
 
@@ -23,6 +23,7 @@ namespace Superstars.WebApp.Services
             // You can add other claims here, if you want:
             var claims = new[]
             {
+                new Claim( "isAdmin", isAdmin.ToString() ),
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.UniqueName, pseudo),
                 new Claim(JwtRegisteredClaimNames.Iat, ((int) (now - new DateTime(1970, 1, 1)).TotalSeconds).ToString(),
