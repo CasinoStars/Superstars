@@ -1,10 +1,10 @@
 <template>
-  <div class="yams">
+<div class="yams">
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
-      <div class="modal-content">
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
 
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
@@ -29,29 +29,17 @@
           <div class="alert alert-danger" style="opacity: 0.8; font-weight: bold; font-family: 'Courier New', sans-serif; text-transform: uppercase; margin-top: 1%; margin-bottom: 0.5%; text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
             <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
           </div>
-          <router-link class="close" to="/play">&times;</router-link>
         </div>
-        <ul class="tab-group">
-          <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
-          <li class="tab" v-else><a v-on:click="changeBet('real')">Réel</a></li>
-          <li class="tab active" v-if="this.realOrFake == 'fake'"><a v-on:click="changeBet('real')">Virtuel</a></li>
-          <li class="tab" v-else><a v-on:click="changeBet('fake')">Virtuel</a></li>
-        </ul>
-        <form @submit="bet($event)">
-          <div class="modal-body">
-            <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-if="realOrFake == 'real'">SAISISSEZ
-              VOTRE MISE EN BTC <span class="req">*</span></h4>
-            <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-else>SAISISSEZ VOTRE MISE EN ALL'IN
-              <span class="req">*</span></h4>
-            <input style="margin-top: 10px; margin-bottom: 1%;" v-if="realOrFake == 'real'" type="number" v-model="trueBet"
-              required />
-            <input style="margin-top: 10px; margin-bottom: 1%;" v-else type="number" v-model="fakeBet" required />
 
         <div class="modal-footer">
           <div style="margin-right: 42%;">
             <router-link class="btn btn-secondary" v-on:click.native="RedirectandDelete()" to="">Annuler</router-link>
             <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
   
@@ -72,92 +60,56 @@
     </div>
   </form>
 
-    <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
+  <br>
+  <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
+    <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER </div>
+    <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA </div>
+    <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ  </div>  
+    <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ   </div>
+    <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ  </div>
+    <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
+    
 
-    <form @submit="onSubmitAI($event)" id="PlayAI">
-      <div v-for="(i, index) of iadices" :key="index" class="iadices">
-        <img v-if="i == 1" src="../img/diceia1.png">
-        <img v-if="i == 2" src="../img/diceia2.png">
-        <img v-if="i == 3" src="../img/diceia3.png">
-        <img v-if="i == 4" src="../img/diceia4.png">
-        <img v-if="i == 5" src="../img/diceia5.png">
-        <img v-if="i == 6" src="../img/diceia6.png">
+<center>
+<div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="lds-css ng-scope">
+  <div style="width:100%;height:100%" class="lds-eclipse">
+    <div>
       </div>
-    </form>
-
-    <br><br><br><br>
-
-    <form @submit="onSubmit($event)" id="PlayPlayer">
-      <div v-for="(i, index) of dices" :key="index" class="playerdices">
-        <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
-        <label class="image-checkbox" :for="index+1">
-          <img v-if="i == 1" src="../img/dice1.png">
-          <img v-if="i == 2" src="../img/dice2.png">
-          <img v-if="i == 3" src="../img/dice3.png">
-          <img v-if="i == 4" src="../img/dice4.png">
-          <img v-if="i == 5" src="../img/dice5.png">
-          <img v-if="i == 6" src="../img/dice6.png">
-        </label>
       </div>
-    </form>
+      </div>
+</center>
 
-    <br>
-    <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-      <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER </div>
-      <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA </div>
-      <div v-if="nbTurnIa == 1">L'IA FAIT SON 1<sup>er</sup> LANCÉ </div>
-      <div v-if="nbTurnIa == 2">L'IA FAIT SON 2<sup>ème</sup> LANCÉ </div>
-      <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ </div>
-      <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
-
-
-      <center>
-        <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="lds-css ng-scope">
-          <div style="width:100%;height:100%" class="lds-eclipse">
-            <div>
-            </div>
-          </div>
-        </div>
-      </center>
-
-      <!-- <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="spinner">
+    <!-- <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="spinner">
   <div class="cube1"></div>
   <div class="cube2"></div>
     </div> -->
 
-      <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
-      <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
-      <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0"
-        @click="nbTurn = 3">GARDER MES DÉS</button>
-      <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
-      <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE:
-        <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
-    </div>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0" @click="nbTurn = 3">GARDER MES DÉS</button>
+    <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
+    <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}<br>VOTRE FIGURE: <strong>{{playerFigure}}</strong><br>FIGURE DE L'IA: <strong>{{IaFigure}}</strong></div>
+  </div>
 
-    <div style="text-align:center;" v-if="nbTurnIa == 3 && winOrLose != ''">
-      <br>
-      <router-link v-on:click.native="RePlay()" to="">
-        <button class="btn btn-light">REJOUER</button>
-      </router-link>
-      <router-link to="/play">
-        <button class="btn btn-dark">QUITTER</button>
-      </router-link>
-    </div>
-
+  <div style="text-align:center;" v-if="nbTurnIa == 3 && winOrLose != ''">
+    <br>
+    <router-link v-on:click.native="RePlay()" to="">
+      <button class="btn btn-light">REJOUER</button>
+    </router-link>
+    <router-link to="/play">
+      <button class="btn btn-dark">QUITTER</button>
+    </router-link>
   </div>
     <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
 </div>
 </template>
 
 <script>
-  import {
-    mapActions,
-    mapGetters
-  } from 'vuex';
-  import YamsApiService from '../services/YamsApiService';
-  import GameApiService from '../services/GameApiService';
-  import WalletApiService from '../services/WalletApiService';
-  import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
+import YamsApiService from '../services/YamsApiService';
+import GameApiService from '../services/GameApiService';
+import WalletApiService from '../services/WalletApiService';
+import Vue from 'vue';
 
 export default {
   data(){
@@ -220,9 +172,9 @@ export default {
       this.errors = 0;
     },
 
-    computed: {
-      ...mapGetters(['BTCMoney']),
-      ...mapGetters(['fakeMoney'])
+    showModal() {
+      var modal = document.getElementById('myModal');
+      modal.style.display = "block";
     },
 
     async bet(e) {
@@ -265,23 +217,10 @@ export default {
           modal.style.display = "none";
           this.playerBet = true;
         }
-        this.errors = errors;
-        if (errors.length == 0) {
-          try {
-            if (this.realOrFake === 'fake') {
-              await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 0));
-              await this.RefreshFakeCoins();
-            } else {
-              await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 0));
-              await this.RefreshBTC();
-            }
-            console.log("WTFHAPPENNNNNN");
-            var modal = document.getElementById('myModal');
-            modal.style.display = "none";
-            this.playerBet = true;
-          } catch (error) {}
+        catch(error) {
         }
-      },
+      }
+    },
 
     async refreshDices() {
       this.dices = await this.executeAsyncRequest(() => YamsApiService.GetPlayerDices());
@@ -294,10 +233,11 @@ export default {
     async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
 
-      async refreshIaDices() {
-        this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
+    },
 
-      },
+    async changeTurn() {
+      this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
+    },
 
     async updateStats() {
         await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
@@ -323,7 +263,8 @@ export default {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
             await this.RefreshFakeCoins();
-          } else {
+          }
+          else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
             await this.RefreshBTC();
@@ -335,13 +276,14 @@ export default {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
             await this.RefreshFakeCoins();
-          } else {
-            await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot / 2));
-            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot / 2));
+          }
+          else {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
             await this.RefreshBTC();
           }
-        }
-      },
+      }
+    },
 
     async RePlay() {
       await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
@@ -353,43 +295,13 @@ export default {
       this.$router.go(this.$router.history);
     },
 
-      waiting() {
-        if (this.wait == '...') {
-          this.wait = '';
-        } else {
-          this.wait += '.';
-        }
-      },
-      timeout(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      },
-      async sleep(fn) {
-        await this.timeout(3000);
-        return fn;
-      },
-      async onSubmitAI(e) {
-        e.preventDefault();
-        while (this.nbTurnIa < 3) {
-          // setTimeout(this.waiting, 400);
-          // setTimeout(this.waiting, 800);
-          // setTimeout(this.waiting, 1200);
-          // setTimeout(this.waiting, 1600);
-          // setTimeout(this.waiting, 2000);
-          // setTimeout(this.waiting, 2400);
-          // setTimeout(this.waiting, 2800);
-          // setTimeout(this.waiting, 3200);      
-          let arraydice = [this.iadices, this.dices];
-          // while(this.wait != '') {
-          //   //Wait end of dynamic '...' for roll dices
-          //   setTimeout(this.waiting, 400);
-          // }
-          this.nbTurnIa = this.nbTurnIa + 1;
-          await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-          await this.sleep(this.refreshIaDices());
-        }
-        if (this.nbTurnIa === 3)
-          await this.getFinalResult();
-      },
+    waiting() {
+      if(this.wait == '...'){
+        this.wait = '';
+      }else{
+        this.wait += '.';
+      }
+    },
 
     async onSubmitAI(e) {
       e.preventDefault();
@@ -434,222 +346,190 @@ export default {
       return require(`../img/${image}`);
     }
   }
+}
 </script>
 
 <style lang="scss">
-  $body-bg: #c1bdba;
-  $form-bg: #13232f;
-  $white: #ffffff;
-  $main: #777c7b;
-  $main-dark: darken($main, 5%);
-  $gray-light: #a0b3b0;
+$body-bg: #c1bdba;
+$form-bg: #13232f;
+$white: #ffffff;
+$main: #777c7b;
+$main-dark: darken($main,5%);
+$gray-light: #a0b3b0;
 
-  .yams .tab-group {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 5px 0;
-
-    &:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    li a {
-      display: block;
-      text-decoration: none;
-      padding: 8px;
-      background: rgba($gray-light, .25);
-      color: $gray-light;
-      font-size: 20px;
-      float: left;
-      width: 50%;
-      text-align: center;
-      cursor: pointer;
-      transition: .5s ease;
-
-      &:hover {
-        background: $main-dark;
-        color: $white;
-      }
-    }
-
-    .active a {
-      background: $main;
-      color: $white;
+.yams .tab-group {
+  list-style:none;
+  padding:0;
+  margin:0 0 5px 0;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  li a {
+    display:block;
+    text-decoration:none;
+    padding:8px;
+    background:rgba($gray-light,.25);
+    color:$gray-light;
+    font-size:20px;
+    float:left;
+    width:50%;
+    text-align:center;
+    cursor:pointer;
+    transition:.5s ease;
+    &:hover {
+      background:$main-dark;
+      color:$white;
     }
   }
+  .active a {
+    background:$main;
+    color:$white;
+  }
+}
 
-  /* The Modal (background) */
-  .yams .modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: 1;
-    /* Sit on top */
-    padding-top: 16%;
-    /* Location of the box */
+/* The Modal (background) */
+.yams .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 16%; /* Location of the box */
     left: 0;
     top: 0;
-    width: 100%;
-    /* Full width */
-    height: 100%;
-    /* Full height */
-    overflow: auto;
-    /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0);
-    /* Fallback color */
-    background-color: rgba($body-bg, 0.4);
-    /* Black w/ opacity */
-  }
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba($body-bg,0.4); /* Black w/ opacity */
+}
 
-  /* Modal Content */
-  .yams .modal-content {
+/* Modal Content */
+.yams .modal-content {
     position: relative;
-    background: rgba($form-bg, .9);
+    background: rgba($form-bg,.9);
     margin: auto;
     padding: 0;
     width: 80%;
-    box-shadow: 0 0 100px 50px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 0 100px 50px rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
     animation-duration: 0.4s
-  }
+}
 
-  /* Add Animation */
-  @-webkit-keyframes animatetop {
-    from {
-      top: -300px;
-      opacity: 0
-    }
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
 
-    to {
-      top: 0;
-      opacity: 1
-    }
-  }
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
 
-  @keyframes animatetop {
-    from {
-      top: -300px;
-      opacity: 0
-    }
-
-    to {
-      top: 0;
-      opacity: 1
-    }
-  }
-
-  /* The Close Button */
-  .yams .close {
+/* The Close Button */
+.yams .close {
     color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }
+}
 
-  .yams .close:hover,
-  .yams .close:focus {
+.yams .close:hover,
+.yams .close:focus {
     color: white;
     text-decoration: none;
     cursor: pointer;
-  }
+}
 
-  .req {
-    margin: 2px;
-    color: #1ab188;
-    ;
-  }
+.req {
+	margin:2px;
+	color:#1ab188;;
+}
 
-  .yams .modal-header {
+.yams .modal-header {
     padding: 10px 16px;
     text-align: center;
     background: #222222a8;
     color: white;
-  }
+}
 
-  .yams .modal-body {
-    padding: 20px 16px;
-    text-align: center;
-  }
+.yams .modal-body {
+  padding: 20px 16px;
+  text-align: center;
+}
 
-  .yams .modal-footer {
-    padding: 15px 16px;
-    background-color: #222222a8;
-    color: white;
-  }
+.yams .modal-footer {
+  padding: 15px 16px;
+  background-color:  #222222a8;
+  color: white;
+}
 </style>
 
 <style>
-  /* ECLIPSE LOADER */
+/* ECLIPSE LOADER */
 
-  @keyframes lds-eclipse {
-    0% {
-      -webkit-transform: rotate(0deg);
-      transform: rotate(0deg);
-    }
-
-    50% {
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);
-    }
-
-    100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
+@keyframes lds-eclipse {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
-
-  @-webkit-keyframes lds-eclipse {
-    0% {
-      -webkit-transform: rotate(0deg);
-      transform: rotate(0deg);
-    }
-
-    50% {
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);
-    }
-
-    100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
   }
-
-  .yams .lds-eclipse {
-    position: relative;
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
-
-  .yams .lds-eclipse div {
-    position: absolute;
-    -webkit-animation: lds-eclipse 1s linear infinite;
-    animation: lds-eclipse 1s linear infinite;
-    width: 40px;
-    height: 40px;
-    top: 80px;
-    margin-left: -250%;
-    border-radius: 50%;
-    box-shadow: 0 2px 0 0 #7f8387;
-    -webkit-transform-origin: 20px 21px;
-    transform-origin: 20px 21px;
+}
+@-webkit-keyframes lds-eclipse {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
-
-  .yams .lds-eclipse {
-    width: 200px !important;
-    height: 200px !important;
-    -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
-    transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
   }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.yams .lds-eclipse {
+  position: relative;
+}
+
+.yams .lds-eclipse div {
+  position: absolute;
+  -webkit-animation: lds-eclipse 1s linear infinite;
+  animation: lds-eclipse 1s linear infinite;
+  width: 40px;
+  height: 40px;
+  top: 80px;
+  margin-left: -250%;
+  border-radius: 50%;
+  box-shadow: 0 2px 0 0 #7f8387;
+  -webkit-transform-origin: 20px 21px;
+  transform-origin: 20px 21px;
+}
+
+.yams .lds-eclipse {
+  width: 200px !important;
+  height: 200px !important;
+  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+}
 
 
 
-  /* DOUBLE CUBER SPINER */
+/* DOUBLE CUBER SPINER */
 
-  /* .spinner {
+/* .spinner {
   margin: 100px auto;
   width: 40px;
   height: 40px;
@@ -701,74 +581,64 @@ export default {
 } */
 
 
-  /* TURNING SQUARE SPINER */
-  .yams .loader {
-    border: 2px solid #f3f3f3;
-    border-radius: 0%;
-    border-top: 4px solid rgb(160, 160, 160);
-    border-right: 4px solid rgb(128, 128, 128);
-    border-bottom: 4px solid rgb(190, 190, 190);
-    border-left: 4px solid rgb(96, 96, 96);
-    margin: auto;
-    width: 15px;
-    height: 15px;
-    display: -webkit-inline-box;
-    -webkit-animation: spin 1s linear infinite;
-    animation: spin 1s linear infinite;
-  }
+/* TURNING SQUARE SPINER */
+.yams .loader {
+  border: 2px solid #f3f3f3;
+  border-radius: 0%;
+  border-top: 4px solid 	rgb(160,160,160);
+  border-right: 4px solid 	rgb(128,128,128);
+  border-bottom: 4px solid 	rgb(190,190,190);
+  border-left: 4px solid 	rgb(96,96,96);
+  margin: auto;
+  width: 15px;
+  height: 15px;
+  display: -webkit-inline-box;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
 
-  @-webkit-keyframes spin {
-    0% {
-      -webkit-transform: rotate(0deg);
-    }
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
 
-    100% {
-      -webkit-transform: rotate(360deg);
-    }
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
+.yams .image-checkbox > img {
+	cursor: pointer;
+  height: 100px;
+  width: 100px;
+}
 
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+.yams input[type="checkbox"] {
+	display: none;
+}
 
-  .yams .image-checkbox>img {
-    cursor: pointer;
-    height: 100px;
-    width: 100px;
-  }
+.yams input[type=checkbox]:checked + label > img{
+  height: 120px;
+  width: 120px;
+} 
 
-  .yams input[type="checkbox"] {
-    display: none;
-  }
+.playerdices {
+	display: inline-block;
+	position: relative;
+  width: 8%; 
+	left: 30.2%;
+}
 
-  .yams input[type=checkbox]:checked+label>img {
-    height: 120px;
-    width: 120px;
-  }
+.iadices {
+	display: inline-block;
+	position: relative;
+  width: 8%;
+	left: 30.2%;
+  margin-top: 8%;
+}
 
-  .playerdices {
-    display: inline-block;
-    position: relative;
-    width: 8%;
-    left: 30.2%;
-  }
-
-  .iadices {
-    display: inline-block;
-    position: relative;
-    width: 8%;
-    left: 30.2%;
-    margin-top: 8%;
-  }
-
-  .iadices>img {
-    height: 100px;
-    width: 100px;
-  }
+.iadices > img {
+  height: 100px;
+  width: 100px;  
+}
 </style>

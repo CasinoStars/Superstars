@@ -52,6 +52,10 @@
 
             
         },
+        beforeDestroy() {
+            this.chart.destroy();
+            this.i = 0
+        },
 
         methods: {
             initializeChart() {
