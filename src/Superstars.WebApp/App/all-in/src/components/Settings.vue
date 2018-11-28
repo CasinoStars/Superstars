@@ -1,0 +1,272 @@
+<template>
+    <div class="settings">
+        <!-- Modal Settings -->
+        <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-hidden="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="margin-left:32%;">Gestion de compte</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div v-if="!editMail && !editPassword">
+                        <div class="modal-body">
+                            <ul class="tab-group">
+                                <li class="tab"><a v-on:click="editPassword=true">Mot De Passe</a></li>
+                                <li class="tab"><a v-on:click="getEmail()">Adresse Email</a></li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer"></div>
+                    </div>
+                    <form @submit="changePassword($event)" v-else-if="editPassword">
+                        <div class="modal-body">
+                            <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
+                            <div class="field-wrap">
+                                <label>
+                                    Mot de Passe Actuel<span class="req">*</span>
+                                </label><br>
+                                <input type="password" v-model="item.oldPass" required />
+                            </div>
+                            <div class="field-wrap">
+                                <label>
+                                    Nouveau Mot de Passe<span class="req">*</span>
+                                </label><br>
+                                <input type="password" v-model="item.newPass" required />
+                            </div>
+                            <div class="field-wrap">
+                                <label>
+                                    Confirmer le Mot de Passe<span class="req">*</span>
+                                </label><br>
+                                <input type="password" v-model="item.confirmPass" required />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" v-if="editPassword" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
+                            <button type="submit" v-if="editPassword" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                        </div>
+                    </form>
+                    <form @submit="changeEmail($event)" v-else>
+                        <div class="modal-body">
+                            <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
+                            <div class="field-wrap">
+                                <label>
+                                    Adresse Mail<span class="req">*</span>
+                                </label><br>
+                                <input :placeholder="item.oldMail" v-model="item.newMail" required />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button v-if="editMail" type="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
+                            <button type="submit" v-if="editMail" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
+    </div>
+</template>
+
+<script>
+    import {
+        mapActions
+    } from 'vuex';
+    import SettingsApiService from '../services/SettingsApiService';
+
+    export default {
+        data() {
+            return {
+                editPassword: false,
+                editMail: false,
+                success: '',
+                item: {},
+                errors: []
+            };
+        },
+
+        methods: {
+            ...mapActions(['executeAsyncRequest']),
+
+            cancel() {
+                this.errors = [];
+                this.item = {};
+                this.editPassword = false;
+                this.editMail = false;
+            },
+
+            async changePassword(e) {
+                e.preventDefault();
+                this.errors = [];
+                if (this.item.newPass.length < 6)
+                    this.errors.push("Le mot de passe doit contenir au minimum 6 caracteres");
+                else if (this.item.newPass.length > 100)
+                    this.errors.push("Le mot de passe doit contenir au maximum 100 caracteres");
+                else if (this.item.newPass != this.item.confirmPass)
+                    this.errors.push("Le mot de passe de confirmation n'est pas bon");
+                else {
+                    var response = await this.executeAsyncRequest(() => SettingsApiService.updatePassword(this.item.oldPass, this.item.newPass).then(r => r.json()));
+                    if (response == false)
+                        this.errors.push("Le mot de passe actuelle est incorrecte");
+                    else {
+                        // Put Message Succes
+                        this.success = "Votre mot de passe a bien été changé"
+                        // Get the snackbar DIV
+                        var x = document.getElementById("snackbar");
+                        x.className = "show";
+                        // After 3 seconds, remove the show class from DIV
+                        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+                        this.cancel();
+                    }
+
+                }
+            },
+
+            async getEmail() { 
+                this.item.oldMail =  await this.executeAsyncRequest(() => SettingsApiService.getEmail());
+                this.editMail = true;
+            },
+
+            async changeEmail(e) {
+                e.preventDefault();
+                this.errors = [];
+                if(this.item.oldMail == this.item.newMail)
+                    this.errors.push("Cette adresse mail est déja la votre");
+                else {
+                    var response = await this.executeAsyncRequest(() => SettingsApiService.updateEmail(this.item.newMail).then(r => r.json()));
+                    if(!response)
+                        this.errors.push("L'adresse mail n'est pas valide");
+                    else {
+                        // Put Message Succes
+                        this.success = "Votre adresse mail a bien été changée"
+                        // Get the snackbar DIV
+                        var x = document.getElementById("snackbar");
+                        x.className = "show";
+                        // After 3 seconds, remove the show class from DIV
+                        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+                        this.cancel();
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<style lang="scss">
+$body-bg: #c1bdba;
+$form-bg: #13232f;
+$gray-light: #a0b3b0;
+$white: #ffffff;
+$main: #777c7b;
+$main-dark: darken($main,5%);
+
+.settings .modal-header {
+    padding: 10px 16px;
+    text-align: center;
+    background: #222222a8;
+    color: white;
+}
+
+.settings .modal-content {
+    position: relative;
+    background: rgba($form-bg,.9);
+    margin: auto;
+    padding: 0;
+}
+
+.settings .modal-body {
+    text-align: center;
+    input {
+        width: 60%;
+    }
+}
+
+.settings .modal-footer {
+    min-height: 40px;
+    padding: 10px 16px;
+    background-color:  #222222a8;
+    color: white;
+    button{
+        width: 30%;
+    }
+}
+
+.settings .field-wrap {
+    color: white;
+}
+
+.settings .tab-group {
+  padding:0;
+  margin:0 0 5px 0;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  li a {
+    text-decoration:none;
+    background:rgba($gray-light,.25);
+    color:$gray-light;
+    font-size:20px;
+    float:left;
+    width:100%;
+    text-align:center;
+    cursor:pointer;
+    transition:.5s ease;
+    &:hover {
+      background:$main-dark;
+      color:$white;
+    }
+  }
+}
+
+.settings .close {
+    color: white;
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 400px; /* Set a default minimum width */
+    margin-left: -200px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 10px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+   However, delay the fade out process for 2.5 seconds */
+   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+</style>

@@ -6,10 +6,28 @@
       <!-- Modal content -->
       <div class="modal-content">
 
-        <div class="modal-header">
-          <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-            <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
-            <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+      <div class="modal-header">
+        <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
+          <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
+          <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+        </div>
+        <router-link class="close" v-on:click.native="RedirectandDelete()" to="">&times;</router-link>
+      </div>
+      <ul class="tab-group">
+                <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
+                <li class="tab" v-else><a v-on:click="changeBet('real')">Réel</a></li>
+                <li class="tab active" v-if="this.realOrFake == 'fake'"><a v-on:click="changeBet('real')">Virtuel</a></li>
+                <li class="tab" v-else><a v-on:click="changeBet('fake')">Virtuel</a></li>
+      </ul>
+      <form @submit="bet($event)">
+        <div  class="modal-body">
+          <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-if="realOrFake == 'real'">SAISISSEZ VOTRE MISE EN BTC <span class="req">*</span></h4>
+          <h4 style="color: white; font-family: 'Courier New', sans-serif;" v-else>SAISISSEZ VOTRE MISE EN ALL'IN <span class="req">*</span></h4>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-if="realOrFake == 'real'" type="number" v-model="trueBet" required/>
+          <input style="margin-top: 10px; margin-bottom: 1%;" v-else type="number" v-model="fakeBet" required/>
+        
+          <div class="alert alert-danger" style="opacity: 0.8; font-weight: bold; font-family: 'Courier New', sans-serif; text-transform: uppercase; margin-top: 1%; margin-bottom: 0.5%; text-align: center; font-family: 'Courier New', sans-serif;" v-if="errors.length > 0">
+            <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
           </div>
           <router-link class="close" to="/play">&times;</router-link>
         </div>
@@ -29,10 +47,10 @@
               required />
             <input style="margin-top: 10px; margin-bottom: 1%;" v-else type="number" v-model="fakeBet" required />
 
-            <div class="alert alert-danger" style="opacity: 0.8; font-weight: bold; font-family: 'Courier New', sans-serif; text-transform: uppercase; margin-top: 1%; margin-bottom: 0.5%; text-align: center; font-family: 'Courier New', sans-serif;"
-              v-if="errors.length > 0">
-              <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
-            </div>
+        <div class="modal-footer">
+          <div style="margin-right: 42%;">
+            <router-link class="btn btn-secondary" v-on:click.native="RedirectandDelete()" to="">Annuler</router-link>
+            <button type="submit" class="btn btn-light">Confirmer</button>
           </div>
 
           <div class="modal-footer">
@@ -118,6 +136,8 @@
     </div>
 
   </div>
+    <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
+</div>
 </template>
 
 <script>
@@ -130,34 +150,64 @@
   import WalletApiService from '../services/WalletApiService';
   import Vue from 'vue';
 
-  export default {
-    data() {
-      return {
-        selected: [],
-        dices: [],
-        iadices: [],
-        nbTurn: 0,
-        nbTurnIa: 0,
-        winOrLose: '',
-        playerFigure: '',
-        IaFigure: '',
-        wait: '',
-        playerwin: false,
-        playerBet: false,
-        realOrFake: 'real',
-        profit: 0,
-        fakeBet: 0,
-        trueBet: 0,
-        errors: []
-      }
+export default {
+  data(){
+    return {
+      selected: [],
+      dices: [],
+      iadices: [],
+      nbTurn: 0,
+      nbTurnIa: 0,
+      winOrLose: '',
+      playerFigure: '',
+      IaFigure: '',
+      wait: '',
+      playerwin: '',
+      playerBet: false,
+      realOrFake: 'real',
+      profit: 0,
+      fakeBet: 0,
+      trueBet: 0,
+      errors: [],
+      wasingame: false,
+      success: ''
+    }
+  },
+
+  async mounted() {
+    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(0));
+    await this.refreshDices();
+    setTimeout(await this.refreshIaDices(), 3000);
+    await this.changeTurn();
+
+    var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+    if(pot == 0) {
+      this.showModal();
+    } else {
+      this.playerBet = true;
+    }
+    
+  },
+  
+  computed: {
+    ...mapGetters(['BTCMoney']),
+    ...mapGetters(['fakeMoney'])
+  },
+
+  methods: {
+    ...mapActions(['executeAsyncRequest']),
+    ...mapActions(['RefreshFakeCoins']),
+    ...mapActions(['RefreshBTC']),
+    
+    async RedirectandDelete() {
+      //await this.executeAsyncRequest(() => GameApiService.deleteYamsGame());
+      await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
+      this.$router.push({ path: 'play' });
     },
 
-    async mounted() {
-      await this.refreshDices();
-      await this.refreshIaDices();
-      await this.changeTurn();
-      //IF ISNOT IN GAME
-      this.showModal();
+    changeBet(choice){
+      this.realOrFake = choice;
+      this.errors = 0;
     },
 
     computed: {
@@ -165,40 +215,45 @@
       ...mapGetters(['fakeMoney'])
     },
 
-    methods: {
-      ...mapActions(['executeAsyncRequest']),
-      ...mapActions(['RefreshFakeCoins']),
-      ...mapActions(['RefreshBTC']),
-
-      changeBet(choice) {
-        this.realOrFake = choice;
-        this.errors = 0;
-      },
-
-      showModal() {
-        var modal = document.getElementById('myModal');
-        modal.style.display = "block";
-      },
-
-      async bet(e) {
-        e.preventDefault();
-        var errors = [];
-        this.errors = 0;
-        if (this.realOrFake === 'fake') {
-          if (this.fakeBet > 1000000)
-            errors.push("La mise maximum est de 1,000,000");
-          else if (this.fakeBet <= 0)
-            errors.push("La mise doit être supérieur à 0");
-          else if (this.fakeBet > this.fakeMoney)
-            errors.push("Vous n'avez pas cette somme sur votre compte");
-        } else {
-          if (this.trueBet > 10000000)
-            errors.push("La mise maximum est de 10,000,000 bits");
-          else if (this.trueBet <= 0)
-            errors.push("La mise doit être supérieur à 0 bits");
-          else if (this.trueBet > this.BTCMoney) {
-            errors.push("Vous n'avez pas cette somme sur votre compte");
+    async bet(e) {
+      e.preventDefault();
+      var errors = [];
+      this.errors = 0;
+      if(this.realOrFake === 'fake') {
+        if(this.fakeBet > 1000000)
+          errors.push("La mise maximum est de 1,000,000");
+        else if(this.fakeBet <= 0)  
+          errors.push("La mise doit être supérieur à 0");
+        else if(this.fakeBet > this.fakeMoney)
+          errors.push("Vous n'avez pas cette somme sur votre compte");
+      }
+      else {
+        if(this.trueBet > 10000000)
+          errors.push("La mise maximum est de 10,000,000 bits");
+        else if(this.trueBet <= 0)  
+          errors.push("La mise doit être supérieur à 0 bits");
+        else if(this.trueBet > this.BTCMoney){
+          errors.push("Vous n'avez pas cette somme sur votre compte");}
+      }
+      this.errors = errors;
+      if(errors.length == 0) {
+        try {
+          if(this.realOrFake === 'fake') {
+            await this.executeAsyncRequest(() => GameApiService.BetFake(this.fakeBet, 0));
+            await this.RefreshFakeCoins();
+            this.success = 'Vous venez de parier: '+this.fakeBet+' All`In Coins';
           }
+          else {
+            await this.executeAsyncRequest(() => GameApiService.BetBTC(this.trueBet, 0));
+            await this.RefreshBTC();
+            this.success = 'Vous venez de parier: '+this.trueBet+' Bits';
+          }
+          var x = document.getElementById("snackbar");
+          x.className = "show";
+          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+          var modal = document.getElementById('myModal');
+          modal.style.display = "none";
+          this.playerBet = true;
         }
         this.errors = errors;
         if (errors.length == 0) {
@@ -227,28 +282,27 @@
 
       },
 
-      async changeTurn() {
-        this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
-      },
-
-      async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats(0, this.playerwin));
+    async updateStats() {
+        await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
+        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(0,this.playerwin,this.realOrFake));
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-      },
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
+    },
 
-      async getFinalResult() {
-        let tableResult = await this.executeAsyncRequest(() => YamsApiService.GetFinalResult());
-        this.IaFigure = tableResult[0];
-        this.playerFigure = tableResult[1];
-        this.winOrLose = tableResult[2];
-        var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
-        if (this.winOrLose == "You Lose") {
+    async getFinalResult() {
+      let tableResult = await this.executeAsyncRequest(() => YamsApiService.GetFinalResult());
+      this.IaFigure = tableResult[0];
+      this.playerFigure = tableResult[1];
+      this.winOrLose = tableResult[2];
+      var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+      if(this.winOrLose == "You Lose") {
+          this.playerwin = 'AI';
           await this.updateStats();
-        } else if (this.winOrLose == "You Win") {
-          this.playerwin = true;
-          await this.updateStats();
-          if (this.trueBet === 0) {
+      }
+      else if(this.winOrLose == "You Win"){
+        this.playerwin = 'Player';
+        await this.updateStats();
+          if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
             await this.RefreshFakeCoins();
@@ -257,13 +311,12 @@
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
             await this.RefreshBTC();
           }
-        } else {
-          await this.setisingamefalse();
-          await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-          await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-          if (this.trueBet === 0) {
-            await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot / 2));
-            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot / 2));
+      } else {
+        await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
+         if(this.trueBet === 0) {
+            await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
+            await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
             await this.RefreshFakeCoins();
           } else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot / 2));
@@ -273,15 +326,15 @@
         }
       },
 
-      async RePlay() {
-        await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis());
-        await this.executeAsyncRequest(() => GameApiService.createGame('Yams'));
-        await this.executeAsyncRequest(() => GameApiService.createAiUser());
-        await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
-        await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
-        this.$router.go(this.$router.history);
-      },
+    async RePlay() {
+      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
+      await this.executeAsyncRequest(() => GameApiService.createGame(0));
+      await this.executeAsyncRequest(() => GameApiService.createAiUser());
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
+      await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
+      this.$router.go(this.$router.history);
+    },
 
       waiting() {
         if (this.wait == '...') {

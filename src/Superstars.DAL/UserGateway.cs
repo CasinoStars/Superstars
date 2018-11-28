@@ -2,7 +2,10 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Dapper;
 
 namespace Superstars.DAL
@@ -72,6 +75,40 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task ActionConnexion(int userid, string username, DateTime date)
+        {
+
+            //XDocument xDoc = new XDocument( 
+            //    new XDeclaration("1.0","UTF-16",null),
+            //    new XElement("UserID", userid),
+            //    new XElement("UserName", username),
+            //    new XElement("Date", date.ToString() ));
+            //StringWriter sw = new StringWriter();
+            //XmlWriter xWrite = XmlWriter.Create(sw);
+            //xDoc.Save(xWrite);
+            //xWrite.Close();
+            //xDoc.Elements("UserID");                                              
+
+            string action = "Player named " + username + " with UserID " + userid + " connected at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }    
+        }
+
+        public async Task ActionDeconnexion(int userid, string username, DateTime date)
+        {
+            string action = "Player named " + username + " with UserID " + userid + " disconnected at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task Delete(int userId)
         {
             using (var con = new SqlConnection(_connectionString))
@@ -81,7 +118,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task UpdateEmail(int userId, string email)
+        public async Task<Result> UpdateEmail(int userId, string email)
         {
             using (var con = new SqlConnection(_connectionString))
             {
@@ -89,10 +126,11 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, Email = email},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
-        public async Task UpdateName(int userId, string pseudo)
+        public async Task<Result> UpdateName(int userId, string pseudo)
         {
             using (var con = new SqlConnection(_connectionString))
             {
@@ -100,10 +138,11 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, UserName = pseudo},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
-        public async Task UpdatePassword(int userId, byte[] password)
+        public async Task<Result> UpdatePassword(int userId, byte[] password)
         {
             using (var con = new SqlConnection(_connectionString))
             {
@@ -111,6 +150,7 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, UserPassword = password},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
@@ -145,46 +185,6 @@ namespace Superstars.DAL
                     "sp.sUserUpdate",
                     new {UserId = userId, Country = country},
                     commandType: CommandType.StoredProcedure);
-            }
-        }
-
-        public async Task<int> GetIsingameyams(int userid)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<int>(
-                    "select u.Isingameyams from sp.vUser u where u.UserId = @UserID",
-                    new {UserID = userid});
-            }
-        }
-
-        public async Task<int> GetIsingameblackjack(int userid)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                return await con.QueryFirstOrDefaultAsync<int>(
-                    "select u.Isingameblackjack from sp.vUser u where u.UserId = @UserID",
-                    new {UserID = userid});
-            }
-        }
-
-        public async Task UpdateIsingameyams(int userId, int isingame)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                await con.QueryFirstOrDefaultAsync<Task>(
-                    "update sp.tUser set Isingameyams = @Isingameyams where UserId = @UserID",
-                    new {UserID = userId, Isingameyams = isingame});
-            }
-        }
-
-        public async Task UpdateIsingameblackjack(int userId, int isingame)
-        {
-            using (var con = new SqlConnection(_connectionString))
-            {
-                await con.QueryFirstOrDefaultAsync<Task>(
-                    "update sp.tUser set Isingameblackjack = @Isingamebj where UserId = @UserID",
-                    new { UserID = userId, Isingamebj = isingame });
             }
         }
     }
