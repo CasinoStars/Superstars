@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.YamsFair", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeCakeBuilder", "src\CodeCakeBuilder\CodeCakeBuilder.csproj", "{E265B536-DF3A-496D-BEB7-8639F838C3EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashGameMath", "CrashGameMath\CrashGameMath.csproj", "{B3C68B27-0F59-43F3-BD33-7930EA529D92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{E265B536-DF3A-496D-BEB7-8639F838C3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E265B536-DF3A-496D-BEB7-8639F838C3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E265B536-DF3A-496D-BEB7-8639F838C3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C68B27-0F59-43F3-BD33-7930EA529D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C68B27-0F59-43F3-BD33-7930EA529D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C68B27-0F59-43F3-BD33-7930EA529D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C68B27-0F59-43F3-BD33-7930EA529D92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

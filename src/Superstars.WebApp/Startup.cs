@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text;
+using CrashGameMath;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -49,11 +50,13 @@ namespace Superstars.WebApp
             services.AddSingleton(x =>
                 new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton(x => new ChatGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddHostedService<CrashService>();
             services.AddSingleton(x => new RankService());
             services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();
+            services.AddSingleton(x => new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526"));
 
             services.AddAuthentication(CookieAuthentication.AuthenticationScheme)
                 .AddCookie(CookieAuthentication.AuthenticationScheme)

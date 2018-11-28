@@ -642,6 +642,3 @@ $gray-light: #a0b3b0;
   width: 100px;  
 }
 </style>
-
-
-  
