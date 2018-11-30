@@ -7,11 +7,11 @@ namespace Superstars.DAL
 {
     public class WalletGateway
     {
-        private readonly string _sqlstring;
+        private readonly SqlConnexion _sqlConnexion;
 
-        public WalletGateway(string sqlstring)
+        public WalletGateway(SqlConnexion sqlConnexion)
         {
-            _sqlstring = sqlstring;
+            _sqlConnexion = sqlConnexion;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Superstars.DAL
         /// <returns></returns>
         public async Task<Result<int>> AddCoins(int userId, int moneyTypeId, int coins, int profit, int credit)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Profit", profit);
@@ -45,7 +45,7 @@ namespace Superstars.DAL
 
         public async Task<Result> InsertInBankRoll(int trueCoins, int fakeCoins)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@RealCoins", trueCoins);
@@ -58,7 +58,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetBTCBankRoll()
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var bankRoll = await con.QueryFirstOrDefaultAsync<int>("select RealCoins from sp.tBankRoll");
                 return Result.Success(bankRoll);
@@ -67,7 +67,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetFakeBankRoll()
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var bankRoll = await con.QueryFirstOrDefaultAsync<int>("select FakeCoins from sp.tBankRoll");
                 return Result.Success(bankRoll);
@@ -77,7 +77,7 @@ namespace Superstars.DAL
 
         public async Task<Result<WalletData>> GetFakeBalance(int userId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var wallet = await con.QueryFirstOrDefaultAsync<WalletData>(
                     "select m.UserId, m.MoneyTypeId, m.Balance from sp.vMoney m where m.UserId = @UserId and m.MoneyTypeId = 0",
@@ -89,7 +89,7 @@ namespace Superstars.DAL
 
         public async Task<Result<WalletData>> GetPrivateKey(int userId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var privateKey = await con.QueryFirstOrDefaultAsync<WalletData>(
                     "select u.PrivateKey from sp.vUser u where u.UserId = @UserId",
@@ -101,7 +101,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetCredit(int userId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var credit = await con.QueryFirstOrDefaultAsync<int>(
                     "select m.Credit from sp.vMoney m where m.UserId = @UserId and m.MoneyTypeId = 1",
@@ -112,7 +112,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetAllCredit()
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var allCredit = await con.QueryFirstOrDefaultAsync<int>(
                     "select SUM(m.Credit) from sp.vMoney m");

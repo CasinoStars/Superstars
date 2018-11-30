@@ -10,16 +10,16 @@ namespace Superstars.DAL
 {
     public class ChatGateway
     {
-        private string _connectionString;
+        private SqlConnexion _sqlConnexion;
 
-        public ChatGateway(string connectionString)
+        public ChatGateway(SqlConnexion sqlConnexion)
         {
-            _connectionString = connectionString;
+            _sqlConnexion = sqlConnexion;
         }
 
         public async Task<IEnumerable<ChatData>> ListAll()
         {
-            using (SqlConnection con = new SqlConnection(_connectionString))
+            using (SqlConnection con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<ChatData>(@"select * from sp.vChat");
             }
@@ -27,7 +27,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> CreateMessage(int userId, string message)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);

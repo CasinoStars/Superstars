@@ -8,16 +8,16 @@ namespace Superstars.DAL
 {
     public class GameGateway
     {
-        private readonly string _sqlstring;
+        private readonly SqlConnexion _sqlConnexion;
 
-        public GameGateway(string sqlstring)
+        public GameGateway(SqlConnexion sqlConnexion)
         {
-            _sqlstring = sqlstring;
+            _sqlConnexion = sqlConnexion;
         }
 
         public async Task<GameData> FindGameById(int GameID)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<GameData>(
                     "select g.GameId, g.GameType, g.StartDate, g.EndDate, g.Winner from vGames g where g.GameId = @GameId",
@@ -29,7 +29,7 @@ namespace Superstars.DAL
         {
             if (gametype == 0)
             {
-                using (var con = new SqlConnection(_sqlstring))
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
                 {
                     return await con.QueryFirstOrDefaultAsync<int>( 
                         "select top 1 y.YamsGameId from sp.tYamsPlayer y where y.YamsPlayerId = @PlayerId",
@@ -39,7 +39,7 @@ namespace Superstars.DAL
             else if (gametype == 1)
             {
 
-                using (var con = new SqlConnection(_sqlstring))
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
                 {
                     return await con.QueryFirstOrDefaultAsync<int>(
                        "select top 1 b.BlackJackGameId from sp.tBlackJackPlayer b where b.BlackJackPlayerId = @PlayerId",
@@ -56,7 +56,7 @@ namespace Superstars.DAL
         {
             if(gametype == 0)
             {
-                using (var con = new SqlConnection(_sqlstring))
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
                 {
                     return await con.QueryFirstOrDefaultAsync<GameData>(
                         "select top 1 g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g left join sp.tYamsPlayer y on g.GameId = y.YamsGameId where y.YamsPlayerId = @PlayerId and g.GameTypeId = @Gametype order by g.StartDate desc",
@@ -64,7 +64,7 @@ namespace Superstars.DAL
                 }
             } else if (gametype == 1) {
 
-                using (var con = new SqlConnection(_sqlstring))
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
                 {
                     return await con.QueryFirstOrDefaultAsync<GameData>(
                         "select top 1 g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.BlackJackGameId where b.BlackJackPlayerId = @PlayerId and g.GameTypeId = @Gametype order by g.StartDate desc",
@@ -80,7 +80,7 @@ namespace Superstars.DAL
         {
             if(gametype == 0)
             {
-                using (var con = new SqlConnection(_sqlstring))
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
                 {
                     return await con.QueryFirstOrDefaultAsync<Result>(
                         "delete g from sp.tGames g left join sp.tYamsPlayer y on g.GameId = y.YamsGameId where y.YamsPlayerId = @PlayerId and g.GameTypeId = @GametypeId",
@@ -89,7 +89,7 @@ namespace Superstars.DAL
             }
             else if(gametype == 1)
             {
-                using (var con = new SqlConnection(_sqlstring))
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
                 {
                     return await con.QueryFirstOrDefaultAsync<Result>(
                         "delete g from sp.tGames g left join sp.tBlackJackPlayer b on g.GameId = b.BlackJackGameId where b.BlackJackPlayerId = @PlayerId and g.GameTypeId = @GametypeId",
@@ -104,7 +104,7 @@ namespace Superstars.DAL
 
         public async Task<Result> DeleteYamsGameByGameId(int gameid)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                return await con.QueryFirstOrDefaultAsync<Result>(
                     "delete from sp.tGameYams where YamsGameId = @GameID",
@@ -114,7 +114,7 @@ namespace Superstars.DAL
 
         public async Task<Result> DeleteBlackJackGameByGameId(int gameid)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<Result>(
                      "delete from sp.tBlackJackPlayer where BlackJackGameId = @GameID",
@@ -123,7 +123,7 @@ namespace Superstars.DAL
         }
         public async Task<Result<int>> CreateGame(int gameTypeId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameTypeId", gameTypeId);
@@ -161,7 +161,7 @@ namespace Superstars.DAL
             string action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid +
                 " and a bet of " + bet + " All`in Coins at " + date.ToString();
 
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -187,7 +187,7 @@ namespace Superstars.DAL
             string action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid + 
                 " and a bet of " + bet + " bits (BTC) at " + date.ToString();
 
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -224,7 +224,7 @@ namespace Superstars.DAL
             string action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
                 " and has " + haswin + " a bet of " + bet +  money + "at " + date.ToString();
 
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -233,7 +233,7 @@ namespace Superstars.DAL
 
         public async Task<Result<string>> GetYamsPot(int gameId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var pot = await con.QueryFirstOrDefaultAsync<string>(
                     @"select g.Pot from sp.vGameYams g where g.YamsGameId = @YamsGameId",
@@ -244,7 +244,7 @@ namespace Superstars.DAL
 
         public async Task<Result<string>> GetBlackJackPot(int gameId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var pot = await con.QueryFirstOrDefaultAsync<string>(
                     @"select g.Pot from sp.vGameBlackJack g where g.BlackJackGameId = @BlackJackGameId",
@@ -255,7 +255,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> CreateYamsGame(string pot)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Pot", pot);
@@ -271,7 +271,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> CreateBlackJackGame(string pot)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Pot", pot);
@@ -287,7 +287,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> DeleteAis(int userId, int gametypeid)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
@@ -303,7 +303,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int wins, int losses)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameTypeId", gameTypeId);
@@ -324,7 +324,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetWins(int userId, int gameTypeId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select s.Wins from sp.tStats s where s.userId = @userid and s.GameTypeId = @gametypeid",
@@ -335,7 +335,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetLosses(int userId, int gameTypeId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select s.Losses from sp.tStats s where s.userId = @userid and s.GameTypeId = @gametypeid",
@@ -346,7 +346,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetTrueProfit(int userId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 1",
@@ -357,7 +357,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetFakeProfit(int userId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
                     @"select m.Profit from sp.tMoney m where m.MoneyId = @userid and m.MoneyType = 2",
@@ -368,7 +368,7 @@ namespace Superstars.DAL
 
         public async Task<Result> UpdateGameEnd(int gameid, int gametypeId, string win)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameId", gameid);
@@ -387,7 +387,7 @@ namespace Superstars.DAL
 
         public async Task<Result<DateTime>> IsGameEndDefined(int gameid, string gametype)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<DateTime>(
                     @"select g.EndDate from sp.tGames g where g.GameId = @gameId and g.GameType = @gametype",
