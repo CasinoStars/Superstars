@@ -37,19 +37,19 @@ namespace Superstars.WebApp
                 o.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
             services.AddSignalR();
-            services.AddSingleton(x => new UserGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton(x => new GameGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton(x => new YamsGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton(
-                x => new WalletGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton(x => new RankGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            //services.AddSingleton(x => new sqlconn());
+            services.AddSingleton(x => new SqlConnexion(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton<UserGateway>();
+            services.AddSingleton<GameGateway>();
+            services.AddSingleton<YamsGateway>();
+            services.AddSingleton<WalletGateway>();
+            services.AddSingleton<RankGateway>();
+            services.AddSingleton<BlackJackGateway>();
             services.AddSingleton<YamsService>();
-            services.AddSingleton(x =>
-                new BlackJackGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
+            services.AddSingleton<ProvablyFairGateway>();
+            services.AddSingleton<ChatGateway>();
+
             services.AddSingleton(x => new BlackJackService());
-            services.AddSingleton(x =>
-                new ProvablyFairGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
-            services.AddSingleton(x => new ChatGateway(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddHostedService<CrashService>();
             services.AddSingleton(x => new RankService());
             services.AddSingleton<YamsIAService>();
