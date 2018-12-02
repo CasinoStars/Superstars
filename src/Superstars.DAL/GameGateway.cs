@@ -269,6 +269,22 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<string>> UpdateYamsGame(string pot, int gameId)
+        {
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@YamsGameId", gameId);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameYamsUpdate", p, commandType: CommandType.StoredProcedure);
+
+                var status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<string>("@Pot"));
+            }
+        }
+
         public async Task<Result<int>> CreateBlackJackGame(string pot)
         {
             using (var con = new SqlConnection(_sqlstring))
@@ -282,6 +298,22 @@ namespace Superstars.DAL
                 var status = p.Get<int>("@Status");
 
                 return Result.Success(p.Get<int>("@BlackJackGameId"));
+            }
+        }
+
+        public async Task<Result<int>> UpdateBlackJackGame(string pot, int gameId)
+        {
+            using (var con = new SqlConnection(_sqlstring))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@BlackJackGameId", gameId);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameBlackJackUpdate", p, commandType: CommandType.StoredProcedure);
+
+                var status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<dynamic>("@BlackJackGameId"));
             }
         }
 

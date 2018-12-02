@@ -40,8 +40,9 @@
       </form>
     </div>
   </div>
-
-  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:90%;">TOUR:{{nbTurn}}</h3>
+  
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:2%;">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/></h3>
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top: -3%; margin-left:89%;">TOUR: {{nbTurn}}</h3>
   
   <form @submit="onSubmitAI($event)" id="PlayAI">
     <div v-for="(i, index) of iadices" :key="index" class="iadices">
@@ -130,20 +131,18 @@ export default {
       fakeBet: 0,
       trueBet: 0,
       errors: [],
-      wasingame: false,
       success: '',
-      rollDices: false
+      rollDices: false,
+      pot: 0
     }
   },
 
   async mounted() {
-    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(0));
     await this.refreshDices();
-    setTimeout(await this.refreshIaDices(), 3000);
+    await this.refreshIaDices();
     await this.changeTurn();
-
-    var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
-    if(pot == 0) {
+    this.pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+    if(this.pot == 0) {
       this.showModal();
     } else {
       this.playerBet = true;
@@ -215,6 +214,7 @@ export default {
           setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
+          this.pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
           this.playerBet = true;
         }
         catch(error) {
@@ -287,9 +287,7 @@ export default {
 
     async RePlay() {
       await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-      await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
       await this.executeAsyncRequest(() => GameApiService.createGame(0));
-      await this.executeAsyncRequest(() => GameApiService.createAiUser());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
       await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
       this.$router.go(this.$router.history);

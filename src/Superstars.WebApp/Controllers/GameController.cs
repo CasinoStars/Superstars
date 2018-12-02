@@ -39,6 +39,14 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreateGame(int gameTypeId)
         {
             Result result = await _gameGateway.CreateGame(gameTypeId);
+            if (gameTypeId == 0)
+            {
+                Result yamsPot = await _gameGateway.CreateYamsGame("0");
+            }
+            else
+            {
+                Result blackJackpot = await _gameGateway.CreateBlackJackGame("0");
+            }
             return this.CreateResult(result);
         }
 
@@ -50,14 +58,14 @@ namespace Superstars.WebApp.Controllers
             var user = await _userGateway.FindById(userId);
             if (gameTypeId == 0)
             {
-                Result result = await _gameGateway.CreateYamsGame(stringBet);
                 var data = await _yamsGateway.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateYamsGame(stringBet, data.YamsGameId);
                 await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
-                Result result = await _gameGateway.CreateBlackJackGame(stringBet);
                 var data = await _blackJackGateWay.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateBlackJackGame(stringBet, data.BlackJackGameId);
                 await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
@@ -74,14 +82,14 @@ namespace Superstars.WebApp.Controllers
             var user = await _userGateway.FindById(userId);
             if (gameTypeId == 0)
             {
-                Result result = await _gameGateway.CreateYamsGame(stringBet);
                 var data = await _yamsGateway.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateYamsGame(stringBet, data.YamsGameId);
                 await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
-                Result result = await _gameGateway.CreateBlackJackGame(stringBet);
                 var data = await _blackJackGateWay.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateBlackJackGame(stringBet,data.BlackJackGameId);
                 await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
@@ -335,8 +343,8 @@ namespace Superstars.WebApp.Controllers
 
             } else
             {
-                var IA = await _userGateway.FindByName("#AI" + userid + gametype.ToString());
-                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid + gametype.ToString());
+                var IA = await _userGateway.FindByName("#AI" + userid);
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid);
                 await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake);
             }
 

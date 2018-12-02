@@ -9,5 +9,6 @@ create table sp.tProvablyFair
 	PreviousCryptedServerSeed nvarchar(128),
 	Nonce int
 
+	constraint PK_tProvablyFair_UserId primary key (UserId),
 	constraint FK_tProvablyFair_UserId foreign key(UserId) references sp.tUser(UserId)
 );

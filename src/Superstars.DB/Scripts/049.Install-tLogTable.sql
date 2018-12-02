@@ -5,5 +5,6 @@ create table sp.tLogTable
 	ActionDate datetime,
 	ActionDescription varchar(500)
 
-	constraint FK_tLogTable_UserId foreign key (UserId) references sp.tUser(UserId),
+	constraint PK_tLogTable_LogId primary key (LogId),
+	constraint FK_tLogTable_UserId foreign key (UserId) references sp.tUser(UserId)
 );

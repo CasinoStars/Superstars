@@ -110,6 +110,7 @@
 <div id="tocenter">
 
 <div id="infos">
+    <a class="txt"> Pot : {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/> </a> <br>
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
     <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
     <a v-if="!iaturn && !gameend" class="txt"> C'est à votre tour de jouer </a> <br>
@@ -203,7 +204,7 @@
    </form>
 <div id="leespace"></div>
    <form @submit="stand($event)">
-   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">STAND</button></div>
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue <= 21 && iaturn == false && gameend == false">STAND</button></div>
    </form>
 
    <!-- <form @submit="split($event)">
@@ -223,6 +224,7 @@
     <router-link to="/play">
       <br><div style="text-align:center;"><button  style="text-align:center;" class="btn btn-dark" v-if="gameend == true">QUITTER</button></div>
     </router-link>
+    <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
    </div>
 </template>
 
@@ -253,7 +255,8 @@ export default {
             fakeBet: 0,
             trueBet: 0,
             errors: [],
-            wasingame: false,
+            success: '',
+            pot: 0
         }
     },
   computed: {
@@ -262,14 +265,12 @@ export default {
   },
 
   async mounted() {
-
-    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(1));
-    var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
+    this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
     this.refreshiaturn();
 
-    if(pot == 0 || pot == null) {
+    if(this.pot == 0 || this.pot == null) {
       this.showModal();
     } else {   
       this.playerBet = true;
@@ -339,6 +340,7 @@ export default {
           setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
+          this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
           this.playerBet = true;
           await this.refreshCards();
           await this.refreshHandValue();
