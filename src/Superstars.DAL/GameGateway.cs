@@ -271,7 +271,7 @@ namespace Superstars.DAL
 
         public async Task<Result<string>> UpdateYamsGame(string pot, int gameId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Pot", pot);
@@ -303,7 +303,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> UpdateBlackJackGame(string pot, int gameId)
         {
-            using (var con = new SqlConnection(_sqlstring))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Pot", pot);
