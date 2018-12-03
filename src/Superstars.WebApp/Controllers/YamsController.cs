@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +35,7 @@ namespace Superstars.WebApp.Controllers
         }
 
 
-        //Roll player dices
+        //Roll IA dices
         [HttpPost("RollIa")]
         public async Task<IActionResult> RollIaDices([FromBody] int[][] dices)
         {
@@ -79,6 +80,7 @@ namespace Superstars.WebApp.Controllers
             //Get the player data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var data = await _yamsGateway.GetPlayer(userId);
+            var dataPlayer = await _userGateway.FindById(userId);
             var playerDices = new int[5];
             var stringDices = data.Dices;
             for (var i = 0; i < 5; i++) playerDices[i] = (int) char.GetNumericValue(stringDices[i]);
@@ -97,6 +99,7 @@ namespace Superstars.WebApp.Controllers
             //Update SQL
             Result result = await _yamsGateway.UpdateYamsPlayer(userId, data.YamsGameId, data.NbrRevives,
                 playerStringDices, playerPts);
+            await _yamsGateway.ActionRollDices(userId, dataPlayer.UserName,data.YamsGameId, DateTime.UtcNow, stringDices, playerStringDices);
             return this.CreateResult(result);
         }
 

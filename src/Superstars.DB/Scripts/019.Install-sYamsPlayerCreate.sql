@@ -13,10 +13,10 @@ begin
     set transaction isolation level serializable;
 	begin tran;
 
-        if exists(select * from sp.tYamsPlayer y where y.[YamsPlayerId] = @PlayerId)
-	begin
-	delete sp.tYamsPlayer from sp.tYamsPlayer y where y.YamsPlayerId = @PlayerId;
-	end;	
+ --   if exists(select * from sp.tYamsPlayer y where y.[YamsPlayerId] = @PlayerId)
+	--begin
+	--delete sp.tYamsPlayer from sp.tYamsPlayer y where y.YamsGameId = @PlayerId;
+	--end;	
 
     insert into sp.tYamsPlayer(YamsPlayerId, YamsGameId, [Dices], [NbrRevives], [DicesValue]) values(@PlayerId, @GameId, @Dices, @NbrRevives, @DicesValue);
 	commit;

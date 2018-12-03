@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -149,17 +150,16 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result1 = await _gameGateway.GetWins(userId, gameTypeId);
             var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
-            //int averagebet = 0;
+            int averagebet = 0;
 
-            //WIP
-            /*if (gametype == "Yams")
+            if (gameTypeId == 0)
             {
                 averagebet = await GetAverageBetYams();
             }
-            else if (gametype == "BlackJack")
+            else if (gameTypeId == 1)
             {
                 averagebet = await GetAverageBetBJ();
-            }*/
+            }
 
             var wins = result1.Content;
             var losses = result2.Content;
@@ -172,18 +172,27 @@ namespace Superstars.WebApp.Controllers
               losses = losses + 1;
             }
 
-            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses);
+            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses, averagebet);
             return Result.Success(result3);
         }
 
         public async Task<int> GetAverageBetYams()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            //Get all Pots from played games
             var betsYams = await _rankGateway.GetPlayerYamsBets(userId);
             var allbetsyams = betsYams.ToList();
 
+            //Divid pot by 2 to get player's bet
+            List<int> items = new List<int>();
+            foreach (var item in allbetsyams)
+            {
+                items.Add(item / 2);
+            }
+
+            //Sum up bets
             var sommeYams = 0;
-            foreach (var item in allbetsyams) sommeYams += item;
+            foreach (var item in items) sommeYams += item;
             sommeYams = sommeYams / allbetsyams.Count();
 
             return sommeYams;
@@ -191,12 +200,21 @@ namespace Superstars.WebApp.Controllers
 
         public async Task<int> GetAverageBetBJ()
         {
+            //Get all pots from played games
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var betsBJ = await _rankGateway.GetPlayerBJBets(userId);
             var allbetsBJ = betsBJ.ToList();
+             
+            //Divide pot by 2 to get player's bet
+            List<int> items = new List<int>();
+            foreach (var item in allbetsBJ)
+            {
+                items.Add(item / 2);
+            }
 
+            //Sum up bets
             var sommeBJ = 0;
-            foreach (var item in allbetsBJ) sommeBJ += item;
+            foreach (var item in items) sommeBJ += item;
             sommeBJ = sommeBJ / allbetsBJ.Count();
 
             return sommeBJ;

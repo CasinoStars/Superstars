@@ -71,6 +71,16 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result> IncrementSeedsinStats(int userId)
+        {
+            using (var con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<Result>(
+                    "Update sp.tStats set ClientSeedChanges = ClientSeedChanges + 1 where UserId = @UserId",
+                    new { UserId = userId });
+            }
+        }
+
         public async Task<Result<int>> AddSeeds(int userId)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
