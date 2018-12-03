@@ -12,17 +12,17 @@ namespace Superstars.DAL
 {
     public class UserGateway
     {
-        private readonly string _connectionString;
+        private readonly SqlConnexion _sqlConnexion;
 
 
-        public UserGateway(string connectionString)
+        public UserGateway(SqlConnexion connectionString)
         {
-            _connectionString = connectionString;
+            _sqlConnexion = connectionString;
         }
 
         public async Task<UserData> FindById(int userId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
                     "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.UserId = @UserId",
@@ -32,7 +32,7 @@ namespace Superstars.DAL
 
         public async Task<UserData> FindByName(string pseudo)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
                     "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.UserName = @UserName",
@@ -42,7 +42,7 @@ namespace Superstars.DAL
 
         public async Task<UserData> FindByEmail(string email)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
                     "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.Email = @Email",
@@ -52,7 +52,7 @@ namespace Superstars.DAL
 
         public async Task<Result> CreateUser(string pseudo, byte[] password, string email, string privateKey)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@Email", email);
@@ -89,7 +89,7 @@ namespace Superstars.DAL
             //xDoc.Elements("UserID");                                              
             string action = "Player named " + username + " with UserID " + userid + " connected at " + date.ToString();
 
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -100,7 +100,7 @@ namespace Superstars.DAL
         {
             string action = "Player named " + username + " with UserID " + userid + " disconnected at " + date.ToString();
 
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -111,7 +111,7 @@ namespace Superstars.DAL
         {
             string action = "Player named " + username + " with UserID " + userid + " changed his email to " + newEmail + " at " + date.ToString();
 
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -122,7 +122,7 @@ namespace Superstars.DAL
         {
             string action = "Player named " + username + " with UserID " + userid + " changed his password to " + newPassword + " at " + date.ToString();
 
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -131,7 +131,7 @@ namespace Superstars.DAL
 
         public async Task Delete(int userId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sUserDelete", new {UserId = userId},
                     commandType: CommandType.StoredProcedure);
@@ -140,7 +140,7 @@ namespace Superstars.DAL
 
         public async Task<Result> UpdateEmail(int userId, string email)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",
@@ -152,7 +152,7 @@ namespace Superstars.DAL
 
         public async Task<Result> UpdateName(int userId, string pseudo)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",
@@ -164,7 +164,7 @@ namespace Superstars.DAL
 
         public async Task<Result> UpdatePassword(int userId, byte[] password)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",
@@ -177,7 +177,7 @@ namespace Superstars.DAL
 
         public async Task UpdateLastConnexion(int userId, DateTime time)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",
@@ -188,7 +188,7 @@ namespace Superstars.DAL
 
         public async Task UpdateLastDeconnexion(int userId, DateTime time)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",
@@ -199,7 +199,7 @@ namespace Superstars.DAL
 
         public async Task UpdateCountry(int userId, string country)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync(
                     "sp.sUserUpdate",

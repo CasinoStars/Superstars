@@ -7,17 +7,17 @@ namespace Superstars.DAL
 {
     public class RankGateway
     {
-        private readonly string _connectionString;
+        private readonly SqlConnexion _sqlConnexion;
 
 
-        public RankGateway(string connectionString)
+        public RankGateway(SqlConnexion sqlConnexion)
         {
-            _connectionString = connectionString;
+            _sqlConnexion = sqlConnexion;
         }
 
         public async Task<IEnumerable<string>> PseudoList()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<string>(
                     "select u.UserName from sp.vUser u where u.UserName is not null and u.UserName not like '#%' order by u.UserId ASC "
@@ -27,7 +27,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayerTrueProfitList()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select m.Profit from sp.tMoney m where m.MoneyTypeId = 1 "
@@ -37,7 +37,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayerProfitList()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select m.Profit from sp.tMoney m where m.MoneyTypeId = 0 "
@@ -47,7 +47,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayersBlackJackWins()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select s.Wins from sp.tStats s where GameTypeId = 1"
@@ -57,7 +57,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayersBlackJackLosses()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select s.Losses from sp.tStats s where GameTypeId = 1"
@@ -67,7 +67,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayersYamsWins()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select s.Wins from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameTypeId = 0"
@@ -77,7 +77,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayerYamsLosses()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select s.Losses from sp.tStats s left outer join sp.tUser u on s.UserId = u.UserId where GameTypeId = 0"
@@ -87,7 +87,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayerYamsBets(int userid)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select a.Pot from sp.tYamsPlayer y inner join sp.tGames as g on y.YamsGameId = g.GameId left join sp.tGameYams as a on a.YamsGameId = g.GameId where g.GameTypeId = 0 and y.YamsPlayerId = @UserId",
@@ -97,7 +97,7 @@ namespace Superstars.DAL
 
         public async Task<IEnumerable<int>> GetPlayerBJBets(int userid)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryAsync<int>(
                     "select a.Pot from sp.tBlackJackPlayer b inner join sp.tGames g on b.BlackJackGameId = g.GameId left join sp.tGameBlackJack a on a.BlackJackGameId = g.GameId where g.GameTypeId = 1 and b.BlackJackPlayerId = @UserId",

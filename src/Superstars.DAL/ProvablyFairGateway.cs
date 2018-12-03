@@ -9,17 +9,17 @@ namespace Superstars.DAL
 {
     public class ProvablyFairGateway
     {
-        private readonly string _connectionString;
+        private readonly SqlConnexion _sqlConnexion;
 
-        public ProvablyFairGateway(string connectionString)
+        public ProvablyFairGateway(SqlConnexion sqlConnection)
         {
-            _connectionString = connectionString;
+            _sqlConnexion = sqlConnection;
         }
 
 
         public async Task<ProvablyFairData> GetSeeds(int userId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<ProvablyFairData>(
                     "select m.UncryptedPreviousServerSeed, m.UncryptedServerSeed, m.CryptedServerSeed, m.ClientSeed,m.PreviousClientSeed,m.PreviousCryptedServerSeed, m.Nonce from sp.tProvablyFair m where m.UserId = @userId",
@@ -33,7 +33,7 @@ namespace Superstars.DAL
             var seedManager = new SeedManager(seeds.UncryptedServerSeed, seeds.UncryptedPreviousServerSeed,
                 seeds.ClientSeed, seeds.CryptedServerSeed, seeds.PreviousClientSeed, seeds.PreviousCryptedServerSeed);
             seedManager.NewSeed(clientSeed);
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
@@ -60,7 +60,7 @@ namespace Superstars.DAL
             string action = "Player named " + username + " with UserID " + userid + " changed his client seed from " + previousClientSeed + 
                 " to " + clientSeed + " and his server seed from " + previousServerSeed + " to " + serverSeed + " at " + date.ToString();
 
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var res = await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);
@@ -83,7 +83,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> AddSeeds(int userId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var seedManager = new SeedManager();
                 var p = new DynamicParameters();
@@ -111,7 +111,7 @@ namespace Superstars.DAL
             var seedManager = new SeedManager(seeds.UncryptedServerSeed, seeds.UncryptedPreviousServerSeed,
                 seeds.ClientSeed, seeds.CryptedServerSeed, seeds.PreviousClientSeed, seeds.PreviousCryptedServerSeed);
             var dice = HashManager.GetDiceFromHash(seeds.UncryptedServerSeed, seeds.ClientSeed, seeds.Nonce);
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);

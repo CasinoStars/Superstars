@@ -57,7 +57,7 @@
     
 <br>
     <center style="padding-top: 4%;">
-        <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
+        <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
     </center>
 
 <!-- Footer -->

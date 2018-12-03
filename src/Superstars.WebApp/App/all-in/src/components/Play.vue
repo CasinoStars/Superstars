@@ -55,25 +55,17 @@ export default {
 
       if(this.isInGameBlackJack != true) {
          await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-         await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
       }
       
       if(this.isInGameYams != true) {
-         await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
       }
-      
-      if(this.isInGameBlackJack != true && this.isInGameYams != true) {
-         await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
-         await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
-      }   
     },
 
     async PlayYams(gameTypeId) {
 
       if(this.isInGameYams != true) {
-          await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));      
-          await this.executeAsyncRequest(() => GameApiService.createAiUser(gameTypeId));
+          await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));     
           await this.executeAsyncRequest(() => YamsApiService.CreateYamsPlayer());
           await this.executeAsyncRequest(() => YamsApiService.CreateYamsAiPlayer());
       }
@@ -84,7 +76,6 @@ export default {
       
       if(this.isInGameBlackJack != true) {
        await this.executeAsyncRequest(() => GameApiService.createGame(gameTypeId));
-       await this.executeAsyncRequest(() => GameApiService.createAiUser(gameTypeId));
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
        await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());

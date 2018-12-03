@@ -8,16 +8,16 @@ namespace Superstars.DAL
 {
     public class YamsGateway
     {
-        private readonly string _connectionString;
+        private readonly SqlConnexion _sqlConnexion;
 
-        public YamsGateway(string connectionString)
+        public YamsGateway(SqlConnexion sqlConnexion)
         {
-            _connectionString = connectionString;
+            _sqlConnexion = sqlConnexion;
         }
 
         public async Task<Result<int>> CreateYamsPlayer(int userId, int nbturn, string dices, int dicesvalue)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@PlayerId", userId);
@@ -36,7 +36,7 @@ namespace Superstars.DAL
 
         public async Task<Result> DeleteYamsPlayer(int gameid)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<Result>(
                     "delete from sp.tYamsPlayer where YamsGameId = @GameID",
@@ -46,7 +46,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> CreateYamsAI(int userId, int nbturn, string dices, int dicesvalue)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
@@ -66,7 +66,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> DeleteYamsAi(int userId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@UserId", userId);
@@ -82,7 +82,7 @@ namespace Superstars.DAL
         public async Task<Result<int>> UpdateYamsPlayer(int playerid, int gameid, int nbturn, string dices,
             int dicesvalue)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@YamsPlayerId", playerid);
@@ -102,7 +102,7 @@ namespace Superstars.DAL
 
         public async Task<YamsData> GetPlayer(int playerId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<YamsData>(
                     "select top 1 t.YamsPlayerId, t.YamsGameId, t.NbrRevives, t.Dices, t.DicesValue from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId order by YamsGameId desc",
@@ -112,7 +112,7 @@ namespace Superstars.DAL
 
         public async Task<YamsData> GetGameId(int playerId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<YamsData>(
                     "select top 1 t.YamsGameId from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId order by YamsGameId desc",
@@ -123,7 +123,7 @@ namespace Superstars.DAL
 
         public async Task<Result<string>> GetPlayerDices(int userId, int gameId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<string>(
                     @"select t.Dices from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId;",
@@ -135,7 +135,7 @@ namespace Superstars.DAL
 
         public async Task<Result<string>> GetIaDices(int userId, int gameId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<string>(
                     @"select t.Dices from sp.tYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId;",
@@ -147,7 +147,7 @@ namespace Superstars.DAL
 
         public async Task<Result<int>> GetTurn(int playerId, int gameId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryFirstOrDefaultAsync<int>(
                     "select top 1 t.NbrRevives from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId order by YamsGameId desc",

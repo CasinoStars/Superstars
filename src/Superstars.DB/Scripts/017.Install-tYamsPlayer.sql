@@ -6,6 +6,7 @@ create table sp.tYamsPlayer
 	Dices varchar(6),
 	DicesValue int
 
+	constraint PK_tYamsPlayer_Id primary key (YamsPlayerId, YamsGameId),
 	constraint FK_tYamsPlayer_UserId foreign key (YamsPlayerId) references sp.tUser(UserId),
-	constraint FK_tYamsPlayer_GameId foreign key (YamsGameId) references sp.tGames(GameId) ON DELETE CASCADE
+	constraint FK_tYamsPlayer_GameId foreign key (YamsGameId) references sp.tGameYams(YamsGameId) ON DELETE CASCADE
 )

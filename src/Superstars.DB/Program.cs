@@ -53,14 +53,12 @@ namespace Superstars.DB
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(result.Error);
                 Console.ResetColor();
-                Console.ReadLine();
                 return -1;
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Success!");
             Console.ResetColor();
-            Console.ReadLine();
 
             return 0;
         }

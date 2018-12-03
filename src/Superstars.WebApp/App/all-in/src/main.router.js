@@ -16,6 +16,7 @@ import Rules from './components/Rules.vue';
 import Stats from './components/MyStats.vue';
 import Rank from './components/Rank.vue';
 import ProvablyFair from './components/ProvablyFair.vue';
+import CrashTest from './components/CrashTest.vue';
 
 const routes = [
     { path: '', component: Home },
@@ -28,6 +29,7 @@ const routes = [
     { path: '/statistics', component: Stats, beforeEnter: requireAuth},
     { path: '/playersStats', component: Rank},
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
+    { path: '/crash', component: CrashTest}
 ];
 
 export default new VueRouter({
