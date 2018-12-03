@@ -167,7 +167,7 @@ export default {
       this.$router.push({ path: 'play' });
     },
 
-    changeBet(choice){
+    changeBet(choice) {
       this.realOrFake = choice;
       this.errors = 0;
     },
@@ -232,7 +232,6 @@ export default {
     
     async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
-
     },
 
     async changeTurn() {
@@ -306,19 +305,7 @@ export default {
     async onSubmitAI(e) {
       e.preventDefault();
       while(this.nbTurnIa < 3) {
-        // setTimeout(this.waiting, 400);
-        // setTimeout(this.waiting, 800);
-        // setTimeout(this.waiting, 1200);
-        // setTimeout(this.waiting, 1600);
-        // setTimeout(this.waiting, 2000);
-        // setTimeout(this.waiting, 2400);
-        // setTimeout(this.waiting, 2800);
-        // setTimeout(this.waiting, 3200);      
         let arraydice = [this.iadices, this.dices];
-        // while(this.wait != '') {
-        //   //Wait end of dynamic '...' for roll dices
-        //   setTimeout(this.waiting, 400);
-        // }
         this.nbTurnIa = this.nbTurnIa + 1;
         await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
         await new Promise(f => setTimeout(f, 2000)); //Pause de 3s;

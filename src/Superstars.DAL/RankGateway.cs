@@ -89,8 +89,8 @@ namespace Superstars.DAL
         {
             using (var con = new SqlConnection(_connectionString))
             {
-                return await con.QueryFirstOrDefaultAsync<IEnumerable<int>>(
-                    "select s.Pot from sp.tGameYams s left outer join sp.tUser u on s.UserId = @UserId where GameTypeId = 0",
+                return await con.QueryAsync<int>(
+                    "select a.Pot from sp.tYamsPlayer y inner join sp.tGames as g on y.YamsGameId = g.GameId left join sp.tGameYams as a on a.YamsGameId = g.GameId where g.GameTypeId = 0 and y.YamsPlayerId = @UserId",
                     new {UserId = userid});
             }
         }
@@ -99,8 +99,8 @@ namespace Superstars.DAL
         {
             using (var con = new SqlConnection(_connectionString))
             {
-                return await con.QueryFirstOrDefaultAsync<IEnumerable<int>>(
-                    "select s.Pot from sp.tGameBlackJack s left outer join sp.tUser u on s.UserId = @UserId where GameTypeId = 1",
+                return await con.QueryAsync<int>(
+                    "select a.Pot from sp.tBlackJackPlayer b inner join sp.tGames g on b.BlackJackGameId = g.GameId left join sp.tGameBlackJack a on a.BlackJackGameId = g.GameId where g.GameTypeId = 1 and b.BlackJackPlayerId = @UserId",
                     new {UserId = userid});
             }
         }

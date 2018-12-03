@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
@@ -152,6 +153,18 @@ namespace Superstars.DAL
                     "select top 1 t.NbrRevives from sp.vYamsPlayer t where t.YamsPlayerId = @YamsPlayerId and t.YamsGameId = @YamsGameId order by YamsGameId desc",
                     new {YamsPlayerId = playerId, YamsGameId = gameId});
                 return Result.Success(data);
+            }
+        }
+
+        //WIP
+        public async Task ActionRollDices(int userid, string username, int gameId, DateTime date, string oldDices, string newDices)
+        {
+            string action = "Player named " + username + " with UserID " + userid + " in GameID " + gameId + " and with dices " + oldDices +  " revived his dices and get " + newDices + " at " + date.ToString();
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
             }
         }
     }

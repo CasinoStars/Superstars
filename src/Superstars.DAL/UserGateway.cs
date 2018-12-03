@@ -77,7 +77,6 @@ namespace Superstars.DAL
 
         public async Task ActionConnexion(int userid, string username, DateTime date)
         {
-
             //XDocument xDoc = new XDocument( 
             //    new XDeclaration("1.0","UTF-16",null),
             //    new XElement("UserID", userid),
@@ -88,7 +87,6 @@ namespace Superstars.DAL
             //xDoc.Save(xWrite);
             //xWrite.Close();
             //xDoc.Elements("UserID");                                              
-
             string action = "Player named " + username + " with UserID " + userid + " connected at " + date.ToString();
 
             using (var con = new SqlConnection(_connectionString))
