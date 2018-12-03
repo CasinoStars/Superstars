@@ -73,7 +73,7 @@ namespace Superstars.DAL
 
         public async Task<Result> IncrementSeedsinStats(int userId)
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<Result>(
                     "Update sp.tStats set ClientSeedChanges = ClientSeedChanges + 1 where UserId = @UserId",
