@@ -115,7 +115,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var allCredit = await con.QueryFirstOrDefaultAsync<int>(
-                    "select SUM(m.Credit) from sp.vMoney m");
+                    "select coalesce(SUM(m.Credit),0) from sp.tMoney m");
                 return Result.Success(allCredit);
             }
         }
