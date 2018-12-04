@@ -1,11 +1,10 @@
 <template>
 <div class="yams">
-
   <!-- The Modal -->
   <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-
+      
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
           <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
@@ -40,7 +39,6 @@
       </form>
     </div>
   </div>
-  
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:2%;">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/></h3>
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top: -3%; margin-left:89%;">TOUR: {{nbTurn}}</h3>
   
@@ -50,7 +48,12 @@
     </div>
   </form>
   
-  <br><br><br><br>
+  <br><br>
+  <div id="tutorialRectangle" class="bg-dark">
+    <br><br><br><br><br><br><br><br><br><p id="tutorialText"></p><br>
+    <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+  </div>
+  <br><br>
   
   <form @submit="onSubmit($event)" id="PlayPlayer">
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
@@ -79,13 +82,12 @@
       </div>
       </div>
 </center>
-
     <!-- <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="spinner">
   <div class="cube1"></div>
   <div class="cube2"></div>
     </div> -->
 
-    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet && nbSlidesTutorial > 6">LANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0" @click="nbTurn = 3">GARDER MES DÉS</button>
     <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
@@ -133,11 +135,13 @@ export default {
       errors: [],
       success: '',
       rollDices: false,
-      pot: 0
+      pot: 0,
+      nbSlidesTutorial: 0
     }
   },
 
   async mounted() {
+    document.getElementById("tutorialText").innerHTML = "Bienvenue sur votre première partie de Yams !"
     await this.refreshDices();
     await this.refreshIaDices();
     await this.changeTurn();
@@ -164,6 +168,28 @@ export default {
       //await this.executeAsyncRequest(() => GameApiService.deleteYamsGame());
       await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
       this.$router.push({ path: 'play' });
+    },
+
+    OkTutorial() {
+      let text = document.getElementById("tutorialText");
+      let rectangle = document.getElementById("tutorialRectangle");
+      
+      this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
+      if(this.nbSlidesTutorial === 1 ) {
+          text.textContent = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés ";
+      } else if(this.nbSlidesTutorial === 2) {
+        text.textContent = "  Vos dés sont en noir ";
+      } else if(this.nbSlidesTutorial === 3 ) {
+        text.textContent = "  Les dés de l'ordinateur sont en blanc ";
+      } else if(this.nbSlidesTutorial === 4) {
+        text.textContent = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés ";
+      } else if(this.nbSlidesTutorial === 5) {
+        text.textContent = "  L'ordianteur jouera après vous en suivant ces mêmes règles" ;
+      } else if(this.nbSlidesTutorial === 6) {
+        text.textContent = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
+      } else if(this.nbSlidesTutorial === 7) {
+          rectangle.classList.toggle('fade');
+      }
     },
 
     changeBet(choice) {
@@ -341,6 +367,45 @@ $white: #ffffff;
 $main: #777c7b;
 $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
+
+#tutorialRectangle {
+   width: 80%; 
+   height: 60%;
+  //  background: lightgrey;
+   margin-left: 10%;
+   margin-top: -14%;
+   border-radius: 20px;
+   text-align: center;
+   opacity: 0.99;
+   position: absolute; 
+   transition: opacity 1s; 
+   z-index: 15;
+}
+
+#tutorialRectangle.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+#tutorialText {
+color:white;
+text-transform: uppercase;
+font-size:24px;
+font-family: 'Courier New', sans-serif;
+text-align: center;
+position: relative;
+}
+
+#tutorialButton {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Courier New', sans-serif;
+    display: inline-block;
+    font-size: 22px;
+    border-radius: 3px;
+    position: relative;
+}
 
 .yams .tab-group {
   list-style:none;
@@ -613,7 +678,6 @@ $gray-light: #a0b3b0;
   width: 8%; 
 	left: 30.2%;
 }
-
 .iadices {
 	display: inline-block;
 	position: relative;
