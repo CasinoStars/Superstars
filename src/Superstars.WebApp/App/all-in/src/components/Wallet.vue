@@ -1,3 +1,4 @@
+
 <template>
   <div class="wallet">
 
@@ -229,6 +230,10 @@
     overflow-y: scroll;
   }
 
+  .wallet {
+    margin-top: 7.5%;
+  }
+
   .wallet body {
     background: $body-bg;
     font-family: "Titillium Web", sans-serif;
@@ -247,7 +252,8 @@
   .wallet .form {
     background: rgba($form-bg, 0.9);
     padding: 40px;
-    max-width: 600px;
+    height: 800px;
+    max-width: 700px;
     margin: 40px auto;
     border-radius: $br;
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
