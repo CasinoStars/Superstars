@@ -5,7 +5,7 @@
 	Wins int default 0,
 	Losses int default 0,
 	AverageBet int default 0,
-	AverageTime float default 0,
+	AverageTime int default 0,
 	ClientSeedChanges int default 0
 
 	constraint PK_tStats_Id primary key (GameTypeId, UserId),

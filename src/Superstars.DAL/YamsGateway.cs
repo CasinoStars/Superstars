@@ -161,7 +161,7 @@ namespace Superstars.DAL
         {
             string action = "Player named " + username + " with UserID " + userid + " in GameID " + gameId + " and with dices " + oldDices +  " revived his dices and get " + newDices + " at " + date.ToString();
 
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userid, ActionDate = date, ActionDescription = action },
                     commandType: CommandType.StoredProcedure);

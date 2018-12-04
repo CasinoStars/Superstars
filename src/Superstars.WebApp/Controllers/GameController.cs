@@ -148,10 +148,13 @@ namespace Superstars.WebApp.Controllers
         public async Task<Result> UpdateStats(int gameTypeId, [FromBody] string win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             var result1 = await _gameGateway.GetWins(userId, gameTypeId);
             var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
-            int averagebet = 0;
+            var avgTime = await GetAverageTime(userId, gameTypeId);
+            
 
+            int averagebet = 0;
             if (gameTypeId == 0)
             {
                 averagebet = await GetAverageBetYams();
@@ -172,8 +175,29 @@ namespace Superstars.WebApp.Controllers
               losses = losses + 1;
             }
 
-            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses, averagebet);
+            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses, averagebet, avgTime.Milliseconds);
             return Result.Success(result3);
+        }
+
+        public async Task<TimeSpan> GetAverageTime(int userId, int gameTypeId)
+        {
+            var result = await _rankGateway.GetGames(userId, gameTypeId);
+            var games = result.ToList();
+
+            List<TimeSpan> averageTimes = new List<TimeSpan>();
+
+            foreach (var item in games)
+            {
+                averageTimes.Add(item.EndDate - item.StartDate);
+            }
+
+            if (averageTimes.Count == 0)
+            {
+                return new TimeSpan();
+            }
+            var k = averageTimes.Average(TimeSpan => TimeSpan.TotalMilliseconds);
+            TimeSpan avg = TimeSpan.FromMilliseconds(k);
+            return avg;
         }
 
         public async Task<int> GetAverageBetYams()

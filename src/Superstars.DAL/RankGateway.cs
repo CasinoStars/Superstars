@@ -104,5 +104,28 @@ namespace Superstars.DAL
                     new {UserId = userid});
             }
         }
+
+        public async Task<IEnumerable<GameData>> GetGames(int userid, int gametypeId)
+        {
+            if (gametypeId == 0)
+            {
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
+                {
+                    return await con.QueryAsync<GameData>(
+                        "select g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g inner join sp.tYamsPlayer p on p.YamsGameId = g.GameId where g.GameTypeId = 0 and p.YamsPlayerId = @UserId and g.EndDate is not null",
+                        new { UserId = userid });
+                }
+            } else
+            {
+                using (var con = new SqlConnection(_sqlConnexion.connexionString))
+                {
+                    return await con.QueryAsync<GameData>(
+                        "select g.GameId, g.GameTypeId, g.StartDate, g.EndDate, g.Winner from sp.tGames g inner join sp.tBlackJackPlayer p on p.BlackJackGameId = g.GameId where g.GameTypeId = 1 and p.BlackJackPlayerId = @UserId and g.EndDate is not null",
+                        new { UserId = userid });
+                }
+            }
+
+        }
+
     }
 }
