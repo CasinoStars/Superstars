@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="crash">
         <div class="col-md-auto">
             <div class="piecontainer" id="pie-container">
                 <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
@@ -26,6 +26,39 @@
                     <button type="submit" class="btn btn-light">Confirmer</button>
                 </div>
             </form>
+        </div>
+        <div class="component-box-player-list">
+            <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
+                <thead class="table-header">
+                    <tr>
+                        <th>Joueur</th>
+                        <th class="text-right">X</th>
+                        <th class="text-right">Mise</th>
+                        <th class="text-right">Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>max</td>
+                        <td class="text-right">10</td>
+                        <td class="text-right">10000</td>
+                        <td class="text-right">??</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="table-responsive">
+                <table class="playerlist-stats-table table table-striped table-condensed">
+                    <tbody>
+                        <tr class="table-footer">
+                            <td>En ligne: 0 </td>
+                            <td>Joueurs: 0 </td>
+                            <td>Mises: 0 bits</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -214,22 +247,13 @@
 
 
 <style lang="scss">
-    // #pie-chart {
-    //    width: 10px;
-    //    height: 10px;
-    // }
-    .piecontainer {
+    .crash .piecontainer {
         height: 800px;
         width: 800px;
         display: inline-block;
     }
-
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        border-spacing: 0;
-        width: 100%;
-        border: 1px solid #ddd;
+    .crash .text-right {
+        text-align: right;
     }
 
     tr {

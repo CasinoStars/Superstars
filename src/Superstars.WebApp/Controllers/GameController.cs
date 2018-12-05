@@ -175,12 +175,8 @@ namespace Superstars.WebApp.Controllers
         public async Task<Result> UpdateStats(int gameTypeId, [FromBody] string win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-            var result1 = await _gameGateway.GetWins(userId, gameTypeId);
-            var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
             var avgTime = await GetAverageTime(userId, gameTypeId);
             
-
             int averagebet = 0;
             if (gameTypeId == 0)
             {
@@ -191,19 +187,20 @@ namespace Superstars.WebApp.Controllers
                 averagebet = await GetAverageBetBJ();
             }
 
-            var wins = result1.Content;
-            var losses = result2.Content;
+            var wins = 0;
+            var losses = 0;
+
             if (win == "Player")
             {
-                wins = wins + 1;
+                wins = 1;
             }
             else if(win == "AI")
             {
-              losses = losses + 1;
+              losses = 1;
             }
 
-            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses, averagebet, avgTime.Milliseconds);
-            return Result.Success(result3);
+            var result = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses, averagebet, avgTime.Milliseconds);
+            return Result.Success(result);
         }
 
         public async Task<TimeSpan> GetAverageTime(int userId, int gameTypeId)

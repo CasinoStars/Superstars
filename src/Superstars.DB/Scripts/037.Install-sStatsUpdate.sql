@@ -18,7 +18,7 @@ begin
                return 1;
       end;  
 		 
-      update sp.tStats set Wins = @Wins, Losses = @Losses, AverageBet = @AverageBet, AverageTime = @AverageTime where UserId = @UserId and GameTypeId = @GameTypeId;
+      update sp.tStats set Wins += @Wins, Losses += @Losses, AverageBet = @AverageBet, AverageTime = @AverageTime where UserId = @UserId and GameTypeId = @GameTypeId;
          commit;
       return 0;
 end;
