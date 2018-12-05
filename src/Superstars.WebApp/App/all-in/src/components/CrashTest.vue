@@ -85,8 +85,8 @@
                 connection: null,
                 bet: null,
                 playerMulti: null,
-                moneyType: true
-
+                moneyType: true,
+                playersData: [] 
             }
         },
 
@@ -100,16 +100,18 @@
             var signalR = require("@aspnet/signalr");
             this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel
                 .Error).build();
-            this.connection.on("Newgame", ite => {
+            this.connection.on("Newgame", async (ite) => {
                 console.log(ite)
                 this.chart.destroy();
                 this.initializeChart();
+                await this.getPlayers();
                 this.i = 0
                 this.myLoop(ite);
+
             });
             this.connection.on("Wait", () => {
                 console.log("wait")
-            })
+            });
             this.connection.start();
 
             this.initializeChart();
@@ -129,6 +131,7 @@
             ...mapActions(['executeAsyncRequest']),
             ...mapActions(['RefreshFakeCoins']),
             ...mapActions(['RefreshBTC']),
+
             initializeChart() {
                 this.chart = new Chart(document.getElementById("pie-chart"), {
                     // The type of chart we want to create
@@ -177,6 +180,7 @@
                     }
                 });
             },
+
             addData(chart, x, y) {
                 chart.data.datasets.forEach((dataset) => {
                     dataset.data.push({
@@ -186,6 +190,7 @@
                 });
                 chart.update();
             },
+
             myLoop(iteration) {
                 this.fn = setInterval(() => {
                     this.addData(this.chart, this.i / 10 + 1, Math.exp(this.i / 100));
@@ -199,6 +204,7 @@
                 }, 100);
 
             },
+
             async toBet(e) {
                 e.preventDefault();
                 var errors = [];
@@ -221,8 +227,6 @@
                 this.errors = errors;
                 if (errors.length == 0) {
                     try {
-
-
                         if (this.moneyType === false) {
                             await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
                                 this.moneyType));
@@ -238,9 +242,11 @@
                         console.log(error)
                     }
                 }
+            },
+
+            async getPlayers() {
+                this.playersData = await this.executeAsyncRequest(() => CrashApiService.GetPlayersInGame());
             }
-
-
         }
     }
 </script>

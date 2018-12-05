@@ -19,10 +19,10 @@ namespace Superstars.WebApp.Controllers
         private readonly CrashBuilder _crash;
         private readonly CrashService _crashService;
 
-        public CrashController(CrashBuilder crash)
+        public CrashController(CrashBuilder crash, CrashService crashService)
         {
             _crash = crash;
-            
+            _crashService = crashService;
         }
         [HttpGet("getNextCrash")]
         public async Task<IActionResult> GetNextCrash()
