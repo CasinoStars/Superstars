@@ -42,7 +42,7 @@
                         <td>{{e.userName}}</td>
                         <td class="text-right">{{e.multi}}</td>
                         <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                        <td class="text-right">{{(e.bet * e.multi).toLocaleString('en')}}</td>
+                        <td class="text-right">{{(e.bet * multi).toLocaleString('en')}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -52,9 +52,8 @@
                 <table class="playerlist-stats-table table table-striped table-condensed">
                     <tbody>
                         <tr class="table-footer">
-                            <td>En ligne: 0 </td>
-                            <td>Joueurs: 0 </td>
-                            <td>Mises: 0 bits</td>
+                            <td>Joueurs: {{playersData.length}} </td>
+                            <td>Mises: {{totalBet}} bits</td>
                         </tr>
                     </tbody>
                 </table>
@@ -86,7 +85,8 @@
                 bet: null,
                 playerMulti: null,
                 moneyType: true,
-                playersData: [] 
+                playersData: [],
+                totalBet: 0,
             }
         },
 
@@ -102,11 +102,9 @@
                 .Error).build();
             this.connection.on("Newgame", async (ite) => {
                 console.log(ite)
+                this.totalBet
                 this.chart.destroy();
                 this.initializeChart();
-                //await this.getPlayers();
-               
-
                 this.i = 0
                 this.myLoop(ite);
                 await this.RefreshBTC();
@@ -114,9 +112,16 @@
             });
             this.connection.on("Wait", async () => {
                 console.log("wait")
+                this.totalBet = 0;
+                this.playersData = [];
                 await this.RefreshBTC();
 
             });
+
+            this.connection.on("Bet", async (data) => {
+                this.getPlayers(data);
+            });
+
             this.connection.start();
 
             this.initializeChart();
@@ -249,8 +254,11 @@
                 }
             },
 
-            async getPlayers() {
-                this.playersData = await this.executeAsyncRequest(() => CrashApiService.GetPlayersInGame());
+            getPlayers(data) {
+                this.playersData.push(data)
+                this.playersData.forEach(elements => {
+                    this.totalBet += elements.bet;
+                });
             }
         }
     }

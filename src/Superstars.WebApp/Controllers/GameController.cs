@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using NBitcoin;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
@@ -23,11 +24,12 @@ namespace Superstars.WebApp.Controllers
         private readonly WalletGateway _walletGateway;
         private readonly YamsGateway _yamsGateway;
         private readonly CrashGateway _crashGateway;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
 
         public GameController(GameGateway gameGateway, YamsGateway yamsGateway, BlackJackGateway blackJackGateway,
             UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher,
-            RankGateway rankGateway, CrashGateway crashGateway)
+            RankGateway rankGateway, CrashGateway crashGateway, IHubContext<SignalRHub> hubContext)
         {
             _gameGateway = gameGateway;
             _yamsGateway = yamsGateway;
@@ -37,6 +39,7 @@ namespace Superstars.WebApp.Controllers
             _passwordHasher = passwordHasher;
             _rankGateway = rankGateway;
             _crashGateway = crashGateway;
+            _hubContext = hubContext;
         }
 
         [HttpPost("{gameTypeId}")]
@@ -110,6 +113,11 @@ namespace Superstars.WebApp.Controllers
             var user = await _userGateway.FindById(userId);
 
             await _crashGateway.CreateCrashPlayer(userId, bet, crash);
+            CrashData data = new CrashData();
+            data.UserName =user.UserName;
+            data.Bet = bet;
+            data.Multi = (int)crash;
+            await _hubContext.Clients.All.SendAsync("Bet", data);
 
             if (!isBitcoin)
             {
