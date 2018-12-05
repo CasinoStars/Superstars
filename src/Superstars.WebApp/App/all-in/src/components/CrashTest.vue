@@ -104,12 +104,12 @@
                 console.log(ite)
                 this.chart.destroy();
                 this.initializeChart();
-                //await this.getPlayers();
-               
-
+            
                 this.i = 0
                 this.myLoop(ite);
                 await this.RefreshBTC();
+                await this.getPlayers();
+
 
             });
             this.connection.on("Wait", async () => {
