@@ -61,7 +61,16 @@ namespace Superstars.WebApp.Services
 
         private async Task SetWins()
         {
-            List<CrashData> players = await GetPlayersInGame();
+            var players = await GetPlayersInGame();
+            foreach (var player in players)
+            {
+                if (player.Multi <= _crashValue)
+                {
+                    var pot = player.Multi * player.Bet;
+                    await _walletGateway.AddCoins(player.UserId, 0, 0, pot, pot);
+
+                }
+            }
         }
 
 
@@ -81,7 +90,7 @@ namespace Superstars.WebApp.Services
                 stopWatch.Reset();
 
                 await _gameGateway.UpdateGameEnd(gameId.Content, 2, "");
-                
+                await SetWins();
                 await WaitingForBets();
             }       
         }
