@@ -45,7 +45,7 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             UserData data = await _userGateway.FindById(userId);
             Result res = await _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
-            var seedData = await GetSeeds();
+            var seedData = await _provablyFairGateway.GetSeeds(userId);
             Result actionRes = await _provablyFairGateway.ActionChangeSeeds(data.UserId, data.UserName, DateTime.UtcNow, seedData.ClientSeed, seedData.PreviousClientSeed, seedData.UncryptedServerSeed, seedData.UncryptedPreviousServerSeed);
         }
 

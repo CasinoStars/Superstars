@@ -85,8 +85,11 @@ namespace Superstars.WebApp
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler();
             }
 
             var secretKey = Configuration["JwtBearer:SigningKey"];

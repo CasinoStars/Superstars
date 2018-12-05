@@ -3,10 +3,6 @@
   <div class="wallet">
 
     <!-- errors of transactions !-->
-    <div class="alert alert-danger" style="text-align: center;" v-if="errors.length > 0">
-      <li v-for="e of errors" :key="e">{{e}}</li>
-    </div>
-
     <!-- Upgrade -->
 
     <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
@@ -35,7 +31,6 @@
             </div>
             <div class="modal-body">
               <h4 style="color: white;">{{Responses}} </h4>
-              <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
             </div>
             <div class="modal-footer">
               <div style="margin-right: 42%;">
@@ -62,6 +57,9 @@
           <input type="text" placeholder="Address" v-model="item.DestinationAddress" required autocomplete="off" />
         </div><br>
         <button type="submit" class="button button-block">Envoyer</button>
+        <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
+      <li v-for="e of errors" :key="e">{{e}}</li>
+    </div>    
         <div> </div>
       </form>
 
@@ -75,10 +73,14 @@
             autocomplete="off" />
         </div><br>
         <button type="submit" class="button button-block">Créditer</button>
-
+          <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
+      <li v-for="e of errors" :key="e">{{e}}</li>
+    </div>    
       </form>
     </div>
     <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
+
+       
   </div>
 </template>
 

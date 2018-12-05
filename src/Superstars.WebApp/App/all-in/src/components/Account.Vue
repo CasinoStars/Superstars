@@ -8,16 +8,20 @@
                 <h5 style="text-align: center; color: white;"> MyUserName</h5> 
             </div>
                 
-            <div class="submenu" >
-            <bouton >  Profil </bouton> </div>
+            <div class="submenu" ><bouton >  Profil </bouton> </div>
+            <div class="submenu"><button v-on:click=" ProfilOn()">Profil</button></div>
             <div class="submenu"><button v-on:click=" WalletOn()">Porte monnaie</button></div>
-            <div class="submenu"><button>ProvablyFair</button></div>
-            <div class="submenu"><button>Support</button></div>
-            <div class="submenu"><button>Sécuriter</button></div>
+            <div class="submenu"><button v-on:click="ProvablyFairOn()">ProvablyFair</button></div>
+            <div class="submenu"><button v-on:click="SupportPageOn()">Support</button></div>
+            <div class="submenu"><button v-on:click="Securiter()">Sécuriter</button></div>
             
         </div>
-        <div class="col-md-5">
-            <wallet v-if="this.isWallet == true"/>
+        <div class="col-md-5" style="margin-left: 9.5%;">
+            <div class = "improtedView"> 
+                <wallet v-if="this.isWallet == true"/>
+                <div class="provablyFair"> <ProvablyFair v-if="this.isProvablyFair == true"/> </div>
+           </div>
+
         </div>
     </div>
 </div>
@@ -28,18 +32,24 @@
 <script>
 
 import Wallet from './Wallet.vue'
+import ProvablyFair from './ProvablyFair.vue'
 
 
 
   export default {
     data() {
         return {
-        isWallet: ""
+        isWallet: "",
+        isProvablyFair: "",
+        isSupportPageOn: "",
+        isSecuriterOn: "",
+        isProfilOn:""
         };
     },
 
   components: {
-         Wallet
+         Wallet,
+         ProvablyFair
     },
 
 
@@ -52,8 +62,41 @@ import Wallet from './Wallet.vue'
       handleClose(key, keyPath) {
         console.log(key, keyPath);      
       },
-          WalletOn() {
+        WalletOn() {
          this.isWallet = true;
+         this.isProvablyFair = false;
+         this.isSupportPageOn = false;
+         this.isSecuriterOn = false;
+         this.isProfilOn = false;
+
+      },
+       ProvablyFairOn() {
+         this.isWallet = false;
+         this.isProvablyFair = true;
+         this.isSupportPageOn = false;
+         this.isSecuriterOn = false;
+         this.isProfilOn = false;
+      },
+       SupportPageOn() {
+         this.isWallet = false;
+         this.isProvablyFair = false;
+         this.isSupportPageOn = true;
+         this.isSecuriterOn = false;
+         this.isProfilOn = false;
+      },
+       SecuriterOn() {
+         this.isWallet = true;
+         this.isProvablyFair = false;
+         this.isSupportPageOn = false;
+         this.isSecuriterOn = true;
+         this.isProfilOn = false;
+      },
+       ProfilOn() {
+         this.isWallet = true;
+         this.isProvablyFair = false;
+         this.isSupportPageOn = false;
+         this.isSupportPageOn = false;
+         this.isProfilOn = false;
       } 
     }
   } 
@@ -78,6 +121,18 @@ import Wallet from './Wallet.vue'
   $bold: 600;
   $br: 4px;
 
+.account .importedView {
+width: 600px;
+}
+
+.account .wallet {
+    min-width: 600px;
+    max-width: 600px;
+    min-height:600px;
+    max-height: 600px;
+}
+
+
 .account .submenu {
      box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
      background: rgba($form-bg, 0.9);
@@ -88,7 +143,7 @@ import Wallet from './Wallet.vue'
 	 width:100%;
 	 height:50px;
      border-style: solid;
-     border-width: 1px;   
+     border-width: 2px;   
      border-color: black;
 	// background:#545c64;
 
@@ -97,19 +152,24 @@ import Wallet from './Wallet.vue'
     
 ///}
 
+.account .provablyFair {
+    margin-top: 7.5%;
+}
+
 .account .menu {
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
      background: rgba($form-bg, 0.9);
        margin-top:3%;
     margin-left:10%;
 	width:350px;
-	height:800px;
+	//height:800px;
     border-style: solid;
     border-width: 2px;   
     border-color: black;
 	//background: $main-dark;
     border-radius: 10px;
     opacity: 0.9;
+    min-height: 800px;
 }
 
 .account .imglogo {
