@@ -17,13 +17,17 @@ namespace Superstars.WebApp.Services
         private double _crashValue;
         private readonly CrashBuilder _crashBuilder;
         private readonly GameGateway _gameGateway;
+        private readonly CrashGateway _crashGateway;
+        private readonly WalletGateway _walletGateway;
 
-        public CrashService(IHubContext<SignalRHub> signalR, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway)
+        public CrashService(IHubContext<SignalRHub> signalR, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
         {
             _signalR = signalR;
             _crashValue = crashBuilder.NextCrashValue();
             _crashBuilder = crashBuilder;
             _gameGateway = gameGateway;
+            _crashGateway = crashGateway;
+            _walletGateway = walletGateway;
         }
 
         private async Task LaunchNewGame()
@@ -53,6 +57,7 @@ namespace Superstars.WebApp.Services
             await Task.Delay(5000);
 
         }
+
 
         private async Task GameLoop()
         {
