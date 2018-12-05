@@ -109,6 +109,11 @@
 
 <div id="tocenter">
 
+  <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
+    <br><br><br><br><br><br><br><p id="tutorialText"> {{tutorialp}}</p><br><br><br>
+    <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+  </div>
+
 <div id="infos">
     <a class="txt"> Pot : {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/> </a> <br>
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
@@ -231,6 +236,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import BlackJackApiService from '../services/BlackJackApiService';
+import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
@@ -256,7 +262,11 @@ export default {
             trueBet: 0,
             errors: [],
             success: '',
-            pot: 0
+            pot: 0,
+            tutorialp: '',
+            queryPseudo: '',
+            nbSlidesTutorial: 0,
+            wins: 0
         }
     },
   computed: {
@@ -265,6 +275,14 @@ export default {
   },
 
   async mounted() {
+
+        if(this.$route.query.pseudo)
+      this.queryPseudo = this.$route.query.pseudo;
+    else
+      this.queryPseudo = UserApiService.pseudo;
+
+    this.wins = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer(this.queryPseudo));
+    console.log(this.wins);
     this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
@@ -278,6 +296,7 @@ export default {
       await this.refreshCards();
       await this.refreshHandValue(); 
     }
+      this.tutorialp = "Bienvenue sur le Black Jack !";
   },
 
     methods: {
@@ -285,6 +304,22 @@ export default {
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
 
+    OkTutorial() {
+      let rectangle = document.getElementById("tutorialRectangle");
+      
+      this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
+      if(this.nbSlidesTutorial === 1 ) {
+          this.tutorialp = "  Vous allez devoir vous approchez le plus près possible de 21 mais sans le dépasser";
+      } else if(this.nbSlidesTutorial === 2) {
+        this.tutorialp = "  Vous pouvez à chaque tour, décider de tirer une carte ou de vous arrêter pour conserver votre valeur actuelle";
+      } else if(this.nbSlidesTutorial === 3) {
+        this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
+      } else if(this.nbSlidesTutorial === 4) {
+        this.tutorialp = "  Le joueur le plus proche de 21 sans le dépasser remporte la partie ! Bonne chance ! ";
+      } else if(this.nbSlidesTutorial === 5) {
+          rectangle.classList.toggle('fade');
+      }
+    },
 
     async RedirectandDelete() {
       //await this.executeAsyncRequest(() => GameApiService.deleteBlackJackGame());
@@ -484,6 +519,45 @@ $white: #ffffff;
 $main: #777c7b;
 $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
+
+#tutorialRectangle {
+   width: 70%; 
+   height: 60%;
+  //  background: lightgrey;
+   margin-left: 15.5%;
+   margin-top: -5%;
+   border-radius: 20px;
+   text-align: center;
+   opacity: 0.99;
+   position: absolute; 
+   transition: opacity 1s; 
+   z-index: 15;
+}
+
+#tutorialRectangle.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+#tutorialText {
+color:white;
+text-transform: uppercase;
+font-size:24px;
+font-family: 'Courier New', sans-serif;
+text-align: center;
+position: relative;
+}
+
+#tutorialButton {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Courier New', sans-serif;
+    display: inline-block;
+    font-size: 22px;
+    border-radius: 3px;
+    position: relative;
+}
 
 .blackJack .tab-group {
   list-style:none;

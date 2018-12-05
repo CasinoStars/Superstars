@@ -49,8 +49,8 @@
   </form>
   
   <br><br>
-  <div id="tutorialRectangle" class="bg-dark">
-    <br><br><br><br><br><br><br><br><br><p id="tutorialText"></p><br>
+  <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
+    <br><br><br><br><br><br><br><p id="tutorialText"> {{tutorialp}}</p><br>
     <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
   <br><br>
@@ -87,7 +87,7 @@
   <div class="cube2"></div>
     </div> -->
 
-    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet && nbSlidesTutorial > 6">LANCER</button>
+    <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
     <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0" @click="nbTurn = 3">GARDER MES DÉS</button>
     <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
@@ -112,6 +112,7 @@ import { mapActions, mapGetters } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
+import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 
 export default {
@@ -136,12 +137,22 @@ export default {
       success: '',
       rollDices: false,
       pot: 0,
-      nbSlidesTutorial: 0
+      nbSlidesTutorial: 0,
+      tutorialp: '',
+      queryPseudo: '',
+      wins: 0
     }
   },
 
   async mounted() {
-    document.getElementById("tutorialText").innerHTML = "Bienvenue sur votre première partie de Yams !"
+
+    if(this.$route.query.pseudo)
+      this.queryPseudo = this.$route.query.pseudo;
+    else
+      this.queryPseudo = UserApiService.pseudo;
+
+    this.wins = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer(this.queryPseudo));
+
     await this.refreshDices();
     await this.refreshIaDices();
     await this.changeTurn();
@@ -150,10 +161,10 @@ export default {
       this.showModal();
     } else {
       this.playerBet = true;
-    }
-    
+    }  
+      this.tutorialp = "Bienvenue sur le Yams !";
   },
-  
+
   computed: {
     ...mapGetters(['BTCMoney']),
     ...mapGetters(['fakeMoney'])
@@ -171,23 +182,18 @@ export default {
     },
 
     OkTutorial() {
-      let text = document.getElementById("tutorialText");
       let rectangle = document.getElementById("tutorialRectangle");
       
       this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
       if(this.nbSlidesTutorial === 1 ) {
-          text.textContent = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés ";
+          this.tutorialp = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés ";
       } else if(this.nbSlidesTutorial === 2) {
-        text.textContent = "  Vos dés sont en noir ";
-      } else if(this.nbSlidesTutorial === 3 ) {
-        text.textContent = "  Les dés de l'ordinateur sont en blanc ";
+        this.tutorialp = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés ";
+      } else if(this.nbSlidesTutorial === 3) {
+        this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
       } else if(this.nbSlidesTutorial === 4) {
-        text.textContent = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés ";
+        this.tutorialp = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
       } else if(this.nbSlidesTutorial === 5) {
-        text.textContent = "  L'ordianteur jouera après vous en suivant ces mêmes règles" ;
-      } else if(this.nbSlidesTutorial === 6) {
-        text.textContent = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
-      } else if(this.nbSlidesTutorial === 7) {
           rectangle.classList.toggle('fade');
       }
     },
@@ -369,11 +375,11 @@ $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
 
 #tutorialRectangle {
-   width: 80%; 
-   height: 60%;
+   width: 60%; 
+   height: 50%;
   //  background: lightgrey;
-   margin-left: 10%;
-   margin-top: -14%;
+   margin-left: 18.5%;
+   margin-top: -12%;
    border-radius: 20px;
    text-align: center;
    opacity: 0.99;
