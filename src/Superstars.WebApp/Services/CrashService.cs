@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Superstars.WebApp.Services
         private double _crashValue;
         private readonly CrashBuilder _crashBuilder;
         private readonly GameGateway _gameGateway;
+        private readonly CrashGateway _crashGateway;
 
         public CrashService(IHubContext<SignalRHub> signalR, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway)
         {
@@ -24,6 +26,7 @@ namespace Superstars.WebApp.Services
             _crashValue = crashBuilder.NextCrashValue();
             _crashBuilder = crashBuilder;
             _gameGateway = gameGateway;
+            _crashGateway = crashGateway;
         }
 
         private async Task LaunchNewGame()
@@ -83,6 +86,12 @@ namespace Superstars.WebApp.Services
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             
+        }
+
+        public async Task<IEnumerable<CrashData>> GetPlayersInGame()
+        {
+            List<CrashData> players = (List<CrashData>)await _crashGateway.GetGamePlayers();
+            return players;
         }
     }
 }
