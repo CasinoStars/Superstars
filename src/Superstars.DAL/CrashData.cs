@@ -8,6 +8,7 @@ namespace Superstars.DAL
     {
         public int GameId { get; set; }
         public int UserId { get; set; }
+        public string UserName { get; set; }
         public int Bet { get; set; }
         public int Multi { get; set; }
 

@@ -13,16 +13,16 @@ using Superstars.WebApp.Services;
 namespace Superstars.WebApp.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class CrashController : Controller
     {
         private readonly CrashBuilder _crash;
-        private readonly CrashService _crashService;
+        private readonly CrashGateway _crashGateway;
 
-        public CrashController(CrashBuilder crash, CrashService crashService)
+        public CrashController(CrashBuilder crash, CrashGateway crashGateway)
         {
             _crash = crash;
-            _crashService = crashService;
+            _crashGateway = crashGateway;
         }
         [HttpGet("getNextCrash")]
         public async Task<IActionResult> GetNextCrash()
@@ -33,7 +33,7 @@ namespace Superstars.WebApp.Controllers
         [HttpGet("GetPlayersInGame")]
         public async Task<IEnumerable<CrashData>> GetPlayersInGame()
         {
-            return await _crashService.GetPlayersInGame();
+            return (List<CrashData>) await _crashGateway.GetGamePlayers();
         }
     }
 }

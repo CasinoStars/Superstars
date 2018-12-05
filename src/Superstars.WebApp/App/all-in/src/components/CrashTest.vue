@@ -38,11 +38,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>max</td>
-                        <td class="text-right">10</td>
-                        <td class="text-right">10000</td>
-                        <td class="text-right">??</td>
+                    <tr v-for="(e, index) of playersData" :key="index">
+                        <td>{{e.userName}}</td>
+                        <td class="text-right">{{e.multi}}</td>
+                        <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
+                        <td class="text-right">{{(e.bet * e.multi).toLocaleString('en')}}</td>
                     </tr>
                 </tbody>
             </table>
