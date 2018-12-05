@@ -32,13 +32,12 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@UserId"));
             }
         }
-        public async Task<IEnumerable<CrashData>> GetGamePlayers (int gameId)
+        public async Task<IEnumerable<CrashData>> GetGamePlayers ()
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryAsync<CrashData>(
-                    @"select UserId, Bet, Multi from sp.tCrash where GameId = @gameId",
-                    new { gameId = gameId });
+                    @"select UserId, Bet, Multi from sp.tCrash where Gameid = (select TOP 1 GameId from sp.tCrash order by GameId desc");
                 return data;
             }
         }

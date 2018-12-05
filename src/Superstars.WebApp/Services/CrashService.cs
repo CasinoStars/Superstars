@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -88,6 +89,12 @@ namespace Superstars.WebApp.Services
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             
+        }
+
+        public async Task<IEnumerable<CrashData>> GetPlayersInGame()
+        {
+            List<CrashData> players = (List<CrashData>)await _crashGateway.GetGamePlayers();
+            return players;
         }
     }
 }
