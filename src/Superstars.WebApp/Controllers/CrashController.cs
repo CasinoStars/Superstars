@@ -15,7 +15,7 @@ namespace Superstars.WebApp.Controllers
     //[Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class CrashController : Controller
     {
-        private CrashBuilder _crash;
+        private readonly CrashBuilder _crash;
 
         public CrashController(CrashBuilder crash)
         {

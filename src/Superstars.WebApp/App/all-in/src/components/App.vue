@@ -80,7 +80,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
-import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 import Chat from './Chat.vue'
 import Settings from './Settings.vue'

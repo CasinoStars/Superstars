@@ -22,10 +22,12 @@ namespace Superstars.WebApp.Controllers
         private readonly UserGateway _userGateway;
         private readonly WalletGateway _walletGateway;
         private readonly YamsGateway _yamsGateway;
+        private readonly CrashGateway _crashGateway;
+
 
         public GameController(GameGateway gameGateway, YamsGateway yamsGateway, BlackJackGateway blackJackGateway,
             UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher,
-            RankGateway rankGateway)
+            RankGateway rankGateway, CrashGateway crashGateway)
         {
             _gameGateway = gameGateway;
             _yamsGateway = yamsGateway;
@@ -34,6 +36,7 @@ namespace Superstars.WebApp.Controllers
             _walletGateway = walletGateway;
             _passwordHasher = passwordHasher;
             _rankGateway = rankGateway;
+            _crashGateway = crashGateway;
         }
 
         [HttpPost("{gameTypeId}")]
@@ -44,7 +47,7 @@ namespace Superstars.WebApp.Controllers
             {
                 Result yamsPot = await _gameGateway.CreateYamsGame("0");
             }
-            else
+            else if (gameTypeId == 1)
             {
                 Result blackJackpot = await _gameGateway.CreateBlackJackGame("0");
             }
@@ -97,6 +100,30 @@ namespace Superstars.WebApp.Controllers
             Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
             var result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
+        }
+
+        [HttpPost("{bet}/{crash}/{isBitcoin}/betCrash")]
+        public async Task<IActionResult> BetCrash(int bet, double crash, bool isBitcoin ) 
+        {
+            var stringBet = Convert.ToString(bet * 2);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
+
+            await _crashGateway.CreateCrashPlayer(userId, bet, crash);
+
+            if (!isBitcoin)
+            {
+                Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
+                var result3 = await _walletGateway.InsertInBankRoll(0, bet);
+                return this.CreateResult(result3);
+            }
+            else
+            {
+                Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
+                var result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
+                return this.CreateResult(result2);
+            }
+            
         }
 
         [HttpGet("getYamsPot")]

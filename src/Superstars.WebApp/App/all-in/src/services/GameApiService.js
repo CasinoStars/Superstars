@@ -50,6 +50,10 @@ async BetFake(bet, gameTypeId) {
     return await postAsync(`${endpoint}/${bet}/${gameTypeId}/betFake`);
 }
 
+async BetCrash(bet, crash, isBitcoin){
+    return await postAsync(`${endpoint}/${bet}/${crash}/${isBitcoin}/betCrash`);
+}
+
 async getWinsBlackJackPlayer(pseudo) {
     return await getAsync(`${endpoint}/${pseudo}/getwinsBlackJackPlayer`);
 }

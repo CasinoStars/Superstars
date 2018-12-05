@@ -1,19 +1,40 @@
 <template>
-    <div>
-        <center>
+    <div class="row">
+        <div class="col-md-auto">
             <div class="piecontainer" id="pie-container">
                 <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
                 </canvas>
-                x{{multi}}
+                <center>
+                    x{{multi}}
+                </center>
             </div>
-        </center>
+        </div>
+        <div class="col-3">
+            <form @submit="toBet($event)">
+                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" v-model="moneyType">
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
+                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
+                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="playerMulti" />
+                <div style="margin-right: 42%;">
+                    <button type="submit" class="btn btn-light">Confirmer</button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
 
 <script>
     import {
-        mapActions
+        mapActions,
+        mapGetters
     } from 'vuex';
     import Vue from 'vue';
     import GameApiService from '../services/GameApiService';
@@ -28,15 +49,24 @@
                 scale: null,
                 multi: 1,
                 fn: null,
-                connection: null
+                connection: null,
+                bet: null,
+                playerMulti: null,
+                moneyType: true
 
             }
+        },
+
+        computed: {
+            ...mapGetters(['BTCMoney']),
+            ...mapGetters(['fakeMoney'])
         },
 
         async mounted() {
 
             var signalR = require("@aspnet/signalr");
-            this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel.Error).build();
+            this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel
+                .Error).build();
             this.connection.on("Newgame", ite => {
                 console.log(ite)
                 this.chart.destroy();
@@ -44,20 +74,28 @@
                 this.i = 0
                 this.myLoop(ite);
             });
+            this.connection.on("Wait", () => {
+                console.log("wait")
+            })
             this.connection.start();
 
             this.initializeChart();
             this.i = 0;
             var ite = await CrashApiService.GetNextCrash();
 
-            
+
         },
         beforeDestroy() {
             this.chart.destroy();
+            this.connection.stop();
             this.i = 0
+            console.log("youpiiiiiiiiiiiiiiiiiiiiiiii!!!!")
         },
 
         methods: {
+            ...mapActions(['executeAsyncRequest']),
+            ...mapActions(['RefreshFakeCoins']),
+            ...mapActions(['RefreshBTC']),
             initializeChart() {
                 this.chart = new Chart(document.getElementById("pie-chart"), {
                     // The type of chart we want to create
@@ -126,8 +164,50 @@
                         clearInterval(this.fn);
                     }
                 }, 100);
-                
+
+            },
+            async toBet(e) {
+                e.preventDefault();
+                var errors = [];
+                this.errors = 0;
+                if (this.moneyType === false) {
+                    if (this.bet > 1000000)
+                        errors.push("La mise maximum est de 1,000,000");
+                    else if (this.bet <= 0)
+                        errors.push("La mise doit être supérieur à 0");
+                    else if (this.bet > this.fakeMoney)
+                        errors.push("Vous n'avez pas cette somme sur votre compte");
+                } else {
+                    if (this.bet > 10000000)
+                        errors.push("La mise maximum est de 10,000,000 bits");
+                    else if (this.bet <= 0)
+                        errors.push("La mise doit être supérieur à 0 bits");
+                    else if (this.bet > this.BTCMoney)
+                        errors.push("Vous n'avez pas cette somme sur votre compte");
+                }
+                this.errors = errors;
+                if (errors.length == 0) {
+                    try {
+
+
+                        if (this.moneyType === false) {
+                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
+                                this.moneyType));
+                            await this.RefreshFakeCoins();
+                            this.success = 'Vous venez de parier: ' + this.bet + ' All`In Coins';
+                        } else {
+                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
+                                this.moneyType));
+                            await this.RefreshBTC();
+                            this.success = 'Vous venez de parier: ' + this.bet + ' Bits';
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
             }
+
+
         }
     }
 </script>
@@ -170,5 +250,84 @@
     th {
         background-color: #343a40;
         color: white;
+    }
+
+    .onoffswitch {
+        position: relative;
+        width: 90px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid #999999;
+        border-radius: 20px;
+    }
+
+    .onoffswitch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+
+    .onoffswitch-inner:before,
+    .onoffswitch-inner:after {
+        display: block;
+        float: left;
+        width: 50%;
+        height: 30px;
+        padding: 0;
+        line-height: 30px;
+        font-size: 14px;
+        color: white;
+        font-family: Trebuchet, Arial, sans-serif;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .onoffswitch-inner:before {
+        content: "Bitcoin";
+        padding-left: 10px;
+        background-color: #FF9900;
+        color: #FFFFFF;
+    }
+
+    .onoffswitch-inner:after {
+        content: "All'in";
+        padding-right: 10px;
+        background-color: #373C42;
+        color: #CDCED0;
+        text-align: right;
+    }
+
+    .onoffswitch-switch {
+        display: block;
+        width: 18px;
+        margin: 6px;
+        background: #FFFFFF;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 56px;
+        border: 2px solid #999999;
+        border-radius: 20px;
+        transition: all 0.3s ease-in 0s;
+    }
+
+    .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+
+    .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
+        right: 0px;
     }
 </style>
