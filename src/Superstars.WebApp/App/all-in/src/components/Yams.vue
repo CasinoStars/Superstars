@@ -50,7 +50,7 @@
   
   <br><br>
   <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
-    <br><br><br><br><br><br><br><p id="tutorialText"> {{tutorialp}}</p><br>
+    <p id="tutorialText"> {{tutorialp}}</p>
     <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
   <br><br>
@@ -379,7 +379,7 @@ $gray-light: #a0b3b0;
    height: 50%;
   //  background: lightgrey;
    margin-left: 18.5%;
-   margin-top: -12%;
+   margin-top: -11.5%;
    border-radius: 20px;
    text-align: center;
    opacity: 0.99;
@@ -401,6 +401,7 @@ font-size:24px;
 font-family: 'Courier New', sans-serif;
 text-align: center;
 position: relative;
+margin-top: 5%;
 }
 
 #tutorialButton {
@@ -411,6 +412,7 @@ position: relative;
     font-size: 22px;
     border-radius: 3px;
     position: relative;
+    margin-top: 5%;
 }
 
 .yams .tab-group {

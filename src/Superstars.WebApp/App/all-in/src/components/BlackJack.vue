@@ -109,8 +109,8 @@
 
 <div id="tocenter">
 
-  <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
-    <br><br><br><br><br><br><br><p id="tutorialText"> {{tutorialp}}</p><br><br><br>
+  <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
+    <p id="tutorialText"> {{tutorialp}}</p>
     <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
 
@@ -305,7 +305,7 @@ export default {
       ...mapActions(['RefreshBTC']),
 
     OkTutorial() {
-      let rectangle = document.getElementById("tutorialRectangle");
+      let rectangle = document.getElementById("tutorialRectanglebj");
       
       this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
       if(this.nbSlidesTutorial === 1 ) {
@@ -520,12 +520,11 @@ $main: #777c7b;
 $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
 
-#tutorialRectangle {
-   width: 70%; 
-   height: 60%;
-  //  background: lightgrey;
-   margin-left: 15.5%;
-   margin-top: -5%;
+#tutorialRectanglebj {
+   width: 95%; 
+   height: 80%;
+   margin-left: 3%;
+   margin-top: -9.5%;
    border-radius: 20px;
    text-align: center;
    opacity: 0.99;
@@ -534,7 +533,7 @@ $gray-light: #a0b3b0;
    z-index: 15;
 }
 
-#tutorialRectangle.fade {
+#tutorialRectanglebj.fade {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 2s, opacity 2s linear;
@@ -547,6 +546,7 @@ font-size:24px;
 font-family: 'Courier New', sans-serif;
 text-align: center;
 position: relative;
+margin-top: 15%;
 }
 
 #tutorialButton {
@@ -557,6 +557,7 @@ position: relative;
     font-size: 22px;
     border-radius: 3px;
     position: relative;
+    margin-top: 5%;
 }
 
 .blackJack .tab-group {
