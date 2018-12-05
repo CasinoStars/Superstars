@@ -59,6 +59,11 @@ namespace Superstars.WebApp.Services
 
         }
 
+        private async Task SetWins()
+        {
+            List<CrashData> players = await GetPlayersInGame();
+        }
+
 
         private async Task GameLoop()
         {
@@ -91,7 +96,7 @@ namespace Superstars.WebApp.Services
             
         }
 
-        public async Task<IEnumerable<CrashData>> GetPlayersInGame()
+        public async Task<List<CrashData>> GetPlayersInGame()
         {
             List<CrashData> players = (List<CrashData>)await _crashGateway.GetGamePlayers();
             return players;
