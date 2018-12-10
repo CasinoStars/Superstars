@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CrashGameMath;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
+using NBitcoin;
 using Superstars.DAL;
 
 namespace Superstars.WebApp.Services
@@ -64,12 +65,11 @@ namespace Superstars.WebApp.Services
             var players = await GetPlayersInGame();
             foreach (var player in players)
             {
-                if (player.Multi <= _crashValue)
-                {
-                    var pot = player.Multi * player.Bet;
-                    await _walletGateway.AddCoins(player.UserId, 0, 0, pot, pot);
-
-                }
+                if (!(player.Multi <= _crashValue)) continue;
+                var potDouble = player.Multi * player.Bet;
+                var pot = (int) potDouble;
+                                                                
+                await _walletGateway.AddCoins(player.UserId, 0, pot, pot/2, 0);
             }
         }
 
@@ -80,18 +80,17 @@ namespace Superstars.WebApp.Services
             double playTime = PlayTime();
             for (int i = 0; i < 1000; i++)
             {
+                var gameId = await _gameGateway.CreateGame(2);
+                await WaitingForBets();
                 playTime = PlayTime();
                 await LaunchNewGame();
-                var gameId =  await _gameGateway.CreateGame(2);
-                _crashValue = _crashBuilder.NextCrashValue();
                 stopWatch.Start();
                 await Task.Delay((int) (playTime * 1000));
                 stopWatch.Stop();
                 stopWatch.Reset();
-
                 await _gameGateway.UpdateGameEnd(gameId.Content, 2, "");
                 await SetWins();
-                await WaitingForBets();
+                _crashValue = _crashBuilder.NextCrashValue();
             }       
         }
 

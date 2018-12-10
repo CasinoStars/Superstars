@@ -38,7 +38,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryAsync<CrashData>(
-                    @"select c.GameId, c.UserId, u.UserName, c.Bet, c.Multi from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where c.Gameid = (select TOP 1 GameId from sp.tCrash order by GameId desc)");
+                    @"select c.GameId, c.UserId, u.UserName, c.Bet, c.Multi from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where c.Gameid = (select TOP 1 GameId from sp.tGames where GameTypeId = 2 order by GameId desc)");
                 return data;
             }
         }

@@ -1,12 +1,14 @@
 <template>
-    <div class="crash">
-        <div class="col-md-auto">
-            <div class="piecontainer" id="pie-container">
-                <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
-                </canvas>
-                <center>
-                    x{{multi}}
-                </center>
+    <div>
+        <div class="row">
+            <div class="col">
+                <div class="piecontainer" id="pie-container">
+                    <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
+                    </canvas>
+                    <center>
+                        x{{multi}}
+                    </center>
+                </div>
             </div>
         </div>
         <div class="col-3">
@@ -57,6 +59,19 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="table-responsive col">
+                        <table class="playerlist-stats-table table table-striped table-condensed">
+                            <tbody>
+                                <tr class="table-footer">
+                                    <td>En ligne: 0 </td>
+                                    <td>Joueurs: 0 </td>
+                                    <td>Mises: 0 bits</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -108,6 +123,7 @@
                 this.i = 0
                 this.myLoop(ite);
                 await this.RefreshBTC();
+                await this.RefreshFakeCoins();
 
             });
             this.connection.on("Wait", async () => {
@@ -115,6 +131,8 @@
                 this.totalBet = 0;
                 this.playersData = [];
                 await this.RefreshBTC();
+                await this.RefreshFakeCoins();
+
 
             });
 
@@ -264,12 +282,12 @@
 
 
 <style lang="scss">
-    .crash .piecontainer {
-        height: 800px;
+    .piecontainer {
         width: 800px;
-        display: inline-block;
+        height: 500px;
     }
-    .crash .text-right {
+
+    .text-right {
         text-align: right;
     }
 
