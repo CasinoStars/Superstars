@@ -105,21 +105,21 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result3);
         }
 
-        [HttpPost("{bet}/{crash}/{isBitcoin}/betCrash")]
-        public async Task<IActionResult> BetCrash(int bet, double crash, bool isBitcoin ) 
+        [HttpPost("{bet}/{crash}/{moneyTypeId}/betCrash")]
+        public async Task<IActionResult> BetCrash(int bet, double crash, int moneyTypeId ) 
         {
             var stringBet = Convert.ToString(bet * 2);
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var user = await _userGateway.FindById(userId);
 
-            await _crashGateway.CreateCrashPlayer(userId, bet, crash);
+            await _crashGateway.CreateCrashPlayer(userId, bet, crash, moneyTypeId);
             CrashData data = new CrashData();
             data.UserName =user.UserName;
             data.Bet = bet;
             data.Multi = (int)crash;
             await _hubContext.Clients.All.SendAsync("Bet", data);
 
-            if (!isBitcoin)
+            if (moneyTypeId == 0)
             {
                 Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
                 var result3 = await _walletGateway.InsertInBankRoll(0, bet);

@@ -238,13 +238,11 @@
                 if (errors.length == 0) {
                     try {
                         if (this.moneyType === false) {
-                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
-                                this.moneyType));
+                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti, 0));
                             await this.RefreshFakeCoins();
                             this.success = 'Vous venez de parier: ' + this.bet + ' All`In Coins';
                         } else {
-                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
-                                this.moneyType));
+                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti, 1));
                             await this.RefreshBTC();
                             this.success = 'Vous venez de parier: ' + this.bet + ' Bits';
                         }
