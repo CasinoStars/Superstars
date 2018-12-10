@@ -17,14 +17,14 @@
     <table style="margin-top:3%;">
       <tr>
         <th>Pseudo</th>
-        <th>Profit Bitcoin</th>
+        <th>Profit/Perte</th>
         <th>Parties de Yams joué</th>
         <th>Parties de BlackJack joué</th>
       </tr>
       <tr>
         <th>
         <div v-for="(e,index) of pseudos" :key='index'>
-          <td><router-link style="color: white;" class="nav-link" :to="'/statistics?pseudo='+e"> {{e}} </router-link></td>
+          <td><a :href="'/statistics?pseudo='+e" style="color: white;"> {{e}} </a></td>
         </div>
         </th>
         <th>
