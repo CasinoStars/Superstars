@@ -111,7 +111,7 @@
 
   <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
     <p id="tutorialText"> {{tutorialp}}</p>
-    <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+    <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
 
 <div id="infos">
@@ -205,11 +205,11 @@
     </center>
 <div id="leespace2"></div>
    <form @submit="hit($event)">
-   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false ">HIT</button></div>
+   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false && nbSlidesTutorial > 4">HIT</button></div>
    </form>
 <div id="leespace"></div>
    <form @submit="stand($event)">
-   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue <= 21 && iaturn == false && gameend == false">STAND</button></div>
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false && nbSlidesTutorial > 4">STAND</button></div>
    </form>
 
    <!-- <form @submit="split($event)">
@@ -276,7 +276,7 @@ export default {
 
   async mounted() {
 
-        if(this.$route.query.pseudo)
+    if(this.$route.query.pseudo)
       this.queryPseudo = this.$route.query.pseudo;
     else
       this.queryPseudo = UserApiService.pseudo;
@@ -296,7 +296,9 @@ export default {
       await this.refreshCards();
       await this.refreshHandValue(); 
     }
-      this.tutorialp = "Bienvenue sur le Black Jack !";
+      this.tutorialp = "Bienvenue sur le BlackJack !";
+      await this.CheckWinner();
+
   },
 
     methods: {
@@ -308,15 +310,15 @@ export default {
       let rectangle = document.getElementById("tutorialRectanglebj");
       
       this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
-      if(this.nbSlidesTutorial === 1 ) {
+      if(this.nbSlidesTutorial == 1 ) {
           this.tutorialp = "  Vous allez devoir vous approchez le plus près possible de 21 mais sans le dépasser";
-      } else if(this.nbSlidesTutorial === 2) {
+      } else if(this.nbSlidesTutorial == 2) {
         this.tutorialp = "  Vous pouvez à chaque tour, décider de tirer une carte ou de vous arrêter pour conserver votre valeur actuelle";
-      } else if(this.nbSlidesTutorial === 3) {
+      } else if(this.nbSlidesTutorial == 3) {
         this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
-      } else if(this.nbSlidesTutorial === 4) {
+      } else if(this.nbSlidesTutorial == 4) {
         this.tutorialp = "  Le joueur le plus proche de 21 sans le dépasser remporte la partie ! Bonne chance ! ";
-      } else if(this.nbSlidesTutorial === 5) {
+      } else if(this.nbSlidesTutorial == 5) {
           rectangle.classList.toggle('fade');
       }
     },
@@ -389,7 +391,7 @@ export default {
       e.preventDefault();
       await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
 
-      if(this.handvalue > 21) {
+      if(this.handvalue >= 21) {
         this.gameend = true;
       }
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
@@ -524,7 +526,7 @@ $gray-light: #a0b3b0;
    width: 95%; 
    height: 80%;
    margin-left: 3%;
-   margin-top: -9.5%;
+   margin-top: -11%;
    border-radius: 20px;
    text-align: center;
    opacity: 0.99;
@@ -542,11 +544,11 @@ $gray-light: #a0b3b0;
 #tutorialText {
 color:white;
 text-transform: uppercase;
-font-size:24px;
+font-size:28px;
 font-family: 'Courier New', sans-serif;
 text-align: center;
 position: relative;
-margin-top: 15%;
+margin-top: 17%;
 }
 
 #tutorialButton {
@@ -554,7 +556,7 @@ margin-top: 15%;
     text-transform: uppercase;
     font-family: 'Courier New', sans-serif;
     display: inline-block;
-    font-size: 22px;
+    font-size: 26px;
     border-radius: 3px;
     position: relative;
     margin-top: 5%;

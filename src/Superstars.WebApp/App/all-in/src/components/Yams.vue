@@ -51,7 +51,7 @@
   <br><br>
   <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
     <p id="tutorialText"> {{tutorialp}}</p>
-    <button class="btn btn-dark" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+    <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
   <br><br>
   
@@ -378,7 +378,7 @@ $gray-light: #a0b3b0;
    width: 60%; 
    height: 50%;
   //  background: lightgrey;
-   margin-left: 18.5%;
+   margin-left: 18.8%;
    margin-top: -11.5%;
    border-radius: 20px;
    text-align: center;
