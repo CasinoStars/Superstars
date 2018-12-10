@@ -10,41 +10,52 @@
                     </center>
                 </div>
             </div>
-            <div class="col-md-auto">
-                <form @submit="toBet($event)">
-                    <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
-                            v-model="moneyType">
-                        <label class="onoffswitch-label" for="myonoffswitch">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
-                    </div>
-                    <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
-                    <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
-                    <input style="margin-top: 10px; margin-bottom: 1%;" type="number" step="0.01" min=1 required v-model="playerMulti" />
-                    <div style="margin-right: 42%;">
-                        <button type="submit" class="btn btn-light">Confirmer</button>
-                    </div>
-                </form>
-            </div>
-            <div class="component-box-player-list col">
-                <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
-                    <thead class="table-header">
-                        <tr>
-                            <th>Joueur</th>
-                            <th class="text-right">X</th>
-                            <th class="text-right">Mise</th>
-                            <th class="text-right">Profit</th>
-                        </tr>
-                    </thead>
+        </div>
+        <div class="col-3">
+            <form @submit="toBet($event)">
+                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" v-model="moneyType">
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
+                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
+                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="playerMulti" />
+                <div style="margin-right: 42%;">
+                    <button type="submit" class="btn btn-light">Confirmer</button>
+                </div>
+            </form>
+        </div>
+        <div class="component-box-player-list">
+            <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
+                <thead class="table-header">
+                    <tr>
+                        <th>Joueur</th>
+                        <th class="text-right">X</th>
+                        <th class="text-right">Mise</th>
+                        <th class="text-right">Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(e, index) of playersData" :key="index">
+                        <td>{{e.userName}}</td>
+                        <td class="text-right">{{e.multi}}</td>
+                        <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
+                        <td class="text-right">{{(e.bet * multi).toLocaleString('en')}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="table-responsive">
+                <table class="playerlist-stats-table table table-striped table-condensed">
                     <tbody>
-                        <tr v-for="(e, index) of playersData" :key="index">
-                            <td>{{e.userName}}</td>
-                            <td class="text-right">{{e.multi}}</td>
-                            <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                            <td class="text-right">{{(e.bet * e.multi).toLocaleString('en')}}</td>
+                        <tr class="table-footer">
+                            <td>Joueurs: {{playersData.length}} </td>
+                            <td>Mises: {{totalBet}} bits</td>
                         </tr>
                     </tbody>
                 </table>
@@ -89,7 +100,8 @@
                 bet: null,
                 playerMulti: null,
                 moneyType: true,
-                playersData: []
+                playersData: [],
+                totalBet: 0,
             }
         },
 
@@ -105,11 +117,9 @@
                 .Error).build();
             this.connection.on("Newgame", async (ite) => {
                 console.log(ite)
+                this.totalBet
                 this.chart.destroy();
                 this.initializeChart();
-                //await this.getPlayers();
-
-
                 this.i = 0
                 this.myLoop(ite);
                 await this.RefreshBTC();
@@ -118,11 +128,18 @@
             });
             this.connection.on("Wait", async () => {
                 console.log("wait")
+                this.totalBet = 0;
+                this.playersData = [];
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
 
 
             });
+
+            this.connection.on("Bet", async (data) => {
+                this.getPlayers(data);
+            });
+
             this.connection.start();
 
             this.initializeChart();
@@ -255,8 +272,11 @@
                 }
             },
 
-            async getPlayers() {
-                this.playersData = await this.executeAsyncRequest(() => CrashApiService.GetPlayersInGame());
+            getPlayers(data) {
+                this.playersData.push(data)
+                this.playersData.forEach(elements => {
+                    this.totalBet += elements.bet;
+                });
             }
         }
     }
