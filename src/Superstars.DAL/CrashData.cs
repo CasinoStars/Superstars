@@ -10,7 +10,7 @@ namespace Superstars.DAL
         public int UserId { get; set; }
         public string UserName { get; set; }
         public int Bet { get; set; }
-        public int Multi { get; set; }
+        public double Multi { get; set; }
 
 
         

@@ -1,63 +1,66 @@
 <template>
-    <div class="crash">
-        <div class="col-md-auto">
-            <div class="piecontainer" id="pie-container">
-                <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
-                </canvas>
-                <center>
-                    x{{multi}}
-                </center>
+    <div>
+        <div class="row">
+            <div class="col">
+                <div class="piecontainer" id="pie-container">
+                    <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
+                    </canvas>
+                    <center>
+                        x{{multi}}
+                    </center>
+                </div>
             </div>
-        </div>
-        <div class="col-3">
-            <form @submit="toBet($event)">
-                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
-                <div class="onoffswitch">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" v-model="moneyType">
-                    <label class="onoffswitch-label" for="myonoffswitch">
-                        <span class="onoffswitch-inner"></span>
-                        <span class="onoffswitch-switch"></span>
-                    </label>
-                </div>
-                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
-                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
-                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="playerMulti" />
-                <div style="margin-right: 42%;">
-                    <button type="submit" class="btn btn-light">Confirmer</button>
-                </div>
-            </form>
-        </div>
-        <div class="component-box-player-list">
-            <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
-                <thead class="table-header">
-                    <tr>
-                        <th>Joueur</th>
-                        <th class="text-right">X</th>
-                        <th class="text-right">Mise</th>
-                        <th class="text-right">Profit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(e, index) of playersData" :key="index">
-                        <td>{{e.userName}}</td>
-                        <td class="text-right">{{e.multi}}</td>
-                        <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                        <td class="text-right">{{(e.bet * e.multi).toLocaleString('en')}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <div class="table-responsive">
-                <table class="playerlist-stats-table table table-striped table-condensed">
+            <div class="col-md-auto">
+                <form @submit="toBet($event)">
+                    <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
+                            v-model="moneyType">
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                    <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
+                    <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
+                    <input style="margin-top: 10px; margin-bottom: 1%;" type="number" step="0.01" min=1 required v-model="playerMulti" />
+                    <div style="margin-right: 42%;">
+                        <button type="submit" class="btn btn-light">Confirmer</button>
+                    </div>
+                </form>
+            </div>
+            <div class="component-box-player-list col">
+                <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Joueur</th>
+                            <th class="text-right">X</th>
+                            <th class="text-right">Mise</th>
+                            <th class="text-right">Profit</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr class="table-footer">
-                            <td>En ligne: 0 </td>
-                            <td>Joueurs: 0 </td>
-                            <td>Mises: 0 bits</td>
+                        <tr v-for="(e, index) of playersData" :key="index">
+                            <td>{{e.userName}}</td>
+                            <td class="text-right">{{e.multi}}</td>
+                            <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
+                            <td class="text-right">{{(e.bet * e.multi).toLocaleString('en')}}</td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="table-responsive col">
+                        <table class="playerlist-stats-table table table-striped table-condensed">
+                            <tbody>
+                                <tr class="table-footer">
+                                    <td>En ligne: 0 </td>
+                                    <td>Joueurs: 0 </td>
+                                    <td>Mises: 0 bits</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -86,7 +89,7 @@
                 bet: null,
                 playerMulti: null,
                 moneyType: true,
-                playersData: [] 
+                playersData: []
             }
         },
 
@@ -105,16 +108,19 @@
                 this.chart.destroy();
                 this.initializeChart();
                 //await this.getPlayers();
-               
+
 
                 this.i = 0
                 this.myLoop(ite);
                 await this.RefreshBTC();
+                await this.RefreshFakeCoins();
 
             });
             this.connection.on("Wait", async () => {
                 console.log("wait")
                 await this.RefreshBTC();
+                await this.RefreshFakeCoins();
+
 
             });
             this.connection.start();
@@ -258,12 +264,12 @@
 
 
 <style lang="scss">
-    .crash .piecontainer {
-        height: 800px;
+    .piecontainer {
         width: 800px;
-        display: inline-block;
+        height: 500px;
     }
-    .crash .text-right {
+
+    .text-right {
         text-align: right;
     }
 
