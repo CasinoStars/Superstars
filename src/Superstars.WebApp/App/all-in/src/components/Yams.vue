@@ -1,11 +1,10 @@
 <template>
 <div class="yams">
-
   <!-- The Modal -->
   <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-
+      
       <div class="modal-header">
         <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
           <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 1.5rem;"></i></h2>
@@ -40,7 +39,6 @@
       </form>
     </div>
   </div>
-  
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:2%;">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/></h3>
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top: -3%; margin-left:89%;">TOUR: {{nbTurn}}</h3>
   
@@ -50,7 +48,12 @@
     </div>
   </form>
   
-  <br><br><br><br>
+  <br><br>
+  <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
+    <p id="tutorialText"> {{tutorialp}}</p>
+    <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+  </div>
+  <br><br>
   
   <form @submit="onSubmit($event)" id="PlayPlayer">
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
@@ -79,7 +82,6 @@
       </div>
       </div>
 </center>
-
     <!-- <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="spinner">
   <div class="cube1"></div>
   <div class="cube2"></div>
@@ -110,6 +112,7 @@ import { mapActions, mapGetters } from 'vuex';
 import YamsApiService from '../services/YamsApiService';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
+import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 
 export default {
@@ -133,11 +136,23 @@ export default {
       errors: [],
       success: '',
       rollDices: false,
-      pot: 0
+      pot: 0,
+      nbSlidesTutorial: 0,
+      tutorialp: '',
+      queryPseudo: '',
+      wins: 0
     }
   },
 
   async mounted() {
+
+    if(this.$route.query.pseudo)
+      this.queryPseudo = this.$route.query.pseudo;
+    else
+      this.queryPseudo = UserApiService.pseudo;
+
+    this.wins = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer(this.queryPseudo));
+
     await this.refreshDices();
     await this.refreshIaDices();
     await this.changeTurn();
@@ -146,10 +161,10 @@ export default {
       this.showModal();
     } else {
       this.playerBet = true;
-    }
-    
+    }  
+      this.tutorialp = "Bienvenue sur le Yams !";
   },
-  
+
   computed: {
     ...mapGetters(['BTCMoney']),
     ...mapGetters(['fakeMoney'])
@@ -164,6 +179,23 @@ export default {
       //await this.executeAsyncRequest(() => GameApiService.deleteYamsGame());
       await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
       this.$router.push({ path: 'play' });
+    },
+
+    OkTutorial() {
+      let rectangle = document.getElementById("tutorialRectangle");
+      
+      this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
+      if(this.nbSlidesTutorial === 1 ) {
+          this.tutorialp = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés ";
+      } else if(this.nbSlidesTutorial === 2) {
+        this.tutorialp = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés ";
+      } else if(this.nbSlidesTutorial === 3) {
+        this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
+      } else if(this.nbSlidesTutorial === 4) {
+        this.tutorialp = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
+      } else if(this.nbSlidesTutorial === 5) {
+          rectangle.classList.toggle('fade');
+      }
     },
 
     changeBet(choice) {
@@ -341,6 +373,47 @@ $white: #ffffff;
 $main: #777c7b;
 $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
+
+#tutorialRectangle {
+   width: 60%; 
+   height: 50%;
+  //  background: lightgrey;
+   margin-left: 18.8%;
+   margin-top: -11.5%;
+   border-radius: 20px;
+   text-align: center;
+   opacity: 0.99;
+   position: absolute; 
+   transition: opacity 1s; 
+   z-index: 15;
+}
+
+#tutorialRectangle.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+#tutorialText {
+color:white;
+text-transform: uppercase;
+font-size:24px;
+font-family: 'Courier New', sans-serif;
+text-align: center;
+position: relative;
+margin-top: 5%;
+}
+
+#tutorialButton {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Courier New', sans-serif;
+    display: inline-block;
+    font-size: 22px;
+    border-radius: 3px;
+    position: relative;
+    margin-top: 5%;
+}
 
 .yams .tab-group {
   list-style:none;
@@ -613,7 +686,6 @@ $gray-light: #a0b3b0;
   width: 8%; 
 	left: 30.2%;
 }
-
 .iadices {
 	display: inline-block;
 	position: relative;
