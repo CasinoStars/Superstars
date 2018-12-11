@@ -2,7 +2,7 @@ create proc sp.sCrashCreate
 (
 	@UserId int,
 	@Bet int,
-	@Multi decimal
+	@Multi float
 )
 as
 

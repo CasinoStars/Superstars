@@ -1,17 +1,20 @@
 <template>
-    <div>
-        <div class="row">
+    <div class="row">
+        <div>
             <div class="col">
                 <div class="piecontainer" id="pie-container">
                     <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
                     </canvas>
-                    <center>
+                    <center v-if="!isWaiting">
                         x{{multi}}
+                    </center>
+                    <center v-else>
+                        En attente des mises
                     </center>
                 </div>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-auto">
             <form @submit="toBet($event)">
                 <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
                 <div class="onoffswitch">
@@ -23,13 +26,17 @@
                 </div>
                 <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
                 <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
-                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="playerMulti" />
+                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 step=0.01 required v-model="playerMulti" />
                 <div style="margin-right: 42%;">
-                    <button type="submit" class="btn btn-light">Confirmer</button>
+                    
+                    <button type="submit" class="btn btn-light" v-if="isWaiting && !hasPlayed">Confirmer</button>
+                    <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed">Sortir</button>
+                    <button disabled type="submit" class="btn btn-light" v-else>Confirmer</button>
                 </div>
             </form>
+             
         </div>
-        <div class="component-box-player-list">
+        <div class="component-box-player-list col">
             <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
                 <thead class="table-header">
                     <tr>
@@ -44,37 +51,31 @@
                         <td>{{e.userName}}</td>
                         <td class="text-right">{{e.multi}}</td>
                         <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                        <td class="text-right">{{(e.bet * multi).toLocaleString('en')}}</td>
+                        <td class="text-right" v-if="multi < e.multi">{{(e.bet * multi).toLocaleString('en')}}</td>
+                        <td class="text-right" style="color: green;" v-else>{{(e.bet * e.multi).toLocaleString('en')}}</td>
+
                     </tr>
                 </tbody>
             </table>
-        </div>
+      
         <div>
-            <div class="table-responsive">
-                <table class="playerlist-stats-table table table-striped table-condensed">
-                    <tbody>
-                        <tr class="table-footer">
-                            <td>Joueurs: {{playersData.length}} </td>
-                            <td>Mises: {{totalBet}} bits</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="row">
-                    <div class="table-responsive col">
-                        <table class="playerlist-stats-table table table-striped table-condensed">
-                            <tbody>
-                                <tr class="table-footer">
-                                    <td>En ligne: 0 </td>
-                                    <td>Joueurs: 0 </td>
-                                    <td>Mises: 0 bits</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="row">
+                <div class="table-responsive col">
+                    <table class="playerlist-stats-table table table-striped table-condensed">
+                        <tbody>
+                            <tr class="table-footer">
+                                <td><center>Joueurs: {{playersData.length}}</center> </td>
+                                <td><center>Mises: {{totalBet}} bits</center></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
                 </div>
             </div>
         </div>
     </div>
+      </div>
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
 
@@ -102,6 +103,8 @@
                 moneyType: true,
                 playersData: [],
                 totalBet: 0,
+                isWaiting: false,
+                hasPlayed: false
             }
         },
 
@@ -117,6 +120,7 @@
                 .Error).build();
             this.connection.on("Newgame", async (ite) => {
                 console.log(ite)
+                this.isWaiting = false
                 this.totalBet
                 this.chart.destroy();
                 this.initializeChart();
@@ -128,6 +132,8 @@
             });
             this.connection.on("Wait", async () => {
                 console.log("wait")
+                this.isWaiting = true
+                this.hasPlayed = false;
                 this.totalBet = 0;
                 this.playersData = [];
                 await this.RefreshBTC();
@@ -152,7 +158,6 @@
             this.chart.destroy();
             this.connection.stop();
             this.i = 0
-            console.log("youpiiiiiiiiiiiiiiiiiiiiiiii!!!!")
         },
 
         methods: {
@@ -235,6 +240,7 @@
 
             async toBet(e) {
                 e.preventDefault();
+                this.hasPlayed = true;
                 var errors = [];
                 this.errors = 0;
                 if (this.moneyType === false) {
@@ -285,8 +291,8 @@
 
 <style lang="scss">
     .piecontainer {
-        width: 800px;
-        height: 500px;
+        width: 100%;
+        height: 100%;
     }
 
     .text-right {
