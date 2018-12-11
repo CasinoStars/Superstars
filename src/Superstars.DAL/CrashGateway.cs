@@ -17,7 +17,7 @@ namespace Superstars.DAL
             _sqlConnexion = sqlConnexion;
         }
 
-        public async Task<Result<int>> CreateCrashPlayer(int userId, int bet, double multi)
+        public async Task<Result<int>> CreateCrashPlayer(int userId, int bet, double multi, int MoneyTypeId)
         {
 
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
@@ -26,6 +26,7 @@ namespace Superstars.DAL
                 p.Add("@UserId", userId);
                 p.Add("@Bet", bet);
                 p.Add("@Multi", multi);
+                p.Add("@MoneyTypeId", MoneyTypeId);
               
                 await con.ExecuteAsync("sp.sCrashCreate", p, commandType: CommandType.StoredProcedure);
 

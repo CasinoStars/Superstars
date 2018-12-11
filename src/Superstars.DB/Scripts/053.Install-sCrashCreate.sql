@@ -2,7 +2,8 @@ create proc sp.sCrashCreate
 (
 	@UserId int,
 	@Bet int,
-	@Multi float
+	@Multi float,
+	@MoneyTypeId int
 )
 as
 
@@ -19,7 +20,7 @@ begin
 		return 1;
 	end;
 
-    insert into sp.tCrash(GameId, UserId, Bet, Multi) values(@GameId, @UserId, @Bet, @Multi);
+    insert into sp.tCrash(GameId, UserId, Bet, Multi, MoneyTypeId) values(@GameId, @UserId, @Bet, @Multi, @MoneyTypeId);
 	commit;
     return 0;
 end;
