@@ -11,6 +11,7 @@ namespace Superstars.DAL
         public string UserName { get; set; }
         public int Bet { get; set; }
         public float Multi { get; set; }
+        public int MoneyTypeId { get; set; }
 
 
         

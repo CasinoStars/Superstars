@@ -68,8 +68,11 @@ namespace Superstars.WebApp.Services
                 if (!(player.Multi <= _crashValue)) continue;
                 var potDouble = player.Multi * player.Bet;
                 var pot = (int) potDouble;
-                                                                
-                await _walletGateway.AddCoins(player.UserId, 0, pot, pot/2, 0);
+                
+                if(player.MoneyTypeId == 0)
+                    await _walletGateway.AddCoins(player.UserId, 0, pot, pot / 2, 0);
+                else
+                    await _walletGateway.AddCoins(player.UserId, 1, 0, pot / 2, pot);
             }
         }
 

@@ -33,12 +33,28 @@ namespace Superstars.DAL
                 return Result.Success(p.Get<int>("@UserId"));
             }
         }
+
+        public async Task<Result<int>>UpdateCrashPlayer(int userId,double multi)
+        {
+
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@UserId", userId);
+                p.Add("@Multi", multi);
+
+                await con.ExecuteAsync("sp.sCrashUpdate", p, commandType: CommandType.StoredProcedure);
+
+                return Result.Success(p.Get<int>("@UserId"));
+            }
+        }
+
         public async Task<IEnumerable<CrashData>> GetGamePlayers()
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var data = await con.QueryAsync<CrashData>(
-                    @"select c.GameId, c.UserId, u.UserName, c.Bet, c.Multi from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where c.Gameid = (select TOP 1 GameId from sp.tGames where GameTypeId = 2 order by GameId desc)");
+                    @"select c.GameId, c.UserId, u.UserName, c.Bet, c.Multi, c.MoneyTypeId from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where c.Gameid = (select TOP 1 GameId from sp.tGames where GameTypeId = 2 order by GameId desc)");
                 return data;
             }
         }

@@ -146,6 +146,15 @@
                 this.getPlayers(data);
             });
 
+            this.connection.on("Update", async (data) => {
+                console.log("lololol")
+                this.playersData.forEach(element =>{
+                    if(element.userName == data.userName){
+                        element.multi = data.multi;
+                    }
+                });
+            });
+
             this.connection.start();
 
             this.initializeChart();
@@ -281,6 +290,11 @@
                 this.playersData.forEach(elements => {
                     this.totalBet += elements.bet;
                 });
+            }, 
+            async out(){
+                this.isWaiting = true;
+                await this.executeAsyncRequest(() => GameApiService.UpdateCrash(this.multi));
+
             }
         }
     }

@@ -131,6 +131,20 @@ namespace Superstars.WebApp.Controllers
             
         }
 
+        [HttpPost("{crash}/updateCrash")]
+        public async Task<IActionResult> UpdateCrash(float crash)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
+
+            var result = await _crashGateway.UpdateCrashPlayer(userId, crash);
+            var data = new CrashData { UserName = user.UserName, Multi = crash };
+            await _hubContext.Clients.All.SendAsync("Update", data);
+
+            return this.CreateResult(result);
+
+        }
+
         [HttpGet("getYamsPot")]
         public async Task<decimal> GetYamsPot()
         {
