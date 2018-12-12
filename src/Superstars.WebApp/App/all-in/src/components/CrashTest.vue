@@ -1,10 +1,11 @@
 <template>
     <div class="row">
-        <div>
-            <div class="col">
-                <div class="piecontainer" id="pie-container">
-                    <canvas id="pie-chart" class="chartjs" width="770px" height="385px">
-                    </canvas>
+        <div class="col-md-5">
+            <div class="piecontainer" id="pie-container">
+                <div id="linechart"></div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <center v-if="!isWaiting">
                         x{{multi}}
                     </center>
@@ -14,6 +15,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-auto">
             <form @submit="toBet($event)">
                 <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
@@ -28,13 +30,13 @@
                 <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
                 <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 step=0.01 required v-model="playerMulti" />
                 <div style="margin-right: 42%;">
-                    
+
                     <button type="submit" class="btn btn-light" v-if="isWaiting && !hasPlayed">Confirmer</button>
                     <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed">Sortir</button>
                     <button disabled type="submit" class="btn btn-light" v-else>Confirmer</button>
                 </div>
             </form>
-             
+
         </div>
         <div class="component-box-player-list col">
             <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
@@ -57,27 +59,32 @@
                     </tr>
                 </tbody>
             </table>
-      
-        <div>
-            <div class="row">
-                <div class="table-responsive col">
-                    <table class="playerlist-stats-table table table-striped table-condensed">
-                        <tbody>
-                            <tr class="table-footer">
-                                <td><center>Joueurs: {{playersData.length}}</center> </td>
-                                <td><center>Mises: {{totalBet}} bits</center></td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+            <div>
+                <div class="row">
+                    <div class="table-responsive col">
+                        <table class="playerlist-stats-table table table-striped table-condensed">
+                            <tbody>
+                                <tr class="table-footer">
+                                    <td>
+                                        <center>Joueurs: {{playersData.length}}</center>
+                                    </td>
+                                    <td>
+                                        <center>Mises: {{totalBet}} bits</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-      </div>
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
+
 
 <script>
     import {
@@ -87,7 +94,7 @@
     import Vue from 'vue';
     import GameApiService from '../services/GameApiService';
     import CrashApiService from '../services/CrashApiService';
-    import Chart from 'chart.js';
+    import CanvasJS from '../canvasjs.min.js';
 
     export default {
         data() {
@@ -104,7 +111,8 @@
                 playersData: [],
                 totalBet: 0,
                 isWaiting: false,
-                hasPlayed: false
+                hasPlayed: false,
+                points: [],
             }
         },
 
@@ -118,28 +126,39 @@
             var signalR = require("@aspnet/signalr");
             this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel
                 .Error).build();
-            this.connection.on("Newgame", async (ite) => {
-                console.log(ite)
+            this.connection.on("NewGame", async () => {
+                console.log("start")
                 this.isWaiting = false
-                this.totalBet
-                this.chart.destroy();
-                this.initializeChart();
-                this.i = 0
-                this.myLoop(ite);
+                //this.myLoop();
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
-
             });
+            this.connection.on("EndGame", async (ite) => {
+                console.log("Chart stop at "+ this.multi+" serv stop at "+ite)
+                
+                this.multi = ite;
+                clearInterval(this.fn);
+              
+                await this.RefreshBTC();
+                await this.RefreshFakeCoins();
+            })
+             this.connection.on("Step", async (ite, i) => {
+                console.log("step at "+ite)
+                this.multi = ite;
+                this.addData(this.chart, i / 10 + 1, ite);
+
+            })
             this.connection.on("Wait", async () => {
                 console.log("wait")
                 this.isWaiting = true
                 this.hasPlayed = false;
-                this.totalBet = 0;
+                this.totalBet = 0;  
+                this.points = [];
+                this.initializeChart();
+                this.i = 0
                 this.playersData = [];
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
-
-
             });
 
             this.connection.on("Bet", async (data) => {
@@ -147,21 +166,16 @@
             });
 
             this.connection.on("Update", async (data) => {
-                console.log("lololol")
-                this.playersData.forEach(element =>{
-                    if(element.userName == data.userName){
+                this.playersData.forEach(element => {
+                    if (element.userName == data.userName) {
                         element.multi = data.multi;
                     }
                 });
             });
-
             this.connection.start();
-
             this.initializeChart();
             this.i = 0;
             var ite = await CrashApiService.GetNextCrash();
-
-
         },
         beforeDestroy() {
             this.chart.destroy();
@@ -175,74 +189,42 @@
             ...mapActions(['RefreshBTC']),
 
             initializeChart() {
-                this.chart = new Chart(document.getElementById("pie-chart"), {
-                    // The type of chart we want to create
-                    type: 'line',
+                this.chart = new CanvasJS.Chart("linechart", {
+                    exportEnabled: false,
 
-                    // The data for our dataset
-                    data: {
-                        datasets: [{
-                            borderColor: 'rgb(255, 99, 132)',
-                            data: [],
-                            showLine: false, // disable for a single dataset
-                        }]
+                    axisY: {
+                        includeZero: false,
+                        gridThickness: 0,
+                        maximum: 2
                     },
-
-                    // Configuration options go here
-                    options: {
-                        showLine: false, // disable for a single dataset
-                        elements: {
-                            line: {
-                                tension: 0, // disables bezier curves
-                            }
-                        },
-                        scales: {
-                            xAxes: [{
-                                type: "linear",
-                                ticks: {
-                                    suggestedMin: 1,
-                                    suggestedMax: 10
-                                }
-                            }],
-                            yAxes: [{
-                                type: "linear",
-                                ticks: {
-                                    suggestedMin: 1,
-                                    suggestedMax: 2
-                                }
-                            }]
-                        },
-                        animation: {
-                            duration: 0, // general animation time
-                        },
-                        hover: {
-                            animationDuration: 0, // duration of animations when hovering an item
-                        },
-                        responsiveAnimationDuration: 0 // animation duration after a resize
-                    }
+                    axisX: {
+                        includeZero: false,
+                        gridThickness: 0,
+                    },
+                    data: [{
+                        type: "spline",
+                        markerSize: 0,
+                        dataPoints: this.points
+                    }]
                 });
+                this.chart.render();
             },
 
             addData(chart, x, y) {
-                chart.data.datasets.forEach((dataset) => {
-                    dataset.data.push({
-                        x: x,
-                        y: y
-                    });
-                });
-                chart.update();
+                this.points.push({
+                    x: x,
+                    y: y
+                })
+                this.chart.options.axisY.maximum = y + 2;
+                chart.render();
             },
 
-            myLoop(iteration) {
+            myLoop() {
                 this.fn = setInterval(() => {
                     this.addData(this.chart, this.i / 10 + 1, Math.exp(this.i / 100));
                     this.multi = Math.exp(this.i / 100);
                     this.multi = Math.round(this.multi * 100) / 100;
                     this.i++;
-                    if (this.multi >= iteration) {
-                        this.multi = iteration;
-                        clearInterval(this.fn);
-                    }
                 }, 100);
 
             },
@@ -271,11 +253,13 @@
                 if (errors.length == 0) {
                     try {
                         if (this.moneyType === false) {
-                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti, 0));
+                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
+                                0));
                             await this.RefreshFakeCoins();
                             this.success = 'Vous venez de parier: ' + this.bet + ' All`In Coins';
                         } else {
-                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti, 1));
+                            await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
+                                1));
                             await this.RefreshBTC();
                             this.success = 'Vous venez de parier: ' + this.bet + ' Bits';
                         }
@@ -290,8 +274,8 @@
                 this.playersData.forEach(elements => {
                     this.totalBet += elements.bet;
                 });
-            }, 
-            async out(){
+            },
+            async out() {
                 this.isWaiting = true;
                 await this.executeAsyncRequest(() => GameApiService.UpdateCrash(this.multi));
 
