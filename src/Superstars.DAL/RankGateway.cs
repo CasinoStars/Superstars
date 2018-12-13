@@ -15,6 +15,34 @@ namespace Superstars.DAL
             _sqlConnexion = sqlConnexion;
         }
 
+        public async Task<IEnumerable<RankData>> GetPlayersGlobalProfit(int moneyTypeId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var data = await con.QueryAsync<RankData>(
+                    @"select u.UserName, SUM(s.Profit) as Profit from sp.tUser u left join sp.tStats s on s.UserId = u.UserId where s.MoneyTypeId = @TypeId group by u.UserName order by Profit desc",
+                    new { TypeId = moneyTypeId }
+                    );
+                return data;
+            }
+        }
+
+        public async Task<IEnumerable<RankData>> GetPlayerStats(string pseudo, int moneyTypeId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var data = await con.QueryAsync<RankData>(
+                @"select u.UserName, g.GameName, s.Profit, s.TotalBet, s.Wins, s.Losses, s.Equality, s.AverageTime from sp.vStats s 
+                inner join sp.vUser u on u.UserName = @Pseudo
+                inner join sp.vGameType g on g.GameTypeId = s.GameTypeId
+                inner join sp.vMoneyType m on m.MoneyTypeId = @TypeId
+                where s.UserId = u.UserId and s.MoneyTypeId = m.MoneyTypeId",
+                new { TypeId = moneyTypeId, Pseudo = pseudo }
+                );
+                return data;
+            }
+        }
+
         public async Task<IEnumerable<string>> PseudoList()
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))

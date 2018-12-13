@@ -270,11 +270,11 @@ export default {
       this.nbTurn = await this.executeAsyncRequest(() => YamsApiService.GetTurn());
     },
 
-    async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats(0,this.playerwin));
-        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(0,this.playerwin,this.realOrFake));
-        await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
+    async updateStats(moneyType, bet) {
+      await this.executeAsyncRequest(() => GameApiService.UpdateStats(0, moneyType, bet, this.playerwin));
+      await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(0, this.playerwin, this.realOrFake));
+      await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
     },
 
     async getFinalResult() {
@@ -285,22 +285,28 @@ export default {
       var pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
       if(this.winOrLose == "You Lose") {
           this.playerwin = 'AI';
-          await this.updateStats();
+          if(this.trueBet === 0)
+            await this.updateStats(1, -this.fakeBet);
+          else
+            await this.updateStats(0, -this.trueBet);
       }
       else if(this.winOrLose == "You Win"){
         this.playerwin = 'Player';
-        await this.updateStats();
           if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
             await this.RefreshFakeCoins();
+            await this.updateStats(0, this.fakeBet);
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
             await this.RefreshBTC();
+            await this.updateStats(1, this.trueBet);
           }
       } else {
+        this.playerwin = 'Equality';
+        await this.updateStats(0,0);
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          if(this.trueBet === 0) {

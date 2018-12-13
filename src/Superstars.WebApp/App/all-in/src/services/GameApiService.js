@@ -38,8 +38,8 @@ async createAiUser(gameTypeId) {
     return await postAsync(`${endpoint}/createAiUser`,gameTypeId);
 }
 
-async UpdateStats(gameTypeId, win) {
-    return await postAsync(`${endpoint}/${gameTypeId}/UpdateStats`, win);
+async UpdateStats(gameTypeId, moneyTypeId, bet, win) {
+    return await postAsync(`${endpoint}/${gameTypeId}/${moneyTypeId}/${bet}/UpdateStats`, win);
 }
 
 async BetBTC(bet, gameTypeId) {

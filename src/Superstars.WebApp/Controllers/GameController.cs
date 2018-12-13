@@ -70,7 +70,7 @@ namespace Superstars.WebApp.Controllers
                 await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
-            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
+            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet);
             var result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
             return this.CreateResult(result2);
         }
@@ -94,7 +94,7 @@ namespace Superstars.WebApp.Controllers
                 await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
-            Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
+            Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet);
             var result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
         }
@@ -144,39 +144,26 @@ namespace Superstars.WebApp.Controllers
             return Result.Success(game);
         }
 
-        [HttpPost("{gameTypeId}/UpdateStats")]
-        public async Task<Result> UpdateStats(int gameTypeId, [FromBody] string win)
+        [HttpPost("{gameTypeId}/{moneyTypeId}/{bet}/UpdateStats")]
+        public async Task<Result> UpdateStats(int gameTypeId, int moneyTypeId, int bet, [FromBody] string win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-            var result1 = await _gameGateway.GetWins(userId, gameTypeId);
-            var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
+            Result result = null;
             var avgTime = await GetAverageTime(userId, gameTypeId);
-            
-
-            int averagebet = 0;
-            if (gameTypeId == 0)
-            {
-                averagebet = await GetAverageBetYams();
-            }
-            else if (gameTypeId == 1)
-            {
-                averagebet = await GetAverageBetBJ();
-            }
-
-            var wins = result1.Content;
-            var losses = result2.Content;
+           
             if (win == "Player")
             {
-                wins = wins + 1;
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 1, 0, 0, bet, bet, avgTime.Milliseconds);
             }
             else if(win == "AI")
             {
-              losses = losses + 1;
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 1, 0, -bet, bet, avgTime.Milliseconds);
             }
-
-            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses, averagebet, avgTime.Milliseconds);
-            return Result.Success(result3);
+            else if(win == "Equality")
+            {
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 0, 1, 0, bet, avgTime.Milliseconds);
+            }
+            return Result.Success(result);
         }
 
         public async Task<TimeSpan> GetAverageTime(int userId, int gameTypeId)

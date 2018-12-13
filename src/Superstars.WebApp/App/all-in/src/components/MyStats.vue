@@ -7,29 +7,31 @@
       <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
       <strong v-else>Mes statistiques</strong>
     </h1>
+    <i class="fa fa-btc" style="font-size: 0.8rem;" v-on:click="moneyTypeChange(1)"></i>
+    <i class="fa fa-money" style="font-size: 0.8rem;" v-on:click="moneyTypeChange(0)"></i>
   </div>
   <br><br>
 <table>
   <tr>
     <th>Jeu</th>
-    <th>Victoires</th>
-    <th>Défaites</th>
-    <th>Victoire %</th>
-    <th>Nombre de parties</th>
+    <th>Profit</th>
+    <th>Mise Total</th>
+    <th>Mise Moyenne</th>
+    <th>Victoire</th>
+    <th>Défaite</th>
+    <th>Egalité</th>
+    <th>Temps par parties</th>
   </tr>
-  <tr>
-    <td>BlackJack</td>
-    <td>{{playerwinsbj}}</td>
-    <td>{{playerlossesbj}}</td>
-    <td>{{playerratiobj}}</td>
-    <td>{{playernbgamesbj}}</td>
-  </tr>
-  <tr>
-    <td>Yams</td>
-    <td>{{playerwinsy}}</td>
-    <td>{{playerlossesy}}</td>
-    <td>{{playerratioy}}</td>
-    <td>{{playernbgamesy}}</td>
+  <tr v-for="(e,index) of playerStatsData" :key="index">
+    <td>{{e.gameName}}</td>
+    <td>{{e.profit.toLocaleString('en')}}</td>
+    <td>{{e.totalBet.toLocaleString('en')}}</td>
+    <td v-if="(e.wins+e.losses+e.equality) == 0">0</td>
+    <td v-else>{{(e.totalBet/(e.wins+e.losses+e.equality)).toLocaleString('en')}}</td>
+    <td>{{e.wins.toLocaleString('en')}}</td>
+    <td>{{e.losses.toLocaleString('en')}}</td>
+    <td>{{e.equality.toLocaleString('en')}}</td>
+    <td>{{e.averageTime}}</td>
   </tr>
 </table>
  <br>
@@ -46,6 +48,10 @@
 <div class="piecontainer">
 <canvas id="pie-chart2" class="chartjs" width="770px" height="385px" ></canvas>
 </div>
+
+<div class="piecontainer">
+<canvas id="pie-chart3" class="chartjs" width="770px" height="385px" ></canvas>
+</div>
 </center>
 <router-view :key="$route.fullPath"> </router-view>
 </div>
@@ -58,21 +64,16 @@ import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
 import UserApiService from '../services/UserApiService';
 import Chart from 'chart.js';
+import RankApiService from '../services/RankApiService';
 
 export default {
   data() {
     return {
-      playerwinsbj: 0,
-      playerlossesbj:0,
-      playerratiobj: 0,
-      playernbgamesbj: 0,
-      playerwinsy: 0,
-      playerlossesy:0,
-      playerratioy: 0,
-      playerratioynum: 0,
-      playerratiobjnum: 0,
-      playernbgamesy: 0,
+      playerRatioYams: 0,
+      playerRatioBj: 0,
+      playerRatioCrash: 0,
       queryPseudo: '',
+      playerStatsData: []
     }
   },
 
@@ -81,8 +82,7 @@ export default {
       this.queryPseudo = this.$route.query.pseudo;
     else
       this.queryPseudo = UserApiService.pseudo;
-    await this.refreshBlackJackstats();
-    await this.refreshYamsstats();
+    await this.getPlayerStats(1);
     this.drawDiagram();
   },
 
@@ -92,8 +92,7 @@ export default {
         this.queryPseudo = this.$route.query.pseudo;
       else
         this.queryPseudo = UserApiService.pseudo;
-      await this.refreshBlackJackstats();
-      await this.refreshYamsstats();
+      await this.getPlayerStats(1);
       this.drawDiagram();
     }
   },
@@ -109,7 +108,7 @@ export default {
           datasets: [{
             label: "Ratio (percentage)",
             backgroundColor: ["#c3c3d5", "#343a40"],
-            data: [this.playerratioynum.toFixed(2), (100 - this.playerratioynum).toFixed(2)]
+            data: [this.playerRatioYams.toFixed(2), (100 - this.playerRatioYams).toFixed(2)]
           }]
         },
         options: {
@@ -127,7 +126,7 @@ export default {
           datasets: [{
             label: "Ratio (percentage)",
             backgroundColor: ["#c3c3d5", "#343a40"],
-            data: [this.playerratiobjnum.toFixed(2),(100 - this.playerratiobjnum).toFixed(2)]
+            data: [this.playerRatioBj.toFixed(2),(100 - this.playerRatioBj).toFixed(2)]
           }]
         },
         options: {
@@ -137,35 +136,63 @@ export default {
           }
         }
       });
+
+      new Chart(document.getElementById("pie-chart3"), {
+        type: 'pie',
+        data: {
+          labels: ["Victoires", "Defaites"],
+          datasets: [{
+            label: "Ratio (percentage)",
+            backgroundColor: ["#c3c3d5", "#343a40"],
+            data: [this.playerRatioCrash.toFixed(2),(100 - this.playerRatioCrash).toFixed(2)]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Ratio (%) for Crash'
+          }
+        }
+      });
     },
 
-    async refreshBlackJackstats() {
-      this.playerwinsbj = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer(this.queryPseudo));
-      this.playerlossesbj = await this.executeAsyncRequest(() => GameApiService.getLossesBlackJackPlayer(this.queryPseudo));
-      this.playernbgamesbj = this.playerwinsbj + this.playerlossesbj;
-      this.playerratiobj = this.playerwinsbj / (this.playerwinsbj + this.playerlossesbj);
-      this.playerratiobjnum = this.playerratiobj.toFixed(3) * 100;
-      this.playerratiobj = (this.playerratiobj.toFixed(3) * 100).toFixed(2) + ' %';
-      if(this.playerratiobj == "NaN %") {
-        this.playerratiobj = "0 %";
-      }
+    async getPlayerStats(moneyTypeId) {
+        this.playerStatsData = await this.executeAsyncRequest(() => RankApiService.GetPlayerStats(this.queryPseudo, moneyTypeId));
+      
+      this.playerStatsData.forEach(element => {
+          element.averageTime = this.msToTime(element.averageTime);
+
+        if(element.gameName == 'BlackJack')
+          this.playerRatioBj = (element.wins / (element.wins + element.losses)).toFixed(3) * 100;
+        
+        if(element.gameName == 'Yams')
+          this.playerRatioYams = (element.wins / (element.wins + element.losses)).toFixed(3) * 100;
+
+        if(element.gameName == 'Crash')
+          this.playerRatioCrash = (element.wins / (element.wins + element.losses)).toFixed(3) * 100;
+      });
     },
 
-    async refreshYamsstats(pseudo) {
-      this.playerwinsy = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer(this.queryPseudo));
-      this.playerlossesy = await this.executeAsyncRequest(() => GameApiService.getLossesYamsPlayer(this.queryPseudo));
-      this.playernbgamesy = this.playerwinsy + this.playerlossesy;
-      this.playerratioy = this.playerwinsy / (this.playerwinsy + this.playerlossesy);
-      this.playerratioynum = this.playerratioy.toFixed(3) * 100;
-      this.playerratioy = (this.playerratioy.toFixed(3) * 100).toFixed(2) + ' %';
-      if(this.playerratioy == "NaN %") {
-        this.playerratioy = "0 %";
-      }
+    msToTime(element) {
+      var milliseconds = parseInt((element % 1000) / 100),
+      seconds = parseInt((element / 1000) % 60),
+      minutes = parseInt((element / (1000 * 60)) % 60),
+      hours = parseInt((element / (1000 * 60 * 60)) % 24);
+
+      hours = (hours < 10) ? "0" + hours : hours;
+      minutes = (minutes < 10) ? "0" + minutes : minutes;
+      seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+      return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+    },
+
+    async moneyTypeChange(moneyTypeId){
+      await this.getPlayerStats(moneyTypeId);
+      this.drawDiagram();
     }
   }
 }
 </script>
-
 
 <style lang="scss">
 

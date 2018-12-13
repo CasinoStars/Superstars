@@ -22,11 +22,16 @@ begin
 	set @UserId = scope_identity();
 	if(substring(@UserName, 1, 3)  <> '#AI')
 	begin
-	insert into sp.tMoney(UserId, MoneyTypeId, Balance, Profit) values(@UserId, 0, 0, 0);
-	insert into sp.tMoney(UserId, MoneyTypeId, Balance, Profit) values(@UserId, 1, 0, 0);
-	insert into sp.tStats(GameTypeId, UserId, Wins, Losses) values(0, @UserId, 0, 0);
-	insert into sp.tStats(GameTypeId, UserId, Wins, Losses) values(1
-, @UserId, 0, 0);
+	insert into sp.tMoney(UserId, MoneyTypeId, Balance) values(@UserId, 0, 0);
+	insert into sp.tMoney(UserId, MoneyTypeId, Balance) values(@UserId, 1, 0);
+
+	insert into sp.tStats(GameTypeId, MoneyTypeId, UserId, Wins, Losses) values(0, 0, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, MoneyTypeId , UserId, Wins, Losses) values(1, 0, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, MoneyTypeId , UserId, Wins, Losses) values(2, 0, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, MoneyTypeId, UserId, Wins, Losses) values(0, 1, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, MoneyTypeId , UserId, Wins, Losses) values(1, 1, @UserId, 0, 0);
+	insert into sp.tStats(GameTypeId, MoneyTypeId , UserId, Wins, Losses) values(2, 1, @UserId, 0, 0);
+
 	end;
 	commit;
 	return 0;

@@ -205,11 +205,11 @@
     </center>
 <div id="leespace2"></div>
    <form @submit="hit($event)">
-   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false && nbSlidesTutorial > 4">HIT</button></div>
+   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">HIT</button></div>
    </form>
 <div id="leespace"></div>
    <form @submit="stand($event)">
-   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false && nbSlidesTutorial > 4">STAND</button></div>
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">STAND</button></div>
    </form>
 
    <!-- <form @submit="split($event)">

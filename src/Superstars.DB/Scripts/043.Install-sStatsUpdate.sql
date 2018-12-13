@@ -1,11 +1,14 @@
 ﻿create proc sp.sStatsUpdate
 (
 	@GameTypeId int,
+	@MoneyTypeId int,
 	@UserId int,
+	@Profit int,
 	@Wins int,
 	@Losses int,
-	@AverageBet INT,
-	@AverageTime INT
+	@Equality int,
+	@TotalBet int,
+	@AverageTime int
 )
 as 
 begin
@@ -18,7 +21,7 @@ begin
                return 1;
       end;  
 		 
-      update sp.tStats set Wins = @Wins, Losses = @Losses, AverageBet = @AverageBet, AverageTime = @AverageTime where UserId = @UserId and GameTypeId = @GameTypeId;
+      update sp.tStats set Wins += @Wins, Losses += @Losses, Equality += @Equality, Profit += @Profit, TotalBet += @TotalBet, AverageTime = @AverageTime where UserId = @UserId and GameTypeId = @GameTypeId and MoneyTypeId = @MoneyTypeId;
          commit;
       return 0;
 end;
