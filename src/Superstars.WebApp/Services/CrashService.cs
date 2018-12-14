@@ -84,9 +84,9 @@ namespace Superstars.WebApp.Services
                 var pot = (int) potDouble;
                 
                 if(player.MoneyTypeId == 0)
-                    await _walletGateway.AddCoins(player.UserId, 0, pot, pot / 2, 0);
+                    await _walletGateway.AddCoins(player.UserId, 0, pot, pot / 2);
                 else
-                    await _walletGateway.AddCoins(player.UserId, 1, 0, pot / 2, pot);
+                    await _walletGateway.AddCoins(player.UserId, 1, 0, pot / 2);
             }
         }
 

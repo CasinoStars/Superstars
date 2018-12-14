@@ -118,13 +118,13 @@ namespace Superstars.WebApp.Controllers
 
             if (moneyTypeId == 0)
             {
-                Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
+                Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet);
                 var result3 = await _walletGateway.InsertInBankRoll(0, bet);
                 return this.CreateResult(result3);
             }
             else
             {
-                Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
+                Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet);
                 var result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
                 return this.CreateResult(result2);
             }
