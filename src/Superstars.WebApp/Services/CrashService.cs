@@ -141,7 +141,6 @@ namespace Superstars.WebApp.Services
         {
             new Task(async()=>await GameLoop()).Start();
             return Task.CompletedTask;
-
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
