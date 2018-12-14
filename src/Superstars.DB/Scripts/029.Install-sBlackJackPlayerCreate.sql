@@ -17,11 +17,11 @@ begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	if exists(select * from sp.tBlackJackPlayer bj where bj.BlackJackGameId = @BlackJackGameId)
-	begin
-		rollback;
-		return 1;
-	end;
+	--if exists(select * from sp.tBlackJackPlayer bj where bj.BlackJackGameId = @BlackJackGameId)
+	--begin
+	--	rollback;
+	--	return 1;
+	--end;
 
     insert into sp.tBlackJackPlayer(BlackJackPlayerId,BlackJackGameId,PlayerCards,SecondPlayerCards,NbTurn,HandValue,SecondHandValue) values(@UserId, @BlackJackGameId, @PlayerCards,@SecondPlayerCards, @NbTurn,@HandValue,@SecondHandValue);
 	set @BlackJackPlayerId = @UserId;

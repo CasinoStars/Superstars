@@ -23,12 +23,11 @@ namespace Superstars.DAL
         /// <param name="profit">Profit if user win or Loose a game</param>
         /// <param name="credit">Credit if user win or Loose with Bitcoin (Never credit if moneyType = 0)</param>
         /// <returns></returns>
-        public async Task<Result<int>> AddCoins(int userId, int moneyTypeId, int coins, int profit, int credit)
+        public async Task<Result<int>> AddCoins(int userId, int moneyTypeId, int coins, int credit)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Profit", profit);
                 p.Add("@Credit", credit);
                 p.Add("@UserId", userId);
                 p.Add("@Balance", coins);
@@ -115,7 +114,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var allCredit = await con.QueryFirstOrDefaultAsync<int>(
-                    "select SUM(m.Credit) from sp.vMoney m");
+                    "select coalesce(SUM(m.Credit),0) from sp.tMoney m");
                 return Result.Success(allCredit);
             }
         }

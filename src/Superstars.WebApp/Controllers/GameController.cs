@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using NBitcoin;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
@@ -21,10 +23,13 @@ namespace Superstars.WebApp.Controllers
         private readonly UserGateway _userGateway;
         private readonly WalletGateway _walletGateway;
         private readonly YamsGateway _yamsGateway;
+        private readonly CrashGateway _crashGateway;
+        private readonly IHubContext<SignalRHub> _hubContext;
+
 
         public GameController(GameGateway gameGateway, YamsGateway yamsGateway, BlackJackGateway blackJackGateway,
             UserGateway userGateway, WalletGateway walletGateway, PasswordHasher passwordHasher,
-            RankGateway rankGateway)
+            RankGateway rankGateway, CrashGateway crashGateway, IHubContext<SignalRHub> hubContext)
         {
             _gameGateway = gameGateway;
             _yamsGateway = yamsGateway;
@@ -33,12 +38,22 @@ namespace Superstars.WebApp.Controllers
             _walletGateway = walletGateway;
             _passwordHasher = passwordHasher;
             _rankGateway = rankGateway;
+            _crashGateway = crashGateway;
+            _hubContext = hubContext;
         }
 
         [HttpPost("{gameTypeId}")]
         public async Task<IActionResult> CreateGame(int gameTypeId)
         {
             Result result = await _gameGateway.CreateGame(gameTypeId);
+            if (gameTypeId == 0)
+            {
+                Result yamsPot = await _gameGateway.CreateYamsGame("0");
+            }
+            else if (gameTypeId == 1)
+            {
+                Result blackJackpot = await _gameGateway.CreateBlackJackGame("0");
+            }
             return this.CreateResult(result);
         }
 
@@ -50,18 +65,18 @@ namespace Superstars.WebApp.Controllers
             var user = await _userGateway.FindById(userId);
             if (gameTypeId == 0)
             {
-                Result result = await _gameGateway.CreateYamsGame(stringBet);
                 var data = await _yamsGateway.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateYamsGame(stringBet, data.YamsGameId);
                 await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
-                Result result = await _gameGateway.CreateBlackJackGame(stringBet);
                 var data = await _blackJackGateWay.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateBlackJackGame(stringBet, data.BlackJackGameId);
                 await _gameGateway.ActionStartGameBTC(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
-            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet, -bet);
+            Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet);
             var result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
             return this.CreateResult(result2);
         }
@@ -74,20 +89,60 @@ namespace Superstars.WebApp.Controllers
             var user = await _userGateway.FindById(userId);
             if (gameTypeId == 0)
             {
-                Result result = await _gameGateway.CreateYamsGame(stringBet);
                 var data = await _yamsGateway.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateYamsGame(stringBet, data.YamsGameId);
                 await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.YamsGameId);
             }
             else
             {
-                Result result = await _gameGateway.CreateBlackJackGame(stringBet);
                 var data = await _blackJackGateWay.GetPlayer(userId);
+                Result result = await _gameGateway.UpdateBlackJackGame(stringBet,data.BlackJackGameId);
                 await _gameGateway.ActionStartGameFake(user.UserId, user.UserName, DateTime.UtcNow, gameTypeId, data.BlackJackGameId);
             }
 
-            Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet, 0);
+            Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet);
             var result3 = await _walletGateway.InsertInBankRoll(0, bet);
             return this.CreateResult(result3);
+        }
+
+        [HttpPost("{bet}/{crash}/{moneyTypeId}/betCrash")]
+        public async Task<IActionResult> BetCrash(int bet, float crash, int moneyTypeId ) 
+        {
+            var stringBet = Convert.ToString(bet * 2);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
+
+            await _crashGateway.CreateCrashPlayer(userId, bet, crash, moneyTypeId);
+            var data = new CrashData {UserName = user.UserName, Bet = bet, Multi = crash};
+            await _hubContext.Clients.All.SendAsync("Bet", data);
+
+            if (moneyTypeId == 0)
+            {
+                Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet);
+                var result3 = await _walletGateway.InsertInBankRoll(0, bet);
+                return this.CreateResult(result3);
+            }
+            else
+            {
+                Result result2 = await _walletGateway.AddCoins(userId, 1, 0, -bet);
+                var result3 = await _walletGateway.InsertInBankRoll(bet, 0); //insert in true coin bet
+                return this.CreateResult(result2);
+            }
+            
+        }
+
+        [HttpPost("{crash}/updateCrash")]
+        public async Task<IActionResult> UpdateCrash(float crash)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
+
+            var result = await _crashGateway.UpdateCrashPlayer(userId, crash);
+            var data = new CrashData { UserName = user.UserName, Multi = crash };
+            await _hubContext.Clients.All.SendAsync("Update", data);
+
+            return this.CreateResult(result);
+
         }
 
         [HttpGet("getYamsPot")]
@@ -135,47 +190,66 @@ namespace Superstars.WebApp.Controllers
             return Result.Success(game);
         }
 
-        [HttpPost("{gameTypeId}/UpdateStats")]
-        public async Task<Result> UpdateStats(int gameTypeId, [FromBody] string win)
+        [HttpPost("{gameTypeId}/{moneyTypeId}/{bet}/UpdateStats")]
+        public async Task<Result> UpdateStats(int gameTypeId, int moneyTypeId, int bet, [FromBody] string win)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result1 = await _gameGateway.GetWins(userId, gameTypeId);
-            var result2 = await _gameGateway.GetLosses(userId, gameTypeId);
-            //int averagebet = 0;
-
-            //WIP
-            /*if (gametype == "Yams")
-            {
-                averagebet = await GetAverageBetYams();
-            }
-            else if (gametype == "BlackJack")
-            {
-                averagebet = await GetAverageBetBJ();
-            }*/
-
-            var wins = result1.Content;
-            var losses = result2.Content;
+            Result result = null;
+            var avgTime = await GetAverageTime(userId, gameTypeId);
+           
             if (win == "Player")
             {
-                wins = wins + 1;
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 1, 0, 0, bet, bet, avgTime.Milliseconds);
             }
             else if(win == "AI")
             {
-              losses = losses + 1;
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 1, 0, -bet, bet, avgTime.Milliseconds);
+            }
+            else if(win == "Equality")
+            {
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 0, 1, 0, bet, avgTime.Milliseconds);
+            }
+            return Result.Success(result);
+        }
+
+        public async Task<TimeSpan> GetAverageTime(int userId, int gameTypeId)
+        {
+            var result = await _rankGateway.GetGames(userId, gameTypeId);
+            var games = result.ToList();
+
+            List<TimeSpan> averageTimes = new List<TimeSpan>();
+
+            foreach (var item in games)
+            {
+                averageTimes.Add(item.EndDate - item.StartDate);
             }
 
-            var result3 = await _gameGateway.UpdateStats(userId, gameTypeId, wins, losses);
-            return Result.Success(result3);
+            if (averageTimes.Count == 0)
+            {
+                return new TimeSpan();
+            }
+            var k = averageTimes.Average(TimeSpan => TimeSpan.TotalMilliseconds);
+            TimeSpan avg = TimeSpan.FromMilliseconds(k);
+            return avg;
         }
 
         public async Task<int> GetAverageBetYams()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            //Get all Pots from played games
             var betsYams = await _rankGateway.GetPlayerYamsBets(userId);
             var allbetsyams = betsYams.ToList();
 
+            //Divid pot by 2 to get player's bet
+            List<int> items = new List<int>();
+            foreach (var item in allbetsyams)
+            {
+                items.Add(item / 2);
+            }
+
+            //Sum up bets
             var sommeYams = 0;
-            foreach (var item in allbetsyams) sommeYams += item;
+            foreach (var item in items) sommeYams += item;
             sommeYams = sommeYams / allbetsyams.Count();
 
             return sommeYams;
@@ -183,12 +257,21 @@ namespace Superstars.WebApp.Controllers
 
         public async Task<int> GetAverageBetBJ()
         {
+            //Get all pots from played games
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var betsBJ = await _rankGateway.GetPlayerBJBets(userId);
             var allbetsBJ = betsBJ.ToList();
+             
+            //Divide pot by 2 to get player's bet
+            List<int> items = new List<int>();
+            foreach (var item in allbetsBJ)
+            {
+                items.Add(item / 2);
+            }
 
+            //Sum up bets
             var sommeBJ = 0;
-            foreach (var item in allbetsBJ) sommeBJ += item;
+            foreach (var item in items) sommeBJ += item;
             sommeBJ = sommeBJ / allbetsBJ.Count();
 
             return sommeBJ;
@@ -328,15 +411,15 @@ namespace Superstars.WebApp.Controllers
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
                 await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake);
             }
-            else if (win == "Draw")
+            else if (win == "Equality")
             {
-                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Draw");
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "draw", trueOrFake);
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Equality");
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "Equality", trueOrFake);
 
             } else
             {
-                var IA = await _userGateway.FindByName("#AI" + userid + gametype.ToString());
-                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid + gametype.ToString());
+                var IA = await _userGateway.FindByName("#AI" + userid);
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid);
                 await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake);
             }
 

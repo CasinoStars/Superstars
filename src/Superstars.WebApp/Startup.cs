@@ -48,6 +48,7 @@ namespace Superstars.WebApp
             services.AddSingleton<YamsService>();
             services.AddSingleton<ProvablyFairGateway>();
             services.AddSingleton<ChatGateway>();
+            services.AddSingleton<CrashGateway>();
 
             services.AddSingleton(x => new BlackJackService());
             services.AddHostedService<CrashService>();

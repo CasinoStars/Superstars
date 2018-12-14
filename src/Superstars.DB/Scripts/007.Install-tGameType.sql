@@ -7,3 +7,4 @@ create table sp.tGameType
 );
 insert into sp.tGameType(GameName) values('Yams');
 insert into sp.tGameType(GameName) values('BlackJack');
+insert into sp.tGameType(GameName) values('Crash');

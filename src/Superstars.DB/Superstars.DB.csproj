@@ -10,17 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Scripts\047.Install-tChat.sql" />
-    <None Remove="Scripts\048.Install-vChat.sql" />
-    <None Remove="Scripts\049.Install-sChatCreate.sql" />
-    <None Remove="Scripts\20180431 013.Install-tProvablyFair.sql" />
-    <None Remove="Scripts\20180431 0134.Install-sProvablyFairCreate.sql" />
-    <None Remove="Scripts\2018043101345.Install-sProvablyFairUpdate.sql" />
-    <None Remove="Scripts\20180503.001.Install-sGameBlackJackUpdate.sql" />
-    <None Remove="Scripts\20183419 015.Install-vProvablyFair.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="dbup" Version="3.3.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
@@ -29,10 +18,10 @@
     <PackageReference Include="QBitNinja.Client" Version="1.0.3.47" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -47,6 +47,7 @@ namespace Superstars.WebApp.Controllers
             Result res = await _provablyFairGateway.UpdateSeeds(userId, ClientSeed);
             var seedData = await _provablyFairGateway.GetSeeds(userId);
             Result actionRes = await _provablyFairGateway.ActionChangeSeeds(data.UserId, data.UserName, DateTime.UtcNow, seedData.ClientSeed, seedData.PreviousClientSeed, seedData.UncryptedServerSeed, seedData.UncryptedPreviousServerSeed);
+            await _provablyFairGateway.IncrementSeedsinStats(userId);
         }
 
         [HttpPost("{clientSeedTest}/{serverSeedTest}/{nbOfDices}/RetriveDicesFromSeeds")]

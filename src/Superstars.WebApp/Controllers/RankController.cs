@@ -22,7 +22,20 @@ namespace Superstars.WebApp.Controllers
             _rankService = rankService;
         }
 
+        [HttpGet("{moneyTypeId}/GetPlayersGlobalProfit")]
+        public async Task<IEnumerable<RankData>> GetPlayersGlobalProfit(int moneytypeId)
+        {
+            return (List<RankData>) await _rankGateway.GetPlayersGlobalProfit(moneytypeId);
+        }
+
+        [HttpGet("{pseudo}/{moneyTypeId}/GetPlayerStats")]
+        public async Task<IEnumerable<RankData>> GetPlayerStats(string pseudo, int moneytypeId)
+        {
+            return (List<RankData>) await _rankGateway.GetPlayerStats(pseudo, moneytypeId);
+        }
+
         [HttpGet("{TrueOrFake}/PlayersProfitSorted")]
+        [AllowAnonymous]
         public async Task<IEnumerable<int>> GetPlayersProfitSorted(bool TrueOrFake)
         {
             var names = await _rankGateway.PseudoList();
@@ -44,6 +57,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("{TrueOrFake}/PlayersUserNameSorted")]
+        [AllowAnonymous]
         public async Task<IEnumerable<string>> GetPlayersUserNameSorted(bool TrueorFake)
         {
             var names = await _rankGateway.PseudoList();
@@ -65,6 +79,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("{TrueOrFake}/PlayersYamsNumberParts")]
+        [AllowAnonymous]
         public async Task<IEnumerable<int>> GetPlayersYamsNumberParts(bool TrueOrFake)
         {
             var winsYams = await _rankGateway.GetPlayersYamsWins();
@@ -88,6 +103,7 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("{TrueOrFake}/PlayersBlackJackNumberParts")]
+        [AllowAnonymous]
         public async Task<IEnumerable<int>> GetPlayersBlackJackNumberParts(bool TrueOrFake)
         {
             var winsBlackJack = await _rankGateway.GetPlayersBlackJackWins();

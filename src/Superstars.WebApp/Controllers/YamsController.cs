@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -34,13 +35,13 @@ namespace Superstars.WebApp.Controllers
         }
 
 
-        //Roll player dices
+        //Roll IA dices
         [HttpPost("RollIa")]
         public async Task<IActionResult> RollIaDices([FromBody] int[][] dices)
         {
             // Get IA data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var IA = await _userGateway.FindByName("#AI" + userId.ToString() + "0");
+            var IA = await _userGateway.FindByName("#AI" + userId.ToString());
             var data = await _yamsGateway.GetPlayer(IA.UserId);
 
             // Roll new dices
@@ -79,6 +80,7 @@ namespace Superstars.WebApp.Controllers
             //Get the player data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var data = await _yamsGateway.GetPlayer(userId);
+            var dataPlayer = await _userGateway.FindById(userId);
             var playerDices = new int[5];
             var stringDices = data.Dices;
             for (var i = 0; i < 5; i++) playerDices[i] = (int) char.GetNumericValue(stringDices[i]);
@@ -97,6 +99,7 @@ namespace Superstars.WebApp.Controllers
             //Update SQL
             Result result = await _yamsGateway.UpdateYamsPlayer(userId, data.YamsGameId, data.NbrRevives,
                 playerStringDices, playerPts);
+            await _yamsGateway.ActionRollDices(userId, dataPlayer.UserName,data.YamsGameId, DateTime.UtcNow, stringDices, playerStringDices);
             return this.CreateResult(result);
         }
 
@@ -106,7 +109,7 @@ namespace Superstars.WebApp.Controllers
         {
             // Get data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var Ia = await _userGateway.FindByName("#AI" + userId + "0");
+            var Ia = await _userGateway.FindByName("#AI" + userId);
             var playerData = await _yamsGateway.GetPlayer(userId);
             var IaData = await _yamsGateway.GetPlayer(Ia.UserId);
 
@@ -142,7 +145,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> GetIaDices()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindByName("#AI" + userId + "0");
+            var user = await _userGateway.FindByName("#AI" + userId);
             var data = await _yamsGateway.GetGameId(userId);
 
             var result = await _yamsGateway.GetIaDices(user.UserId, data.YamsGameId);

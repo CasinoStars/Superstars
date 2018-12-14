@@ -1,4 +1,4 @@
-create view sp.sGameType
+create view sp.vGameType
 as
    select
 	GameTypeId = g.GameTypeId,

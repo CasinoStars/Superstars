@@ -83,6 +83,7 @@ namespace Superstars.WebApp.Controllers
 
                 var privateKey = new Key().GetBitcoinSecret(Network.TestNet);
                 var privateKeyString = privateKey.ToString();
+
                 var result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email, privateKeyString);
                 if (result.HasError)
                 {
@@ -90,7 +91,10 @@ namespace Superstars.WebApp.Controllers
                     return View(model);
                 }
 
+                var privateKeyAi = new Key().GetBitcoinSecret(Network.TestNet);
+
                 var user = await _userService.FindUser(model.Pseudo, model.Password);
+                var userAI = await _userService.CreateUser("#AI" + user.UserId, "azertyuiop" + user.UserId, "", privateKeyAi.ToString());
                 await SignIn(model.Pseudo, user.UserId.ToString());
                 await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));

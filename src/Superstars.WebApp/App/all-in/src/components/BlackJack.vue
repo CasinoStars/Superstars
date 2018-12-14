@@ -109,7 +109,13 @@
 
 <div id="tocenter">
 
+  <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
+    <p id="tutorialText"> {{tutorialp}}</p>
+    <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+  </div>
+
 <div id="infos">
+    <a class="txt"> Pot : {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/> </a> <br>
     <a class="txt"> Valeur de votre main : {{handvalue}} </a> <br>
     <a class="txt"> Valeur de la main du dealer : {{dealerhandvalue}} </a> <br>
     <a v-if="!iaturn && !gameend" class="txt"> C'est à votre tour de jouer </a> <br>
@@ -199,7 +205,7 @@
     </center>
 <div id="leespace2"></div>
    <form @submit="hit($event)">
-   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false ">HIT</button></div>
+   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">HIT</button></div>
    </form>
 <div id="leespace"></div>
    <form @submit="stand($event)">
@@ -223,12 +229,14 @@
     <router-link to="/play">
       <br><div style="text-align:center;"><button  style="text-align:center;" class="btn btn-dark" v-if="gameend == true">QUITTER</button></div>
     </router-link>
+    <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
    </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import BlackJackApiService from '../services/BlackJackApiService';
+import UserApiService from '../services/UserApiService';
 import Vue from 'vue';
 import GameApiService from '../services/GameApiService';
 import WalletApiService from '../services/WalletApiService';
@@ -253,7 +261,12 @@ export default {
             fakeBet: 0,
             trueBet: 0,
             errors: [],
-            wasingame: false,
+            success: '',
+            pot: 0,
+            tutorialp: '',
+            queryPseudo: '',
+            nbSlidesTutorial: 0,
+            wins: 0
         }
     },
   computed: {
@@ -263,13 +276,19 @@ export default {
 
   async mounted() {
 
-    this.wasingame = await this.executeAsyncRequest(() => GameApiService.isInGame(1));
-    var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
+    if(this.$route.query.pseudo)
+      this.queryPseudo = this.$route.query.pseudo;
+    else
+      this.queryPseudo = UserApiService.pseudo;
+
+    this.wins = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer(this.queryPseudo));
+    console.log(this.wins);
+    this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
     this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
     this.refreshiaturn();
 
-    if(pot == 0 || pot == null) {
+    if(this.pot == 0 || this.pot == null) {
       this.showModal();
     } else {   
       this.playerBet = true;
@@ -277,6 +296,9 @@ export default {
       await this.refreshCards();
       await this.refreshHandValue(); 
     }
+      this.tutorialp = "Bienvenue sur le BlackJack !";
+      await this.CheckWinner();
+
   },
 
     methods: {
@@ -284,6 +306,22 @@ export default {
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
 
+    OkTutorial() {
+      let rectangle = document.getElementById("tutorialRectanglebj");
+      
+      this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
+      if(this.nbSlidesTutorial == 1 ) {
+          this.tutorialp = "  Vous allez devoir vous approchez le plus près possible de 21 mais sans le dépasser";
+      } else if(this.nbSlidesTutorial == 2) {
+        this.tutorialp = "  Vous pouvez à chaque tour, décider de tirer une carte ou de vous arrêter pour conserver votre valeur actuelle";
+      } else if(this.nbSlidesTutorial == 3) {
+        this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
+      } else if(this.nbSlidesTutorial == 4) {
+        this.tutorialp = "  Le joueur le plus proche de 21 sans le dépasser remporte la partie ! Bonne chance ! ";
+      } else if(this.nbSlidesTutorial == 5) {
+          rectangle.classList.toggle('fade');
+      }
+    },
 
     async RedirectandDelete() {
       //await this.executeAsyncRequest(() => GameApiService.deleteBlackJackGame());
@@ -339,6 +377,7 @@ export default {
           setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
           var modal = document.getElementById('myModal');
           modal.style.display = "none";
+          this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
           this.playerBet = true;
           await this.refreshCards();
           await this.refreshHandValue();
@@ -352,7 +391,7 @@ export default {
       e.preventDefault();
       await this.executeAsyncRequest(() => BlackJackApiService.HitPlayer());
 
-      if(this.handvalue > 21) {
+      if(this.handvalue >= 21) {
         this.gameend = true;
       }
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
@@ -417,49 +456,58 @@ export default {
           this.playerwin = 'Player';
         } else if(this.handvalue == this.dealerhandvalue) {
           this.winnerlooser = "Egalité";
-          this.playerwin = 'Draw';
+          this.playerwin = 'Equality';
           var egalite = true;
         }
         this.gameend = true;
+        if(this.playerwin == 'AI') {
+          if(this.trueBet == 0)
+            await this.updateStats(0, this.fakeBet);
+          else
+            await this.updateStats(1, this.trueBet);
+        }
         if(this.playerwin == 'Player') {
           var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
-          if(this.trueBet === 0) {
+          if(this.trueBet == 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
             await this.RefreshFakeCoins();
+            await this.updateStats(0, this.fakeBet);
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
             await this.RefreshBTC();
+            await this.updateStats(1, this.trueBet);
           }
         }
         if(egalite != null){
            var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
-          if(this.trueBet === 0) {
+          if(this.trueBet == 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
             await this.RefreshFakeCoins();
+            await this.updateStats(0,0);
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
             await this.RefreshBTC();
+            await this.updateStats(1,0);
           }
           await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
           await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
           await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
           return;
         }
-        this.updateStats();
       }
     },
 
-    async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats(1,this.playerwin));
-        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
-        await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));        
+    async updateStats(moneyType, bet) {
+      await this.executeAsyncRequest(() => GameApiService.UpdateStats(1, moneyType, bet, this.playerwin));
+      await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
+      await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));        
     },
 
     async refreshHandValue() {
@@ -482,6 +530,46 @@ $white: #ffffff;
 $main: #777c7b;
 $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
+
+#tutorialRectanglebj {
+   width: 95%; 
+   height: 80%;
+   margin-left: 3%;
+   margin-top: -11%;
+   border-radius: 20px;
+   text-align: center;
+   opacity: 0.99;
+   position: absolute; 
+   transition: opacity 1s; 
+   z-index: 15;
+}
+
+#tutorialRectanglebj.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+#tutorialText {
+color:white;
+text-transform: uppercase;
+font-size:28px;
+font-family: 'Courier New', sans-serif;
+text-align: center;
+position: relative;
+margin-top: 17%;
+}
+
+#tutorialButton {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Courier New', sans-serif;
+    display: inline-block;
+    font-size: 26px;
+    border-radius: 3px;
+    position: relative;
+    margin-top: 5%;
+}
 
 .blackJack .tab-group {
   list-style:none;

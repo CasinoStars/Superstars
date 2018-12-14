@@ -269,6 +269,22 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task<Result<string>> UpdateYamsGame(string pot, int gameId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@YamsGameId", gameId);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameYamsUpdate", p, commandType: CommandType.StoredProcedure);
+
+                var status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<string>("@Pot"));
+            }
+        }
+
         public async Task<Result<int>> CreateBlackJackGame(string pot)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
@@ -282,6 +298,22 @@ namespace Superstars.DAL
                 var status = p.Get<int>("@Status");
 
                 return Result.Success(p.Get<int>("@BlackJackGameId"));
+            }
+        }
+
+        public async Task<Result<int>> UpdateBlackJackGame(string pot, int gameId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Pot", pot);
+                p.Add("@BlackJackGameId", gameId);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("sp.sGameBlackJackUpdate", p, commandType: CommandType.StoredProcedure);
+
+                var status = p.Get<int>("@Status");
+
+                return Result.Success(p.Get<dynamic>("@BlackJackGameId"));
             }
         }
 
@@ -301,17 +333,20 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int wins, int losses)
+        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int moneyTypeId, int wins, int losses, int equality, int profit, int bet, int averageTime)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@GameTypeId", gameTypeId);
+                p.Add("@MoneyTypeId", moneyTypeId);
                 p.Add("@UserId", userid);
+                p.Add("@Profit", profit);
                 p.Add("@Wins", wins);
                 p.Add("@Losses", losses);
-                //p.Add("@AverageBet", averagebet);
-                //p.Add("@Averagetime", averagetime);
+                p.Add("@Equality", equality);
+                p.Add("@totalBet", bet);
+                p.Add("@AverageTime", averageTime);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("sp.sStatsUpdate", p, commandType: CommandType.StoredProcedure);
 

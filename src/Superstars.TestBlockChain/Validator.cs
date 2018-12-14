@@ -49,9 +49,9 @@ namespace Superstars.Wallet
         {
             for (int i = 0; i < nbOfTest; i++)
             {
-                var tktmagl = new Key();
+                var testedKey = new Key();
 
-                if (Validator.IsValidAddress(tktmagl.PubKey.GetAddress(Network.TestNet).ToString()) == true) Console.WriteLine("TRUE");
+                if (Validator.IsValidAddress(testedKey.PubKey.GetAddress(Network.TestNet).ToString()) == true) Console.WriteLine("TRUE");
                 else
                 {
                     throw new Exception("FASLE");

@@ -6,7 +6,6 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -37,7 +36,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.AmountToSend, 0, 0);
+            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.AmountToSend, 0);
             return this.CreateResult(result);
         }
 
@@ -45,7 +44,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 0, pot, pot, 0);
+            Result result = await _walletGateway.AddCoins(userId, 0, pot, pot);
             return this.CreateResult(result);
         }
 
@@ -53,7 +52,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerBTC(int pot)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot, pot);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot);
             return this.CreateResult(result);
         }
 
