@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using NBitcoin;
 using Superstars.DAL;
+using Superstars.WebApp.Controllers;
 
 namespace Superstars.WebApp.Services
 {
@@ -18,11 +19,12 @@ namespace Superstars.WebApp.Services
         private readonly IHubContext<SignalRHub> _signalR;
         private double _crashValue;
         private readonly CrashBuilder _crashBuilder;
+        private readonly RankGateway _rankGateway;
         private readonly GameGateway _gameGateway;
         private readonly CrashGateway _crashGateway;
         private readonly WalletGateway _walletGateway;
 
-        public CrashService(IHubContext<SignalRHub> signalR, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
+        public CrashService(IHubContext<SignalRHub> signalR, RankGateway rankGateway, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
         {
             _signalR = signalR;
             _crashValue = crashBuilder.NextCrashValue();
@@ -30,6 +32,7 @@ namespace Superstars.WebApp.Services
             _gameGateway = gameGateway;
             _crashGateway = crashGateway;
             _walletGateway = walletGateway;
+            _rankGateway = rankGateway;
         }
 
         private async Task LaunchNewGame()
@@ -73,17 +76,46 @@ namespace Superstars.WebApp.Services
             await Task.Delay(5000);
 
         }
+        public async Task<TimeSpan> GetAverageTime(int userId, int gameTypeId)
+        {
+            var result = await _rankGateway.GetGames(userId, gameTypeId);
+            var games = result.ToList();
+
+            List<TimeSpan> averageTimes = new List<TimeSpan>();
+
+            foreach (var item in games)
+            {
+                averageTimes.Add(item.EndDate - item.StartDate);
+            }
+
+            if (averageTimes.Count == 0)
+            {
+                return new TimeSpan();
+            }
+            var k = averageTimes.Average(TimeSpan => TimeSpan.TotalMilliseconds);
+            TimeSpan avg = TimeSpan.FromMilliseconds(k);
+            return avg;
+        }
 
         private async Task SetWins()
         {
             var players = await GetPlayersInGame();
             foreach (var player in players)
             {
-                if (!(player.Multi <= _crashValue)) continue;
+                var avgTime = await GetAverageTime(player.UserId, 2);
+                if (!(player.Multi <= _crashValue))
+                {
+                    await _gameGateway.UpdateStats(player.UserId, 2, player.MoneyTypeId, 0, 1, 0, -player.Bet, player.Bet,
+                        avgTime.Milliseconds);
+                    continue;
+                }
                 var potDouble = player.Multi * player.Bet;
                 var pot = (int) potDouble;
-                
-                if(player.MoneyTypeId == 0)
+
+                await _gameGateway.UpdateStats(player.UserId, 2, player.MoneyTypeId, 1, 0, 0, -player.Bet, player.Bet,
+                    avgTime.Milliseconds);
+
+                if (player.MoneyTypeId == 0)
                     await _walletGateway.AddCoins(player.UserId, 0, pot, pot / 2);
                 else
                     await _walletGateway.AddCoins(player.UserId, 1, 0, pot / 2);
