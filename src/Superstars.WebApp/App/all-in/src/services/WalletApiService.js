@@ -42,6 +42,10 @@ class WalletApiService {
         return response.text();
     }
 
+    async Transfer(model){
+        await postAsync(`${endpoint}/TransferToPlayer`, model);
+    }
+
     async GetBTCBankRoll(){
         return await getAsync(`${endpoint}/BTCBankRoll`);   
     }

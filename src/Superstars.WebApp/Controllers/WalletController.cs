@@ -6,6 +6,7 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,12 +19,13 @@ namespace Superstars.WebApp.Controllers
     public class WalletController : Controller
     {
         private readonly WalletGateway _walletGateway;
+        private readonly UserGateway _userGateway;
 
         public WalletController(WalletGateway walletGateway)
         {
             _walletGateway = walletGateway;
         }
-        
+
         /// <summary>
         /// Add FakeCoin to user
         /// </summary>
@@ -47,6 +49,19 @@ namespace Superstars.WebApp.Controllers
             Result result = await _walletGateway.AddCoins(userId, 0, pot, pot);
             return this.CreateResult(result);
         }
+
+        [HttpPost("TransferToPlayer")] 
+
+        public async void TransferToPlayer([FromBody] TransferViewModel model)
+        {
+
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var receiver = _userGateway.FindByName(model.DestinationAccount);
+            await _walletGateway.AddCoins(receiver.Id, 1, 0, model.AmountToSend);
+            await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
+        }
+
+
 
         [HttpPost("{pot}/creditBTCPlayer")]
         public async Task<IActionResult> CreditPlayerBTC(int pot)

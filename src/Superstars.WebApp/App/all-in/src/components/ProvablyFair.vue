@@ -402,4 +402,6 @@ textarea {
     margin-top: -20px;
     text-align: right;
   }
+  }
+  }
 </style>
