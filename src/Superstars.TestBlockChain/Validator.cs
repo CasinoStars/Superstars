@@ -1,7 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto.Digests;
 using System;
 using NBitcoin;
-using System.Threading.Tasks;
 
 namespace Superstars.Wallet
 {
