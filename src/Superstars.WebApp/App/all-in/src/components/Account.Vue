@@ -8,8 +8,8 @@
                 <h5 style="text-align: center; color: white;"> MyUserName</h5> 
             </div>
                 
-            <div class="submenu" ><bouton >  Profil </bouton> </div>
-            <div class="submenu"><button v-on:click=" ProfilOn()">Profil</button></div>
+            <div class="submenu" ><bouton>  Profil </bouton> </div>
+            <div class="submenu"><button v-on:click=" TransferOn()">Transfer</button></div>
             <div class="submenu"><button v-on:click=" WalletOn()">Porte monnaie</button></div>
             <div class="submenu"><button v-on:click="ProvablyFairOn()">ProvablyFair</button></div>
             <div class="submenu"><button v-on:click="SupportPageOn()">Support</button></div>
@@ -18,6 +18,7 @@
         </div>
         <div class="col-md-5" style="margin-left: 9.5%;">
             <div class = "improtedView"> 
+                <transfer v-if="this.isTransferOn == true"/>
                 <wallet v-if="this.isWallet == true"/>
                 <div class="provablyFair"> <ProvablyFair v-if="this.isProvablyFair == true"/> </div>
            </div>
@@ -27,12 +28,11 @@
 </div>
 </template>
 
-
-
 <script>
 
 import Wallet from './Wallet.vue'
 import ProvablyFair from './ProvablyFair.vue'
+import Transfer from './Transfer.vue'
 
 
 
@@ -43,12 +43,14 @@ import ProvablyFair from './ProvablyFair.vue'
         isProvablyFair: "",
         isSupportPageOn: "",
         isSecuriterOn: "",
-        isProfilOn:""
+        isProfilOn:"",
+        isTransferOn:"",
         };
     },
 
   components: {
          Wallet,
+         Transfer,
          ProvablyFair
     },
 
@@ -68,6 +70,7 @@ import ProvablyFair from './ProvablyFair.vue'
          this.isSupportPageOn = false;
          this.isSecuriterOn = false;
          this.isProfilOn = false;
+         this.isTransferOn = false;
 
       },
        ProvablyFairOn() {
@@ -76,6 +79,7 @@ import ProvablyFair from './ProvablyFair.vue'
          this.isSupportPageOn = false;
          this.isSecuriterOn = false;
          this.isProfilOn = false;
+         this.isTransferOn = false;
       },
        SupportPageOn() {
          this.isWallet = false;
@@ -83,6 +87,7 @@ import ProvablyFair from './ProvablyFair.vue'
          this.isSupportPageOn = true;
          this.isSecuriterOn = false;
          this.isProfilOn = false;
+         this.isTransferOn = false;
       },
        SecuriterOn() {
          this.isWallet = true;
@@ -90,13 +95,16 @@ import ProvablyFair from './ProvablyFair.vue'
          this.isSupportPageOn = false;
          this.isSecuriterOn = true;
          this.isProfilOn = false;
+         this.isTransferOn = false;
       },
-       ProfilOn() {
-         this.isWallet = true;
+       TransferOn() {
+         this.isWallet = false;
          this.isProvablyFair = false;
          this.isSupportPageOn = false;
-         this.isSupportPageOn = false;
          this.isProfilOn = false;
+         this.isTransferOn = true;
+         this.isSecuriterOn = false;
+
       } 
     }
   } 

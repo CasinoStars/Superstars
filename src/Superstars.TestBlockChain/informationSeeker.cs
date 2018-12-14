@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NBitcoin;
 using QBitNinja.Client;
 using QBitNinja.Client.Models;
@@ -25,16 +26,47 @@ namespace Superstars.Wallet
         /// <param name="privateKey"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static List<GetTransactionResponse> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
+        public static async Task<List<string>> SeekPendingTrx(BitcoinSecret privateKey, QBitNinjaClient client)
         {
-            var responses = SeekAllTransaction(privateKey, client);
-            var unconfirmedTrxs = new List<GetTransactionResponse>();
+            var unconfirmedTrxs = new List<string>();
+            var historyTransaction = await client.GetBalance(privateKey);
+            var transactionsResponses = new List<GetTransactionResponse>();
+            double totalSpent = 0;
+            double totalReceived = 0;
+            bool isSpend;
+            string info;
 
-            foreach (var response in responses)
-                if (response.Block == null || response.Block.Confirmations < 6)
-                    unconfirmedTrxs.Add(response);
+            foreach (var item in historyTransaction.Operations)
+            {
+                //Money
+                decimal d = item.Amount.ToDecimal(MoneyUnit.BTC);
+                if (item.Confirmations != 0)
+                {
+
+                    isSpend = ( d < 0);
+                
+                   
+                    if(isSpend)
+                    {
+                        info = d.ToString() + " Depenser";
+                    }
+                    else
+                    {
+                        info = d.ToString() + " Reçu";
+                    }
+
+                    unconfirmedTrxs.Add(item.TransactionId.ToString() + " " + info + " ");
+                }
+            }
+
             return unconfirmedTrxs;
         }
+
+        ///if (spend and received coin ) spendcoin - received coin - fee = montant de la transaction envoyer  
+
+        ///if only received just add the amount of received coin 
+
+        ///if received false and spend true , value il spend
 
         /// <summary>
         ///     get all transaction associate to a wallet address
@@ -46,12 +78,9 @@ namespace Superstars.Wallet
         {
             var transactionsResponses = new List<GetTransactionResponse>();
             var historyTransaction = client.GetBalance(key);
-            var i = 0;
-
             foreach (var tx in historyTransaction.Result.Operations)
             {
                 transactionsResponses.Add(client.GetTransaction(tx.TransactionId).Result);
-                i++;
             }
 
             return transactionsResponses;

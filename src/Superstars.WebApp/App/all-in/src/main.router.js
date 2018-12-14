@@ -18,6 +18,7 @@ import Stats from './components/MyStats.vue';
 import Rank from './components/Rank.vue';
 import ProvablyFair from './components/ProvablyFair.vue';
 import CrashTest from './components/CrashTest.vue';
+import Transfer from './components/Transfer.vue';
 
 const routes = [
     { path: '', component: Home },
@@ -30,6 +31,7 @@ const routes = [
     { path: '/account', component: Account, beforeEnter: requireAuth},
     { path: '/statistics', component: Stats, beforeEnter: requireAuth},
     { path: '/playersStats', component: Rank},
+    { path: '/Transfer', component: Transfer, beforeEnter: requireAuth},
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
     { path: '/crash', component: CrashTest}
 ];
