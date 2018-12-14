@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-5">
             <div class="piecontainer" id="pie-container">
-                <div id="linechart"></div>
+                <canvas id="linechart"></canvas>
             </div>
             <div class="row">
                 <div class="col">
@@ -94,7 +94,7 @@
     import Vue from 'vue';
     import GameApiService from '../services/GameApiService';
     import CrashApiService from '../services/CrashApiService';
-    import CanvasJS from '../canvasjs.min.js';
+    import ChartJS from 'Chart.js';
 
     export default {
         data() {
@@ -134,16 +134,16 @@
                 await this.RefreshFakeCoins();
             });
             this.connection.on("EndGame", async (ite) => {
-                console.log("Chart stop at "+ this.multi+" serv stop at "+ite)
-                
+                console.log("Chart stop at " + this.multi + " serv stop at " + ite)
+
                 this.multi = ite;
                 clearInterval(this.fn);
-              
+
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
             })
-             this.connection.on("Step", async (ite, i) => {
-                console.log("step at "+ite)
+            this.connection.on("Step", async (ite, i) => {
+                console.log("step at " + ite)
                 this.multi = ite;
                 this.addData(this.chart, i / 10 + 1, ite);
 
@@ -152,8 +152,9 @@
                 console.log("wait")
                 this.isWaiting = true
                 this.hasPlayed = false;
-                this.totalBet = 0;  
+                this.totalBet = 0;
                 this.points = [];
+                this.chart.destroy();
                 this.initializeChart();
                 this.i = 0
                 this.playersData = [];
@@ -189,34 +190,98 @@
             ...mapActions(['RefreshBTC']),
 
             initializeChart() {
-                this.chart = new CanvasJS.Chart("linechart", {
-                    exportEnabled: false,
+                this.chart = new Chart(document.getElementById("linechart"), {
+                    // The type of chart we want to create
+                    type: 'line',
+                   
+                    // The data for our dataset
+                    data: {
+                        
+                        datasets: [{
+                        
+                            label: "",
+                            fill: false,
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: [],
+                            pointRadius: 0,
+                        }]
+                    },
 
-                    axisY: {
-                        includeZero: false,
-                        gridThickness: 0,
-                        maximum: 2
-                    },
-                    axisX: {
-                        includeZero: false,
-                        gridThickness: 0,
-                    },
-                    data: [{
-                        type: "spline",
-                        markerSize: 0,
-                        dataPoints: this.points
-                    }]
+                    // Configuration options go here
+                    options: {
+                        legend:{
+                            display: false
+                        },
+                        tooltips:{
+                            enabled: false
+                        },
+                        scales: {
+
+                            xAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                type: "linear",
+                                ticks: {
+                                    suggestedMin: 1,
+                                    suggestedMax: 3
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                type: "linear",
+                                ticks: {
+                                    suggestedMin: 1,
+                                    suggestedMax: 3
+                                }
+                            }]
+                        },
+                        animation: {
+                            duration: 0, // general animation time
+                        },
+                        hover: {
+                            animationDuration: 0, // duration of animations when hovering an item
+                        },
+                        responsiveAnimationDuration: 0 // animation duration after a resize
+                    }
                 });
-                this.chart.render();
             },
 
             addData(chart, x, y) {
-                this.points.push({
-                    x: x,
-                    y: y
-                })
-                this.chart.options.axisY.maximum = y + 2;
-                chart.render();
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data.push({
+                        x: x,
+                        y: y
+                    });
+                });
+                chart.options.scales = {
+                    xAxes: [{
+                        gridLines: {
+                            display: false
+                        },
+                        type: "linear",
+                        ticks: {
+                            min: 1,
+                            max: x + 2
+                        }
+                    }],
+
+                    yAxes: [{
+                        gridLines: {
+                            display: false
+                        },
+                        drawOnChartArea: false,
+                        ticks: {
+                            min: 1,
+                            max: y + 2
+                        }
+                    }]
+
+                }
+
+                chart.update();
             },
 
             myLoop() {
