@@ -37,7 +37,6 @@ namespace Superstars.WebApp
                 o.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
             services.AddSignalR();
-            //services.AddSingleton(x => new sqlconn());
             services.AddSingleton(x => new SqlConnexion(Configuration["ConnectionStrings:SuperstarsDB"]));
             services.AddSingleton<UserGateway>();
             services.AddSingleton<GameGateway>();
@@ -57,6 +56,12 @@ namespace Superstars.WebApp
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();
             services.AddSingleton(x => new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526"));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsAdmin", policy =>
+                policy.RequireClaim(ClaimTypes.Role, "Admin"));
+            });
 
             services.AddAuthentication(CookieAuthentication.AuthenticationScheme)
                 .AddCookie(CookieAuthentication.AuthenticationScheme)

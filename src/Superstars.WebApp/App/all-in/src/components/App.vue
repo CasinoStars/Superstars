@@ -29,6 +29,11 @@
               <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> PROVABLYFAIR
               </router-link>
           </li>
+          <li class="nav-item" v-if="auth.isConnected">
+              <router-link class="nav-link" to="/Faq" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-question-circle" style="font-size: 1.4rem;"></i> FAQ
+              </router-link>
+          </li>
         </ul>
 
         <div class="collapse navbar-collapse" v-if="auth.isConnected">
@@ -131,9 +136,6 @@ export default{
 
 <style lang="scss" scoped>
 
-.app {
-    background-color: black;
-}
 
 #borderSolde{
   border-style:solid; 
