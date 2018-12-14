@@ -2,7 +2,7 @@
   <div class="stats">
     <br>
     <br>
-    <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;" class="container">
+    <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
       <h1 style="font-variant: small-caps; font-size: 45px;">
         <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
         <strong v-else>Mes statistiques</strong>
@@ -11,6 +11,7 @@
       <i class="fa fa-money" style="font-size: 0.8rem;" v-on:click="moneyTypeChange(0)"></i>
     </div>
     <br><br>
+    <div class="table-responsive">
     <table>
       <tr>
         <th>Jeu</th>
@@ -34,11 +35,8 @@
         <td>{{e.averageTime}}</td>
       </tr>
     </table>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    </div>
+
 <div class="container">
     <div class="row">
       <div class="col-sm">
@@ -200,10 +198,17 @@
   //    width: 10px;
   //    height: 10px;
   // }
-  .stats .piecontainer {
-    height: 40%;
-    width: 40%;
-    display: inline-flex;
+
+  .stats {
+    overflow-x: hidden;
+  }
+  .stats .container {
+    margin-top: 2%;
+    .row{
+    margin-left: -25%;
+    height: 150%;
+    width: 150%;
+    }
   }
 
   .stats table {
