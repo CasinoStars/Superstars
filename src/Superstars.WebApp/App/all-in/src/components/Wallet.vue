@@ -59,23 +59,19 @@
         <button type="submit" class="button button-block">Envoyer</button>
 
         <div class="transaction">
-        <table id="lastTransaction">
-          <tr>
-            <th>5 dernières Transaction</th>
-            </tr>
+          <table id="lastTransaction">
             <tr>
-              <div v-for="item in lastTransactions">
-    <!-- {{ item }} -->ffes
-           <tr>
+              <th>Historique des transactions</th>
             </tr>
-  </div>          
-            
-            
+            <div class="transactionList">
             <tr>
-              <td></td>
+                <div v-for="trx in lastTransactions">
+                  <td> {{trx}} </td>
+              </div>                      
             </tr>
+            </div>
           </table>
-          </div>
+        </div>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
 
@@ -134,7 +130,7 @@
 
     async mounted() {
       this.wallet = "real";
-      await this.GetLastFiveTransaction();
+      await this.GetTransaction();
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.GetWalletAddress();
@@ -219,9 +215,9 @@
         }
       },
 
-      async GetLastFiveTransaction() {
+      async GetTransaction() {
         this.lastTransactions = await this.executeAsyncRequest(() =>
-              WalletApiService.GetLastTransaction()
+              WalletApiService.GetTransaction()
         );
       },
 
@@ -255,6 +251,18 @@
   $normal: 400;
   $bold: 600;
   $br: 4px;
+
+  .wallet .transactionList {
+    max-height: 225px;
+    overflow-y: scroll;
+    font-size: 15px;
+    background-color: #f2f2f2;
+    
+  }
+
+  .wallet td{
+    width: 1000px;
+  }
 
   #lastTransaction {
   margin-top: 2%; 

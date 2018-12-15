@@ -42,9 +42,9 @@ class WalletApiService {
         return response.text();
     }
 
-    async GetLastTransaction(){
-        var response = await postAsync(`${endpoint}/GetLastTransaction`);
-        return response.text();
+    async GetTransaction(){
+        var response = await getAsync(`${endpoint}/GetTransaction`);
+        return response;
     }
 
     async Transfer(model){

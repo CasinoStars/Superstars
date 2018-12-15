@@ -62,7 +62,7 @@ namespace Superstars.WebApp.Controllers
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
         }
 
-        [HttpPost("GetLastTransaction")]
+        [HttpGet("GetTransaction")]
 
         public async Task<List<string>> GetTransaction() {
 
@@ -70,7 +70,7 @@ namespace Superstars.WebApp.Controllers
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
-            var response = await informationSeeker.SeekTrx(privateKey, client, 9000000,5);
+            var response = await informationSeeker.SeekTrx(privateKey, client, 9000000,100);
 
             return response;
         }

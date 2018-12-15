@@ -1,4 +1,5 @@
 <template>
+<div class ="CrashTest">
     <div class="row">
         <div class="col-md-5">
             <div class="piecontainer" id="pie-container">
@@ -82,6 +83,7 @@
             </div>
         </div>
     </div>
+<div>   
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
 
@@ -360,11 +362,11 @@
         text-align: right;
     }
 
-    tr {
+    .CrashTest tr {
         background-color: #f2f2f2;
     }
 
-    td,
+    .CrashTest td,
     th {
         border-bottom: 1px solid #dddddd;
         text-align: left;
@@ -375,7 +377,7 @@
         font-weight: bold;
     }
 
-    th {
+     .CrashTest th {
         background-color: #343a40;
         color: white;
     }
