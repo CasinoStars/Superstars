@@ -80,7 +80,7 @@
        async Transfer(e) { 
 
 
-       }
+       },
 
       async onSubmit(e) {
         e.preventDefault();
