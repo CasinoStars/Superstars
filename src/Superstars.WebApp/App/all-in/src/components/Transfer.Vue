@@ -12,14 +12,14 @@
           <label>
             Nom de compte<span class="req">*</span>
           </label><br><br>
-          <input type="number" min="0" placeholder="Nom de compte" v-model="item.AccountName" required
+          <input type="text" min="0" placeholder="Nom de compte" v-model="item.DestinationAccount" required
             autocomplete="off" />
         </div>
         <div class="field-wrap">
           <label>
             Montant<span class="req">*</span>
           </label><br><br>
-          <input type="text" placeholder="Montant" v-model="item.DestinationAccount" required autocomplete="off" />
+          <input type="number" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off" />
         </div><br>
         <button type="submit" class="button button-block">Envoyer</button>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
@@ -44,6 +44,7 @@
     data() {
       return {
         item: {},
+        trueBalance:'',
         success :'',
         errors: [],
         Responses: []
@@ -56,9 +57,8 @@
     },
 
     async mounted() {
-      await this.RefreshBTC();
-      await this.RefreshFakeCoins();
-      this.GetWalletAddress();
+      // await this.RefreshBTC();
+      // await this.RefreshFakeCoins();
     },
 
     methods: {
@@ -67,40 +67,63 @@
       ...mapActions(["RefreshBTC"]),
 
       async GetWalletAddress() {
+         this.trueBalance = await this.executeAsyncRequest(() =>
+          WalletApiService.GetTrueBalance()
+        );  
+        if(this.item.AmountToSend > this.trueBalance) {
+
         this.BTCAddress = await this.executeAsyncRequest(() =>
           WalletApiService.GetWalletAddress()
         );       
+        }
+        else {
+            var errors = []
+            errors.push(
+            "Vous n'avez pas assez de bits"
+          );
+        }
+
       },
-
-      async Transfer(){
-
-      },
-
 
        async Transfer(e) { 
+        //   this.trueBalance = await this.executeAsyncRequest(() =>
+        //   WalletApiService.GetTrueBalance()
+        // );  
 
+        // console.log(this.trueBalance + "truebalance");
+        // console.log(this.AmountToSend);
+        //   if(this.item.AmountToSend > this.trueBalance) {
+          await this.executeAsyncRequest(() =>
+          WalletApiService.Transfer(this.item));
+      //  }
+      //   else {
+      //    var errors = []
+      //       errors.push(
+      //       "Vous n'avez pas assez de bits");
+      //  }
+       }
 
-       },
+      
 
-      async onSubmit(e) {
-        e.preventDefault();
+      // async onSubmit(e) {
+      //   e.preventDefault();
 
-        var errors = [];
+      //   var errors = [];
 
-        this.errors = errors;
+      //   this.errors = errors;
 
-        if (errors.length == 0) {
-          try {
-            await this.executeAsyncRequest(() =>
-              WalletApiService.AddCoins(this.item)
-            );
-            await this.RefreshFakeCoins();
-            var x = document.getElementById("snackbar");
-            x.className = "show";
-            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-          } catch (error) {}
-        }
-      },     
+      //   if (errors.length == 0) {
+      //     try {
+      //       await this.executeAsyncRequest(() =>
+      //         WalletApiService.AddCoins(this.item)
+      //       );
+      //       await this.RefreshFakeCoins();
+      //       var x = document.getElementById("snackbar");
+      //       x.className = "show";
+      //       setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      //     } catch (error) {}
+      //   }
+      // },     
     }
   };
 </script>

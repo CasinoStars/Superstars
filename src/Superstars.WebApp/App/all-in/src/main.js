@@ -10,8 +10,6 @@ import App from './components/App.vue';
 import 'jquery';
 import 'popper.js';
 import 'bootstrap';
-import Element from 'element-ui';
-Vue.use(Element, { size: 'small', zIndex: 3000 });
 
 // Creation of the root Vue of the application
 new Vue({

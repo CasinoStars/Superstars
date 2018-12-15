@@ -21,9 +21,10 @@ namespace Superstars.WebApp.Controllers
         private readonly WalletGateway _walletGateway;
         private readonly UserGateway _userGateway;
 
-        public WalletController(WalletGateway walletGateway)
+        public WalletController(WalletGateway walletGateway,UserGateway userGateway)
         {
             _walletGateway = walletGateway;
+            _userGateway = userGateway;
         }
 
         /// <summary>
@@ -56,8 +57,8 @@ namespace Superstars.WebApp.Controllers
         {
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var receiver = _userGateway.FindByName(model.DestinationAccount);
-            await _walletGateway.AddCoins(receiver.Id, 1, 0, model.AmountToSend);
+            var receiver = await _userGateway.FindByName(model.DestinationAccount);
+            await _walletGateway.AddCoins(receiver.UserId, 1, 0, model.AmountToSend);
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
         }
 

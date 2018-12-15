@@ -1,10 +1,9 @@
 ﻿namespace Superstars.WebApp.Models
 {
-    public class WalletViewModel
+    public class TransferViewModel
     {
-        public int MoneyType { get; set; }
 
-        public string DestinationAddress { get; set; }
+        public string DestinationAccount { get; set; }
 
         public int AmountToSend { get; set; }
     }
