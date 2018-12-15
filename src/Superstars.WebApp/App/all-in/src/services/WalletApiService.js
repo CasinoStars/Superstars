@@ -42,6 +42,11 @@ class WalletApiService {
         return response.text();
     }
 
+    async GetLastTransaction(){
+        var response = await postAsync(`${endpoint}/GetLastTransaction`);
+        return response.text();
+    }
+
     async Transfer(model){
         await postAsync(`${endpoint}/TransferToPlayer`, model);
     }

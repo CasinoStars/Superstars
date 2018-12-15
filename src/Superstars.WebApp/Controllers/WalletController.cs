@@ -21,7 +21,7 @@ namespace Superstars.WebApp.Controllers
         private readonly WalletGateway _walletGateway;
         private readonly UserGateway _userGateway;
 
-        public WalletController(WalletGateway walletGateway,UserGateway userGateway)
+        public WalletController(WalletGateway walletGateway, UserGateway userGateway)
         {
             _walletGateway = walletGateway;
             _userGateway = userGateway;
@@ -51,7 +51,7 @@ namespace Superstars.WebApp.Controllers
             return this.CreateResult(result);
         }
 
-        [HttpPost("TransferToPlayer")] 
+        [HttpPost("TransferToPlayer")]
 
         public async void TransferToPlayer([FromBody] TransferViewModel model)
         {
@@ -60,6 +60,19 @@ namespace Superstars.WebApp.Controllers
             var receiver = await _userGateway.FindByName(model.DestinationAccount);
             await _walletGateway.AddCoins(receiver.UserId, 1, 0, model.AmountToSend);
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
+        }
+
+        [HttpPost("GetLastTransaction")]
+
+        public async Task<List<string>> GetTransaction() {
+
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
+            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
+            QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
+            var response = await informationSeeker.SeekTrx(privateKey, client, 9000000,5);
+
+            return response;
         }
 
 

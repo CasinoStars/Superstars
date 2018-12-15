@@ -274,8 +274,8 @@ $br: 4px;
 .provablyfair .form {
   background: rgba($form-bg, 0.9);
   padding: 40px;
-    height: 800px;
-  max-width: 6000px;
+    height: 900px;
+    width: 1000px;
   border-radius: $br;
   box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
 }

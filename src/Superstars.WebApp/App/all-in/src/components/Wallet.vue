@@ -57,8 +57,28 @@
           <input type="text" placeholder="Address" v-model="item.DestinationAddress" required autocomplete="off" />
         </div><br>
         <button type="submit" class="button button-block">Envoyer</button>
+
+        <div class="transaction">
+        <table id="lastTransaction">
+          <tr>
+            <th>5 dernières Transaction</th>
+            </tr>
+            <tr>
+              <div v-for="item in lastTransactions">
+    <!-- {{ item }} -->ffes
+           <tr>
+            </tr>
+  </div>          
+            
+            
+            <tr>
+              <td></td>
+            </tr>
+          </table>
+          </div>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
+
     </div>    
         <div> </div>
       </form>
@@ -102,7 +122,8 @@
         BTCAddress: "",
         success :'',
         errors: [],
-        Responses: []
+        Responses: [],
+        lastTransactions: []
       };
     },
 
@@ -113,6 +134,7 @@
 
     async mounted() {
       this.wallet = "real";
+      await this.GetLastFiveTransaction();
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.GetWalletAddress();
@@ -197,6 +219,12 @@
         }
       },
 
+      async GetLastFiveTransaction() {
+        this.lastTransactions = await this.executeAsyncRequest(() =>
+              WalletApiService.GetLastTransaction()
+        );
+      },
+
       Copy() {
         navigator.clipboard.writeText(this.BTCAddress);
       },
@@ -228,6 +256,27 @@
   $bold: 600;
   $br: 4px;
 
+  #lastTransaction {
+  margin-top: 2%; 
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  height: 50%;
+}
+
+#lastTransaction th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: rgba(39, 184, 61, 0.589);
+  color: white;
+}
+
+#lastTransaction td, #lastTransaction th {
+  border: 1px solid rgb(0, 0, 0);
+  padding: 15px;
+}
+  
   .wallet html {
     overflow-y: scroll;
   }
@@ -254,8 +303,8 @@
   .wallet .form {
     background: rgba($form-bg, 0.9);
     padding: 40px;
-    height: 800px;
-    max-width: 700px;
+    height: 900px;
+    width: 1000px;
     margin: 40px auto;
     border-radius: $br;
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);

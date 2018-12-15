@@ -16,7 +16,7 @@
             <div class="submenu"><button v-on:click="Securiter()">Sécuriter</button></div>
             
         </div>
-        <div class="col-md-5" style="margin-left: 9.5%;">
+        <div class="col-md-5" style="margin-left: 3.5%;">
             <div class = "improtedView"> 
                 <transfer v-if="this.isTransferOn == true"/>
                 <wallet v-if="this.isWallet == true"/>
@@ -133,13 +133,6 @@ import Transfer from './Transfer.vue'
 width: 600px;
 }
 
-.account .wallet {
-    min-width: 600px;
-    max-width: 600px;
-    min-height:600px;
-    max-height: 600px;
-}
-
 
 .account .submenu {
      box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
@@ -170,7 +163,7 @@ width: 600px;
        margin-top:3%;
     margin-left:10%;
 	width:350px;
-	//height:800px;
+	height:900px;
     border-style: solid;
     border-width: 2px;   
     border-color: black;
