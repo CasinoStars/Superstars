@@ -70,7 +70,7 @@ namespace Superstars.WebApp.Controllers
             Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
-            var response = await informationSeeker.SeekTrx(privateKey, client, 9000000,100);
+            var response = await informationSeeker.SeekTrx(privateKey, client,100000);
 
             return response;
         }

@@ -26,7 +26,7 @@ namespace Superstars.Wallet
         /// <param name="privateKey"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static async Task<List<string>> SeekTrx(BitcoinSecret privateKey, QBitNinjaClient client, int maxConfirmation,int nbOfTransactionToFind)
+        public static async Task<List<string>> SeekTrx(BitcoinSecret privateKey, QBitNinjaClient client, int maxConfirmation)
         {
             var unconfirmedTrxs = new List<string>();
             var historyTransaction = await client.GetBalance(privateKey);
@@ -35,7 +35,6 @@ namespace Superstars.Wallet
             double totalReceived = 0;
             bool isSpend;
             string info;
-            int i = 0;
 
             foreach (var item in historyTransaction.Operations)
             {
@@ -55,13 +54,7 @@ namespace Superstars.Wallet
                     {
                         info = d.ToString() + " Reçu";
                     }
-
-                    unconfirmedTrxs.Add(item.TransactionId.ToString() + " " + info + " ");
-                    i++;
-                    if(i == nbOfTransactionToFind)
-                    {
-                        break;
-                    }
+                    unconfirmedTrxs.Add(item.TransactionId.ToString() + " " + info + " ");                  
                 }
             }
 
