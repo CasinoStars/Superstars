@@ -48,13 +48,13 @@ namespace Superstars.Wallet
                    
                     if(isSpend)
                     {
-                        info = d.ToString() + " Depenser";
+                        info = d.ToString();
                     }
                     else
                     {
-                        info = d.ToString() + " Reçu";
+                        info = d.ToString();
                     }
-                    unconfirmedTrxs.Add(item.TransactionId.ToString() + " " + info + " ");                  
+                    unconfirmedTrxs.Add(item.TransactionId.ToString() + " " + info + "BTC " + item.Confirmations.ToString() + " confirmations");                  
                 }
             }
 
