@@ -133,6 +133,10 @@ import Transfer from './Transfer.vue'
 width: 600px;
 }
 
+.account .submenu .button {
+    border-radius: 10px;
+}
+
 
 .account .submenu {
      box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);

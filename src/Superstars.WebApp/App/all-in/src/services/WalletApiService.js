@@ -42,10 +42,11 @@ class WalletApiService {
         return response.text();
     }
 
-    async GetTransaction(){
-        var response = await getAsync(`${endpoint}/GetTransaction`);
+    async GetTransaction(maxConfirmation){
+        var response = await getAsync(`${endpoint}/${maxConfirmation}/GetTransaction`);
         return response;
     }
+    
 
     async Transfer(model){
         await postAsync(`${endpoint}/TransferToPlayer`, model);

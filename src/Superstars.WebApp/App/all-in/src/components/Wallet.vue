@@ -65,12 +65,24 @@
             </tr>
             <div class="transactionList">
             <tr>
-                <div v-for="trx in lastTransactions">
-                  <td> {{trx}} </td>
-              </div>                      
+                <div v-for="trx in lastTransactions" >
+                <td > {{trx}} </td> </div>
+                
             </tr>
             </div>
           </table>
+          <table id="pendingTrx">
+           <tr>
+              <th>Transactions en attentes</th>
+            </tr>
+            <div class = "pendingTrxList">
+              <tr>
+                  <div v-for="trx in pendingTrx" >
+                  <td > {{trx}} </td> </div>
+                  
+              </tr>
+            </div>
+            </table>
         </div>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
@@ -119,7 +131,8 @@
         success :'',
         errors: [],
         Responses: [],
-        lastTransactions: []
+        lastTransactions: [],
+        pendingTrx: [],
       };
     },
 
@@ -131,6 +144,7 @@
     async mounted() {
       this.wallet = "real";
       await this.GetTransaction();
+      await this.GetPendingTrx();
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.GetWalletAddress();
@@ -217,7 +231,13 @@
 
       async GetTransaction() {
         this.lastTransactions = await this.executeAsyncRequest(() =>
-              WalletApiService.GetTransaction()
+              WalletApiService.GetTransaction(100000)
+        );
+      },
+
+      async GetPendingTrx() {
+        this.pendingTrx = await this.executeAsyncRequest(() =>
+          WalletApiService.GetTransaction(1)
         );
       },
 
@@ -252,8 +272,8 @@
   $bold: 600;
   $br: 4px;
 
-  .wallet .transactionList {
-    max-height: 225px;
+  .wallet .transactionList, .pendingTrxList {
+    max-height: 125px;
     overflow-y: scroll;
     font-size: 15px;
     background-color: #f2f2f2;
@@ -264,7 +284,7 @@
     width: 1000px;
   }
 
-  #lastTransaction {
+  #lastTransaction, #pendingTrx {
   margin-top: 2%; 
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -272,17 +292,17 @@
   height: 50%;
 }
 
-#lastTransaction th {
-  padding-top: 12px;
-  padding-bottom: 12px;
+#lastTransaction th, #pendingTrx th {
+  padding-top: 4px;
+  padding-bottom: 4px;
   text-align: center;
   background-color: rgba(39, 184, 61, 0.589);
   color: white;
 }
 
-#lastTransaction td, #lastTransaction th {
+#lastTransaction td, #lastTransaction td {
   border: 1px solid rgb(0, 0, 0);
-  padding: 15px;
+  padding: 1px;
 }
   
   .wallet html {

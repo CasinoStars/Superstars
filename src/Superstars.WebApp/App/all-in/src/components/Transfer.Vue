@@ -95,35 +95,8 @@
         //   if(this.item.AmountToSend > this.trueBalance) {
           await this.executeAsyncRequest(() =>
           WalletApiService.Transfer(this.item));
-      //  }
-      //   else {
-      //    var errors = []
-      //       errors.push(
-      //       "Vous n'avez pas assez de bits");
-      //  }
        }
 
-      
-
-      // async onSubmit(e) {
-      //   e.preventDefault();
-
-      //   var errors = [];
-
-      //   this.errors = errors;
-
-      //   if (errors.length == 0) {
-      //     try {
-      //       await this.executeAsyncRequest(() =>
-      //         WalletApiService.AddCoins(this.item)
-      //       );
-      //       await this.RefreshFakeCoins();
-      //       var x = document.getElementById("snackbar");
-      //       x.className = "show";
-      //       setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-      //     } catch (error) {}
-      //   }
-      // },     
     }
   };
 </script>
