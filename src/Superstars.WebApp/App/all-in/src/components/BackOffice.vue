@@ -4,7 +4,21 @@
 </template>
 
 <script>
-    export default {
+import { mapGetters, mapActions } from 'vuex';
+import BackOfficeApiService from '../services/BackOfficeApiService';
+import Vue from 'vue';
+
+  export default {
+    data() {
+      return {
+        item: {},
+        wallet: "",
+        BTCAddress: "",
+        success :'',
+        errors: [],
+        Responses: []
+      };
+    },
         mounted() {
         
         },
@@ -14,9 +28,9 @@
         },
 
         methods: {
-
+            
         }
-    }
+}
 </script>
 
 <style lang="scss">

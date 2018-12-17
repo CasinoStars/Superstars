@@ -5,6 +5,9 @@ class BackOfficeApiService {
     constructor() {
     }
     
+    async IsAdmin() {
+        return await getAsync(`${endpoint}/isAdmin`);
+    }
 }
 
 export default new BackOfficeApiService();

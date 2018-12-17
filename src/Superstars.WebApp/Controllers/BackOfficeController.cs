@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -13,15 +11,24 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class BackOfficeController : Controller
     {
-        private readonly RankGateway _rankGateway;
-        public BackOfficeController(RankGateway RankGateway)
+        private readonly UserGateway _userGateway;
+        public BackOfficeController(UserGateway userGateway)
         {
-            _rankGateway = RankGateway;
+            _userGateway = userGateway;
         }
 
-        //public async Task<IEnumerable<LogData>> GetLogsList()
-        //{
-        //    var table = 
-        //}
+        [HttpGet("isAdmin")]
+        async Task<bool> IsAdmin()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
+            if(user.Role == "Admin")
+            {
+                return true;
+            } else {
+                return false;
+            }        
+
+        }
     }
 }
