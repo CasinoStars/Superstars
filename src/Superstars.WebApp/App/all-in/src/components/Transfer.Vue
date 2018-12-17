@@ -7,7 +7,7 @@
 
       <!-- RealWallet -->
       <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-      <form @submit="Transfer($event)">
+      <form @submit.prevent="Transfer($event)">
         <div class="field-wrap">
           <label>
             Nom de compte<span class="req">*</span>
@@ -25,7 +25,7 @@
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
     </div>    
-      </form>      
+      </form>            
   </div>
   </div>
 </template>
@@ -69,7 +69,8 @@
       async GetWalletAddress() {
          this.trueBalance = await this.executeAsyncRequest(() =>
           WalletApiService.GetTrueBalance()
-        );  
+        );
+        var errors = [];  
         if(this.item.AmountToSend > this.trueBalance) {
 
         this.BTCAddress = await this.executeAsyncRequest(() =>
@@ -77,7 +78,6 @@
         );       
         }
         else {
-            var errors = []
             errors.push(
             "Vous n'avez pas assez de bits"
           );
@@ -86,15 +86,22 @@
       },
 
        async Transfer(e) { 
-        //   this.trueBalance = await this.executeAsyncRequest(() =>
-        //   WalletApiService.GetTrueBalance()
-        // );  
-
-        // console.log(this.trueBalance + "truebalance");
-        // console.log(this.AmountToSend);
-        //   if(this.item.AmountToSend > this.trueBalance) {
+       //   e.preventDefault();
+          this.trueBalance = await this.executeAsyncRequest(() =>
+          WalletApiService.GetTrueBalance()
+        );  
+        var errors = [];
+        console.log(this.trueBalance + "truebalance");
+        console.log(this.AmountToSend);
+          if(this.item.AmountToSend < this.trueBalance) {
           await this.executeAsyncRequest(() =>
           WalletApiService.Transfer(this.item));
+          }
+          else{
+                      errors.push("Vous avez pas assez de bits");
+          }
+                  this.errors = errors;
+
        }
 
     }
