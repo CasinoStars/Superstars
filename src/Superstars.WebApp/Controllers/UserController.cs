@@ -56,7 +56,7 @@ namespace Superstars.WebApp.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-                await SignIn(user.UserName, user.UserId.ToString());
+                await SignIn(user.UserName, user.UserId.ToString(),true);
                 return RedirectToAction(nameof(Authenticated));
             }          
             return View(model);
@@ -84,7 +84,7 @@ namespace Superstars.WebApp.Controllers
                 var privateKey = new Key().GetBitcoinSecret(Network.TestNet);
                 var privateKeyString = privateKey.ToString();
 
-                var result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email, privateKeyString);
+                var result = await _userService.CreateUser(model.Pseudo, model.Password, model.Email, privateKeyString,0);
                 if (result.HasError)
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorMessage);
@@ -94,8 +94,8 @@ namespace Superstars.WebApp.Controllers
                 var privateKeyAi = new Key().GetBitcoinSecret(Network.TestNet);
 
                 var user = await _userService.FindUser(model.Pseudo, model.Password);
-                var userAI = await _userService.CreateUser("#AI" + user.UserId, "azertyuiop" + user.UserId, "", privateKeyAi.ToString());
-                await SignIn(model.Pseudo, user.UserId.ToString());
+                var userAI = await _userService.CreateUser("#AI" + user.UserId, "azertyuiop" + user.UserId, "", privateKeyAi.ToString(),0);
+                await SignIn(model.Pseudo, user.UserId.ToString(),true);
                 await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));
             }
@@ -128,7 +128,8 @@ namespace Superstars.WebApp.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var pseudo = User.FindFirst(ClaimTypes.Name).Value;
-            var token = _tokenService.GenerateToken(userId, pseudo);
+            var role = User.FindFirst(ClaimTypes.Role).Value;
+            var token = _tokenService.GenerateToken(userId, pseudo, role);
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
             ViewData["Pseudo"] = pseudo;
@@ -136,10 +137,11 @@ namespace Superstars.WebApp.Controllers
             return View();
         }
 
-        private async Task SignIn(string pseudo, string userId)
+        private async Task SignIn(string pseudo, string userId, bool isAdmin)
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Role, isAdmin? "Admin" : "User",ClaimValueTypes.String),
                 new Claim(ClaimTypes.Name, pseudo, ClaimValueTypes.String),
                 new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String)
             };

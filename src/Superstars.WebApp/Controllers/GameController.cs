@@ -124,7 +124,7 @@ namespace Superstars.WebApp.Controllers
             var privateKey = new Key().GetBitcoinSecret(Network.TestNet);
             var privateKeyString = privateKey.ToString();
             var result = await _userGateway.CreateUser("#AI" + userId + gametypeid.ToString(),
-                _passwordHasher.HashPassword("azertyuiop" + userId), "", privateKeyString);
+                _passwordHasher.HashPassword("azertyuiop" + userId), "", privateKeyString,0);
             return this.CreateResult(result);
         }
 

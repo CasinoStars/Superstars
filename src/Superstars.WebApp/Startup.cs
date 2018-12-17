@@ -60,7 +60,7 @@ namespace Superstars.WebApp
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("IsAdmin", policy =>
-                policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                policy.RequireClaim(AllinClaimsNames.Role, "Admin"));
             });
 
             services.AddAuthentication(CookieAuthentication.AuthenticationScheme)

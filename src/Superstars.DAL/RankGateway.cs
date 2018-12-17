@@ -127,5 +127,15 @@ namespace Superstars.DAL
 
         }
 
+        public async Task<IEnumerable<LogData>> GetLogs()
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                return await con.QueryAsync<LogData>(
+                    "select LogId, UserId, ActionDate, ActionDescription from sp.tLogTable");
+            }
+
+        }
+
     }
 }

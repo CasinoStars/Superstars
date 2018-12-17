@@ -18,6 +18,7 @@ import Rank from './components/Rank.vue';
 import ProvablyFair from './components/ProvablyFair.vue';
 import CrashTest from './components/CrashTest.vue';
 import Faq from './components/Faq.vue';
+import BackOffice from './components/BackOffice.vue';
 
 const routes = [
     { path: '', component: Home },
@@ -31,7 +32,8 @@ const routes = [
     { path: '/playersStats', component: Rank},
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
     { path: '/crash', component: CrashTest},
-    { path: '/faq', component: Faq}
+    { path: '/faq', component: Faq},
+    { path: '/BackOffice',component: BackOffice}
 ];
 
 export default new VueRouter({
