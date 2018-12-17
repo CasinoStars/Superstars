@@ -42,6 +42,13 @@ class WalletApiService {
         return response.text();
     }
 
+    async isPseudoExist(model) {
+        var response = await postAsync(`${endpoint}/isPseudoExist`, model);
+        return response.text();
+
+    }
+
+
     async GetTransaction(maxConfirmation){
         var response = await getAsync(`${endpoint}/${maxConfirmation}/GetTransaction`);
         return response;

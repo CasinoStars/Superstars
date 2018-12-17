@@ -7,7 +7,7 @@
 
       <!-- RealWallet -->
       <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-      <form @submit.prevent="Transfer($event)">
+      <form @submit.prevent="Transfer($event, item.DestinationAccount)">
         <div class="field-wrap">
           <label>
             Nom de compte<span class="req">*</span>
@@ -39,6 +39,7 @@
     mapGetters
   } from "vuex";
   import WalletApiService from "../services/WalletApiService";
+  import UserApiService from "../services/UserApiService";
 
   export default {
     data() {
@@ -47,6 +48,7 @@
         trueBalance:'',
         success :'',
         errors: [],
+        isPseudoExist: false,
         Responses: []
       };
     },
@@ -86,13 +88,22 @@
       },
 
        async Transfer(e) { 
+        
+         this.isPseudoExist = await this.executeAsyncRequest(() =>
+         WalletApiService.isPseudoExist(this.item)
+         );
+         var errors = [];
+
        //   e.preventDefault();
+        if(this.isPseudoExist == "true") {
+          console.log("GAGNERRR WE DID IT");
+        
+
           this.trueBalance = await this.executeAsyncRequest(() =>
-          WalletApiService.GetTrueBalance()
+          WalletApiService.GetTrueBalance(this.item)
         );  
-        var errors = [];
-        console.log(this.trueBalance + "truebalance");
-        console.log(this.AmountToSend);
+        // console.log(this.trueBalance + "truebalance");
+        // console.log(this.AmountToSend);
           if(this.item.AmountToSend < this.trueBalance) {
           await this.executeAsyncRequest(() =>
           WalletApiService.Transfer(this.item));
@@ -100,6 +111,10 @@
           else{
                       errors.push("Vous avez pas assez de bits");
           }
+        }
+        else {
+          errors.push("Le pseudo n'exist pas");
+        }
                   this.errors = errors;
 
        }

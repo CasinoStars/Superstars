@@ -62,6 +62,18 @@ namespace Superstars.WebApp.Controllers
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
         }
 
+
+        [HttpPost("isPseudoExist")]
+
+        public async Task<bool> IsPseudoExist([FromBody] TransferViewModel model)
+        {
+            UserData result = await _userGateway.FindByName(model.DestinationAccount);
+            bool isPseudoExist = false;
+            isPseudoExist = (result == null) ? false : true;
+
+            return isPseudoExist;
+        }
+
         [HttpGet("{maxConfirmation}/GetTransaction")]
 
         public async Task<List<string>> GetTransaction(int maxConfirmation) {
