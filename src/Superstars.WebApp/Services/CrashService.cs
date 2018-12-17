@@ -113,13 +113,13 @@ namespace Superstars.WebApp.Services
                 var potDouble = player.Multi * player.Bet;
                 var pot = (int) potDouble;
 
-                await _gameGateway.UpdateStats(player.UserId, 2, player.MoneyTypeId, 1, 0, 0, -player.Bet, player.Bet,
+                await _gameGateway.UpdateStats(player.UserId, 2, player.MoneyTypeId, 1, 0, 0, player.Bet, player.Bet,
                     avgTime.Milliseconds);
 
                 if (player.MoneyTypeId == 0)
-                    await _walletGateway.AddCoins(player.UserId, 0, pot, pot / 2);
+                    await _walletGateway.AddCoins(player.UserId, 0, pot, 0);
                 else
-                    await _walletGateway.AddCoins(player.UserId, 1, 0, pot / 2);
+                    await _walletGateway.AddCoins(player.UserId, 1, 0, pot);
             }
         }
 

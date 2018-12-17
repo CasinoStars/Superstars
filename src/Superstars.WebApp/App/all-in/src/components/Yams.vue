@@ -286,9 +286,9 @@ export default {
       if(this.winOrLose == "You Lose") {
           this.playerwin = 'AI';
           if(this.trueBet === 0)
-            await this.updateStats(1, -this.fakeBet);
+            await this.updateStats(0, this.fakeBet);
           else
-            await this.updateStats(0, -this.trueBet);
+            await this.updateStats(1, this.trueBet);
       }
       else if(this.winOrLose == "You Win"){
         this.playerwin = 'Player';
@@ -306,18 +306,19 @@ export default {
           }
       } else {
         this.playerwin = 'Equality';
-        await this.updateStats(0,0);
         await this.executeAsyncRequest(() => YamsApiService.DeleteYamsAiPlayer());
         await this.executeAsyncRequest(() => GameApiService.DeleteAis(0));
          if(this.trueBet === 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
             await this.RefreshFakeCoins();
+            await this.updateStats(0,0);
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
             await this.RefreshBTC();
+            await this.updateStats(1,0);
           }
       }
     },

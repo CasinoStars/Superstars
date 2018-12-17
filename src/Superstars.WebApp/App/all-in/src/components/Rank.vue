@@ -25,7 +25,7 @@
       <tbody>
         <tr v-for="(e, index) of playersProfitData" :key='index'>
           <td>{{index+1}}</td>
-          <td><a class="link" :href="'/statistics?pseudo='+e.userName">{{e.userName}}</a></td>
+          <td><a class="link" :href="'statistics?pseudo='+e.userName">{{e.userName}}</a></td>
           <td>{{e.profit.toLocaleString('en')}}</td>
         </tr>
       </tbody>

@@ -411,10 +411,10 @@ namespace Superstars.WebApp.Controllers
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
                 await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake);
             }
-            else if (win == "Draw")
+            else if (win == "Equality")
             {
-                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Draw");
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "draw", trueOrFake);
+                result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Equality");
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "Equality", trueOrFake);
 
             } else
             {
