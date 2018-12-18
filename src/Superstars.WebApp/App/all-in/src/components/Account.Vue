@@ -5,7 +5,7 @@
         <div class="menu col-md-3">      
             <div class="carre">
                 <img src="../img/LOGO1.png" alt="yams" class="imglogo">  
-                <h5 style="text-align: center; color: white;"> MyUserName</h5> 
+                <h5 style="text-align: center; color: white;"> admin</h5> 
             </div>
                 
             <div class="submenu" ><bouton>  Profil </bouton> </div>
