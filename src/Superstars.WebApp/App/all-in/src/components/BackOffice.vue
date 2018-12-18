@@ -55,5 +55,29 @@ export default {
 </script>
 
 <style lang="scss">
+    .bo tr {
+        background-color: #f2f2f2;
+        
+    }
+    
+    .bo table {
 
+      width: 100%;
+    }
+
+    .bo td,
+    th {
+        border-bottom: 1px solid #dddddd;
+        text-align: left;
+        padding: 14px;
+        font-family: 'Courier New', sans-serif;
+        font-size: 21px;
+        font-variant: small-caps;
+        font-weight: bold;
+    }
+
+    .bo th {
+        background-color: #343a40;
+        color: white;
+    }
 </style>
