@@ -15,36 +15,21 @@
     </div>
 
     <table style="margin-top:3%;">
-      <tr>
-        <th>Pseudo</th>
-        <th>Profit/Perte</th>
-        <th>Parties de Yams joué</th>
-        <th>Parties de BlackJack joué</th>
-      </tr>
-      <tr>
-        <th>
-        <div v-for="(e,index) of pseudos" :key='index'>
-          <td><a :href="'/statistics?pseudo='+e" style="color: white;"> {{e}} </a></td>
-        </div>
-        </th>
-        <th>
-        <div v-for="(e,index) of profits" :key='index'>
-          <td>{{e.toLocaleString('en')}}</td>
-        </div>
-        </th>
-        <th>
-        <div v-for="(e,index) of playeryamsnbgames" :key='index'>
-          <td>{{e}}</td>
-        </div>
-        </th>
-        <th>
-        <div v-for="(e,index) of playerblackjacknbgames" :key='index'>
-          <td>{{e}}</td>
-        </div>
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Rang</th>
+          <th>Pseudo</th>
+          <th>Profit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(e, index) of playersProfitData" :key='index'>
+          <td>{{index+1}}</td>
+          <td><a class="link" :href="'statistics?pseudo='+e.userName">{{e.userName}}</a></td>
+          <td>{{e.profit.toLocaleString('en')}}</td>
+        </tr>
+      </tbody>
     </table>
-        
   </div>
 </template>
 
@@ -52,9 +37,6 @@
 
 import { mapActions } from 'vuex';
 import Vue from 'vue';
-import GameApiService from '../services/GameApiService';
-import WalletApiService from '../services/WalletApiService';
-import UserApiService from '../services/UserApiService';
 import RankApiService from '../services/RankApiService';
 
 
@@ -62,18 +44,12 @@ export default {
   data() {
     return {
       TrueOrFake: true,
-      pseudos: [],
-      profits: [],
-      playerblackjacknbgames: [],
-      playeryamsnbgames: []
+      playersProfitData: []
     }
   },    
 
   async mounted() {
-    this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted(this.TrueOrFake));
-    this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted(this.TrueOrFake));
-    this.playeryamsnbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersYamsNumberParts(this.TrueOrFake));
-    this.playerblackjacknbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersBlackJackNumberParts(this.TrueOrFake));
+    await this.getPlayersProfit();
   },
 
   methods: {
@@ -84,17 +60,21 @@ export default {
       this.changethetab();
     },
 
+    async getPlayersProfit(){
+      if(this.TrueOrFake)
+      this.playersProfitData = await this.executeAsyncRequest(() => RankApiService.GetPlayersGlobalProfit(1));
+      else
+      this.playersProfitData = await this.executeAsyncRequest(() => RankApiService.GetPlayersGlobalProfit(0));
+    },
+
     async changethetab(){
-      this.pseudos = await this.executeAsyncRequest(() => RankApiService.GetPlayersUserNameSorted(this.TrueOrFake));
-      this.profits = await this.executeAsyncRequest(() => RankApiService.GetPlayersProfitSorted(this.TrueOrFake));
-      this.playeryamsnbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersYamsNumberParts(this.TrueOrFake));
-      this.playerblackjacknbgames = await this.executeAsyncRequest(() => RankApiService.GetPlayersBlackJackNumberParts(this.TrueOrFake));
+      await this.getPlayersProfit();
     }  
   }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
  .rank .nav-link:hover {
     opacity: 0.5;
  }
@@ -120,4 +100,51 @@ export default {
     height:10px;
     border:2px solid #81888b;
   }
+  
+  .rank table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+
+  .rank th {
+    background-color: #343a40;
+    color: white;
+  }
+
+  .rank tr { 
+  background-color: #f2f2f2;;
+  }
+
+  .rank thead {
+    text-align: center;
+  }
+  
+  .rank td,th {
+    border-bottom: 1px solid #dddddd;
+    text-align: center;
+    font-family: 'Courier New', sans-serif;
+    font-variant: small-caps;
+    font-weight: bold;
+  }
+
+  .rank tbody tr:hover {
+    background-color: #343a40;
+    color:white;
+    a{
+      color: white;
+    }
+    a:hover{
+      color: grey;
+    }
+  }
+
+  .rank a{
+    color: black;
+    font-family: 'Courier New', sans-serif;
+    font-size: 120%;
+  }
+  
 </style>

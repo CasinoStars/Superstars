@@ -47,6 +47,7 @@ namespace Superstars.WebApp
             services.AddSingleton<YamsService>();
             services.AddSingleton<ProvablyFairGateway>();
             services.AddSingleton<ChatGateway>();
+            services.AddSingleton<CrashGateway>();
 
             services.AddSingleton(x => new BlackJackService());
             services.AddHostedService<CrashService>();
@@ -90,8 +91,11 @@ namespace Superstars.WebApp
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler();
             }
 
             var secretKey = Configuration["JwtBearer:SigningKey"];

@@ -205,11 +205,11 @@
     </center>
 <div id="leespace2"></div>
    <form @submit="hit($event)">
-   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false && nbSlidesTutorial > 4">HIT</button></div>
+   <div style="text-align:center;"><button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">HIT</button></div>
    </form>
 <div id="leespace"></div>
    <form @submit="stand($event)">
-   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false && nbSlidesTutorial > 4">STAND</button></div>
+   <div style="text-align:center;"><button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">STAND</button></div>
    </form>
 
    <!-- <form @submit="split($event)">
@@ -456,49 +456,58 @@ export default {
           this.playerwin = 'Player';
         } else if(this.handvalue == this.dealerhandvalue) {
           this.winnerlooser = "Egalité";
-          this.playerwin = 'Draw';
+          this.playerwin = 'Equality';
           var egalite = true;
         }
         this.gameend = true;
+        if(this.playerwin == 'AI') {
+          if(this.trueBet == 0)
+            await this.updateStats(0, this.fakeBet);
+          else
+            await this.updateStats(1, this.trueBet);
+        }
         if(this.playerwin == 'Player') {
           var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
-          if(this.trueBet === 0) {
+          if(this.trueBet == 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot));
             await this.RefreshFakeCoins();
+            await this.updateStats(0, this.fakeBet);
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot));
             await this.RefreshBTC();
+            await this.updateStats(1, this.trueBet);
           }
         }
         if(egalite != null){
            var pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
-          if(this.trueBet === 0) {
+          if(this.trueBet == 0) {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawFakeBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInFake(pot/2));
             await this.RefreshFakeCoins();
+            await this.updateStats(0,0);
           }
           else {
             await this.executeAsyncRequest(() => WalletApiService.WithdrawBTCBankRoll(pot/2));
             await this.executeAsyncRequest(() => WalletApiService.CreditPlayerInBTC(pot/2));
             await this.RefreshBTC();
+            await this.updateStats(1,0);
           }
           await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
           await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
           await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));
           return;
         }
-        this.updateStats();
       }
     },
 
-    async updateStats() {
-        await this.executeAsyncRequest(() => GameApiService.UpdateStats(1,this.playerwin));
-        await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
-        await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
-        await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));        
+    async updateStats(moneyType, bet) {
+      await this.executeAsyncRequest(() => GameApiService.UpdateStats(1, moneyType, bet, this.playerwin));
+      await this.executeAsyncRequest(() => GameApiService.gameEndUpdate(1,this.playerwin,this.realOrFake));
+      await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+      await this.executeAsyncRequest(() => GameApiService.DeleteAis(1));        
     },
 
     async refreshHandValue() {

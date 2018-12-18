@@ -6,6 +6,7 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,12 +19,14 @@ namespace Superstars.WebApp.Controllers
     public class WalletController : Controller
     {
         private readonly WalletGateway _walletGateway;
+        private readonly UserGateway _userGateway;
 
-        public WalletController(WalletGateway walletGateway)
+        public WalletController(WalletGateway walletGateway, UserGateway userGateway)
         {
             _walletGateway = walletGateway;
+            _userGateway = userGateway;
         }
-        
+
         /// <summary>
         /// Add FakeCoin to user
         /// </summary>
@@ -36,7 +39,7 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> AddFakeCoins([FromBody] WalletViewModel model)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.AmountToSend, 0, 0);
+            Result result = await _walletGateway.AddCoins(userId, model.MoneyType, model.AmountToSend, 0);
             return this.CreateResult(result);
         }
 
@@ -44,15 +47,53 @@ namespace Superstars.WebApp.Controllers
         public async Task<IActionResult> CreditPlayerFake(int pot)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 0, pot, pot, 0);
+            Result result = await _walletGateway.AddCoins(userId, 0, pot, pot);
             return this.CreateResult(result);
         }
+
+        [HttpPost("TransferToPlayer")]
+
+        public async void TransferToPlayer([FromBody] TransferViewModel model)
+        {
+
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var receiver = await _userGateway.FindByName(model.DestinationAccount);
+            await _walletGateway.AddCoins(receiver.UserId, 1, 0, model.AmountToSend);
+            await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
+        }
+
+
+        [HttpPost("isPseudoExist")]
+
+        public async Task<bool> IsPseudoExist([FromBody] TransferViewModel model)
+        {
+            UserData result = await _userGateway.FindByName(model.DestinationAccount);
+            bool isPseudoExist = false;
+            isPseudoExist = (result == null) ? false : true;
+
+            return isPseudoExist;
+        }
+
+        [HttpGet("{maxConfirmation}/GetTransaction")]
+
+        public async Task<List<string>> GetTransaction(int maxConfirmation) {
+
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Result<WalletData> result1 = await _walletGateway.GetPrivateKey(userId);
+            BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
+            QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
+            var response = await informationSeeker.SeekTrx(privateKey, client,maxConfirmation);
+
+            return response;
+        }
+
+
 
         [HttpPost("{pot}/creditBTCPlayer")]
         public async Task<IActionResult> CreditPlayerBTC(int pot)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot, pot);
+            Result result = await _walletGateway.AddCoins(userId, 1, 0, pot);
             return this.CreateResult(result);
         }
 

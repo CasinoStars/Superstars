@@ -74,7 +74,7 @@
     mounted() {
       var notif = null
       var signalR = require("@aspnet/signalr")
-      this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel.Information)
+      this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR")
         .build();
       this.connection.on("Message", (user, message) => {
         if(user != this.auth.pseudo){

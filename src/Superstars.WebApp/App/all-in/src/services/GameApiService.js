@@ -38,8 +38,8 @@ async createAiUser(gameTypeId) {
     return await postAsync(`${endpoint}/createAiUser`,gameTypeId);
 }
 
-async UpdateStats(gameTypeId, win) {
-    return await postAsync(`${endpoint}/${gameTypeId}/UpdateStats`, win);
+async UpdateStats(gameTypeId, moneyTypeId, bet, win) {
+    return await postAsync(`${endpoint}/${gameTypeId}/${moneyTypeId}/${bet}/UpdateStats`, win);
 }
 
 async BetBTC(bet, gameTypeId) {
@@ -48,6 +48,14 @@ async BetBTC(bet, gameTypeId) {
 
 async BetFake(bet, gameTypeId) {
     return await postAsync(`${endpoint}/${bet}/${gameTypeId}/betFake`);
+}
+
+async BetCrash(bet, crash, moneyTypeId){
+    return await postAsync(`${endpoint}/${bet}/${crash}/${moneyTypeId}/betCrash`);
+}
+
+async UpdateCrash(crash){
+    return await postAsync(`${endpoint}/${crash}/updateCrash`)
 }
 
 async getWinsBlackJackPlayer(pseudo) {

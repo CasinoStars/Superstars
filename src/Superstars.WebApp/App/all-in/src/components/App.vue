@@ -58,9 +58,9 @@
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" style="text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">
-              <a class="nav-link dropdown-toggle" href="#" id="basic-nav-dropdown" role="button" data-toggle="modal" data-target="#settingsModal" aria-haspopup="true" aria-expanded="false">
+             <router-link class="nav-link" to="/Account"  style="letter-spacing: 2px; font-size: 12px;">
                 <i class="fa fa-user" style="font-size: 1.4rem;"></i> {{ auth.pseudo }}
-              </a>
+             </router-link>
             <li class="nav-item">
               <router-link class="nav-link" to="/logout"><i class="fa fa-sign-out" style="font-size: 0.9rem;"></i></router-link>
             </li>
@@ -75,9 +75,9 @@
           </ul>
         </div>
       </nav>
-      <div class="progress" v-if="isLoading">
+      <!-- <div class="progress" v-if="isLoading">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-      </div>
+      </div> -->
     </header>
     <router-view></router-view>
     <chat v-if="auth.isConnected"></chat>
@@ -90,7 +90,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
-import WalletApiService from '../services/WalletApiService';
 import Vue from 'vue';
 import Chat from './Chat.vue'
 import Settings from './Settings.vue'
