@@ -68,6 +68,7 @@ namespace Superstars.WebApp.Services
                 await LaunchStep(multi, i);
                 await Task.Delay(100);
             }
+            await LaunchStep(_crashValue, i);
         }
 
         private async Task WaitingForBets()

@@ -1,83 +1,104 @@
 <template>
-<div class ="CrashTest">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="piecontainer" id="pie-container">
-                <canvas id="linechart"></canvas>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <center v-if="!isWaiting">
-                        x{{multi}}
-                    </center>
-                    <center v-else>
-                        En attente des mises
-                    </center>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-auto">
-            <form @submit="toBet($event)">
-                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
-                <div class="onoffswitch">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" v-model="moneyType">
-                    <label class="onoffswitch-label" for="myonoffswitch">
-                        <span class="onoffswitch-inner"></span>
-                        <span class="onoffswitch-switch"></span>
-                    </label>
-                </div>
-                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
-                <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span class="req">*</span></h4>
-                <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 step=0.01 required v-model="playerMulti" />
-                <div style="margin-right: 42%;">
-
-                    <button type="submit" class="btn btn-light" v-if="isWaiting && !hasPlayed">Confirmer</button>
-                    <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed">Sortir</button>
-                    <button disabled type="submit" class="btn btn-light" v-else>Confirmer</button>
-                </div>
-            </form>
-
-        </div>
-        <div class="component-box-player-list col">
-            <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
-                <thead class="table-header">
-                    <tr>
-                        <th>Joueur</th>
-                        <th class="text-right">X</th>
-                        <th class="text-right">Mise</th>
-                        <th class="text-right">Profit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(e, index) of playersData" :key="index">
-                        <td>{{e.userName}}</td>
-                        <td class="text-right">{{e.multi}}</td>
-                        <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                        <td class="text-right" v-if="multi < e.multi">{{(e.bet * multi).toLocaleString('en')}}</td>
-                        <td class="text-right" style="color: green;" v-else>{{(e.bet * e.multi).toLocaleString('en')}}</td>
-
-                    </tr>
-                </tbody>
-            </table>
-
-            <div>
+    <div>
+        <div class="row">
+            <div class="col-md-auto">
                 <div class="row">
-                    <div class="table-responsive col">
-                        <table class="playerlist-stats-table table table-striped table-condensed">
-                            <tbody>
-                                <tr class="table-footer">
-                                    <td>
-                                        <center>Joueurs: {{playersData.length}}</center>
-                                    </td>
-                                    <td>
-                                        <center>Mises: {{totalBet}} bits</center>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-md-auto">
+                        <div class="piecontainer" id="pie-container">
+                            <canvas id="linechart">
+                                <center v-if="!isWaiting">
+                                    x{{multi}}
+                                </center>
+                                <center v-else>
+                                    En attente des mises
+                                </center>
+                            </canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <form @submit="toBet($event)">
+                            <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
+                                    v-model="moneyType">
+                                <label class="onoffswitch-label" for="myonoffswitch">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
+                            <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span
+                                    class="req">*</span></h4>
+                            <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 step=0.01 required
+                                v-model="playerMulti" />
+                            <div style="margin-right: 42%;">
+
+                                <button type="submit" class="btn btn-light" v-if="isWaiting && !hasPlayed">Confirmer</button>
+                                <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed">Sortir</button>
+                                <button disabled type="submit" class="btn btn-light" v-else>Confirmer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Hash</th>
+                                <th class="text-right">X</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(e, index) of hashList" :key="index">
+                                <td>{{e.hashString}}</td>
+                                <td class="text-right" style="color: green" v-if="e.hashValue >= 2">{{e.hashValue}}</td>
+                                <td class="text-right" style="color: red" v-else>{{e.hashValue}}</td>
 
 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="component-box-player-list col">
+                <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Joueur</th>
+                            <th class="text-right">X</th>
+                            <th class="text-right">Mise</th>
+                            <th class="text-right">Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(e, index) of playersData" :key="index">
+                            <td>{{e.userName}}</td>
+                            <td class="text-right">{{e.multi}}</td>
+                            <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
+                            <td class="text-right" v-if="multi < e.multi">{{(e.bet * multi).toLocaleString('en')}}</td>
+                            <td class="text-right" style="color: green;" v-else>{{(e.bet *
+                                e.multi).toLocaleString('en')}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div class="row">
+                        <div class="table-responsive col">
+                            <table class="playerlist-stats-table table table-striped table-condensed">
+                                <tbody>
+                                    <tr class="table-footer">
+                                        <td>
+                                            <center>Joueurs: {{playersData.length}}</center>
+                                        </td>
+                                        <td>
+                                            <center>Mises: {{totalBet}} bits</center>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,6 +136,8 @@
                 isWaiting: false,
                 hasPlayed: false,
                 points: [],
+                ctx: null,
+                hashList: null
             }
         },
 
@@ -124,7 +147,8 @@
         },
 
         async mounted() {
-
+            this.hashList = await CrashApiService.GetHashList();
+            console.log(this.hashList);
             var signalR = require("@aspnet/signalr");
             this.connection = new signalR.HubConnectionBuilder().withUrl("/SignalR").configureLogging(signalR.LogLevel
                 .Error).build();
@@ -139,7 +163,9 @@
                 console.log("Chart stop at " + this.multi + " serv stop at " + ite)
 
                 this.multi = ite;
+
                 clearInterval(this.fn);
+                this.hashList = await CrashApiService.GetHashList();
 
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
@@ -148,7 +174,7 @@
                 console.log("step at " + ite)
                 this.multi = ite;
                 this.addData(this.chart, i / 10 + 1, ite);
-
+                this.updateNumber();
             })
             this.connection.on("Wait", async () => {
                 console.log("wait")
@@ -158,6 +184,11 @@
                 this.points = [];
                 this.chart.destroy();
                 this.initializeChart();
+                var canvas = document.getElementById("linechart");
+                var ctx = canvas.getContext("2d");
+                ctx.font = "50px Arial";
+                ctx.strokeStyle = "red";
+                ctx.strokeText("En attente des mises", 100, 200);
                 this.i = 0
                 this.playersData = [];
                 await this.RefreshBTC();
@@ -178,7 +209,6 @@
             this.connection.start();
             this.initializeChart();
             this.i = 0;
-            var ite = await CrashApiService.GetNextCrash();
         },
         beforeDestroy() {
             this.chart.destroy();
@@ -191,16 +221,23 @@
             ...mapActions(['RefreshFakeCoins']),
             ...mapActions(['RefreshBTC']),
 
+            updateNumber() {
+                var canvas = document.getElementById("linechart");
+                var ctx = canvas.getContext("2d");
+                ctx.font = "70px Arial";
+                ctx.strokeText("X"+this.multi.toFixed(2), 250, 200);
+            },
+
             initializeChart() {
                 this.chart = new Chart(document.getElementById("linechart"), {
                     // The type of chart we want to create
                     type: 'line',
-                   
+
                     // The data for our dataset
                     data: {
-                        
+
                         datasets: [{
-                        
+
                             label: "",
                             fill: false,
                             borderColor: 'rgb(255, 99, 132)',
@@ -211,10 +248,10 @@
 
                     // Configuration options go here
                     options: {
-                        legend:{
+                        legend: {
                             display: false
                         },
-                        tooltips:{
+                        tooltips: {
                             enabled: false
                         },
                         scales: {
@@ -226,7 +263,8 @@
                                 type: "linear",
                                 ticks: {
                                     suggestedMin: 1,
-                                    suggestedMax: 3
+                                    suggestedMax: 3,
+                                    precision: 2
                                 }
                             }],
                             yAxes: [{
@@ -236,7 +274,8 @@
                                 type: "linear",
                                 ticks: {
                                     suggestedMin: 1,
-                                    suggestedMax: 3
+                                    suggestedMax: 3,
+                                    precision: 2
                                 }
                             }]
                         },
@@ -252,6 +291,9 @@
             },
 
             addData(chart, x, y) {
+                var maxY = y + 2
+                var maxX = x + 2
+
                 chart.data.datasets.forEach((dataset) => {
                     dataset.data.push({
                         x: x,
@@ -266,7 +308,9 @@
                         type: "linear",
                         ticks: {
                             min: 1,
-                            max: x + 2
+                            max: maxX,
+                            precision: 2
+
                         }
                     }],
 
@@ -277,7 +321,8 @@
                         drawOnChartArea: false,
                         ticks: {
                             min: 1,
-                            max: y + 2
+                            max: maxY,
+                            precision: 2
                         }
                     }]
 
@@ -343,9 +388,8 @@
                 });
             },
             async out() {
-                this.isWaiting = true;
+                this.hasPlayed = false;
                 await this.executeAsyncRequest(() => GameApiService.UpdateCrash(this.multi));
-
             }
         }
     }
@@ -354,7 +398,7 @@
 
 <style lang="scss">
     .piecontainer {
-        width: 100%;
+        width: 700px;
         height: 100%;
     }
 

@@ -58,5 +58,39 @@ namespace Superstars.DAL
                 return data;
             }
         }
+
+        public async Task<IEnumerable<CrashData>> GetGamePlayers(int gameId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var data = await con.QueryAsync<CrashData>(
+                    @"select c.GameId, c.UserId, u.UserName, c.Bet, c.Multi, c.MoneyTypeId from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where c.Gameid = @GameId", new {GameId = gameId});
+                return data;
+            }
+        }
+
+        public async Task<CrashData> GetPlayerByGame(int userId, int gameId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var data = await con.QueryFirstOrDefaultAsync<CrashData>(
+                    @"select c.GameId, c.UserId, u.UserName, c.Bet, c.Multi, c.MoneyTypeId from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where c.Gameid = @GameId and c.UserId = @UserId", new{GameId = gameId, UserId = userId});
+                return data;
+            }
+        }
+
+        public async Task<CrashData> GetTenLastGame(int userId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                throw new NotImplementedException();
+                var data = await con.QueryFirstOrDefaultAsync<CrashData>(
+                    @"select c.Bet, c.Multi from sp.tCrash c left join sp.tUser u on c.UserId = u.UserId where  c.UserId = @UserId", new {  UserId = userId });
+                return data;
+            }
+        }
+
+
+
     }
 }

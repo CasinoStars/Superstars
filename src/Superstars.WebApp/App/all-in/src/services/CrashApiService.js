@@ -16,6 +16,10 @@ class CrashApiService {
     async GetPlayersInGame() {
         return await getAsync(`${endpoint}/GetPlayersInGame`);
     } 
+    async GetHashList() {
+        return await getAsync(`${endpoint}/HashList`);
+    } 
 }
+
 
 export default new CrashApiService();
