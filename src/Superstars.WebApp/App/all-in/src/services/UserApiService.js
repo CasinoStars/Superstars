@@ -19,6 +19,10 @@
         return this.identity != null;
     }
 
+    async isPseudoExist(model) {
+        return await getAsync(`${endpoint}/isPseudoExist`, model);
+    }
+
     get accessToken() {
         var identity = this.identity;
         return identity ? identity.bearer.access_token : null;

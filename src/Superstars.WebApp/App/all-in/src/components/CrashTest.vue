@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class=CrashTest>
         <div class="row">
             <div class="col-md-auto">
                 <div class="row">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col">
+                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col" style="margin-left:10px">
                         <thead class="table-header">
                             <tr>
                                 <th>Hash</th>
@@ -405,11 +405,11 @@
         text-align: right;
     }
 
-    tr {
+    .CrashTest tr {
         background-color: #f2f2f2;
     }
 
-    td,
+    .CrashTest td,
     th {
         border-bottom: 1px solid #dddddd;
         text-align: left;
@@ -420,7 +420,7 @@
         font-weight: bold;
     }
 
-    th {
+    .CrashTest th {
         background-color: #343a40;
         color: white;
     }

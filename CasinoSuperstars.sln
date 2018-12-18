@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superstars.YamsFair", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeCakeBuilder", "src\CodeCakeBuilder\CodeCakeBuilder.csproj", "{E265B536-DF3A-496D-BEB7-8639F838C3EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashGameMath", "CrashGameMath\CrashGameMath.csproj", "{B3C68B27-0F59-43F3-BD33-7930EA529D92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrashGameMath", "CrashGameMath\CrashGameMath.csproj", "{B3C68B27-0F59-43F3-BD33-7930EA529D92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,8 +1,11 @@
-
 <template>
-  <div class="wallet">
+  <div class="wallet1">
 
     <!-- errors of transactions !-->
+    <div class="alert alert-danger" style="text-align: center;" v-if="errors.length > 0">
+      <li v-for="e of errors" :key="e">{{e}}</li>
+    </div>
+
     <!-- Upgrade -->
 
     <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
@@ -31,6 +34,7 @@
             </div>
             <div class="modal-body">
               <h4 style="color: white;">{{Responses}} </h4>
+              <div style="opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
             </div>
             <div class="modal-footer">
               <div style="margin-right: 42%;">
@@ -57,37 +61,6 @@
           <input type="text" placeholder="Address" v-model="item.DestinationAddress" required autocomplete="off" />
         </div><br>
         <button type="submit" class="button button-block">Envoyer</button>
-
-        <div class="transaction">
-          <table id="lastTransaction">
-            <tr>
-              <th>Historique des transactions</th>
-            </tr>
-            <div class="transactionList">
-            <tr>
-                <div v-for="trx in lastTransactions" >
-                <td > {{trx}} </td> </div>
-                
-            </tr>
-            </div>
-          </table>
-          <table id="pendingTrx">
-           <tr>
-              <th>Transactions en attentes</th>
-            </tr>
-            <div class = "pendingTrxList">
-              <tr>
-                  <div v-for="trx in pendingTrx" >
-                  <td > {{trx}} </td> </div>
-                  
-              </tr>
-            </div>
-            </table>
-        </div>
-        <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
-      <li v-for="e of errors" :key="e">{{e}}</li>
-
-    </div>    
         <div> </div>
       </form>
 
@@ -101,14 +74,10 @@
             autocomplete="off" />
         </div><br>
         <button type="submit" class="button button-block">Créditer</button>
-          <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
-      <li v-for="e of errors" :key="e">{{e}}</li>
-    </div>    
+
       </form>
     </div>
     <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
-
-       
   </div>
 </template>
 
@@ -130,9 +99,7 @@
         BTCAddress: "",
         success :'',
         errors: [],
-        Responses: [],
-        lastTransactions: [],
-        pendingTrx: [],
+        Responses: []
       };
     },
 
@@ -143,8 +110,6 @@
 
     async mounted() {
       this.wallet = "real";
-      await this.GetTransaction();
-      await this.GetPendingTrx();
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.GetWalletAddress();
@@ -229,18 +194,6 @@
         }
       },
 
-      async GetTransaction() {
-        this.lastTransactions = await this.executeAsyncRequest(() =>
-              WalletApiService.GetTransaction(100000)
-        );
-      },
-
-      async GetPendingTrx() {
-        this.pendingTrx = await this.executeAsyncRequest(() =>
-          WalletApiService.GetTransaction(1)
-        );
-      },
-
       Copy() {
         navigator.clipboard.writeText(this.BTCAddress);
       },
@@ -272,45 +225,8 @@
   $bold: 600;
   $br: 4px;
 
-  .wallet .transactionList, .pendingTrxList {
-    max-height: 125px;
-    overflow-y: scroll;
-    font-size: 15px;
-    background-color: #f2f2f2;
-    
-  }
-
-  .wallet td{
-    width: 1000px;
-  }
-
-  #lastTransaction, #pendingTrx {
-  margin-top: 2%; 
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-  height: 50%;
-}
-
-#lastTransaction th, #pendingTrx th {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  text-align: center;
-  background-color: rgba(39, 184, 61, 0.589);
-  color: white;
-}
-
-#lastTransaction td, #lastTransaction td {
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
-}
-  
   .wallet html {
     overflow-y: scroll;
-  }
-
-  .wallet {
-    margin-top: 7.5%;
   }
 
   .wallet body {
@@ -331,8 +247,7 @@
   .wallet .form {
     background: rgba($form-bg, 0.9);
     padding: 40px;
-    height: 900px;
-    width: 1000px;
+    max-width: 600px;
     margin: 40px auto;
     border-radius: $br;
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);

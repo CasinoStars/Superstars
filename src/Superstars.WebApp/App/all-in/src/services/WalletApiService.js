@@ -42,6 +42,23 @@ class WalletApiService {
         return response.text();
     }
 
+    async isPseudoExist(model) {
+        var response = await postAsync(`${endpoint}/isPseudoExist`, model);
+        return response.text();
+
+    }
+
+
+    async GetTransaction(maxConfirmation){
+        var response = await getAsync(`${endpoint}/${maxConfirmation}/GetTransaction`);
+        return response;
+    }
+    
+
+    async Transfer(model){
+        await postAsync(`${endpoint}/TransferToPlayer`, model);
+    }
+
     async GetBTCBankRoll(){
         return await getAsync(`${endpoint}/BTCBankRoll`);   
     }
