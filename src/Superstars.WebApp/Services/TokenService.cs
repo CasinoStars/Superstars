@@ -15,7 +15,7 @@ namespace Superstars.WebApp.Services
             _options = options.Value;
         }
 
-        public Token GenerateToken(string userId, string pseudo, string role)
+        public Token GenerateToken(string userId, string pseudo/*, string role*/)
         {
             var now = DateTime.UtcNow;
 
@@ -25,7 +25,7 @@ namespace Superstars.WebApp.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.UniqueName, pseudo),
-                new Claim(AllinClaimsNames.Role,role),
+                //new Claim(AllinClaimsNames.Role,role),
                 new Claim(JwtRegisteredClaimNames.Iat, ((int) (now - new DateTime(1970, 1, 1)).TotalSeconds).ToString(),
                     ClaimValueTypes.Integer64)
             };
