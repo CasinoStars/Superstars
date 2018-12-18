@@ -23,7 +23,22 @@
             <router-link class="nav-link" to="/statistics" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-bar-chart" style="font-size: 1.4rem;"></i> STATISTIQUES
             </router-link>
-          </li>     
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
+              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> PROVABLYFAIR
+              </router-link>
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
+              <router-link class="nav-link" to="/Faq" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-question-circle" style="font-size: 1.4rem;"></i> FAQ
+              </router-link>
+          </li>
+          <li class="nav-item" v-if="auth.isConnected">
+              <router-link class="nav-link" to="/BackOffice" style="letter-spacing: 2px; font-size: 12px;">
+              <i class="fa fa-briefcase" style="font-size: 1.4rem;"></i> BACK OFFICE
+              </router-link>
+          </li>
         </ul>
 
         <div class="collapse navbar-collapse" v-if="auth.isConnected">
@@ -80,7 +95,7 @@ import Chat from './Chat.vue'
 import Settings from './Settings.vue'
 
 export default{
-  
+
   components: {
     Chat, Settings
   },
@@ -125,9 +140,6 @@ export default{
 
 <style lang="scss" scoped>
 
-.app {
-    background-color: black;
-}
 
 #borderSolde{
   border-style:solid; 

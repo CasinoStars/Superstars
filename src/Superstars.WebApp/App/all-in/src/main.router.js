@@ -18,6 +18,8 @@ import Stats from './components/MyStats.vue';
 import Rank from './components/Rank.vue';
 import ProvablyFair from './components/ProvablyFair.vue';
 import CrashTest from './components/CrashTest.vue';
+import Faq from './components/Faq.vue';
+import BackOffice from './components/BackOffice.vue';
 import Transfer from './components/Transfer.vue';
 
 const routes = [
@@ -33,7 +35,9 @@ const routes = [
     { path: '/playersStats', component: Rank},
     { path: '/Transfer', component: Transfer, beforeEnter: requireAuth},
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
-    { path: '/crash', component: CrashTest}
+    { path: '/crash', component: CrashTest},
+    { path: '/faq', component: Faq},
+    { path: '/BackOffice',component: BackOffice}
 ];
 
 export default new VueRouter({

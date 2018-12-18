@@ -25,7 +25,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.UserId = @UserId",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Role from sp.vUser u where u.UserId = @UserId",
                     new {UserId = userId});
             }
         }
@@ -35,7 +35,7 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.UserName = @UserName",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Role from sp.vUser u where u.UserName = @UserName",
                     new {UserName = pseudo});
             }
         }
@@ -45,12 +45,12 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey from sp.vUser u where u.Email = @Email",
+                    "select u.UserId, u.Email, u.UserName, u.UserPassword, u.PrivateKey, u.Role from sp.vUser u where u.Email = @Email",
                     new {Email = email});
             }
         }
 
-        public async Task<Result> CreateUser(string pseudo, byte[] password, string email, string privateKey)
+        public async Task<Result> CreateUser(string pseudo, byte[] password, string email, string privateKey, int isAdmin)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
@@ -60,6 +60,7 @@ namespace Superstars.DAL
                 p.Add("@UserPassword", password);
                 p.Add("@PrivateKey", privateKey);
                 p.Add("@Country", "France");
+                p.Add("@IsAdmin", isAdmin);
                 p.Add("@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 

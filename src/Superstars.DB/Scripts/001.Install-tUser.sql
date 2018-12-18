@@ -7,7 +7,8 @@ create table sp.tUser
 	PrivateKey varchar(64) not null,
 	Country varchar(64),
 	LastConnexionDate datetime,
-	LastDeconnexionDate datetime
+	LastDeconnexionDate datetime,
+	IsAdmin bit
 
 
 	constraint PK_tUser primary key(UserId),
@@ -16,3 +17,4 @@ create table sp.tUser
 );
 
 create unique index IX_tUser_Email on sp.tUser(Email) where Email <> '';
+--insert into sp.tUser(UserName,UserPassword,Email,PrivateKey,Country,IsAdmin) values('admin',0x010000000100002710000000100CA8F8BF8AE13CA67CF27468B82B8770001E28DB98068D6DE7550A5509EF26C2DD39E88CC816C5A624829ADAF013C63B,'','wxcvbn','France',1);

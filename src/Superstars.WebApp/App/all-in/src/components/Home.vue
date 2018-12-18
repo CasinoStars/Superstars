@@ -79,6 +79,8 @@
 import { mapActions } from 'vuex';
 import Vue from 'vue';
 import WalletApiService from '../services/WalletApiService';
+import BackOfficeApiService from '../services/BackOfficeApiService';
+
 
 export default {
 
@@ -86,12 +88,18 @@ export default {
     return {
       BTCBankCoins: 0,
       fakeBankCoins: 0,
+      isAdmin: false
     }
   },
 
      async created(){
       await this.BTCBank();
       await this.fakeBank();
+      await this.setIsAdmin();
+    },
+
+    async mounted() {
+        console.log(this.isAdmin);
     },
 
      methods: {
@@ -102,6 +110,10 @@ export default {
 
     async fakeBank() {
       this.fakeBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
+    },
+
+    async setIsAdmin() {
+      this.isAdmin = await this.executeAsyncRequest(() => BackOfficeApiService.IsAdmin());
     },
 
      }
@@ -115,7 +127,7 @@ export default {
 
 .home .carousel .carousel-item{
     height: 450px;
-    min-height: 350px;/* Prevent carousel from being distorted if for some reason image doesn't load */
+    min-height: 350px; /* Prevent carousel from being distorted if for some reason image doesn't load */
 }
 
 

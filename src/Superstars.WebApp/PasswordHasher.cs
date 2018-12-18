@@ -88,6 +88,7 @@ namespace Superstars.WebApp
 
         private byte[] HashPasswordV3(string password, RandomNumberGenerator rng)
         {
+
             return HashPasswordV3(password, rng,
                 KeyDerivationPrf.HMACSHA256,
                 _iterCount,
