@@ -61,7 +61,10 @@ export default {
     },
 
     async getPlayersProfit(){
-      this.playersProfitData = await this.executeAsyncRequest(() => RankApiService.GetPlayersGlobalProfit(this.TrueOrFake))
+      if(this.TrueOrFake)
+      this.playersProfitData = await this.executeAsyncRequest(() => RankApiService.GetPlayersGlobalProfit(1));
+      else
+      this.playersProfitData = await this.executeAsyncRequest(() => RankApiService.GetPlayersGlobalProfit(0));
     },
 
     async changethetab(){
@@ -114,12 +117,15 @@ export default {
   .rank tr { 
   background-color: #f2f2f2;;
   }
+
+  .rank thead {
+    text-align: center;
+  }
   
   .rank td,th {
     border-bottom: 1px solid #dddddd;
     text-align: center;
     font-family: 'Courier New', sans-serif;
-    font-size: 21px;
     font-variant: small-caps;
     font-weight: bold;
   }
@@ -136,8 +142,8 @@ export default {
   }
 
   .rank a{
-      color: black;
-          font-family: 'Courier New', sans-serif;
+    color: black;
+    font-family: 'Courier New', sans-serif;
     font-size: 120%;
   }
   

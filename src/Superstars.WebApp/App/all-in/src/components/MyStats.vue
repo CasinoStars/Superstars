@@ -4,11 +4,15 @@
     <br>
     <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
       <h1 style="font-variant: small-caps; font-size: 45px;">
+        <i class="fa fa-chevron-left" @click="SwapTrueOrFake()" id="chevron"></i>
         <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
         <strong v-else>Mes statistiques</strong>
+        <i class="fa fa-chevron-right" @click="SwapTrueOrFake()" id="chevron"></i>
       </h1>
-      <i class="fa fa-btc" style="font-size: 0.8rem;" v-on:click="moneyTypeChange(1)"></i>
-      <i class="fa fa-money" style="font-size: 0.8rem;" v-on:click="moneyTypeChange(0)"></i>
+      <i v-if="TrueOrFake" class="fa fa-btc" style="font-size: 1.5rem; cursor: pointer"></i>
+      <i v-else class="fa fa-btc" style="font-size: 0.8rem; cursor: pointer"></i>
+      <i v-if="!TrueOrFake" class="fa fa-money" style="font-size: 1.5rem; cursor: pointer"></i>
+      <i v-else class="fa fa-money" style="font-size: 0.8rem; cursor: pointer"></i>
     </div>
     <br><br>
     <div class="table-responsive">
@@ -71,7 +75,8 @@
         playerRatioBj: 0,
         playerRatioCrash: 0,
         queryPseudo: '',
-        playerStatsData: []
+        playerStatsData: [],
+        TrueOrFake: true
       }
     },
 
@@ -185,8 +190,12 @@
         return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
       },
 
-      async moneyTypeChange(moneyTypeId) {
-        await this.getPlayerStats(moneyTypeId);
+      async SwapTrueOrFake(){
+        this.TrueOrFake = !this.TrueOrFake;
+        if(this.TrueOrFake)
+          await this.getPlayerStats(1);
+        else 
+          await this.getPlayerStats(0);
         this.drawDiagram();
       }
     }
@@ -201,6 +210,15 @@
 
   .stats {
     overflow-x: hidden;
+  }
+
+  .stats #chevron {
+    color: gray;
+    font-size: 50%;
+  }
+  .stats #chevron:hover {
+    cursor: pointer;
+    opacity: 0.5;
   }
   .stats .container {
     margin-top: 2%;
