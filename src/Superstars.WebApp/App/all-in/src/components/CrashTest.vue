@@ -1,6 +1,5 @@
 <template>
-<div class="CrashTest">
-    <div>
+    <div class=CrashTest>
         <div class="row">
             <div class="col-md-auto">
                 <div class="row">
@@ -42,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col">
+                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col" style="margin-left:10px">
                         <thead class="table-header">
                             <tr>
                                 <th>Hash</th>
@@ -105,7 +104,6 @@
             </div>
         </div>
     </div>
-<div>   
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
 
@@ -422,7 +420,7 @@
         font-weight: bold;
     }
 
-     .CrashTest th {
+    .CrashTest th {
         background-color: #343a40;
         color: white;
     }
