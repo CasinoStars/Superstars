@@ -8,6 +8,10 @@ class BackOfficeApiService {
     async IsAdmin() {
         return await getAsync(`${endpoint}/isAdmin`);
     }
+
+    async GetLogs() {
+        return await getAsync(`${endpoint}/getLogs`);
+    }
 }
 
 export default new BackOfficeApiService();

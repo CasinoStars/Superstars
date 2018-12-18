@@ -127,7 +127,7 @@ export default {
 
 .home .carousel .carousel-item{
     height: 450px;
-    min-height: 350px;/* Prevent carousel from being distorted if for some reason image doesn't load */
+    min-height: 350px; /* Prevent carousel from being distorted if for some reason image doesn't load */
 }
 
 

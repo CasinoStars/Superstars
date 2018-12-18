@@ -1,9 +1,12 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Superstars.DAL;
 using Superstars.WebApp.Authentication;
+using System;
+using System.Linq;
 
 namespace Superstars.WebApp.Controllers
 {
@@ -12,13 +15,15 @@ namespace Superstars.WebApp.Controllers
     public class BackOfficeController : Controller
     {
         private readonly UserGateway _userGateway;
-        public BackOfficeController(UserGateway userGateway)
+        private readonly RankGateway _rankGateway;
+        public BackOfficeController(UserGateway userGateway, RankGateway rankGateway)
         {
             _userGateway = userGateway;
+            _rankGateway = rankGateway;
         }
 
         [HttpGet("isAdmin")]
-        async Task<bool> IsAdmin()
+        public async Task<bool> IsAdmin()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var user = await _userGateway.FindById(userId);
@@ -28,7 +33,17 @@ namespace Superstars.WebApp.Controllers
             } else {
                 return false;
             }        
+        }
 
+        [HttpGet("getLogs")]
+        public async Task<IEnumerable<LogData>> GetLogs()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userGateway.FindById(userId);
+
+            var result = await _rankGateway.GetLogs();
+            var logsList = result.ToList();
+            return logsList;
         }
     }
 }

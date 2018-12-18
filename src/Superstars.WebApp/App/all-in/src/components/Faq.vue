@@ -21,7 +21,7 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="text-info">What's the house edge ? </h1>
-    <p class="lead">Bla bla bla bla.</p>
+    <p class="lead">We take only approximatly 1% !</p>
   </div>
 </div>
 </div>
