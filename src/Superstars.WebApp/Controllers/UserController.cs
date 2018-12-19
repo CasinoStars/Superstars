@@ -130,7 +130,7 @@ namespace Superstars.WebApp.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var pseudo = User.FindFirst(ClaimTypes.Name).Value;
             var role = User.FindFirst(ClaimTypes.Role).Value;
-            var token = _tokenService.GenerateToken(userId, pseudo, role);
+            var token = _tokenService.GenerateToken(userId, pseudo/*, role*/);
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
             ViewData["Pseudo"] = pseudo;

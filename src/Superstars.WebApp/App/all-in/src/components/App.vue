@@ -25,11 +25,6 @@
             </router-link>
           </li>
           <li class="nav-item" v-if="auth.isConnected">
-              <router-link class="nav-link" to="/ProvablyFair" style="letter-spacing: 2px; font-size: 12px;">
-              <i class="fa fa-balance-scale" style="font-size: 1.4rem;"></i> PROVABLYFAIR
-              </router-link>
-          </li>
-          <li class="nav-item" v-if="auth.isConnected">
               <router-link class="nav-link" to="/Faq" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-question-circle" style="font-size: 1.4rem;"></i> FAQ
               </router-link>
