@@ -405,11 +405,11 @@
         text-align: right;
     }
 
-     tr {
+    .CrashTest tr {
         background-color: #f2f2f2;
     }
 
-     td,
+    .CrashTest td,
     th {
         border-bottom: 1px solid #dddddd;
         text-align: left;
@@ -420,7 +420,7 @@
         font-weight: bold;
     }
 
-     th {
+    .CrashTest th {
         background-color: #343a40;
         color: white;
     }

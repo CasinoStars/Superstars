@@ -34,7 +34,7 @@
               <i class="fa fa-question-circle" style="font-size: 1.4rem;"></i> FAQ
               </router-link>
           </li>
-          <li class="nav-item" v-if="auth.isConnected">
+          <li class="nav-item" v-if="this.isAdmin == true">
               <router-link class="nav-link" to="/BackOffice" style="letter-spacing: 2px; font-size: 12px;">
               <i class="fa fa-briefcase" style="font-size: 1.4rem;"></i> BACK OFFICE
               </router-link>
@@ -90,11 +90,18 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
+import BackOfficeApiService from '../services/BackOfficeApiService';
 import Vue from 'vue';
 import Chat from './Chat.vue'
 import Settings from './Settings.vue'
 
 export default{
+
+  data(){
+    return {
+      isAdmin: false
+    }
+  },
 
   components: {
     Chat, Settings
@@ -108,7 +115,8 @@ export default{
   },
   
   async mounted() {
-    if(UserApiService.isConnected) {
+      await this.setIsAdmin();
+    if(UserApiService.isConnected && this.isAdmin == false) { 
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
     }
@@ -134,6 +142,12 @@ export default{
       await this.RefreshFakeCoins();
       this.$router.replace('/play');
     },
+    
+    async setIsAdmin() {
+      this.isAdmin = UserApiService.isAdmin;
+      console.log(this.isAdmin + "ICI");
+    },
+
   }
 }
 </script>

@@ -87,19 +87,16 @@ export default {
   data(){
     return {
       BTCBankCoins: 0,
-      fakeBankCoins: 0,
-      isAdmin: false
+      fakeBankCoins: 0
     }
   },
 
      async created(){
       await this.BTCBank();
       await this.fakeBank();
-      await this.setIsAdmin();
     },
 
     async mounted() {
-        console.log(this.isAdmin);
     },
 
      methods: {
@@ -111,12 +108,7 @@ export default {
     async fakeBank() {
       this.fakeBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetFakeBankRoll());
     },
-
-    async setIsAdmin() {
-      this.isAdmin = await this.executeAsyncRequest(() => BackOfficeApiService.IsAdmin());
-    },
-
-     }
+  }
 }
 </script>
 

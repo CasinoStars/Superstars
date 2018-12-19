@@ -11,7 +11,7 @@ using System.Linq;
 namespace Superstars.WebApp.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme,Policy = "IsAdmin")]
     public class BackOfficeController : Controller
     {
         private readonly UserGateway _userGateway;
@@ -22,18 +22,6 @@ namespace Superstars.WebApp.Controllers
             _rankGateway = rankGateway;
         }
 
-        [HttpGet("isAdmin")]
-        public async Task<bool> IsAdmin()
-        {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userGateway.FindById(userId);
-            if(user.Role == "Admin")
-            {
-                return true;
-            } else {
-                return false;
-            }        
-        }
 
         [HttpGet("getLogs")]
         public async Task<IEnumerable<LogData>> GetLogs()

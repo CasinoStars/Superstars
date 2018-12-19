@@ -21,6 +21,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import BackOfficeApiService from '../services/BackOfficeApiService';
 import Vue from 'vue';
+import UserApiService from '../services/UserApiService';
 
 export default {
 
@@ -43,7 +44,7 @@ export default {
     ...mapActions(['executeAsyncRequest']),
  
     async setIsAdmin() {
-      this.isAdmin = await this.executeAsyncRequest(() => BackOfficeApiService.IsAdmin());
+      this.isAdmin = UserApiService.isAdmin;
     },
 
     async getLogs() {
@@ -56,17 +57,14 @@ export default {
 
 <style lang="scss">
     .bo tr {
-        background-color: #f2f2f2;
-        
+        background-color: #f2f2f2;       
     }
     
     .bo table {
-
       width: 100%;
     }
 
-    .bo td,
-    th {
+.bo td, th {
         border-bottom: 1px solid #dddddd;
         text-align: left;
         padding: 14px;
@@ -76,8 +74,8 @@ export default {
         font-weight: bold;
     }
 
-    .bo th {
+.bo th {
         background-color: #343a40;
         color: white;
-    }
+}
 </style>
