@@ -23,9 +23,9 @@ namespace Superstars.WebApp.Controllers
             {
                 var userId = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var pseudo = identity.FindFirst(ClaimTypes.Name).Value;
-                //var role = identity.FindFirst(ClaimTypes.Role).Value;
+                var role = identity.FindFirst(ClaimTypes.Role).Value;
 
-                var token = _tokenService.GenerateToken(userId, pseudo/*,role*/);
+                var token = _tokenService.GenerateToken(userId, pseudo,role);
                 ViewData["Token"] = token;
                 ViewData["Pseudo"] = pseudo;
             }

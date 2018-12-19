@@ -110,7 +110,7 @@ export default{
   },
   
   async mounted() {
-      await this.setIsAdmin();
+      this.setIsAdmin();
     if(UserApiService.isConnected && this.isAdmin == false) { 
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
@@ -138,9 +138,8 @@ export default{
       this.$router.replace('/play');
     },
     
-    async setIsAdmin() {
+    setIsAdmin() {
       this.isAdmin = UserApiService.isAdmin;
-      console.log(this.isAdmin + "ICI");
     },
 
   }
