@@ -33,5 +33,19 @@ namespace Superstars.WebApp.Controllers
             var logsList = result.ToList();
             return logsList;
         }
+
+        [HttpGet("getUsers")]
+        public async Task<IEnumerable<string>> GetUsers()
+        {
+            var result = await _rankGateway.PseudoList();
+            return result;
+        }
+
+        [HttpDelete("{UserPseudo}/deleteUser")]
+        public async Task<Result> DeleteUser(string UserPseudo)
+        {
+            var user = await _userGateway.FindByName(UserPseudo);
+            return await _userGateway.Delete(user.UserId);
+        }
     }
 }

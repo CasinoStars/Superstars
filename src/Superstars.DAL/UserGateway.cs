@@ -130,12 +130,13 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task Delete(int userId)
+        public async Task<Result> Delete(int userId)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 await con.ExecuteAsync("sp.sUserDelete", new {UserId = userId},
                     commandType: CommandType.StoredProcedure);
+                return Result.Success();
             }
         }
 
