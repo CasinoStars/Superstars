@@ -57,7 +57,7 @@ namespace Superstars.WebApp.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-                await SignIn(user.UserName, user.UserId.ToString(),true);
+                await SignIn(user.UserName, user.UserId.ToString(),user.Role == "Admin");
                 return RedirectToAction(nameof(Authenticated));
             }          
             return View(model);
@@ -96,7 +96,7 @@ namespace Superstars.WebApp.Controllers
 
                 var user = await _userService.FindUser(model.Pseudo, model.Password);
                 var userAI = await _userService.CreateUser("#AI" + user.UserId, "azertyuiop" + user.UserId, "", privateKeyAi.ToString(),0);
-                await SignIn(model.Pseudo, user.UserId.ToString(),true);
+                await SignIn(model.Pseudo, user.UserId.ToString(),user.Role == "Admin");
                 await _provablyFairGateway.AddSeeds(user.UserId);
                 return RedirectToAction(nameof(Authenticated));
             }
