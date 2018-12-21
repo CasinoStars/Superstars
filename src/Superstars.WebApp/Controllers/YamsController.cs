@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -37,8 +38,12 @@ namespace Superstars.WebApp.Controllers
 
         //Roll IA dices
         [HttpPost("RollIa")]
-        public async Task<IActionResult> RollIaDices([FromBody] int[][] dices)
+        public async Task<List<int[]>> RollIaDices([FromBody] int[][] dices)
         {
+            // List hand and index of dices reroll
+            List<int[]> handAndIndex = new List<int[]>();
+            List<int> indexReRoll = new List<int>();
+
             // Get IA data
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var IA = await _userGateway.FindByName("#AI" + userId.ToString());
@@ -53,6 +58,11 @@ namespace Superstars.WebApp.Controllers
             if (data.NbrRevives != 0)
             {
                 var IaDicesForReRoll = _yamsIAService.GiveRerollHand(IaHand, playerPts);
+                for (int i = 0; i < IaDicesForReRoll.Length; i++)
+                {
+                    if (IaDicesForReRoll[i] == 0)
+                        indexReRoll.Add(i);
+                }
                 IaFinalDices = await _yamsService.Reroll(IaDicesForReRoll, userId);
                 data.NbrRevives = data.NbrRevives + 1;
             }
@@ -60,17 +70,16 @@ namespace Superstars.WebApp.Controllers
             {
                 IaFinalDices = await _yamsService.Reroll(new[] {0, 0, 0, 0, 0}, userId);
                 data.NbrRevives = data.NbrRevives + 1;
+                indexReRoll = new List<int>() { 0, 1, 2, 3, 4 };
             }
-
+            handAndIndex.Add(IaFinalDices);
+            handAndIndex.Add(indexReRoll.ToArray());
             string IaStringDices = null;
             for (var i = 0; i < IaHand.Length; i++) IaStringDices += IaFinalDices[i];
 
             //Update SQL
-            Result result =
-                await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
-
-
-            return this.CreateResult(result);
+            Result result = await _yamsGateway.UpdateYamsPlayer(IA.UserId, data.YamsGameId, data.NbrRevives, IaStringDices, IaPts);
+            return handAndIndex;
         }
 
         //Roll player dices

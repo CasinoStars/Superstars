@@ -44,7 +44,7 @@
   
   <form @submit="onSubmitAI($event)" id="PlayAI">
     <div v-for="(i, index) of iadices" :key="index" class="iadices">
-      <img :src="require(`../img/diceia${i}.png`)">
+      <img :src="getDiceIaImage(i, index)">
     </div>
   </form>
   
@@ -121,6 +121,7 @@ export default {
       selected: [],
       dices: [],
       iadices: [],
+      indexRerollDicesIa: [],
       nbTurn: 0,
       nbTurnIa: 0,
       winOrLose: '',
@@ -135,6 +136,7 @@ export default {
       trueBet: 0,
       errors: [],
       success: '',
+      iaRollDices: false,
       rollDices: false,
       pot: 0,
       nbSlidesTutorial: 0,
@@ -342,11 +344,19 @@ export default {
     async onSubmitAI(e) {
       e.preventDefault();
       while(this.nbTurnIa < 3) {
+        this.iaRollDices = true;
         let arraydice = [this.iadices, this.dices];
         this.nbTurnIa = this.nbTurnIa + 1;
-        await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice));
-        await new Promise(f => setTimeout(f, 2000)); //Pause de 3s;
-        await this.refreshIaDices();
+        var dicesAndIndex = await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice)).then(r => r.json());
+        this.iadices = dicesAndIndex[0];
+        this.indexRerollDicesIa = dicesAndIndex[1];
+        console.log(this.indexRerollDicesIa);
+        await new Promise(f => setTimeout(f, 1500));
+        //await this.refreshIaDices();
+        this.iaRollDices = false;
+        this.indexRerollDicesIa = []
+        await new Promise(f => setTimeout(f, 1500));
+        
       }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
@@ -363,6 +373,11 @@ export default {
         await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
       await new Promise(f => setTimeout(f, 1500));
       await this.refreshDices();
+    },
+
+    getDiceIaImage(value, index) {
+      let image = this.indexRerollDicesIa.findIndex(x => x === index) !== -1 && this.iaRollDices ? `diceIaRoll.gif` : `diceia${value}.png`;
+      return require(`../img/${image}`);
     },
 
     getDiceImage(value, index) {
