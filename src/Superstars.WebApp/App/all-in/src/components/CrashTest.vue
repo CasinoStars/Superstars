@@ -158,13 +158,14 @@
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
             });
-            this.connection.on("EndGame", async (ite) => {
+            this.connection.on("EndGame", async (hash, ite) => {
                 console.log("Chart stop at " + this.multi + " serv stop at " + ite)
 
                 this.multi = ite;
 
                 clearInterval(this.fn);
-                this.hashList = await CrashApiService.GetHashList();
+                this.hashList.unshift({ hashString: hash, hashValue: ite});
+                this.hashList.pop();
 
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
