@@ -161,7 +161,7 @@ namespace Superstars.WebApp.Services
 			return points;
 		}
 
-		private string FindFigureName(int[] hand)
+		internal string FindFigureName(int[] hand)
 		{
 			string figureName;
 			int[] handcount = new int[6];

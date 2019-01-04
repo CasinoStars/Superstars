@@ -133,9 +133,41 @@ namespace Superstars.WebApp.Controllers
                 IaDices[i] = (int) char.GetNumericValue(stringIaDices[i]);
                 playerDices[i] = (int) char.GetNumericValue(stringPlayerDices[i]);
             }
-
+            
             // Return the result of the game
             string[] result = _yamsService.TabFiguresAndWinner(IaDices, playerDices);
+            return result;
+        }
+
+        [HttpGet("GetScore")]
+        public async Task<string[]> GetScore()
+        {
+            // Get data
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var Ia = await _userGateway.FindByName("#AI" + userId);
+            var playerData = await _yamsGateway.GetPlayer(userId);
+            var IaData = await _yamsGateway.GetPlayer(Ia.UserId);
+
+            //Convert dices from string to int
+            var IaDices = new int[5];
+            var playerDices = new int[5];
+            var stringIaDices = IaData.Dices;
+            var stringPlayerDices = playerData.Dices;
+
+            for (var i = 0; i < 5; i++)
+            {
+                IaDices[i] = (int)char.GetNumericValue(stringIaDices[i]);
+                playerDices[i] = (int)char.GetNumericValue(stringPlayerDices[i]);
+            }
+
+            // Return the result of the game
+            string[] result = new string[4];
+            result[0] = _yamsService.PointCount(playerDices).ToString();
+            result[1] = _yamsService.FindFigureName(playerDices);
+            result[2] = _yamsService.PointCount(IaDices).ToString();
+            result[3] = _yamsService.FindFigureName(IaDices);
+
+
             return result;
         }
 

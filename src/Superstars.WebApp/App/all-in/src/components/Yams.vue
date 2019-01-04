@@ -39,8 +39,17 @@
       </form>
     </div>
   </div>
+  
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:2%;">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" style="font-size: 1.5rem;"/><i v-else class="fa fa-money" style="font-size: 1.5rem;"/></h3>
   <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top: -3%; margin-left:89%;">TOUR: {{nbTurn}}</h3>
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:2%;">Score du Joueur: {{playerScore}}</h3>
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top: -3%; margin-left:75%;">Score de l'IA: {{IaScore}}</h3>
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%; margin-left:2%;">Figure du Joueur: {{playerFigure}}</h3>
+  <h3 style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top: -3%; margin-left:75%;">Figure de l'IA: {{IaFigure}}</h3>
+
+
+
+
   
   <form @submit="onSubmitAI($event)" id="PlayAI">
     <div v-for="(i, index) of iadices" :key="index" class="iadices">
@@ -127,6 +136,8 @@ export default {
       winOrLose: '',
       playerFigure: '',
       IaFigure: '',
+      playerScore: '',
+      IaScore: '',
       wait: '',
       playerwin: '',
       playerBet: false,
@@ -262,10 +273,16 @@ export default {
       this.selected = [];
       if(this.nbTurn < 3)
         await this.changeTurn();
+      var result = await  this.executeAsyncRequest(() => YamsApiService.GetScore());
+      this.playerScore = result[0];
+      this.playerFigure = result[1];
+      this.IaScore = result[2];
+      this.IaFigure = result[3];
     },
     
     async refreshIaDices() {
       this.iadices = await this.executeAsyncRequest(() => YamsApiService.GetIaDices());
+      
     },
 
     async changeTurn() {
@@ -356,10 +373,16 @@ export default {
         this.iaRollDices = false;
         this.indexRerollDicesIa = []
         await new Promise(f => setTimeout(f, 1500));
+        var result = await  this.executeAsyncRequest(() => YamsApiService.GetScore());
+      
+      this.IaScore = result[2];
+      this.IaFigure = result[3];
+      console.log(result);
         
       }
       if(this.nbTurnIa === 3)
         await this.getFinalResult();
+      
     },
 
     async onSubmit(e) {
