@@ -73,6 +73,7 @@
       <!-- <div class="progress" v-if="isLoading">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
       </div> -->
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
     </header>
     <router-view></router-view>
     <chat v-if="auth.isConnected"></chat>
@@ -82,6 +83,7 @@
 <script src="~/lib/signalr/signalr.js"></script>
 
 
+
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserApiService from '../services/UserApiService';
@@ -89,6 +91,10 @@ import BackOfficeApiService from '../services/BackOfficeApiService';
 import Vue from 'vue';
 import Chat from './Chat.vue'
 import Settings from './Settings.vue'
+import VueMaterial from 'vue-material'
+
+Vue.use(VueMaterial)
+
 
 export default{
 
