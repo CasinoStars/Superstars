@@ -133,6 +133,7 @@ export default{
     },
     
     async onAuthenticated() {
+      this.setIsAdmin();
       await this.RefreshBTC();
       await this.RefreshFakeCoins();
       this.$router.replace('/play');
