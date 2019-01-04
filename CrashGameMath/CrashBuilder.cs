@@ -39,7 +39,6 @@ namespace CrashGameMath
             if (nb > _playId)
                 nb = _playId;
             var hashList = new CreateHashes(nb-1, hash).HashList();
-            hashList.Add(hash);
             var hashAndValueList = new List<Hash>();
             foreach (var hashString in hashList)
             {
