@@ -9,11 +9,11 @@
             </div>
                 
             <div class="submenu" ><bouton>  Profil </bouton> </div>
-            <div class="submenu"><button v-on:click=" TransferOn()">Transfer</button></div>
+            <div class="submenu"><button v-on:click=" TransferOn()">Transferts</button></div>
             <div class="submenu"><button v-on:click=" WalletOn()">Porte monnaie</button></div>
-            <div class="submenu"><button v-on:click="ProvablyFairOn()">ProvablyFair</button></div>
+            <div class="submenu"><button v-on:click="ProvablyFairOn()">Provably Fair</button></div>
             <div class="submenu"><button v-on:click="SupportPageOn()">Support</button></div>
-            <div class="submenu"><button v-on:click="Securiter()">Sécuriter</button></div>
+            <div class="submenu"><button v-on:click="Securiter()">Sécurité</button></div>
             
         </div>
         <div class="col-md-5" style="margin-left: 3.5%;">
