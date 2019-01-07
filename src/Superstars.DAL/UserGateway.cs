@@ -76,6 +76,19 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task ActionTransfer(int userId, string userName, int receiverId, string receiverPseudo, int amount, DateTime date )
+        {
+            string action = "Player named " + userName + " with UserID " + userId + " send "
+            + amount +" at "  + date.ToString() + " to " + receiverPseudo + " id " + receiverId;
+
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userId, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
         public async Task ActionConnexion(int userid, string username, DateTime date)
         {
             //XDocument xDoc = new XDocument( 

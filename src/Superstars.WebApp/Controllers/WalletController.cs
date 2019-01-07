@@ -57,9 +57,12 @@ namespace Superstars.WebApp.Controllers
         {
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var receiver = await _userGateway.FindByName(model.DestinationAccount);
-            await _walletGateway.AddCoins(receiver.UserId, 1, 0, model.AmountToSend);
+            var receiverData = await _userGateway.FindByName(model.DestinationAccount);
+            var userData = await _userGateway.FindById(userId);
+           // var userName = await _userGateway.findb
+            await _walletGateway.AddCoins(receiverData.UserId, 1, 0, model.AmountToSend);
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
+            await _userGateway.ActionTransfer(userId, userData.UserName,receiverData.UserId,receiverData.UserName,model.AmountToSend,DateTime.UtcNow);
         }
 
 

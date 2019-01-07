@@ -24,7 +24,21 @@
         <button type="submit" class="button button-block">Envoyer</button>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
-    </div>    
+    </div>
+    <div class="transaction">         
+          <table id="pendingTrx">
+           <tr>
+              <th>Transactions en attentes</th>
+            </tr>
+            <div class = "pendingTrxList">
+              <tr>
+                  <div v-for="trx in pendingTrx" >
+                  <td > {{trx}} </td> </div>
+                  
+              </tr>
+            </div>
+            </table>
+        </div>
       </form>            
   </div>
   </div>
