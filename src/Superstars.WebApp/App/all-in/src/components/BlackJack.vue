@@ -110,7 +110,11 @@
 <div id="tocenter">
 
   <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
-    <p id="tutorialText"> {{tutorialp}}</p>
+    <p id="tutorialText0"> {{tutorialp0}}</p>
+    <p id="tutorialText1"> {{tutorialp1}}</p>
+    <p id="tutorialText2"> {{tutorialp2}}</p>
+    <p id="tutorialText3"> {{tutorialp3}}</p>
+    <p id="tutorialText4"> {{tutorialp4}}</p>
     <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
 
@@ -263,7 +267,11 @@ export default {
             errors: [],
             success: '',
             pot: 0,
-            tutorialp: '',
+            tutorialp0: '',
+            tutorialp1: '',
+            tutorialp2: '',
+            tutorialp3: '',
+            tutorialp4: '',
             queryPseudo: '',
             nbSlidesTutorial: 0,
             wins: 0
@@ -296,7 +304,7 @@ export default {
       await this.refreshCards();
       await this.refreshHandValue(); 
     }
-      this.tutorialp = "Bienvenue sur le BlackJack !";
+      this.tutorialp0 = "Bienvenue sur le BlackJack !";
       await this.CheckWinner();
 
   },
@@ -311,20 +319,23 @@ export default {
       
       this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
       if(this.nbSlidesTutorial == 1 ) {
-          this.tutorialp = "  Vous allez devoir vous approchez le plus près possible de 21 mais sans le dépasser";
+        document.getElementById("tutorialText0").style.opacity = 0.5;
+        this.tutorialp1 = "  Vous allez devoir vous approchez le plus près possible de 21 mais sans le dépasser.  ";
       } else if(this.nbSlidesTutorial == 2) {
-        this.tutorialp = "  Vous pouvez à chaque tour, décider de tirer une carte ou de vous arrêter pour conserver votre valeur actuelle";
+        document.getElementById("tutorialText1").style.opacity = 0.5;
+        this.tutorialp2 = "  Vous pouvez à chaque tour, décider de tirer une carte ou de vous arrêter pour conserver votre valeur actuelle.  ";
       } else if(this.nbSlidesTutorial == 3) {
-        this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
+        document.getElementById("tutorialText2").style.opacity = 0.5;
+        this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  " ;
       } else if(this.nbSlidesTutorial == 4) {
-        this.tutorialp = "  Le joueur le plus proche de 21 sans le dépasser remporte la partie ! Bonne chance ! ";
+        document.getElementById("tutorialText3").style.opacity = 0.5;
+        this.tutorialp4 = "  Le joueur le plus proche de 21 sans le dépasser remporte la partie ! Bonne chance !  ";
       } else if(this.nbSlidesTutorial == 5) {
           rectangle.classList.toggle('fade');
       }
     },
 
     async RedirectandDelete() {
-      //await this.executeAsyncRequest(() => GameApiService.deleteBlackJackGame());
       await this.executeAsyncRequest(() => GameApiService.deleteGame(1));
       this.$router.push({ path: 'play' });
     },
@@ -550,17 +561,17 @@ $gray-light: #a0b3b0;
   transition: visibility 0s 2s, opacity 2s linear;
 }
 
-#tutorialText {
+.blackJack #tutorialRectanglebj > p {
 color:white;
 text-transform: uppercase;
 font-size:28px;
 font-family: 'Courier New', sans-serif;
 text-align: center;
 position: relative;
-margin-top: 17%;
+margin-top: 3%;
 }
 
-#tutorialButton {
+.blackJack #tutorialButton {
     text-align: center;
     text-transform: uppercase;
     font-family: 'Courier New', sans-serif;

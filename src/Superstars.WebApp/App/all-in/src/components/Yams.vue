@@ -59,7 +59,11 @@
   
   <br><br>
   <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
-    <p id="tutorialText"> {{tutorialp}}</p>
+    <p id="tutorialText0"> {{tutorialp0}}</p>
+    <p id="tutorialText1"> {{tutorialp1}}</p>
+    <p id="tutorialText2"> {{tutorialp2}}</p>
+    <p id="tutorialText3"> {{tutorialp3}}</p>
+    <p id="tutorialText4"> {{tutorialp4}}</p>
     <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
   <br><br>
@@ -151,7 +155,11 @@ export default {
       rollDices: false,
       pot: 0,
       nbSlidesTutorial: 0,
-      tutorialp: '',
+      tutorialp0: '',
+      tutorialp1: '',
+      tutorialp2: '',
+      tutorialp3: '',
+      tutorialp4: '',
       queryPseudo: '',
       wins: 0
     }
@@ -175,7 +183,7 @@ export default {
     } else {
       this.playerBet = true;
     }  
-      this.tutorialp = "Bienvenue sur le Yams !";
+      this.tutorialp0 = "Bienvenue sur le Yams !";
   },
 
   computed: {
@@ -199,13 +207,17 @@ export default {
       
       this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
       if(this.nbSlidesTutorial === 1 ) {
-          this.tutorialp = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés ";
+        document.getElementById("tutorialText0").style.opacity = 0.4;
+          this.tutorialp1 = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés.  ";
       } else if(this.nbSlidesTutorial === 2) {
-        this.tutorialp = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés ";
+        document.getElementById("tutorialText1").style.opacity = 0.4;
+        this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés.  ";
       } else if(this.nbSlidesTutorial === 3) {
-        this.tutorialp = "  L'ordinateur jouera après vous en suivant ces mêmes règles" ;
+        document.getElementById("tutorialText2").style.opacity = 0.4;
+        this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  " ;
       } else if(this.nbSlidesTutorial === 4) {
-        this.tutorialp = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
+        document.getElementById("tutorialText3").style.opacity = 0.4;
+        this.tutorialp4 = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
       } else if(this.nbSlidesTutorial === 5) {
           rectangle.classList.toggle('fade');
       }
@@ -419,7 +431,7 @@ $main: #777c7b;
 $main-dark: darken($main,5%);
 $gray-light: #a0b3b0;
 
-#tutorialRectangle {
+.yams #tutorialRectangle {
    width: 60%; 
    height: 50%;
   //  background: lightgrey;
@@ -439,14 +451,16 @@ $gray-light: #a0b3b0;
   transition: visibility 0s 2s, opacity 2s linear;
 }
 
-#tutorialText {
+.yams #tutorialRectangle > p {
 color:white;
 text-transform: uppercase;
 font-size:24px;
 font-family: 'Courier New', sans-serif;
 text-align: center;
 position: relative;
-margin-top: 5%;
+margin-top: 2.8%;
+margin-left: 3%;
+margin-right: 3%;
 }
 
 #tutorialButton {
