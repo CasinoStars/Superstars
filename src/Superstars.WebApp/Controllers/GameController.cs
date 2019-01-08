@@ -409,18 +409,18 @@ namespace Superstars.WebApp.Controllers
             if (win == "Player")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake, null);
             }
             else if (win == "Equality")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Equality");
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "Equality", trueOrFake);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "Equality", trueOrFake, null);
 
             } else
             {
                 var IA = await _userGateway.FindByName("#AI" + userid);
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid);
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake, null);
             }
 
             return this.CreateResult(result);

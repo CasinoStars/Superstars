@@ -173,19 +173,26 @@ namespace Superstars.DAL
             Result<string> pot;
             decimal bet;
 
+            string action;
             if (gametype == 0)
             { 
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet/2;
-            } else {
+                action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid +
+                         " and a bet of " + bet + " bits (BTC) at " + date.ToString();
+            } else if (gametype == 1) {
                 pot = await GetBlackJackPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet/2;
+                action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid +
+                                " and a bet of " + bet + " bits (BTC) at " + date.ToString();
+            }
+            else
+            {
+                action = "A game of Crash (2) with GameID " + gameid + " has started at " + date.ToString();
             }
 
-            string action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid + 
-                " and a bet of " + bet + " bits (BTC) at " + date.ToString();
 
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
@@ -194,7 +201,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task ActionEndGame(int userid, string username, DateTime date, int gametype, int gameid, string haswin, string trueOrFake)
+        public async Task ActionEndGame(int userid, string username, DateTime date, int gametype, int gameid, string haswin, string trueOrFake,  int? multi)
         {
             Result<string> pot;
             decimal bet;
@@ -208,21 +215,30 @@ namespace Superstars.DAL
                 money = " All`in Coins ";
             }
 
+            string action;
             if (gametype == 0)
             {
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet / 2;
+                action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
+                         " and has " + haswin + " a bet of " + bet + money + "at " + date.ToString();
             }
-            else
+            else if (gametype == 1)
             {
                 pot = await GetBlackJackPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet / 2;
+                action = "A game of " + gametype + " with GameID " + gameid +
+                                " and has " + haswin + " a bet of " + bet + money + "at " + date.ToString();
             }
+            else
+            {
+                action = "A game of Crash (2) with GameID " + gameid +
+                         " has ended with a multi of "+ multi +" at " + date.ToString();
+            }
+          
 
-            string action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
-                " and has " + haswin + " a bet of " + bet +  money + "at " + date.ToString();
 
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {

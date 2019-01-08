@@ -37,7 +37,8 @@ namespace Superstars.WebApp.Services
 
         private async Task LaunchNewGame()
         {
-             await _signalR.Clients.All.SendAsync("NewGame");
+            await _gameGateway.ActionStartGameBTC(0, "", DateTime.UtcNow, 2, 0);
+            await _signalR.Clients.All.SendAsync("NewGame");
         }
         private async Task LaunchStep(double step, double i)
         {
