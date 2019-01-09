@@ -434,7 +434,7 @@ export default {
         return require(`../img/${image}`);
       }
     }
-  }
+  
 </script>
 
 <style lang="scss">

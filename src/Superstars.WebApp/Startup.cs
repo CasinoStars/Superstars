@@ -93,10 +93,7 @@ namespace Superstars.WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler();
-            }
+
 
             var secretKey = Configuration["JwtBearer:SigningKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
