@@ -79,9 +79,7 @@
       <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ </div>
       <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     </div>
-  </form>
   
-  <br><br>
   <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
     <p id="tutorialText0"> {{tutorialp0}}</p>
     <p id="tutorialText1"> {{tutorialp1}}</p>
@@ -90,7 +88,7 @@
     <p id="tutorialText4"> {{tutorialp4}}</p>
     <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
   </div>
-  <br><br>
+  
   
   <form @submit="onSubmit($event)" id="PlayPlayer">
     <div v-for="(i, index) of dices" :key="index" class="playerdices">
@@ -100,15 +98,6 @@
       </label>
     </div>
   </form>
-
-    <form @submit="onSubmit($event)" id="PlayPlayer">
-      <div v-for="(i, index) of dices" :key="index" class="playerdices">
-        <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
-        <label class="image-checkbox" :for="index+1">
-          <img :src="getDiceImage(i, index)" :id="index">
-        </label>
-      </div>
-    </form>
 
     <br>
     <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
@@ -217,6 +206,11 @@ export default {
       ...mapGetters(['BTCMoney']),
       ...mapGetters(['fakeMoney'])
     },
+
+  methods: {
+    ...mapActions(['executeAsyncRequest']),
+    ...mapActions(['RefreshFakeCoins']),
+    ...mapActions(['RefreshBTC']),
 
     OkTutorial() {
       let rectangle = document.getElementById("tutorialRectangle");
@@ -434,7 +428,7 @@ export default {
         return require(`../img/${image}`);
       }
     }
-  
+}
 </script>
 
 <style lang="scss">
