@@ -48,15 +48,15 @@
       <center>
         <div class="row">
           <div class="col">
-            <h3 style="font-size:1.8vw;">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc"/><i
-                v-else class="fa fa-money"/></h3>
+            <h3 style="font-size:150%;">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" /><i
+                v-else class="fa fa-money" /></h3>
           </div>
           <div class="col">
-            <h3 style="font-size:1.8vw;">TOUR: {{nbTurn}}</h3>
+            <h3 style="font-size:150%;">TOUR: {{nbTurn}}</h3>
           </div>
         </div><br>
-        <h3 style="font-size:1.25vw; text-transform: capitalize;">SCORE DE L'IA: <strong>{{IaScore}}</strong></h3>
-        <h3 style="font-size:1.25vw; text-transform: capitalize;">FIGURE L'IA: <strong>{{IaFigure}}</strong></h3>
+        <h3 style="font-size:115%; text-transform: capitalize;">SCORE DE L'IA: <strong>{{IaScore}}</strong></h3>
+        <h3 style="font-size:115%; text-transform: capitalize;">FIGURE L'IA: <strong>{{IaFigure}}</strong></h3>
       </center>
     </div>
 
@@ -79,46 +79,44 @@
       <div v-if="nbTurnIa == 3 && winOrLose == ''">L'IA FAIT SON DERNIER LANCÉ </div>
       <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     </div>
-  
-  <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
-    <p id="tutorialText0"> {{tutorialp0}}</p>
-    <p id="tutorialText1"> {{tutorialp1}}</p>
-    <p id="tutorialText2"> {{tutorialp2}}</p>
-    <p id="tutorialText3"> {{tutorialp3}}</p>
-    <p id="tutorialText4"> {{tutorialp4}}</p>
-    <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
-  </div>
-  
-  
-  <form @submit="onSubmit($event)" id="PlayPlayer">
-    <div v-for="(i, index) of dices" :key="index" class="playerdices">
-      <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
-      <label class="image-checkbox" :for="index+1">
-        <img :src="getDiceImage(i, index)" :id="index">
-      </label>
+
+    <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
+      <p id="tutorialText0"> {{tutorialp0}}</p>
+      <p id="tutorialText1"> {{tutorialp1}}</p>
+      <p id="tutorialText2"> {{tutorialp2}}</p>
+      <p id="tutorialText3"> {{tutorialp3}}</p>
+      <p id="tutorialText4"> {{tutorialp4}}</p>
+      <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
     </div>
-  </form>
 
-    <br>
-    <div style="text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-      <center>
-        <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="lds-css ng-scope">
-          <div style="width:100%;height:100%" class="lds-eclipse">
-            <div>
-            </div>
-          </div>
-        </div>
-      </center>
 
-      <h3 style="font-size:115%; text-transform: capitalize;">VOTRE SCORE: <strong>{{playerScore}}</strong></h3>
-      <h3 style="font-size:115%; text-transform: capitalize;">VOTRE FIGURE: <strong>{{playerFigure}}</strong></h3>
+    <form @submit="onSubmit($event)" id="PlayPlayer">
+      <div v-for="(i, index) of dices" :key="index" class="playerdices">
+        <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
+        <label class="image-checkbox" :for="index+1">
+          <img :src="getDiceImage(i, index)" :id="index">
+        </label>
+      </div>
+    </form>
+
+    <center>
+      <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%;">
+        <h3 style="font-size:115%; text-transform: capitalize;">VOTRE SCORE: <strong>{{playerScore}}</strong></h3>
+        <h3 style="font-size:115%; text-transform: capitalize;">VOTRE FIGURE: <strong>{{playerFigure}}</strong></h3>
+      </div>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected == 0"
         @click="nbTurn = 3">GARDER MES DÉS</button>
       <button form="PlayAI" type="submit" class="btn btn-light" v-if="nbTurn >= 3 && nbTurnIa <1">LANCER L'IA</button>
       <div style="text-transform: capitalize;" v-if="nbTurnIa == 3 && winOrLose != ''">{{winOrLose}}</div>
-    </div>
+    </center>
+
+        <div v-if="nbTurnIa == 1 || nbTurnIa == 2 || nbTurnIa == 3 && winOrLose == ''" class="lds-css ng-scope">
+          <div style="width:100%;height:100%" class="lds-eclipse">
+            <div></div>
+          </div>
+        </div>
 
     <div style="text-align:center;" v-if="nbTurnIa == 3 && winOrLose != ''">
       <br>
@@ -129,6 +127,7 @@
         <button class="btn btn-dark">QUITTER</button>
       </router-link>
     </div>
+
     <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
   </div>
 </template>
@@ -144,42 +143,42 @@
   import UserApiService from '../services/UserApiService';
   import Vue from 'vue';
 
-export default {
-  data(){
-    return {
-      selected: [],
-      dices: [],
-      iadices: [],
-      indexRerollDicesIa: [],
-      nbTurn: 0,
-      nbTurnIa: 0,
-      winOrLose: '',
-      playerFigure: '',
-      IaFigure: '',
-      playerScore: '',
-      IaScore: '',
-      wait: '',
-      playerwin: '',
-      playerBet: false,
-      realOrFake: 'real',
-      profit: 0,
-      fakeBet: 0,
-      trueBet: 0,
-      errors: [],
-      success: '',
-      iaRollDices: false,
-      rollDices: false,
-      pot: 0,
-      nbSlidesTutorial: 0,
-      tutorialp0: '',
-      tutorialp1: '',
-      tutorialp2: '',
-      tutorialp3: '',
-      tutorialp4: '',
-      queryPseudo: '',
-      wins: 0
-    }
-  },
+  export default {
+    data() {
+      return {
+        selected: [],
+        dices: [],
+        iadices: [],
+        indexRerollDicesIa: [],
+        nbTurn: 0,
+        nbTurnIa: 0,
+        winOrLose: '',
+        playerFigure: '',
+        IaFigure: '',
+        playerScore: '',
+        IaScore: '',
+        wait: '',
+        playerwin: '',
+        playerBet: false,
+        realOrFake: 'real',
+        profit: 0,
+        fakeBet: 0,
+        trueBet: 0,
+        errors: [],
+        success: '',
+        iaRollDices: false,
+        rollDices: false,
+        pot: 0,
+        nbSlidesTutorial: 0,
+        tutorialp0: '',
+        tutorialp1: '',
+        tutorialp2: '',
+        tutorialp3: '',
+        tutorialp4: '',
+        queryPseudo: '',
+        wins: 0
+      }
+    },
 
     async mounted() {
 
@@ -190,45 +189,45 @@ export default {
 
       this.wins = await this.executeAsyncRequest(() => GameApiService.getWinsYamsPlayer(this.queryPseudo));
 
-    await this.refreshDices();
-    await this.refreshIaDices();
-    await this.changeTurn();
-    this.pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
-    if(this.pot == 0) {
-      this.showModal();
-    } else {
-      this.playerBet = true;
-    }  
+      await this.refreshDices();
+      await this.refreshIaDices();
+      await this.changeTurn();
+      this.pot = await this.executeAsyncRequest(() => GameApiService.getYamsPot());
+      if (this.pot == 0) {
+        this.showModal();
+      } else {
+        this.playerBet = true;
+      }
       this.tutorialp0 = "Bienvenue sur le Yams !";
-  },
+    },
 
     computed: {
       ...mapGetters(['BTCMoney']),
       ...mapGetters(['fakeMoney'])
     },
 
-  methods: {
-    ...mapActions(['executeAsyncRequest']),
-    ...mapActions(['RefreshFakeCoins']),
-    ...mapActions(['RefreshBTC']),
+    methods: {
+      ...mapActions(['executeAsyncRequest']),
+      ...mapActions(['RefreshFakeCoins']),
+      ...mapActions(['RefreshBTC']),
 
-    OkTutorial() {
-      let rectangle = document.getElementById("tutorialRectangle");
-      
-      this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
-      if(this.nbSlidesTutorial === 1 ) {
-        document.getElementById("tutorialText0").style.opacity = 0.4;
+      OkTutorial() {
+        let rectangle = document.getElementById("tutorialRectangle");
+
+        this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
+        if (this.nbSlidesTutorial === 1) {
+          document.getElementById("tutorialText0").style.opacity = 0.4;
           this.tutorialp1 = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés.  ";
-      } else if(this.nbSlidesTutorial === 2) {
-        document.getElementById("tutorialText1").style.opacity = 0.4;
-        this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés.  ";
-      } else if(this.nbSlidesTutorial === 3) {
-        document.getElementById("tutorialText2").style.opacity = 0.4;
-        this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  " ;
-      } else if(this.nbSlidesTutorial === 4) {
-        document.getElementById("tutorialText3").style.opacity = 0.4;
-        this.tutorialp4 = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
-      } else if(this.nbSlidesTutorial === 5) {
+        } else if (this.nbSlidesTutorial === 2) {
+          document.getElementById("tutorialText1").style.opacity = 0.4;
+          this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés.  ";
+        } else if (this.nbSlidesTutorial === 3) {
+          document.getElementById("tutorialText2").style.opacity = 0.4;
+          this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  ";
+        } else if (this.nbSlidesTutorial === 4) {
+          document.getElementById("tutorialText3").style.opacity = 0.4;
+          this.tutorialp4 = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
+        } else if (this.nbSlidesTutorial === 5) {
           rectangle.classList.toggle('fade');
         }
       },
@@ -428,7 +427,7 @@ export default {
         return require(`../img/${image}`);
       }
     }
-}
+  }
 </script>
 
 <style lang="scss">
@@ -438,25 +437,39 @@ export default {
   $main: #777c7b;
   $main-dark: darken($main, 5%);
   $gray-light: #a0b3b0;
-  @keyframes Infos{
-    0%{opacity: 1;}
-    50%{opacity: 0.5;}
-    100%{opacity: 1;}
+
+  @keyframes Infos {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 
-.yams #tutorialRectangle {
-   width: 60%; 
-   height: 50%;
-  //  background: lightgrey;
-   margin-left: 18.8%;
-   margin-top: -11.5%;
-   border-radius: 20px;
-   text-align: center;
-   opacity: 0.99;
-   position: absolute; 
-   transition: opacity 1s; 
-   z-index: 15;
-}
+  .yams html {
+    overflow-y: none;
+  }
+  
+  .yams #tutorialRectangle {
+    width: 60%;
+    height: 50%;
+    //  background: lightgrey;
+    margin-left: 18.8%;
+    margin-top: -11.5%;
+    border-radius: 20px;
+    text-align: center;
+    opacity: 0.99;
+    position: absolute;
+    transition: opacity 1s;
+    z-index: 15;
+  }
+
   .yams #Infos {
     animation: Infos 2s infinite;
   }
@@ -475,17 +488,17 @@ export default {
     z-index: 15;
   }
 
-.yams #tutorialRectangle > p {
-color:white;
-text-transform: uppercase;
-font-size:24px;
-font-family: 'Courier New', sans-serif;
-text-align: center;
-position: relative;
-margin-top: 2.8%;
-margin-left: 3%;
-margin-right: 3%;
-}
+  .yams #tutorialRectangle>p {
+    color: white;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-family: 'Courier New', sans-serif;
+    text-align: center;
+    position: relative;
+    margin-top: 2.8%;
+    margin-left: 3%;
+    margin-right: 3%;
+  }
 
   #tutorialText {
     color: white;
@@ -694,12 +707,12 @@ margin-right: 3%;
     animation: lds-eclipse 1s linear infinite;
     width: 40px;
     height: 40px;
-    top: 80px;
-    margin-left: -250%;
     border-radius: 50%;
     box-shadow: 0 2px 0 0 #7f8387;
     -webkit-transform-origin: 20px 21px;
     transform-origin: 20px 21px;
+    margin-left: -50%;
+    margin-top: -35%;
   }
 
   .yams .lds-eclipse {
