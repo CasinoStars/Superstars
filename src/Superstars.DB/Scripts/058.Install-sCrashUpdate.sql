@@ -6,7 +6,7 @@ create proc sp.sCrashUpdate
 as
 
 	declare @GameId int;
-	set @GameId = (select top 1 GameId from sp.tGames where GameTypeId = 2 order by StartDate desc);
+	set @GameId = (select top 1 GameId from sp.tGameCrash c order by c.GameId desc);
 
 begin
 	set transaction isolation level serializable;

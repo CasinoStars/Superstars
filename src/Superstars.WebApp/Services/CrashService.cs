@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CrashGameMath;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Hosting;
 using NBitcoin;
 using Superstars.DAL;
@@ -18,7 +19,7 @@ namespace Superstars.WebApp.Services
     {
         private readonly IHubContext<SignalRHub> _signalR;
         private double _crashValue;
-        private readonly CrashBuilder _crashBuilder;
+        private CrashBuilder _crashBuilder;
         private readonly RankGateway _rankGateway;
         private readonly GameGateway _gameGateway;
         private readonly CrashGateway _crashGateway;
@@ -26,11 +27,11 @@ namespace Superstars.WebApp.Services
         private CancellationTokenSource _cancellationTokenSource;
         private Task _runningTask;
         private CancellationToken RunToken => _cancellationTokenSource.Token;
-        public CrashService(IHubContext<SignalRHub> signalR, RankGateway rankGateway, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
+        public CrashService(IHubContext<SignalRHub> signalR, RankGateway rankGateway, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
         {
             _signalR = signalR;
-            _crashValue = crashBuilder.NextCrashValue();
-            _crashBuilder = crashBuilder;
+            _crashBuilder = new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526" + new Random().Next(int.MaxValue));
+            _crashValue = _crashBuilder.NextCrashValue();
             _gameGateway = gameGateway;
             _crashGateway = crashGateway;
             _walletGateway = walletGateway;
@@ -131,9 +132,14 @@ namespace Superstars.WebApp.Services
 
         private async Task Process(CancellationToken cancellationToken)
         {
-            for (var i = 0; i < 1000; i++)
+            while (true)
             {
-                await GameLoop(cancellationToken);
+                for (var i = 0; i < 999; i++)
+                {
+                    await GameLoop(cancellationToken);
+                    if (RunToken.IsCancellationRequested) return;
+                }
+                _crashBuilder = new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526" + new Random().Next(int.MaxValue));
                 if (RunToken.IsCancellationRequested) return;
             }
         }
@@ -141,10 +147,12 @@ namespace Superstars.WebApp.Services
         private async Task GameLoop(CancellationToken cancellationToken)
         {
             var gameId = await _gameGateway.CreateGame(2);
+            await _crashGateway.CreateCrashGame("", 0);
             await WaitingForBets();
             await Task.WhenAll(LaunchNewGame(gameId.Content), PlayTime());
             await LaunchEndGame(gameId.Content);
             await _gameGateway.UpdateGameEnd(gameId.Content, 2, "");
+            await _crashGateway.UpdateCrashGame(CrashBuilder.ActualHashString, CrashBuilder.ActualHashValue);
             await SetWins(gameId.Content);
             _crashValue = _crashBuilder.NextCrashValue();
         }

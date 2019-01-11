@@ -165,7 +165,8 @@
 
                 clearInterval(this.fn);
                 this.hashList.unshift({ hashString: hash, hashValue: ite});
-                this.hashList.pop();
+                if(this.hashList.length > 10)
+                    this.hashList.pop();
 
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
@@ -365,10 +366,15 @@
                 if (errors.length == 0) {
                     try {
                         if (this.moneyType === false) {
+                            console.log("ok");
                             await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
                                 0));
-                            await this.RefreshFakeCoins();
+
+                            //await this.RefreshFakeCoins();
+                            debugger;
                             this.success = 'Vous venez de parier: ' + this.bet + ' All`In Coins';
+
+                            console.log("not ok");
                         } else {
                             await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
                                 1));

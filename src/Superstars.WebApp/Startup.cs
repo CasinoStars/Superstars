@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Text;
 using CrashGameMath;
 using Microsoft.AspNetCore.Builder;
@@ -56,7 +57,6 @@ namespace Superstars.WebApp
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<PasswordHasher>();
-            services.AddSingleton(x => new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526"));
 
             services.AddAuthorization(options =>
             {

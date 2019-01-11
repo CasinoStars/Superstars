@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CrashGameMath;
 using Microsoft.AspNetCore.Authorization;
@@ -17,15 +18,13 @@ namespace Superstars.WebApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class CrashController : Controller
     {
-        private readonly CrashBuilder _crash;
+       
         private readonly CrashGateway _crashGateway;
 
-        public CrashController(CrashBuilder crash, CrashGateway crashGateway)
+        public CrashController(CrashGateway crashGateway)
         {
-            _crash = crash;
             _crashGateway = crashGateway;
         }
-
 
         [HttpGet("GetPlayersInGame")]
         public async Task<IEnumerable<CrashData>> GetPlayersInGame()
@@ -33,22 +32,25 @@ namespace Superstars.WebApp.Controllers
             return (List<CrashData>)await _crashGateway.GetGamePlayers();
         }
 
-
-
         [HttpGet("{gameId}/GetPlayersInGame")]
         public async Task<IEnumerable<CrashData>> GetPlayersInGame(int gameId)
         {
             return (List<CrashData>) await _crashGateway.GetGamePlayers(gameId);
         }
+
         [HttpGet("{gameId}/{userId}/GetPlayerByGame")]
         public async Task<CrashData> GetPlayerByGame(int gameId, int userId)
         {
             return await _crashGateway.GetPlayerByGame(userId,gameId);
         }
+
         [HttpGet("HashList")]
-        public IEnumerable GetHashList()
+        public async Task<IEnumerable> GetHashList()
         {
-            return _crash.CreateHashList(10, CrashBuilder.ActualHashString);
+            var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var list = await _crashGateway.GetTenLastGame(userid);
+            return list;
+
         }
 
 
