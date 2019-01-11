@@ -6,12 +6,12 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-            <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc"
-                style="font-size: 1.5rem;"></i></h2>
-            <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
-          </div>
+          <div style="padding-top: 2px; font-family: 'Courier New', sans-serif;" class="col-12 modal-title text-center">
           <router-link class="close" v-on:click.native="RedirectandDelete()" to="">&times;</router-link>
+            <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC:<br>{{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc"
+                style="font-size: 1.5rem;"></i></h2>
+            <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN:<br>{{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+          </div>
         </div>
         <ul class="tab-group">
           <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
@@ -36,7 +36,7 @@
           </div>
 
           <div class="modal-footer">
-            <div style="margin-right: 42%;">
+            <div class="col-12 modal-title text-center">
               <router-link class="btn btn-secondary" v-on:click.native="RedirectandDelete()" to="">Annuler</router-link>
               <button type="submit" class="btn btn-light">Confirmer</button>
             </div>
@@ -829,23 +829,25 @@
     width: 110%;
   }
 
-  .playerdices {
+  .yams .playerdices {
     display: inline-block;
     position: relative;
     width: 8%;
-    left: 30.2%;
+    left: 25%;
+    margin: 1%;
     margin-top: 4%;
   }
 
-  .iadices {
+  .yams .iadices {
     display: inline-block;
     position: relative;
     width: 8%;
-    left: 30.2%;
+    left: 25%;
+    margin: 1%;
     margin-top: 3%;
   }
 
-  .iadices>img {
+  .yams .iadices>img {
     height: 100%;
     width: 100%;
   }
