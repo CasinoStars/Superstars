@@ -66,11 +66,6 @@
       </div>
     </form>
 
-    <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
-      <p id="tutorialText"> {{tutorialp}}</p>
-      <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
-    </div>
-
     <div style="margin-top:3%; text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;" id="Infos">
       <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER </div>
       <div v-if="nbTurn == 3 && nbTurnIa == 0">C'EST MAINTENANT AU TOUR DE L'IA </div>
@@ -211,9 +206,13 @@
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
 
+    async RedirectandDelete() {
+      await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
+      this.$router.push({ path: 'play' });
+    },
+
       OkTutorial() {
         let rectangle = document.getElementById("tutorialRectangle");
-
         this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
         if (this.nbSlidesTutorial === 1) {
           document.getElementById("tutorialText0").style.opacity = 0.4;
@@ -227,7 +226,7 @@
         } else if (this.nbSlidesTutorial === 4) {
           document.getElementById("tutorialText3").style.opacity = 0.4;
           this.tutorialp4 = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
-        } else if (this.nbSlidesTutorial === 5) {
+        } else if (this.nbSlidesTutorial > 4) {
           rectangle.classList.toggle('fade');
         }
       },
@@ -470,22 +469,14 @@
     z-index: 15;
   }
 
+.yams #tutorialRectangle.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
   .yams #Infos {
     animation: Infos 2s infinite;
-  }
-
-  #tutorialRectangle {
-    width: 60%;
-    height: 50%;
-    //  background: lightgrey;
-    margin-left: 18.8%;
-    margin-top: -11.5%;
-    border-radius: 20px;
-    text-align: center;
-    opacity: 0.99;
-    position: absolute;
-    transition: opacity 1s;
-    z-index: 15;
   }
 
   .yams #tutorialRectangle>p {
@@ -520,6 +511,7 @@
     position: relative;
     margin-top: 5%;
   }
+
 
   .yams .tab-group {
     list-style: none;

@@ -116,6 +116,8 @@ namespace Superstars.WebApp.Controllers
             var data = new CrashData {UserName = user.UserName, Bet = bet, Multi = crash};
             await _hubContext.Clients.All.SendAsync("Bet", data);
 
+            await _gameGateway.ActionPlayerBetCrash(userId, user.UserName, DateTime.UtcNow, data.GameId, crash, bet,
+                moneyTypeId);
             if (moneyTypeId == 0)
             {
                 Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet);
@@ -140,6 +142,7 @@ namespace Superstars.WebApp.Controllers
             var result = await _crashGateway.UpdateCrashPlayer(userId, crash);
             var data = new CrashData { UserName = user.UserName, Multi = crash };
             await _hubContext.Clients.All.SendAsync("Update", data);
+            await _gameGateway.ActionPlayerOutCrash(userId, user.UserName, DateTime.UtcNow, data.GameId, crash);
 
             return this.CreateResult(result);
 
@@ -409,18 +412,18 @@ namespace Superstars.WebApp.Controllers
             if (win == "Player")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, udata.UserName);
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake, null);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "win", trueOrFake);
             }
             else if (win == "Equality")
             {
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "Equality");
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "Equality", trueOrFake, null);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "Equality", trueOrFake);
 
             } else
             {
                 var IA = await _userGateway.FindByName("#AI" + userid);
                 result = await _gameGateway.UpdateGameEnd(data.GameId, gametype, "#AI" + userid);
-                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake, null);
+                await _gameGateway.ActionEndGame(udata.UserId, udata.UserName, DateTime.UtcNow, gametype, data.GameId, "lost", trueOrFake);
             }
 
             return this.CreateResult(result);

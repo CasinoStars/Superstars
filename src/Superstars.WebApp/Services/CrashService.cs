@@ -33,9 +33,9 @@ namespace Superstars.WebApp.Services
             _rankGateway = rankGateway;
         }
 
-        private async Task LaunchNewGame()
+        private async Task LaunchNewGame(int gameId)
         {
-            await _gameGateway.ActionStartGameBTC(0, "", DateTime.UtcNow, 2, 0);
+            await _gameGateway.ActionStartGameCrash(DateTime.UtcNow, gameId);
             await _signalR.Clients.All.SendAsync("NewGame");
         }
         private async Task LaunchStep(double step, double i)
@@ -43,8 +43,9 @@ namespace Superstars.WebApp.Services
             await _signalR.Clients.All.SendAsync("Step", step, i);
         }
 
-        private async Task LaunchEndGame()
+        private async Task LaunchEndGame(int gameId)
         {
+            await _gameGateway.ActionEndGameCrash(DateTime.UtcNow, gameId, _crashValue);
             await _signalR.Clients.All.SendAsync("EndGame", CrashBuilder.ActualHashString, _crashValue);
             await Task.Delay(2000);
         }
@@ -97,7 +98,7 @@ namespace Superstars.WebApp.Services
             return avg;
         }
 
-        private async Task SetWins()
+        private async Task SetWins(int gameId)
         {
             var players = await GetPlayersInGame();
             foreach (var player in players)
@@ -114,7 +115,8 @@ namespace Superstars.WebApp.Services
 
                 await _gameGateway.UpdateStats(player.UserId, 2, player.MoneyTypeId, 1, 0, 0, player.Bet, player.Bet,
                     avgTime.Milliseconds);
-
+                await _gameGateway.ActionPlayerWinCrash(player.UserId, DateTime.UtcNow, gameId, player.Multi, player.Bet,
+                    player.MoneyTypeId, pot);
                 if (player.MoneyTypeId == 0)
                     await _walletGateway.AddCoins(player.UserId, 0, pot, 0);
                 else
@@ -136,10 +138,10 @@ namespace Superstars.WebApp.Services
         {
             var gameId = await _gameGateway.CreateGame(2);
             await WaitingForBets();
-            await Task.WhenAll(LaunchNewGame(), PlayTime());
-            await LaunchEndGame();
+            await Task.WhenAll(LaunchNewGame(gameId.Content), PlayTime());
+            await LaunchEndGame(gameId.Content);
             await _gameGateway.UpdateGameEnd(gameId.Content, 2, "");
-            await SetWins();
+            await SetWins(gameId.Content);
             _crashValue = _crashBuilder.NextCrashValue();
         }
 
