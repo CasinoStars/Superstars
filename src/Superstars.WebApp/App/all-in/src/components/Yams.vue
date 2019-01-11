@@ -6,12 +6,12 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <div style="margin-left: 20%; padding-top: 2px; font-family: 'Courier New', sans-serif;">
-            <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC: {{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc"
-                style="font-size: 1.5rem;"></i></h2>
-            <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN: {{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
-          </div>
+          <div style="padding-top: 2px; font-family: 'Courier New', sans-serif;" class="col-12 modal-title text-center">
           <router-link class="close" v-on:click.native="RedirectandDelete()" to="">&times;</router-link>
+            <h2 v-if="realOrFake == 'real'">SOLDE DE VOTRE COMPTE BTC:<br>{{BTCMoney.toLocaleString('en')}} <i class="fa fa-btc"
+                style="font-size: 1.5rem;"></i></h2>
+            <h2 v-else>SOLDE DE VOTRE COMPTE ALL'IN:<br>{{fakeMoney.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 1.5rem;"></i></h2>
+          </div>
         </div>
         <ul class="tab-group">
           <li class="tab active" v-if="this.realOrFake == 'real'"><a v-on:click="changeBet('real')">Réel</a></li>
@@ -36,7 +36,7 @@
           </div>
 
           <div class="modal-footer">
-            <div style="margin-right: 42%;">
+            <div class="col-12 modal-title text-center">
               <router-link class="btn btn-secondary" v-on:click.native="RedirectandDelete()" to="">Annuler</router-link>
               <button type="submit" class="btn btn-light">Confirmer</button>
             </div>
@@ -65,11 +65,6 @@
         <img :src="getDiceIaImage(i, index)">
       </div>
     </form>
-
-    <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
-      <p id="tutorialText"> {{tutorialp}}</p>
-      <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
-    </div>
 
     <div style="margin-top:3%; text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;" id="Infos">
       <div v-if="nbTurn != 0 && nbTurn < 3">ClIQUER SUR LES DÉS À RELANCER </div>
@@ -211,9 +206,13 @@
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
 
+    async RedirectandDelete() {
+      await this.executeAsyncRequest(() => GameApiService.deleteGame(0));
+      this.$router.push({ path: 'play' });
+    },
+
       OkTutorial() {
         let rectangle = document.getElementById("tutorialRectangle");
-
         this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
         if (this.nbSlidesTutorial === 1) {
           document.getElementById("tutorialText0").style.opacity = 0.4;
@@ -227,7 +226,7 @@
         } else if (this.nbSlidesTutorial === 4) {
           document.getElementById("tutorialText3").style.opacity = 0.4;
           this.tutorialp4 = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
-        } else if (this.nbSlidesTutorial === 5) {
+        } else if (this.nbSlidesTutorial > 4) {
           rectangle.classList.toggle('fade');
         }
       },
@@ -470,22 +469,14 @@
     z-index: 15;
   }
 
+.yams #tutorialRectangle.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
   .yams #Infos {
     animation: Infos 2s infinite;
-  }
-
-  #tutorialRectangle {
-    width: 60%;
-    height: 50%;
-    //  background: lightgrey;
-    margin-left: 18.8%;
-    margin-top: -11.5%;
-    border-radius: 20px;
-    text-align: center;
-    opacity: 0.99;
-    position: absolute;
-    transition: opacity 1s;
-    z-index: 15;
   }
 
   .yams #tutorialRectangle>p {
@@ -520,6 +511,7 @@
     position: relative;
     margin-top: 5%;
   }
+
 
   .yams .tab-group {
     list-style: none;
@@ -829,23 +821,25 @@
     width: 110%;
   }
 
-  .playerdices {
+  .yams .playerdices {
     display: inline-block;
     position: relative;
     width: 8%;
-    left: 30.2%;
+    left: 25%;
+    margin: 1%;
     margin-top: 4%;
   }
 
-  .iadices {
+  .yams .iadices {
     display: inline-block;
     position: relative;
     width: 8%;
-    left: 30.2%;
+    left: 25%;
+    margin: 1%;
     margin-top: 3%;
   }
 
-  .iadices>img {
+  .yams .iadices>img {
     height: 100%;
     width: 100%;
   }

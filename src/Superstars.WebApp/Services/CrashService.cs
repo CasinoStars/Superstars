@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +7,7 @@ using CrashGameMath;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Hosting;
-using NBitcoin;
 using Superstars.DAL;
-using Superstars.WebApp.Controllers;
 
 namespace Superstars.WebApp.Services
 {
