@@ -33,11 +33,11 @@
             <div class = "pendingTrxList">
               <tr>
                   <div v-for="transfer in TransferList" >
-                  <td>{{transfer.transferId}} </td> 
-                  <td > {{transfer.userId}} </td>
-                  <td > {{transfer.amount}} </td>
-                  <td > {{transfer.receiverId}} </td>
-                  <td > {{transfer.transferDate}} </td>
+                  <td>Transfer ID {{transfer.transferId}} </td>                  
+                  <td >User ID {{GetPseudoFromId(transfer.userId)}} </td>
+                  <td >Amount {{transfer.amount}} </td>
+                  <td >ReceiverId {{transfer.receiverId}} </td>
+                  <td >AT {{transfer.transferDate}} </td>
 
 
 
@@ -67,6 +67,7 @@
     data() {
       return {
         item: {},
+        pseudo:'',
         trueBalance:'',
         success :'',
         errors: [],
@@ -111,12 +112,25 @@
 
       },
 
+      async GetPseudoFromId(userIddd){
+        var myvar = await this.executeAsyncRequest(() =>
+        WalletApiService.GetPseudoFromId(userIddd)
+        );
+
+        return useriddd.userName;
+      },
+
       async GetTransfer() {
           this.TransferList = await this.executeAsyncRequest(() =>
           WalletApiService.GetTransfer()
         );
       },
 
+      async GetPseudo() {
+        this.pseudo = await this.executeAsyncRequest(() =>
+        UserApiService.GetPseudo()
+        );
+      },
 
        async Transfer(e) { 
         

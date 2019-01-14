@@ -58,6 +58,11 @@ class WalletApiService {
         var response = await getAsync(`${endpoint}/GetTransfer`);
         return response;
     }
+
+    async FindById(userId){
+        var response = await getAsync(`${endpoint}/${userid}/FindById`);
+        return response;
+    }
     
 
     async Transfer(model){

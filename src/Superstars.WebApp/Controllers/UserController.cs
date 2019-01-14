@@ -104,6 +104,12 @@ namespace Superstars.WebApp.Controllers
             return View(model);
         }
 
+        [HttpGet("{userId}/FindById")]
+        public async Task<UserData> FindByUserId(int userId)
+        {
+            return await _userGateway.FindById(userId);
+        }
+
         [HttpGet]
         [Authorize(AuthenticationSchemes = CookieAuthentication.AuthenticationScheme)]
         public async Task<IActionResult> LogOff()
