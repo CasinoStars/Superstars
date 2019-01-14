@@ -8,7 +8,7 @@
 	@Losses int,
 	@Equality int,
 	@TotalBet int,
-	@AverageTime int
+	@AverageTime float
 )
 as 
 begin
