@@ -1,19 +1,18 @@
-﻿namespace Superstars.DAL
+﻿using System;
+
+namespace Superstars.DAL
 {
-    public class ProvablyFairData
+    public class TransferData
     {
-        public string UncryptedPreviousServerSeed { get; set; }
+        public int TransferId { get; set; }
 
-        public string UncryptedServerSeed { get; set; }
+        public int UserId { get; set; }
 
-        public string PreviousCryptedServerSeed { get; set; }
+        public int Amount { get; set; }
 
-        public string PreviousClientSeed { get; set; }
+        public int ReceiverId { get; set; }
 
-        public string CryptedServerSeed { get; set; }
+        public DateTime TransferDate { get; set; }
 
-        public string ClientSeed { get; set; }
-
-        public int Nonce { get; set; }
     }
 }
