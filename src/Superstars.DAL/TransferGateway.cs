@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -17,11 +19,11 @@ namespace Superstars.DAL
             _sqlConnexion = sqlConnection;
         }
 
-        public async Task<TransferData> GetTransferData(int userId)
+        public async Task<IEnumerable<TransferData>> GetTransferData(int userId)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
-                return await con.QueryFirstOrDefaultAsync<TransferData>(
+                return await con.QueryAsync<TransferData>(
                     "select * from sp.tTransfer m where m.UserId = @userId",
                     new {UserId = userId});
             }

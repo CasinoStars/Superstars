@@ -8,6 +8,7 @@ using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -93,12 +94,14 @@ namespace Superstars.WebApp.Controllers
             return response;
         }
 
-        [HttpGet("/GetTransaction")]
+        [HttpGet("GetTransfer")]
 
-        public async Task<List<string>> GetTransfer()
+        public async Task<List<TransferData>> GetTransfer()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            TransferData transferData = await _transferGateway.GetTransferData(userId);
+            var transferData = await _transferGateway.GetTransferData(userId);
+            var transferList = transferData.ToList();
+            return transferList;
         }
 
 

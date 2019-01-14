@@ -53,6 +53,11 @@ class WalletApiService {
         var response = await getAsync(`${endpoint}/${maxConfirmation}/GetTransaction`);
         return response;
     }
+
+    async GetTransfer(){
+        var response = await getAsync(`${endpoint}/GetTransfer`);
+        return response;
+    }
     
 
     async Transfer(model){

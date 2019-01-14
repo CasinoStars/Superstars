@@ -32,13 +32,21 @@
             </tr>
             <div class = "pendingTrxList">
               <tr>
-                  <div v-for="trx in pendingTrx" >
-                  <td > {{trx}} </td> </div>
+                  <div v-for="transfer in TransferList" >
+                  <td>{{transfer.transferId}} </td> 
+                  <td > {{transfer.userId}} </td>
+                  <td > {{transfer.amount}} </td>
+                  <td > {{transfer.receiverId}} </td>
+                  <td > {{transfer.transferDate}} </td>
+
+
+
+            </div>
                   
               </tr>
             </div>
             </table>
-        </div>
+        </div>      
       </form>            
   </div>
   </div>
@@ -62,6 +70,7 @@
         trueBalance:'',
         success :'',
         errors: [],
+        TransferList: [],
         isPseudoExist: false,
         Responses: []
       };
@@ -73,6 +82,7 @@
     },
 
     async mounted() {
+         await this.GetTransfer();
       // await this.RefreshBTC();
       // await this.RefreshFakeCoins();
     },
@@ -100,6 +110,13 @@
         }
 
       },
+
+      async GetTransfer() {
+          this.TransferList = await this.executeAsyncRequest(() =>
+          WalletApiService.GetTransfer()
+        );
+      },
+
 
        async Transfer(e) { 
         
