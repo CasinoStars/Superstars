@@ -29,15 +29,17 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result> CreateTransfer(int userId,int amount,int receiverId)
+        public async Task<Result> CreateTransfer(int userId,string userName,int amount,int receiverId,string receiverName)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
                 var p = new DynamicParameters();
                 p.Add("@userId", userId);
+                p.Add("@userName", userName);
                 p.Add("@amount", amount);
                 p.Add("@TransferDate", DateTime.UtcNow);
                 p.Add("@ReceiverId", receiverId);
+                p.Add("@ReceiverName", receiverName);
                 p.Add("@TransferId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 

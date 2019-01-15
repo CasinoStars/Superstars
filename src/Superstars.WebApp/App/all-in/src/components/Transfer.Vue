@@ -31,19 +31,15 @@
               <th>Transactions en attentes</th>
             </tr>
             <div class = "pendingTrxList">
+              <center>
               <tr>
                   <div v-for="transfer in TransferList" >
-                  <td>Transfer ID {{transfer.transferId}} </td>                  
-                  <td >User ID {{GetPseudoFromId(transfer.userId)}} </td>
-                  <td >Amount {{transfer.amount}} </td>
-                  <td >ReceiverId {{transfer.receiverId}} </td>
-                  <td >AT {{transfer.transferDate}} </td>
-
-
-
-            </div>
-                  
+                  <td >You send {{transfer.amount}} </td>
+                  <td >to {{transfer.receiverName}} </td>
+                  <td > at {{transfer.transferDate}} </td>
+            </div>                  
               </tr>
+              </center>
             </div>
             </table>
         </div>      

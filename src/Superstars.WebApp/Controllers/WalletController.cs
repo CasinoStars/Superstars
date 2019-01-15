@@ -65,7 +65,7 @@ namespace Superstars.WebApp.Controllers
            // var userName = await _userGateway.findb
             await _walletGateway.AddCoins(receiverData.UserId, 1, 0, model.AmountToSend);
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
-            await _transferGateway.CreateTransfer(userId, model.AmountToSend, receiverData.UserId);
+            await _transferGateway.CreateTransfer(userId, userData.UserName,model.AmountToSend,receiverData.UserId,receiverData.UserName);
             await _userGateway.ActionTransfer(userId, userData.UserName,receiverData.UserId,receiverData.UserName,model.AmountToSend,DateTime.UtcNow);
         }
 
@@ -103,8 +103,6 @@ namespace Superstars.WebApp.Controllers
             var transferList = transferData.ToList();
             return transferList;
         }
-
-
 
         [HttpPost("{pot}/creditBTCPlayer")]
         public async Task<IActionResult> CreditPlayerBTC(int pot)

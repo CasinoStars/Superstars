@@ -2,9 +2,11 @@ create procedure sp.sTransferCreate
 (
 	@TransferId int out,
 	@UserId int,
+	@UserName char(64),
 	@Amount int,
 	@TransferDate dateTime,
-	@ReceiverId int
+	@ReceiverId int,
+	@ReceiverName char(64)
 )
 as 
 begin
@@ -18,7 +20,7 @@ begin
 	--end;
 
 
-    insert into sp.tTransfer(UserId, Amount,TransferDate, ReceiverId) values(@UserId, @Amount,@TransferDate,@ReceiverId);
+    insert into sp.tTransfer(UserId,UserName,Amount,TransferDate, ReceiverId, ReceiverName) values(@UserId,@UserName, @Amount,@TransferDate,@ReceiverId,@ReceiverName);
 	set @TransferId = scope_identity();
 	commit;
 	return 0;
