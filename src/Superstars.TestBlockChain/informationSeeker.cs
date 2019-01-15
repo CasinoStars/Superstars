@@ -93,7 +93,7 @@ namespace Superstars.Wallet
         /// <returns></returns>
         public static int HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
-            var Coins = FindUtxo(privateKey, client);
+            var Coins = new List<Coin>();/*FindUtxo(privateKey, client);*/;
             var total = 0;
             foreach (var coin in Coins)
             {

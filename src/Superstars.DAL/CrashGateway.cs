@@ -121,12 +121,20 @@ namespace Superstars.DAL
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {              
                 var data = await con.QueryAsync<CrashData>(
-                    @"select TOP 10 g.CrashHash, g.CrashValue, c.Bet, c.Multi from sp.tGameCrash g left outer join sp.tCrash c on c.gameId = g.gameId where c.UserId = @UserId", new {  UserId = userId });
+                    @"select TOP 10 g.GameId, g.CrashHash, g.CrashValue, c.Bet, c.Multi, c.MoneyTypeId from sp.tGameCrash g left outer join sp.tCrash c on c.gameId = g.gameId and c.UserId = @UserId where g.CrashValue != 0 order by g.GameId desc", new {  UserId = userId });
                 return data;
             }
         }
 
-
+        public async Task<CrashMeta> GetGameCrashMeta(int gameId)
+        {
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                var data = await con.QueryFirstOrDefaultAsync<CrashMeta>(
+                    @"select g.GameId, g.StartDate, g.EndDate, c.CrashHash, c.CrashValue from sp.tGames g left join sp.tGameCrash c on g.GameId = c.GameId where g.GameId = @GameId; ", new { GameId = gameId});
+                return data;
+            }
+        }
 
     }
 }
