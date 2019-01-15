@@ -6,8 +6,8 @@
         <ul class="nav navbar-nav" v-if="auth.isConnected">
           <li class="nav-item" id="soldeResponsive">
             <router-link class="nav-link" to="/wallet" id="borderSolde" style="letter-spacing: 2px; font-size: 12px;">
-             &nbsp {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> ||
-              {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" style="font-size: 0.8rem;"></i> &nbsp
+             &nbsp; {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> ||
+              {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" style="font-size: 0.8rem;"></i> &nbsp;
             </router-link>
           </li>
         </ul>
