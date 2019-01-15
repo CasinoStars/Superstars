@@ -402,7 +402,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int moneyTypeId, int wins, int losses, int equality, int profit, int bet, int averageTime)
+        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int moneyTypeId, int wins, int losses, int equality, int profit, int bet, float averageTime)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {

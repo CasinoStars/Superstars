@@ -460,7 +460,7 @@
     height: 50%;
     //  background: lightgrey;
     margin-left: 18.8%;
-    margin-top: -11.5%;
+    margin-top: -11.8%;
     border-radius: 20px;
     text-align: center;
     opacity: 0.99;

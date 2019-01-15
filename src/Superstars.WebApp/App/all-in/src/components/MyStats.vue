@@ -25,7 +25,7 @@
         <th>Victoire</th>
         <th>Défaite</th>
         <th>Egalité</th>
-        <th>Temps par parties</th>
+        <th>Temps moyen</th>
       </tr>
       <tr v-for="(e,index) of playerStatsData" :key="index">
         <td>{{e.gameName}}</td>
