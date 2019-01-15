@@ -47,7 +47,7 @@ namespace Superstars.WebApp.Services
         private async Task LaunchEndGame(int gameId)
         {
             await _gameGateway.ActionEndGameCrash(DateTime.UtcNow, gameId, _crashValue);
-            await _signalR.Clients.All.SendAsync("EndGame", CrashBuilder.ActualHashString, _crashValue);
+            await _signalR.Clients.All.SendAsync("EndGame", gameId, CrashBuilder.ActualHashString, _crashValue);
             await Task.Delay(2000);
         }
 

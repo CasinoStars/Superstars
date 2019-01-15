@@ -50,9 +50,13 @@ namespace Superstars.WebApp.Controllers
             var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var list = await _crashGateway.GetTenLastGame(userid);
             return list;
-
         }
 
+        [HttpGet("{gameId}/CrashMeta")]
+        public async Task<CrashMeta> GetCrashMeta(int gameId)
+        {
+            return await _crashGateway.GetGameCrashMeta(gameId);
+        }
 
     }
 }

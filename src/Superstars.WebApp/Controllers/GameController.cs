@@ -202,15 +202,15 @@ namespace Superstars.WebApp.Controllers
            
             if (win == "Player")
             {
-                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 1, 0, 0, bet, bet, avgTime.Milliseconds);
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 1, 0, 0, bet, bet, (float)avgTime.TotalMilliseconds);
             }
             else if(win == "AI")
             {
-                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 1, 0, -bet, bet, avgTime.Milliseconds);
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 1, 0, -bet, bet, (float)avgTime.TotalMilliseconds);
             }
             else if(win == "Equality")
             {
-                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 0, 1, 0, bet, avgTime.Milliseconds);
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 0, 1, 0, bet, (float)avgTime.TotalMilliseconds);
             }
             return Result.Success(result);
         }

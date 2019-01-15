@@ -8,7 +8,7 @@
 	Losses int default 0,
 	Equality int default 0,
 	TotalBet int default 0,
-	AverageTime int default 0,
+	AverageTime float default 0.0,
 	ClientSeedChanges int default 0
 
 	constraint PK_tStats_Id primary key (GameTypeId, UserId, MoneyTypeId),

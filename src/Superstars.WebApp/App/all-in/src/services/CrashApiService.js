@@ -13,12 +13,15 @@ class CrashApiService {
         return await getAsync(`${endpoint}/getNextCrash`);
     }
 
-    async GetPlayersInGame() {
-        return await getAsync(`${endpoint}/GetPlayersInGame`);
+    async GetPlayersInGame(gameId) {
+        return await getAsync(`${endpoint}/${gameId}/GetPlayersInGame`);
     } 
     async GetHashList() {
         return await getAsync(`${endpoint}/HashList`);
     } 
+    async GetCrashMeta(gameId){
+        return await getAsync(`${endpoint}/${gameId}/CrashMeta`)
+    }
 }
 
 
