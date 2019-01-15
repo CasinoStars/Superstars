@@ -44,7 +44,7 @@
         </form>
       </div>
     </div>
-    
+
     <!-- BLACKJACK TUTO -->
     <div id="tocenter">
       <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
@@ -346,13 +346,12 @@
       async playdealer(e) {
         e.preventDefault();
         document.getElementById('wait').style.visibility = "visible";
-        setTimeout(function () {
-          this.playdealersecond
-        }, 2000);
+        this.dealerplaying = true;
+        await new Promise(f => setTimeout(f, 2000));
+        await this.playdealersecond();
       },
 
       async playdealersecond() {
-        this.dealerplaying = true;
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
