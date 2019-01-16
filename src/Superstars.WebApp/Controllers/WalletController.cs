@@ -6,6 +6,7 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;

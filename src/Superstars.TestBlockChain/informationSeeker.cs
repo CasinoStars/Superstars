@@ -31,8 +31,6 @@ namespace Superstars.Wallet
             var unconfirmedTrxs = new List<string>();
             var historyTransaction = await client.GetBalance(privateKey);
             var transactionsResponses = new List<GetTransactionResponse>();
-            double totalSpent = 0;
-            double totalReceived = 0;
             bool isSpend;
             string info;
 
