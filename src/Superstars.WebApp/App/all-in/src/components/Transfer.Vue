@@ -6,8 +6,12 @@
     <!-- Upgrade -->
 
       <!-- RealWallet -->
+      
       <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-      <form @submit.prevent="Transfer($event, item.DestinationAccount)">
+                <div class="title">Transfer</div>
+
+      <form style="margin-top:12%;" @submit.prevent="Transfer($event, item.DestinationAccount)">
+
         <div class="field-wrap">
           <label>
             Nom de compte<span class="req">*</span>
@@ -270,6 +274,22 @@
     font-weight: $thin;
   }
 
+    .Transfer .title {
+    display: block;
+    text-decoration: none;
+    padding: 15px;
+    background: rgba($gray-light, 0.25);
+    color: $gray-light;
+    font-size: 28px;
+    float: left;
+    width: 100%;
+    text-align: center;
+    color:white;
+    transition: 0.5s ease;
+    background: $main-dark;
+
+  }
+
   .Transfer label {
     position: absolute;
     transform: translateY(6px);
@@ -311,7 +331,7 @@
     resize: vertical;
   }
 
-  .field-wrap {
+  .Transfer .field-wrap {
     position: relative;
     margin-bottom: 10px;
   }

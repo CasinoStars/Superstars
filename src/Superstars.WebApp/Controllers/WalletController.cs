@@ -159,7 +159,7 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result1 = await _walletGateway.GetPrivateKey(userId);
             var privateKey = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
-            if (userId == 0)
+            if (userId == 1)
                 privateKey = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
             else
                 privateKey =
