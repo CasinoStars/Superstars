@@ -12,12 +12,7 @@
       <ul class="tab-group">
                 <li style="color: white" class="tab active" v-if="this.view == 'provablyFair'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
                 <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
-
-                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairTest'"><a v-on:click="ChangeView('provablyFairTest')">Retrouver les dés</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairTest')">Retrouver les dés</a></li>
-                
-                
-                <li style="color: white" class="tab active" v-if="this.view == 'provablyFairCode'"><a v-on:click="ChangeView('ProvablyFairCode')" style="margin-leftg: 25%;">Code</a></li>
+                                
                 <!-- <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')" style="margin-leftg: 25%;">Code</a></li> -->
             </ul>
 
@@ -55,8 +50,8 @@
 
 
 
-<div style="color: white" v-if="this.view == 'provablyFairTest'">
-                <div class="tab-content">
+<!-- <div style="color: white" v-if="this.view == 'provablyFairTest'"> -->
+                <!-- <div class="tab-content">
                     <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Test:</span><br>{{seeds.clientSeed}}<br><br></h5>
         
 
@@ -89,8 +84,8 @@
                         <button type="submit" class="button button-block">Retrouver les dés</button>
                     </form>
                         <div v-for="(i,index) of (dicesFromSeeds)" :key="index" style="display: inline;"> {{i}}</div>
-                </div><!-- tab-content -->
-            </div>
+                </div>tab-content -->
+            <!-- </div> -->
         </div>
       </div>
 </template>
@@ -297,7 +292,7 @@ $br: 4px;
     color: $gray-light;
     font-size: 20px;
     float: left;
-    width: 50%;
+    width: 100%;
     text-align: center;
     cursor: pointer;
     transition: 0.5s ease;
