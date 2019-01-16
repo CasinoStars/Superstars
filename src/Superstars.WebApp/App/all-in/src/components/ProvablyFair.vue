@@ -11,9 +11,7 @@
 
       <ul class="tab-group">
                 <li style="color: white" class="tab active" v-if="this.view == 'provablyFair'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
-                                
-                <!-- <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFairCode')" style="margin-leftg: 25%;">Code</a></li> -->
+                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>                                
             </ul>
 
             <div style="color: white" v-if="this.view == 'provablyFair'">
@@ -42,50 +40,6 @@
 
                 </div><!-- tab-content -->
             </div>
-
-
-
-
-
-
-
-
-<!-- <div style="color: white" v-if="this.view == 'provablyFairTest'"> -->
-                <!-- <div class="tab-content">
-                    <h5 style="color: white"><span style="font-weight: bold; font-style: italic;">Test:</span><br>{{seeds.clientSeed}}<br><br></h5>
-        
-
-                    <form  @submit="RetriveDicesFromSeeds($event)">
-                            <div class="field-wrap">
-                                <label style="margin-left: 45%; ">
-                                    <span style="font-weight: bold; font-style: italic;">
-                                    Seed Client<span class="req">*</span> 
-                                    </span>
-                                </label><br><br>
-                                <input  type="string" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="clientSeedTest" required autocomplete="off"/>
-                            </div>
-                             <div class="field-wrap">
-                                <label style="margin-left: 45%; ">
-                                    <span style="font-weight: bold; font-style: italic;">
-                                    Seed Server<span class="req">*</span> 
-                                    </span>
-                                </label><br><br>
-                                <input  type="string" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="serverSeedTest" required autocomplete="off"/>
-                            </div>
-                             <div class="field-wrap">
-                                <label style="margin-left: 45%; ">
-                                    <span style="font-weight: bold; font-style: italic;">
-                                    Nombre de dés<span class="req">*</span> 
-                                    </span>
-                                </label><br><br>
-                                <input  type="int" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="nbOfDices" required autocomplete="off"/>
-                            </div>
-
-                        <button type="submit" class="button button-block">Retrouver les dés</button>
-                    </form>
-                        <div v-for="(i,index) of (dicesFromSeeds)" :key="index" style="display: inline;"> {{i}}</div>
-                </div>tab-content -->
-            <!-- </div> -->
         </div>
       </div>
 </template>
