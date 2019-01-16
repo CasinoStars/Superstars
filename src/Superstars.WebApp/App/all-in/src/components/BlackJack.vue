@@ -202,7 +202,6 @@
         this.queryPseudo = UserApiService.pseudo;
 
       this.wins = await this.executeAsyncRequest(() => GameApiService.getWinsBlackJackPlayer(this.queryPseudo));
-      console.log(this.wins);
       this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
@@ -212,8 +211,8 @@
         this.showModal();
       } else {
         this.playerBet = true;
-        await this.CheckWinner();
         await this.refreshHandValue();
+        await this.CheckWinner();
       }
       this.tutorialp0 = "Bienvenue sur le BlackJack !";
       await this.CheckWinner();
@@ -360,6 +359,7 @@
       },
 
       async CheckWinner() {
+        console.log("ICI " + this.handvalue);
         if (this.gameend == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue ==
           21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
           if (this.handvalue > 21) {
@@ -475,8 +475,8 @@
   #tutorialRectanglebj {
     width: 95%;
     height: 80%;
-    margin-left: 3%;
-    margin-top: -11%;
+    margin-left: 2.5%;
+    margin-top: 5.5%;
     border-radius: 20px;
     text-align: center;
     opacity: 0.99;
