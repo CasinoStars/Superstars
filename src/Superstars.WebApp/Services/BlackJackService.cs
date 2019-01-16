@@ -160,11 +160,9 @@ namespace Superstars.WebApp
         {
             if (BlackJackCheck(myhand)) return myhand;
 
-            while (GetHandValue(myhand) < 17 || GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn)
+            if(GetHandValue(myhand) < 17 || GetHandValue(ennemyhand) > GetHandValue(myhand) && _dealerTurn)
             {
                 DrawCard(myhand);
-
-                if (BlackJackCheck(myhand)) return myhand;
             }
 
             return myhand;
