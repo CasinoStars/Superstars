@@ -25,21 +25,22 @@
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
     </div>
+           <div class="alert alert-success" style="text-align: center; margin-top: 5%" v-if="confirmation.length > 0">
+      <li v-for="e of confirmation" :key="e">{{e}}</li>
+    </div>
     <div class="transaction">         
           <table id="pendingTrx">
            <tr>
               <th>Transactions en attentes</th>
             </tr>
             <div class = "pendingTrxList">
-              <center>
               <tr>
-                  <div v-for="transfer in TransferList" >
-                  <td >You send {{transfer.amount}} </td>
-                  <td >to {{transfer.receiverName}} </td>
-                  <td > at {{transfer.transferDate}} </td>
+                  <div class = "formLine" v-for="transfer in TransferList" >
+                   <td>You send {{transfer.amount}} 
+                   to {{transfer.receiverName}} 
+                   at {{transfer.transferDate}} </td>
             </div>                  
               </tr>
-              </center>
             </div>
             </table>
         </div>      
@@ -67,6 +68,7 @@
         trueBalance:'',
         success :'',
         errors: [],
+        confirmation: [],
         TransferList: [],
         isPseudoExist: false,
         Responses: []
@@ -93,7 +95,8 @@
          this.trueBalance = await this.executeAsyncRequest(() =>
           WalletApiService.GetTrueBalance()
         );
-        var errors = [];  
+        var errors = [];
+        var confirmation = [];  
         if(this.item.AmountToSend > this.trueBalance) {
 
         this.BTCAddress = await this.executeAsyncRequest(() =>
@@ -106,14 +109,6 @@
           );
         }
 
-      },
-
-      async GetPseudoFromId(userIddd){
-        var myvar = await this.executeAsyncRequest(() =>
-        WalletApiService.GetPseudoFromId(userIddd)
-        );
-
-        return useriddd.userName;
       },
 
       async GetTransfer() {
@@ -134,6 +129,7 @@
          WalletApiService.isPseudoExist(this.item)
          );
          var errors = [];
+         var confirmation = [];
 
        //   e.preventDefault();
         if(this.isPseudoExist == "true") {
@@ -143,11 +139,12 @@
           this.trueBalance = await this.executeAsyncRequest(() =>
           WalletApiService.GetTrueBalance(this.item)
         );  
-        // console.log(this.trueBalance + "truebalance");
-        // console.log(this.AmountToSend);
+
           if(this.item.AmountToSend < this.trueBalance) {
-          await this.executeAsyncRequest(() =>
-          WalletApiService.Transfer(this.item));
+              await this.executeAsyncRequest(() =>
+              WalletApiService.Transfer(this.item));
+              confirmation.push("Vous avez envoyer " + this.item.AmountToSend + " Bits to " + this.item.DestinationAccount);
+              this.confirmation = confirmation;
           }
           else{
                       errors.push("Vous avez pas assez de bits");
@@ -157,9 +154,8 @@
           errors.push("Le pseudo n'exist pas");
         }
                   this.errors = errors;
-
+                  this.confirmation = confirmation;
        }
-
     }
   };
 </script>
@@ -195,6 +191,14 @@
     background: $body-bg;
     font-family: "Titillium Web", sans-serif;
   }
+
+  .Transfer .formLine {
+      border: 1px solid rgb(0, 0, 0);
+  }
+
+  //  .Transfer.td {
+  //    width: 1000px;
+  //  }
 
   .Transfer a {
     text-decoration: none;
@@ -255,6 +259,11 @@
     display: none;
   }
 
+  .Transfer .pendingTrxList .formLine {
+  padding: 1px;
+  font-size: 100%;
+}
+
   .Transfer h5 {
     text-align: center;
     color: $white;
@@ -305,26 +314,6 @@
   .field-wrap {
     position: relative;
     margin-bottom: 10px;
-  }
-
-  .wallet .button {
-    border: 0;
-    outline: none;
-    border-radius: 0;
-    padding: 15px 0;
-    font-size: 2rem;
-    font-weight: $bold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    background: $main;
-    color: $white;
-    transition: all.5s ease;
-    -webkit-appearance: none;
-
-    &:hover,
-    &:focus {
-      background: $main-dark;
-    }
   }
 
   .button-block {
