@@ -325,6 +325,7 @@
       },
 
       async StandandFinish() {
+        await this.refreshHandValue();
         await this.executeAsyncRequest(() => BlackJackApiService.StandPlayer());
         await this.CheckWinner();
       },
@@ -332,27 +333,29 @@
       async playdealer(e) {
         e.preventDefault();
         this.dealerplaying = true;
-        await new Promise(f => setTimeout(f, 10000000));
+        await this.CheckWinner();
+        while(this.dealerhandvalue < 17 || this.handvalue > this.dealerhandvalue) {
+        await new Promise(f => setTimeout(f, 1500));
         await this.playdealersecond();
+        } 
       },
 
       async playdealersecond() {
         await this.executeAsyncRequest(() => BlackJackApiService.PlayAI());
         await this.refreshCards();
         await this.refreshHandValue();
-        this.gameend = true;
         await this.CheckWinner();
       },
 
       async CheckWinner() {
-        console.log("ICI " + this.handvalue);
-        if (this.gameend == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue ==
-          21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
+          await this.refreshHandValue();
+          await this.refreshCards();
+        if (this.handvalue < this.dealerhandvalue && this.iaturn == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
           if (this.handvalue > 21) {
             this.winnerlooser = 'Vous avez perdu !';
             this.playerwin = 'AI';
           } else if (this.dealerhandvalue > 21) {
-            this.winnerlooser = 'Vous avez gagné !'
+            this.winnerlooser = 'Vous avez gagné ! 2 '
             this.playerwin = 'Player';
           } else if (this.dealerhandvalue == 21) {
             this.winnerlooser = 'BLACKJACK ! Vous avez perdu !'
