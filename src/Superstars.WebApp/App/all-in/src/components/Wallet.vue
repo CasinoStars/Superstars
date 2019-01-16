@@ -482,7 +482,7 @@
     resize: vertical;
   }
 
-  .field-wrap {
+  .wallet .field-wrap {
     position: relative;
     margin-bottom: 10px;
   }

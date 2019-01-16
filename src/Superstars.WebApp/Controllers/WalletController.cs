@@ -6,7 +6,9 @@ using Superstars.DAL;
 using Superstars.Wallet;
 using Superstars.WebApp.Authentication;
 using Superstars.WebApp.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -19,11 +21,13 @@ namespace Superstars.WebApp.Controllers
     {
         private readonly WalletGateway _walletGateway;
         private readonly UserGateway _userGateway;
+        private readonly TransferGateway _transferGateway;
 
-        public WalletController(WalletGateway walletGateway, UserGateway userGateway)
+        public WalletController(WalletGateway walletGateway, UserGateway userGateway, TransferGateway transferGateway)
         {
             _walletGateway = walletGateway;
             _userGateway = userGateway;
+            _transferGateway = transferGateway;
         }
 
         /// <summary>
@@ -56,9 +60,13 @@ namespace Superstars.WebApp.Controllers
         {
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var receiver = await _userGateway.FindByName(model.DestinationAccount);
-            await _walletGateway.AddCoins(receiver.UserId, 1, 0, model.AmountToSend);
+            var receiverData = await _userGateway.FindByName(model.DestinationAccount);
+            var userData = await _userGateway.FindById(userId);
+           // var userName = await _userGateway.findb
+            await _walletGateway.AddCoins(receiverData.UserId, 1, 0, model.AmountToSend);
             await _walletGateway.AddCoins(userId, 1, 0, -model.AmountToSend);
+            await _transferGateway.CreateTransfer(userId, userData.UserName,model.AmountToSend,receiverData.UserId,receiverData.UserName);
+            await _userGateway.ActionTransfer(userId, userData.UserName,receiverData.UserId,receiverData.UserName,model.AmountToSend,DateTime.UtcNow);
         }
 
 
@@ -86,7 +94,15 @@ namespace Superstars.WebApp.Controllers
             return response;
         }
 
+        [HttpGet("GetTransfer")]
 
+        public async Task<List<TransferData>> GetTransfer()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var transferData = await _transferGateway.GetTransferData(userId);
+            var transferList = transferData.ToList();
+            return transferList;
+        }
 
         [HttpPost("{pot}/creditBTCPlayer")]
         public async Task<IActionResult> CreditPlayerBTC(int pot)
@@ -118,8 +134,7 @@ namespace Superstars.WebApp.Controllers
             var privateKey =
                 new BitcoinSecret(
                     "cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"); //PRIVATE KEY OF ALL'IN BANKROLL
-            var onBlockchain =
-                informationSeeker.HowMuchCoinInWallet(privateKey,
+            var onBlockchain = await informationSeeker.HowMuchCoinInWallet(privateKey,
                     new QBitNinjaClient(Network.TestNet)); //AMOUNT BTC ON BLOCKCHAIN
             var allCredit = await _walletGateway.GetAllCredit();
             decimal BTCBank;
@@ -144,13 +159,13 @@ namespace Superstars.WebApp.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result1 = await _walletGateway.GetPrivateKey(userId);
             var privateKey = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
-            if (userId == 0)
+            if (userId == 1)
                 privateKey = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
             else
                 privateKey =
                     new BitcoinSecret(
                         result1.Content.PrivateKey /*"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"*/);
-            var onBlockchain = informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
+            var onBlockchain = await informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient(Network.TestNet));
             var credit = await _walletGateway.GetCredit(userId);
             var realBalance = onBlockchain + credit.Content;
             return realBalance;
@@ -188,7 +203,7 @@ namespace Superstars.WebApp.Controllers
             BitcoinSecret privateKey = new BitcoinSecret(/*result1.Content.PrivateKey*/"cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
             QBitNinjaClient client = new QBitNinjaClient(Network.TestNet);
             BitcoinAddress destinationAddress = BitcoinAddress.Create(WalletViewModel.DestinationAddress,Network.TestNet);
-            var transaction = TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, 5000, 6, client);
+            var transaction = await TransactionMaker.MakeATransaction(privateKey,destinationAddress, WalletViewModel.AmountToSend, 5000, 6, client);
             List<string> response =  TransactionMaker.BroadCastTransaction(transaction,client);
 
             return response;

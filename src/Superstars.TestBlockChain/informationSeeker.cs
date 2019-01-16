@@ -31,8 +31,6 @@ namespace Superstars.Wallet
             var unconfirmedTrxs = new List<string>();
             var historyTransaction = await client.GetBalance(privateKey);
             var transactionsResponses = new List<GetTransactionResponse>();
-            double totalSpent = 0;
-            double totalReceived = 0;
             bool isSpend;
             string info;
 
@@ -91,9 +89,9 @@ namespace Superstars.Wallet
         /// <param name="privateKey"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static int HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
+        public static async Task<int> HowMuchCoinInWallet(BitcoinSecret privateKey, QBitNinjaClient client)
         {
-            var Coins = new List<Coin>();/*FindUtxo(privateKey, client);*/;
+            var Coins = await FindUtxo(privateKey, client);
             var total = 0;
             foreach (var coin in Coins)
             {
@@ -117,11 +115,11 @@ namespace Superstars.Wallet
         /// <param name="client"></param>
         /// <param name="nbOfConfirmationReq"></param>
         /// <returns></returns>
-        public static ICoin[] FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client)
+        public static async Task<IEnumerable<ICoin>> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client)
         {
-            var coins = client.GetBalance(bitcoinPrivateKey.GetAddress(), true).Result.Operations
-                .SelectMany(op => op.ReceivedCoins).ToArray();
-            return coins;
+            var coinsTask = await client.GetBalance(bitcoinPrivateKey.GetAddress(), true);
+            var coins = coinsTask;
+            return coins.Operations.SelectMany(op => op.ReceivedCoins).ToArray();
         }
     }
 }

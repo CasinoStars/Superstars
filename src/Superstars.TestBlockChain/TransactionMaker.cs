@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NBitcoin;
 using QBitNinja.Client;
 
@@ -14,15 +15,15 @@ namespace Superstars.Wallet
         /// <param name="key"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static Transaction MakeATransaction(BitcoinSecret senderPrivateKey, BitcoinAddress destinationAdress,
+        public static async Task<Transaction> MakeATransaction(BitcoinSecret senderPrivateKey, BitcoinAddress destinationAdress,
             int amountToSend, int minerFee, int nbOfConfimationReq, QBitNinjaClient client)
         {
-            var total = informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
+            var total = await informationSeeker.HowMuchCoinInWallet(senderPrivateKey, client);
             if (amountToSend + minerFee > total)
                 throw new ArgumentException(" AmountToSend + MinerFee should not be greater than the balance");
             Money amount = 0;
 
-            var UTXOS = informationSeeker.FindUtxo(senderPrivateKey, client);
+            var UTXOS = await informationSeeker.FindUtxo(senderPrivateKey, client);
             var transaction = new Transaction();
             var senderScriptPubKey = senderPrivateKey.GetAddress().ScriptPubKey;
             var sortedDict = from entry in UTXOS orderby entry.Amount descending select entry;

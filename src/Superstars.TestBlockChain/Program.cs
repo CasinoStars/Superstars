@@ -24,6 +24,11 @@ namespace Superstars.Wallet
             var btcS = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
             var btcS2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
 
+            var a = await client.GetBalance(btcS2, false);
+            var b = await informationSeeker.FindUtxo(btcS, client);
+
+            Console.ReadKey();
+
             //  static HttpClient client = new HttpClient();
            // var coinInWallet2 = await informationSeeker.SeekPendingTrx(btcS, client);
 

@@ -56,6 +56,8 @@ namespace Superstars.WebApp
             services.AddSingleton<YamsIAService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
+            services.AddSingleton<TransferGateway>();
+
             services.AddSingleton<PasswordHasher>();
 
             services.AddAuthorization(options =>
