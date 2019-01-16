@@ -2,7 +2,7 @@
   <div class="stats">
     <br>
     <br>
-    <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
+    <div style="text-align: center;font-family: 'Courier New', sans-serif;">
       <h1 style="font-variant: small-caps; font-size: 45px;">
         <i class="fa fa-chevron-left" @click="SwapTrueOrFake()" id="chevron"></i>
         <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
@@ -25,7 +25,7 @@
         <th>Victoire</th>
         <th>Défaite</th>
         <th>Egalité</th>
-        <th>Temps par parties</th>
+        <th>Temps moyen</th>
       </tr>
       <tr v-for="(e,index) of playerStatsData" :key="index">
         <td>{{e.gameName}}</td>

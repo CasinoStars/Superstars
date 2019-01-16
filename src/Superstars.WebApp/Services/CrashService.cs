@@ -1,52 +1,53 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CrashGameMath;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Hosting;
-using NBitcoin;
 using Superstars.DAL;
-using Superstars.WebApp.Controllers;
 
 namespace Superstars.WebApp.Services
 {
-    public class CrashService : IHostedService, IDisposable
+    public class CrashService : IHostedService
     {
         private readonly IHubContext<SignalRHub> _signalR;
         private double _crashValue;
-        private readonly CrashBuilder _crashBuilder;
+        private CrashBuilder _crashBuilder;
         private readonly RankGateway _rankGateway;
         private readonly GameGateway _gameGateway;
         private readonly CrashGateway _crashGateway;
         private readonly WalletGateway _walletGateway;
-
-        public CrashService(IHubContext<SignalRHub> signalR, RankGateway rankGateway, CrashBuilder crashBuilder, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
+        private CancellationTokenSource _cancellationTokenSource;
+        private Task _runningTask;
+        private CancellationToken RunToken => _cancellationTokenSource.Token;
+        public CrashService(IHubContext<SignalRHub> signalR, RankGateway rankGateway, GameGateway gameGateway, CrashGateway crashGateway, WalletGateway walletGateway)
         {
             _signalR = signalR;
-            _crashValue = crashBuilder.NextCrashValue();
-            _crashBuilder = crashBuilder;
+            _crashBuilder = new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526" + new Random().Next(int.MaxValue));
+            _crashValue = _crashBuilder.NextCrashValue();
             _gameGateway = gameGateway;
             _crashGateway = crashGateway;
             _walletGateway = walletGateway;
             _rankGateway = rankGateway;
         }
 
-        private async Task LaunchNewGame()
+        private async Task LaunchNewGame(int gameId)
         {
-             await _signalR.Clients.All.SendAsync("NewGame");
+            await _gameGateway.ActionStartGameCrash(DateTime.UtcNow, gameId);
+            await _signalR.Clients.All.SendAsync("NewGame");
         }
         private async Task LaunchStep(double step, double i)
         {
             await _signalR.Clients.All.SendAsync("Step", step, i);
         }
 
-        private async Task LaunchEndGame()
+        private async Task LaunchEndGame(int gameId)
         {
-            await _signalR.Clients.All.SendAsync("EndGame", _crashValue);
+            await _gameGateway.ActionEndGameCrash(DateTime.UtcNow, gameId, _crashValue);
+            await _signalR.Clients.All.SendAsync("EndGame", gameId, CrashBuilder.ActualHashString, _crashValue);
             await Task.Delay(2000);
         }
 
@@ -61,8 +62,8 @@ namespace Superstars.WebApp.Services
             double i = 0;
             while (multi < _crashValue)
             {
-                
-                multi = Math.Exp(i/100);
+
+                multi = Math.Exp(i / 100);
                 multi = Math.Round(multi * 100) / 100;
                 i++;
                 await LaunchStep(multi, i);
@@ -98,7 +99,7 @@ namespace Superstars.WebApp.Services
             return avg;
         }
 
-        private async Task SetWins()
+        private async Task SetWins(int gameId)
         {
             var players = await GetPlayersInGame();
             foreach (var player in players)
@@ -111,11 +112,12 @@ namespace Superstars.WebApp.Services
                     continue;
                 }
                 var potDouble = player.Multi * player.Bet;
-                var pot = (int) potDouble;
+                var pot = (int)potDouble;
 
                 await _gameGateway.UpdateStats(player.UserId, 2, player.MoneyTypeId, 1, 0, 0, player.Bet, player.Bet,
                     avgTime.Milliseconds);
-
+                await _gameGateway.ActionPlayerWinCrash(player.UserId, DateTime.UtcNow, gameId, player.Multi, player.Bet,
+                    player.MoneyTypeId, pot);
                 if (player.MoneyTypeId == 0)
                     await _walletGateway.AddCoins(player.UserId, 0, pot, 0);
                 else
@@ -124,40 +126,50 @@ namespace Superstars.WebApp.Services
         }
 
 
-        private async Task GameLoop()
+        private async Task Process(CancellationToken cancellationToken)
         {
-            for (var i = 0; i < 1000; i++)
+            while (true)
             {
-                var gameId = await _gameGateway.CreateGame(2);
-                await WaitingForBets();
-                await Task.WhenAll(LaunchNewGame(), PlayTime());
-                await LaunchEndGame();
-                await _gameGateway.UpdateGameEnd(gameId.Content, 2, "");
-                await SetWins();
-                _crashValue = _crashBuilder.NextCrashValue();
-            }       
+                for (var i = 0; i < 999; i++)
+                {
+                    await GameLoop(cancellationToken);
+                    if (RunToken.IsCancellationRequested) return;
+                }
+                _crashBuilder = new CrashBuilder(1000, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526" + new Random().Next(int.MaxValue));
+                if (RunToken.IsCancellationRequested) return;
+            }
+        }
+
+        private async Task GameLoop(CancellationToken cancellationToken)
+        {
+            var gameId = await _gameGateway.CreateGame(2);
+            await _crashGateway.CreateCrashGame("", 0);
+            await WaitingForBets();
+            await Task.WhenAll(LaunchNewGame(gameId.Content), PlayTime());
+            await LaunchEndGame(gameId.Content);
+            await _gameGateway.UpdateGameEnd(gameId.Content, 2, "");
+            await _crashGateway.UpdateCrashGame(CrashBuilder.ActualHashString, CrashBuilder.ActualHashValue);
+            await SetWins(gameId.Content);
+            _crashValue = _crashBuilder.NextCrashValue();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            new Task(async()=>await GameLoop()).Start();
+            _runningTask = Process(cancellationToken);
+            _cancellationTokenSource = new CancellationTokenSource();
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            _cancellationTokenSource.Cancel();
+            return _runningTask;
         }
 
         public async Task<List<CrashData>> GetPlayersInGame()
         {
             var players = (List<CrashData>)await _crashGateway.GetGamePlayers();
             return players;
-        }
-
-        public void Dispose()
-        {
-            GameLoop().Dispose();
         }
     }
 }

@@ -1,5 +1,79 @@
 <template>
     <div class=CrashTest>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+
+                <div class="modal-header">
+                   <div style="padding-top: 2px; font-family: 'Courier New', sans-serif;" class="col-12 modal-title text-center">
+                    <router-link class="close" v-on:click.native="closeModal()" to="">&times;</router-link>
+                    </div>
+                </div>
+
+
+                <div class="modal-body">
+                    Numéro de la partie: {{meta.gameId}}
+                    <br>
+                    Date de début: {{meta.startDate}}
+                    <br>
+                    Date de fin: {{meta.endDate}}
+                    <br>
+                    Hash: {{meta.crashHash}}
+                    <br>
+                    X: {{meta.crashValue}}
+                    <div class="component-box-player-list col">
+                        <table class="playerlist-table table table-striped table-bordered table-condensed table-hover">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>Joueur</th>
+                                    <th class="text-right">X</th>
+                                    <th class="text-right">Mise</th>
+                                    <th class="text-right">Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(e, index) of playersGame" :key="index">
+                                    <td>{{e.userName}}</td>
+                                    <td class="text-right">{{e.multi}}</td>
+                                    <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
+                                    <td class="text-right" style="color: green" v-if="profit(meta.crashValue, e.bet, e.multi).toLocaleString('en') >= 1">{{profit(meta.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
+                                    <td class="text-right" style="color: red" v-else>{{profit(meta.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
+                                 
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <div class="row">
+                                <div class="table-responsive col">
+                                    <table class="playerlist-stats-table table table-striped table-condensed">
+                                        <tbody>
+                                            <tr class="table-footer">
+                                                <td>
+                                                    <center>Joueurs: {{playersGame.length}}</center>
+                                                </td>
+                                                <td>
+                                                    <center>Mises: {{totalGameBet}} bits</center>
+                                                </td>
+                                                <td>
+                                                    <center>Profits: {{totalGameProfit.toLocaleString('en')}} bits</center>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-auto">
                 <div class="row">
@@ -34,26 +108,33 @@
                             <div style="margin-right: 42%;">
 
                                 <button type="submit" class="btn btn-light" v-if="isWaiting && !hasPlayed">Confirmer</button>
-                                <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed">Sortir</button>
+                                <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed && !isOut">Sortir</button>
                                 <button disabled type="submit" class="btn btn-light" v-else>Confirmer</button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div class="row">
-                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col" style="margin-left:10px">
+                    <table class="playerlist-table table table-striped table-bordered table-condensed table-hover col"
+                        style="margin-left:10px">
                         <thead class="table-header">
                             <tr>
                                 <th>Hash</th>
                                 <th class="text-right">X</th>
+                                <th>Mise</th>
+                                <th class="text-right">Multi</th>
+                                <th>Profit</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(e, index) of hashList" :key="index">
-                                <td>{{e.hashString}}</td>
-                                <td class="text-right" style="color: green" v-if="e.hashValue >= 2">{{e.hashValue}}</td>
-                                <td class="text-right" style="color: red" v-else>{{e.hashValue}}</td>
+                            <tr v-for="(e, index) of hashList" :key="index" v-on:click="showPlay(e.gameId)">
+                                <td>{{e.crashHash}}</td>
+                                <td class="text-right" style="color: green" v-if="e.crashValue >= 2">{{e.crashValue}}</td>
+                                <td class="text-right" style="color: red" v-else>{{e.crashValue}}</td>
+                                <td>{{e.bet}}</td>
+                                <td class="text-right">{{e.multi}}</td>
+                                <td>{{profit(e.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
 
 
                             </tr>
@@ -76,9 +157,8 @@
                             <td>{{e.userName}}</td>
                             <td class="text-right">{{e.multi}}</td>
                             <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                            <td class="text-right" v-if="multi < e.multi">{{(e.bet * multi).toLocaleString('en')}}</td>
-                            <td class="text-right" style="color: green;" v-else>{{(e.bet *
-                                e.multi).toLocaleString('en')}}</td>
+                            <td class="text-right" v-if="multi < e.multi">{{profit(e.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
+                            <td class="text-right" style="color: green;" v-else>{{profit(multi, e.bet, e.multi).toLocaleString('en')}}</td>
 
                         </tr>
                     </tbody>
@@ -136,7 +216,15 @@
                 hasPlayed: false,
                 points: [],
                 ctx: null,
-                hashList: null
+                hashList: null,
+                meta:{},
+                playersGame: [],
+                totalGameBet: 0,
+                totalProfit: 0,
+                totalGameProfit: 0,
+                isOut : false,
+                definitiveMulti: 0,
+                lineColor : "black"
             }
         },
 
@@ -146,6 +234,7 @@
         },
 
         async mounted() {
+
             this.hashList = await CrashApiService.GetHashList();
             console.log(this.hashList);
             var signalR = require("@aspnet/signalr");
@@ -153,19 +242,46 @@
                 .Error).build();
             this.connection.on("NewGame", async () => {
                 console.log("start")
-                this.isWaiting = false
+                this.isWaiting = false;
+                this.isOut = false;
                 //this.myLoop();
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
             });
-            this.connection.on("EndGame", async (ite) => {
+            this.connection.on("EndGame", async (gameId, hash, ite) => {
                 console.log("Chart stop at " + this.multi + " serv stop at " + ite)
-
+                 if(this.multi<this.definitiveMulti){
+                    this.lineColor="red"
+                    this.chart.data.datasets.forEach((dataset) => {                    
+                    dataset.borderColor = this.lineColor
+                });
+                    this.chart.update()
+                    this.updateNumber()
+                }
                 this.multi = ite;
 
                 clearInterval(this.fn);
-                this.hashList = await CrashApiService.GetHashList();
+                if (!this.hasPlayed) {
+                    this.hashList.unshift({
+                        gameId: gameId,
+                        crashHash: hash,
+                        crashValue: ite,
+                        bet: 0,
+                        multi: 0
+                    });
+                } else {
+                    this.hashList.unshift({
+                        gameId: gameId,
+                        crashHash: hash,
+                        crashValue: ite,
+                        bet: this.bet,
+                        multi: this.definitiveMulti
+                    });
+                }
+                if (this.hashList.length >= 10)
+                    this.hashList.pop();
 
+               
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
             })
@@ -177,6 +293,7 @@
             })
             this.connection.on("Wait", async () => {
                 console.log("wait")
+                this.definitiveMulti = 0;
                 this.isWaiting = true
                 this.hasPlayed = false;
                 this.totalBet = 0;
@@ -186,8 +303,9 @@
                 var canvas = document.getElementById("linechart");
                 var ctx = canvas.getContext("2d");
                 ctx.font = "50px Arial";
-                ctx.strokeStyle = "red";
+                ctx.strokeStyle = "black";
                 ctx.strokeText("En attente des mises", 100, 200);
+                this.lineColor ="black";
                 this.i = 0
                 this.playersData = [];
                 await this.RefreshBTC();
@@ -220,12 +338,37 @@
             ...mapActions(['RefreshFakeCoins']),
             ...mapActions(['RefreshBTC']),
 
+            profit(Crash, bet, multi) {
+                if (Crash < multi) {
+                    return 0 - bet;
+                } else {
+                    return bet * multi - bet;
+                }
+            },
+            async showPlay(gameId) {
+                var modal = document.getElementById('myModal');
+                modal.style.display = "block";
+                this.meta = await CrashApiService.GetCrashMeta(gameId);
+                this.playersGame = await CrashApiService.GetPlayersInGame(gameId);
+                this.playersGame.forEach(e => {
+                    this.totalGameBet+=e.bet;
+                    this.totalGameProfit+= this.profit(this.meta.crashValue, e.bet, e.multi)
+                });
+
+            },
+            closeModal(){
+                var modal = document.getElementById('myModal');
+                modal.style.display = "none";
+                this.totalGameBet=0;
+                this.totalGameProfit=0;
+            },
             updateNumber() {
                 var canvas = document.getElementById("linechart");
                 var ctx = canvas.getContext("2d");
                 ctx.font = "70px Arial";
-                ctx.strokeText("X"+this.multi.toFixed(2), 250, 200);
+                ctx.strokeText("X" + this.multi.toFixed(2), 250, 200);
             },
+
 
             initializeChart() {
                 this.chart = new Chart(document.getElementById("linechart"), {
@@ -239,7 +382,7 @@
 
                             label: "",
                             fill: false,
-                            borderColor: 'rgb(255, 99, 132)',
+                            borderColor: this.lineColor,
                             data: [],
                             pointRadius: 0,
                         }]
@@ -284,6 +427,7 @@
                         hover: {
                             animationDuration: 0, // duration of animations when hovering an item
                         },
+                        
                         responsiveAnimationDuration: 0 // animation duration after a resize
                     }
                 });
@@ -298,6 +442,7 @@
                         x: x,
                         y: y
                     });
+                    dataset.borderColor = this.lineColor
                 });
                 chart.options.scales = {
                     xAxes: [{
@@ -323,10 +468,13 @@
                             max: maxY,
                             precision: 2
                         }
-                    }]
-
+                    }],
+                    
                 }
-
+                if(this.multi>=this.definitiveMulti && this.hasPlayed){
+                    this.lineColor = "green"
+                }
+                    
                 chart.update();
             },
 
@@ -366,17 +514,26 @@
                         if (this.moneyType === false) {
                             await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
                                 0));
-                            await this.RefreshFakeCoins();
+
+                            //await this.RefreshFakeCoins();
+
                             this.success = 'Vous venez de parier: ' + this.bet + ' All`In Coins';
+                            this.definitiveMulti = this.playerMulti;
+
+
                         } else {
                             await this.executeAsyncRequest(() => GameApiService.BetCrash(this.bet, this.playerMulti,
                                 1));
+
                             await this.RefreshBTC();
                             this.success = 'Vous venez de parier: ' + this.bet + ' Bits';
+                            this.definitiveMulti = this.playerMulti;
                         }
+                        
                     } catch (error) {
                         console.log(error)
                     }
+
                 }
             },
 
@@ -387,7 +544,8 @@
                 });
             },
             async out() {
-                this.hasPlayed = false;
+                this.isOut=true;
+                this.definitiveMulti = this.multi;
                 await this.executeAsyncRequest(() => GameApiService.UpdateCrash(this.multi));
             }
         }
@@ -424,6 +582,8 @@
         background-color: #343a40;
         color: white;
     }
+
+
 
     .onoffswitch {
         position: relative;

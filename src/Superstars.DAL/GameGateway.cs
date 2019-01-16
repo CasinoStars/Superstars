@@ -168,24 +168,90 @@ namespace Superstars.DAL
             }
         }
 
+        public async Task ActionStartGameCrash(DateTime date, int gameId)
+        {
+
+            string action = "A game of Crash (2) with GameID " + gameId + " has started at " + date;
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = 0, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionEndGameCrash(DateTime date, int gameId, double multi)
+        {
+
+
+            string action = "A game of Crash (2) with GameID " + gameId +
+                     " has ended with a multi of " + multi + " at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = 0, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionPlayerBetCrash(int userId, string userName, DateTime date, int gameId, double multi, int bet, int moneyType)
+        { 
+
+            string action = "Player "+userName+" with Id "+userId+" bet "+bet+" with money type "+moneyType+" on multi "+multi+" on a game of Crash (2) with GameID " + gameId +
+                            " at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userId, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionPlayerOutCrash(int userId, string userName, DateTime date, int gameId, double multi)
+        {
+
+            string action = "Player " + userName + " with Id " + userId + " outed on multi " + multi + " on a game of Crash (2) with GameID " + gameId +
+                            " at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userId, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task ActionPlayerWinCrash(int userId, DateTime date, int gameId, double multi, int bet, int moneyType, int moneyEarned)
+        {
+            string action = "Player " + userId + " bet " + bet + " with money type " + moneyType + " on multi " + multi + " on a game of Crash (2) with GameID " + gameId +
+                            " and earned "+ moneyEarned+" at " + date.ToString();
+
+            using (var con = new SqlConnection(_sqlConnexion.connexionString))
+            {
+                await con.ExecuteAsync("sp.sLogTableCreate", new { UserId = userId, ActionDate = date, ActionDescription = action },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task ActionStartGameBTC(int userid, string username, DateTime date, int gametype, int gameid)
         {
             Result<string> pot;
             decimal bet;
 
+            string action;
             if (gametype == 0)
             { 
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet/2;
+                action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid +
+                         " and a bet of " + bet + " bits (BTC) at " + date.ToString();
             } else {
                 pot = await GetBlackJackPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet/2;
+                action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid +
+                                " and a bet of " + bet + " bits (BTC) at " + date.ToString();
             }
-
-            string action = "Player named " + username + " with UserID " + userid + " started a game of " + gametype + " with GameID " + gameid + 
-                " and a bet of " + bet + " bits (BTC) at " + date.ToString();
+            
 
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
@@ -208,21 +274,24 @@ namespace Superstars.DAL
                 money = " All`in Coins ";
             }
 
+            string action;
             if (gametype == 0)
             {
                 pot = await GetYamsPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet / 2;
+                action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
+                         " and has " + haswin + " a bet of " + bet + money + "at " + date.ToString();
             }
-            else
+            else 
             {
                 pot = await GetBlackJackPot(gameid);
                 bet = Convert.ToDecimal(pot.Content);
                 bet = bet / 2;
+                action = "A game of " + gametype + " with GameID " + gameid +
+                                " and has " + haswin + " a bet of " + bet + money + "at " + date.ToString();
             }
 
-            string action = "Player named " + username + " with UserID " + userid + " ended a game of " + gametype + " with GameID " + gameid +
-                " and has " + haswin + " a bet of " + bet +  money + "at " + date.ToString();
 
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {
@@ -333,7 +402,7 @@ namespace Superstars.DAL
             }
         }
 
-        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int moneyTypeId, int wins, int losses, int equality, int profit, int bet, int averageTime)
+        public async Task<Result<int>> UpdateStats(int userid, int gameTypeId, int moneyTypeId, int wins, int losses, int equality, int profit, int bet, float averageTime)
         {
             using (var con = new SqlConnection(_sqlConnexion.connexionString))
             {

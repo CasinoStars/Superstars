@@ -19,9 +19,22 @@
         return this.identity != null;
     }
 
+    async isPseudoExist(model) {
+        return await getAsync(`${endpoint}/isPseudoExist`, model);
+    }
+    
     get accessToken() {
         var identity = this.identity;
         return identity ? identity.bearer.access_token : null;
+    }
+
+    get isAdmin() {
+        let accessToken = this.accessToken;
+        if(accessToken === null) return false;
+        accessToken = accessToken.split(".")[1];
+        accessToken = atob(accessToken);
+        let claimsData = JSON.parse(accessToken);
+        return claimsData.Role === "Admin";
     }
 
     get pseudo() {

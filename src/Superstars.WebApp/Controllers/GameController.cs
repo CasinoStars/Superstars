@@ -116,6 +116,8 @@ namespace Superstars.WebApp.Controllers
             var data = new CrashData {UserName = user.UserName, Bet = bet, Multi = crash};
             await _hubContext.Clients.All.SendAsync("Bet", data);
 
+            await _gameGateway.ActionPlayerBetCrash(userId, user.UserName, DateTime.UtcNow, data.GameId, crash, bet,
+                moneyTypeId);
             if (moneyTypeId == 0)
             {
                 Result result2 = await _walletGateway.AddCoins(userId, 0, -bet, -bet);
@@ -140,6 +142,7 @@ namespace Superstars.WebApp.Controllers
             var result = await _crashGateway.UpdateCrashPlayer(userId, crash);
             var data = new CrashData { UserName = user.UserName, Multi = crash };
             await _hubContext.Clients.All.SendAsync("Update", data);
+            await _gameGateway.ActionPlayerOutCrash(userId, user.UserName, DateTime.UtcNow, data.GameId, crash);
 
             return this.CreateResult(result);
 
@@ -199,15 +202,15 @@ namespace Superstars.WebApp.Controllers
            
             if (win == "Player")
             {
-                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 1, 0, 0, bet, bet, avgTime.Milliseconds);
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 1, 0, 0, bet, bet, (float)avgTime.TotalMilliseconds);
             }
             else if(win == "AI")
             {
-                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 1, 0, -bet, bet, avgTime.Milliseconds);
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 1, 0, -bet, bet, (float)avgTime.TotalMilliseconds);
             }
             else if(win == "Equality")
             {
-                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 0, 1, 0, bet, avgTime.Milliseconds);
+                result = await _gameGateway.UpdateStats(userId, gameTypeId, moneyTypeId, 0, 0, 1, 0, bet, (float)avgTime.TotalMilliseconds);
             }
             return Result.Success(result);
         }
