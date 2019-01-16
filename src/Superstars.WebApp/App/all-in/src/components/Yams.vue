@@ -55,8 +55,8 @@
             <h3 style="font-size:150%;">TOUR: {{nbTurn}}</h3>
           </div>
         </div><br>
-        <h3 style="font-size:115%; text-transform: capitalize;">SCORE DE L'IA: <strong>{{IaScore}}</strong></h3>
-        <h3 style="font-size:115%; text-transform: capitalize;">FIGURE L'IA: <strong>{{IaFigure}}</strong></h3>
+        <h3>SCORE DE L'IA: <strong>{{IaScore}}</strong></h3>
+        <h3>FIGURE L'IA: <strong>{{IaFigure}}</strong></h3>
       </center>
     </div>
 
@@ -96,8 +96,8 @@
 
     <center>
       <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%;">
-        <h3 style="font-size:115%; text-transform: capitalize;">VOTRE SCORE: <strong>{{playerScore}}</strong></h3>
-        <h3 style="font-size:115%; text-transform: capitalize;">VOTRE FIGURE: <strong>{{playerFigure}}</strong></h3>
+        <h3>VOTRE SCORE: <strong>{{playerScore}}</strong></h3>
+        <h3>VOTRE FIGURE: <strong>{{playerFigure}}</strong></h3>
       </div>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>
@@ -842,5 +842,45 @@
   .yams .iadices>img {
     height: 100%;
     width: 100%;
+  }
+
+  .yams h3 {
+    text-transform: capitalize;
+    font-size: 115%;
+  } 
+
+  @media(max-width: 460px) {
+    .yams h3 {
+      font-size: 90%;
+    }
+
+    .yams .iadices {
+      margin: 5%;
+      left:3%;
+    }
+
+    .yams .iadices>img {
+      height: 150%;
+      width: 150%;
+    }
+
+    .yams .playerdices {
+      margin: 5%;
+      left:3%;
+    }
+
+    .yams .image-checkbox>img {
+    height: 150%;
+    width: 150%;
+    }
+
+    .yams input[type=checkbox]:checked+label>img {
+      height: 200%;
+      width: 200%;
+    }
+
+    .yams #Infos {
+      font-size:80%;
+    }
   }
 </style>
