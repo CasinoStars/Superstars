@@ -266,11 +266,14 @@
   .Transfer .pendingTrxList .formLine {
   padding: 1px;
   max-height: 125px;
-  overflow-y: scroll;
-    //font-size: 15px;
+  font-size: 30px;
   //font-size: 200%;
-  width: 185.6%;
+  width: 111.7%;
   background-color: white;
+}
+
+.Transfer .pendingTrxList{
+  overflow-y: scroll;
 }
 
   .Transfer h5 {
