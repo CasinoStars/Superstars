@@ -272,7 +272,7 @@
   $bold: 600;
   $br: 4px;
 
-  .wallet .transactionList, .pendingTrxList {
+  .wallet .transactionList, .wallet .pendingTrxList {
     max-height: 125px;
     overflow-y: scroll;
     font-size: 15px;

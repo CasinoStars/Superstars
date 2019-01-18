@@ -5,7 +5,7 @@
             <h1>Bienvenue sur ALL`IN</h1>
         </div>
     </header>
-        <div class="warning slide bg-danger" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
+        <div class="warning slide bg-danger" id="baniere" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
            <h4 style="padding-top:1.5%;">Attention, le casino est actuellement en développement et utilise la <a href="https://en.bitcoin.it/wiki/Testnet" style="color:blue" target="_blank">blockchain test</a></h4>
            </div>
     
@@ -24,23 +24,23 @@
             <div class="carousel-inner" style="text-align: center; font-family: 'Courier New', sans-serif;">
                 <div class="carousel-item active">
                     <img src="../img/../img/provablylogo.png" id="provablylogo">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Un site provably fair</strong><br>Vous pouvez parier les yeux fermés</h5></div>
+                    <div class="carousel-caption d-md-block"><h5><strong>Un site provably fair</strong><br>Vous pouvez parier les yeux fermés</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/fastbetlogo.png" id="fastbetlogo">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Des jeux rapides</strong><br>Mais attention à ne pas vous brûler</h5></div>
+                    <div class="carousel-caption d-md-block"><h5><strong>Des jeux rapides</strong><br>Mais attention à ne pas vous brûler</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/statslogo.png" id="statslogo">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Des statistiques détaillées</strong><br>Visualisez vos statistiques en temps réel</h5></div>
+                    <div class="carousel-caption d-md-block"><h5><strong>Des statistiques détaillées</strong><br>Visualisez vos statistiques en temps réel</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/bitcoinlogo.png" id="bitcoinlogo">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Un Bitcoin Casino</strong><br>La maison accepte le Bitcoin</h5></div>
+                    <div class="carousel-caption d-md-block"><h5><strong>Un Bitcoin Casino</strong><br>La maison accepte le Bitcoin</h5></div>
                 </div>
                 <div class="carousel-item">
                     <img src="../img/leaderboardlogo.png" id="leaderboardlogo">
-                    <div class="carousel-caption d-none d-md-block"><h5 style="color: white; text-align: center; font-family: 'Courier New', sans-serif; font-variant: small-caps; font-size: 30px;"><strong>Classement général</strong><br>Comparez votre parcours par rapport à vos amis</h5></div>
+                    <div class="carousel-caption d-md-block"><h5><strong>Classement général</strong><br>Comparez votre parcours par rapport à vos amis</h5></div>
                 </div>
             </div>
             <!-- Carousel controls -->
@@ -57,7 +57,7 @@
     
 <br>
     <center style="padding-top: 4%;">
-        <strong><a style="font-size: 35px; font-family: 'Courier New', sans-serif; font-variant: small-caps;"> BANQUE DU SITE - {{BTCBankCoins.toLocaleString('en')}} <i class="fa fa-btc" style="font-size: 35px;"></i> | {{fakeBankCoins.toLocaleString('en')}} <i class="fa fa-money" style="font-size: 35px;"></i> </a></strong>
+        <strong><a class="bankRoll">- BANQUE DU SITE -<br>{{BTCBankCoins.toLocaleString('en')}}<i class="fa fa-btc"></i> | {{fakeBankCoins.toLocaleString('en')}}<i class="fa fa-money"></i> </a></strong>
     </center>
 
 <!-- Footer -->
@@ -113,6 +113,42 @@ export default {
 </script>
 
 <style lang="css">
+@media(max-width: 1109px) {
+    .home #baniere > h4 {
+        font-size: inherit;
+    }
+}
+
+@media(max-width: 562px){
+    .home .bankRoll {
+        font-size: 3.8vh;
+        font-family: 'Courier New', sans-serif;
+        font-variant: small-caps;
+    }
+    .home h5 {
+        color: white;
+        text-align: center;
+        font-family: 'Courier New', sans-serif;
+        font-variant: small-caps;
+        font-size: 3.8vh;
+    }
+}
+@media(min-width: 562px) {
+    .home .bankRoll {
+        font-size: 35px;
+        font-family: 'Courier New', sans-serif;
+        font-variant: small-caps;
+    }
+
+    .home h5 {
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', sans-serif;
+    font-variant: small-caps;
+    font-size: 30px;
+}
+}
+
 .home .carousel{
     /* background: #212529; */
 }
