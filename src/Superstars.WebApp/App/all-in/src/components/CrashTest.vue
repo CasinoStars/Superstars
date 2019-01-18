@@ -7,8 +7,8 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                   <div style="padding-top: 2px; font-family: 'Courier New', sans-serif;" class="col-12 modal-title text-center">
-                    <router-link class="close" v-on:click.native="closeModal()" to="">&times;</router-link>
+                    <div style="padding-top: 2px; font-family: 'Courier New', sans-serif;" class="col-12 modal-title text-center">
+                        <router-link class="close" v-on:click.native="closeModal()" to="">&times;</router-link>
                     </div>
                 </div>
 
@@ -38,9 +38,11 @@
                                     <td>{{e.userName}}</td>
                                     <td class="text-right">{{e.multi}}</td>
                                     <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                                    <td class="text-right" style="color: green" v-if="profit(meta.crashValue, e.bet, e.multi).toLocaleString('en') >= 1">{{profit(meta.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
-                                    <td class="text-right" style="color: red" v-else>{{profit(meta.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
-                                 
+                                    <td class="text-right" style="color: green" v-if="profit(meta.crashValue, e.bet, e.multi).toLocaleString('en') >= 1">{{profit(meta.crashValue,
+                                        e.bet, e.multi).toLocaleString('en')}}</td>
+                                    <td class="text-right" style="color: red" v-else>{{profit(meta.crashValue, e.bet,
+                                        e.multi).toLocaleString('en')}}</td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -157,8 +159,12 @@
                             <td>{{e.userName}}</td>
                             <td class="text-right">{{e.multi}}</td>
                             <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                            <td class="text-right" v-if="multi < e.multi">{{profit(e.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
-                            <td class="text-right" style="color: green;" v-else>{{profit(multi, e.bet, e.multi).toLocaleString('en')}}</td>
+                            <td class="text-right" v-if="multi < e.multi && multi != 0">{{(multi * e.bet
+                                -e.bet).toLocaleString('en')}}</td>
+                            <td class="text-right" v-else-if="multi >= e.multi && multi != 0">{{profit(multi, e.bet,
+                                e.multi).toLocaleString('en')}}</td>
+                            <td class="text-right" v-else>{{0}}</td>
+
 
                         </tr>
                     </tbody>
@@ -217,14 +223,14 @@
                 points: [],
                 ctx: null,
                 hashList: null,
-                meta:{},
+                meta: {},
                 playersGame: [],
                 totalGameBet: 0,
                 totalProfit: 0,
                 totalGameProfit: 0,
-                isOut : false,
+                isOut: false,
                 definitiveMulti: 0,
-                lineColor : "black"
+                lineColor: "black"
             }
         },
 
@@ -245,19 +251,22 @@
                 this.isWaiting = false;
                 this.isOut = false;
                 //this.myLoop();
+                if (this.hasPlayed)
+                    this.lineColor = "green";
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
             });
             this.connection.on("EndGame", async (gameId, hash, ite) => {
+
                 console.log("Chart stop at " + this.multi + " serv stop at " + ite)
-                 if(this.multi<this.definitiveMulti){
-                    this.lineColor="red"
-                    this.chart.data.datasets.forEach((dataset) => {                    
+
+                this.lineColor = "red"
+                this.chart.data.datasets.forEach((dataset) => {
                     dataset.borderColor = this.lineColor
                 });
-                    this.chart.update()
-                    this.updateNumber()
-                }
+                this.chart.update()
+                this.updateNumber()
+
                 this.multi = ite;
 
                 clearInterval(this.fn);
@@ -281,7 +290,7 @@
                 if (this.hashList.length >= 10)
                     this.hashList.pop();
 
-               
+
                 await this.RefreshBTC();
                 await this.RefreshFakeCoins();
             })
@@ -293,6 +302,7 @@
             })
             this.connection.on("Wait", async () => {
                 console.log("wait")
+                this.multi = 0;
                 this.definitiveMulti = 0;
                 this.isWaiting = true
                 this.hasPlayed = false;
@@ -305,7 +315,7 @@
                 ctx.font = "50px Arial";
                 ctx.strokeStyle = "black";
                 ctx.strokeText("En attente des mises", 100, 200);
-                this.lineColor ="black";
+                this.lineColor = "black";
                 this.i = 0
                 this.playersData = [];
                 await this.RefreshBTC();
@@ -351,16 +361,16 @@
                 this.meta = await CrashApiService.GetCrashMeta(gameId);
                 this.playersGame = await CrashApiService.GetPlayersInGame(gameId);
                 this.playersGame.forEach(e => {
-                    this.totalGameBet+=e.bet;
-                    this.totalGameProfit+= this.profit(this.meta.crashValue, e.bet, e.multi)
+                    this.totalGameBet += e.bet;
+                    this.totalGameProfit += this.profit(this.meta.crashValue, e.bet, e.multi)
                 });
 
             },
-            closeModal(){
+            closeModal() {
                 var modal = document.getElementById('myModal');
                 modal.style.display = "none";
-                this.totalGameBet=0;
-                this.totalGameProfit=0;
+                this.totalGameBet = 0;
+                this.totalGameProfit = 0;
             },
             updateNumber() {
                 var canvas = document.getElementById("linechart");
@@ -427,7 +437,7 @@
                         hover: {
                             animationDuration: 0, // duration of animations when hovering an item
                         },
-                        
+
                         responsiveAnimationDuration: 0 // animation duration after a resize
                     }
                 });
@@ -469,12 +479,13 @@
                             precision: 2
                         }
                     }],
-                    
+
                 }
-                if(this.multi>=this.definitiveMulti && this.hasPlayed){
-                    this.lineColor = "green"
+                if (this.multi > +this.definitiveMulti && this.hasPlayed) {
+                    this.lineColor = "black"
+                    this.isOut = true;
                 }
-                    
+
                 chart.update();
             },
 
@@ -529,7 +540,7 @@
                             this.success = 'Vous venez de parier: ' + this.bet + ' Bits';
                             this.definitiveMulti = this.playerMulti;
                         }
-                        
+
                     } catch (error) {
                         console.log(error)
                     }
@@ -544,7 +555,7 @@
                 });
             },
             async out() {
-                this.isOut=true;
+                this.isOut = true;
                 this.definitiveMulti = this.multi;
                 await this.executeAsyncRequest(() => GameApiService.UpdateCrash(this.multi));
             }
@@ -567,7 +578,7 @@
         background-color: #f2f2f2;
     }
 
-     .CrashTest td,
+    .CrashTest td,
     th {
         border-bottom: 1px solid #dddddd;
         text-align: left;
@@ -578,7 +589,7 @@
         font-weight: bold;
     }
 
-     .CrashTest th {
+    .CrashTest th {
         background-color: #343a40;
         color: white;
     }

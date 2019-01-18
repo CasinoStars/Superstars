@@ -58,19 +58,19 @@
     </div>
 
     <!-- BLACKJACK GAME -->
-    <div class="container" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%;">
+    <div class="container" style="margin-top:-1%; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
       <center>
         <div class="row">
           <div class="col">
             <a class="txt">POT: {{pot.toLocaleString('en')}}<i v-if="this.realOrFake == 'real'" class="fa fa-btc" /><i
                 v-else class="fa fa-money" /></a>
           </div>
-        </div><br>
-        <a class="txt">Valeur de la main du dealer: <strong>{{dealerhandvalue}}</strong></a>
+        </div>
+        <a class="txt" style="display:block; margin-top:2%;">Valeur de la main du dealer: <strong>{{dealerhandvalue}}</strong></a>
       </center>
     </div>
 
-    <center>
+    <center style="margin-top:-1%;">
       <a class="txt">Cartes du Dealer</a><br>
       <div v-for="(i, index) of dealercards" :key="index" class="dealercards">
         <img :src="getCardImage(i)" :id="index" v-if="i != ''">
@@ -78,50 +78,37 @@
       </div>
     </center>
 
-    <div style="margin-top:3%; text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;" id="Infos">
+    <div style="margin-top:2%; text-align:center; letter-spacing: 2px; font-family: 'Courier New', sans-serif;" id="Infos">
       <a v-if="!iaturn && !gameend" class="txt">C'est à votre tour de jouer</a>
       <a v-if="dealerplaying && !gameend" class="txt">Le dealer est entrain de jouer</a>
-      <div id="wait">
-        <div v-if="!gameend && dealerplaying" class="lds-css ng-scope">
-          <div style="width:100%;height:100% margin-left:-50%;" class="lds-eclipse">
-            <div></div>
-          </div>
-        </div>
-      </div>
       <a v-if="gameend" class="txt"><strong>{{winnerlooser}}</strong></a>
     </div>
 
-    <!-- <img src="../img/back.png" id="deck" style="float: right; margin-top:3%;"/> -->
-
-    <div id="wait">
-      <div v-if="!gameend && dealerplaying" class="lds-css ng-scope">
-        <div style="width:100%;height:100%" class="lds-eclipse">
-          <div></div>
-        </div>
-      </div>
-    </div>
-
-    <center style="margin-top:3%;">
+    <center style="margin-top:1%;">
       <a class="txt">Votre main</a><br>
       <div v-for="(i, index) of playercards" :key="index" class="playercards">
         <img :src="getCardImage(i)" :id="index" v-if="i != ''">
       </div>
     </center>
 
-    <center>
+    <center style="margin-top:-2%;">
       <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%;">
         <a class="txt">Valeur de votre main: <strong>{{handvalue}}</strong></a>
       </div>
       <form @submit="hit($event)">
-        <button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">HIT</button>
+        <button type="submit" value="hit" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">PIOCHER</button>
       </form>
       <form @submit="stand($event)">
-        <button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">STAND</button>
+        <button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">S'ARRETER</button>
       </form>
       <form @submit="playdealer($event)">
-        <button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn == true && gameend == false">PLAY
-          AI</button>
+        <button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn && !gameend && !dealerplaying">LANCER L'AI</button>
       </form>
+      <div v-if="!gameend && dealerplaying" class="lds-css ng-scope" style="display:inline;">
+        <div style="width:100%;height:100%; display:inline;" class="lds-eclipse">
+          <div style="display:inline;"></div>
+        </div>
+      </div>
     </center>
 
     <!-- <form @submit="split($event)">
@@ -345,7 +332,6 @@
 
       async playdealer(e) {
         e.preventDefault();
-        document.getElementById('wait').style.visibility = "visible";
         this.dealerplaying = true;
         await this.CheckWinner();
         while(this.dealerhandvalue < 17 || this.handvalue > this.dealerhandvalue) {
@@ -475,6 +461,10 @@
   $main-dark: darken($main, 5%);
   $gray-light: #a0b3b0;
 
+.blackJack html {
+  overflow-y: hidden;
+  overflow-x:hidden;
+}
   #tutorialRectanglebj {
     width: 95%;
     height: 80%;
@@ -705,32 +695,42 @@
     }
   }
 
-  .lds-eclipse {
+  .blackJack .lds-eclipse {
     position: relative;
   }
 
-  .lds-eclipse div {
+  .blackJack .lds-eclipse div {
     position: absolute;
     -webkit-animation: lds-eclipse 1s linear infinite;
     animation: lds-eclipse 1s linear infinite;
     width: 40px;
     height: 40px;
-    top: 80px;
-    left: 80px;
     border-radius: 50%;
     box-shadow: 0 2px 0 0 #7f8387;
     -webkit-transform-origin: 20px 21px;
     transform-origin: 20px 21px;
+    margin-left: 40%;
+    margin-top: 5%;
   }
 
-  .lds-eclipse {
+  .blackJack .lds-eclipse {
     width: 200px !important;
     height: 200px !important;
     -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
     transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
-    margin-left: 50%;
   }
 
+  @media(max-width: 510px) {
+    .blackJack .txt {
+      font-size: 19px;
+    }
+  }
+
+  @media(max-width: 325px) {
+    .blackJack .txt {
+      font-size: 15px;
+    }
+  }
   .txt {
     font-family: 'Courier New', sans-serif;
     font-variant: small-caps;
@@ -756,8 +756,18 @@
     margin-left: 680px;
   }
 
-  #wait {
-    visibility: hidden;
+  @media(max-width: 510px) {
+    .blackJack .playercards>img {
+      height: 136.6px;
+      width: 83.3px;
+    }
+    .blackJack .dealercards>img {
+    height: 136.6px;
+    width: 83.3px;
+    }
+    .blackJack button {
+      font-size: 75%;
+    }
   }
 
   .playercards>img {
