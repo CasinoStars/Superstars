@@ -123,7 +123,7 @@
       async GetWalletAddress() {
         this.BTCAddress = await this.executeAsyncRequest(() =>
           WalletApiService.GetWalletAddress()
-        );
+      );
       },
 
       async onSubmit(e) {

@@ -6,12 +6,11 @@
                     <div>
                         <h5 class="modal-title" style="margin-left:32%;">Gestion de compte</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div>
                             <ul class="tab-group">
-                                <li class="tab"><a v-on:click="editPassword=true">Mot De Passe</a></li>
+                                <div class="field-wrap"><a v-on:click="editPassword=true">Mot De Passe</a></div>
                             </ul>
                     </div>
                     <form @submit="changePassword($event)">

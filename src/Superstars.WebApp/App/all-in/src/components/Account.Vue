@@ -118,8 +118,6 @@ import Settings from './Settings.vue'
  $body-bg: #c1bdba;
   $form-bg: #13232f;
   $white: #ffffff;
-  $br: 4px;
-
 
   $main: #777c7b;
   $main-light: lighten($main, 5%);
