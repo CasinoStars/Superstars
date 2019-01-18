@@ -1,26 +1,21 @@
 <template>
     <div class="settings">
         <!-- Modal Settings -->
-        <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-hidden="false">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
+        <div class="tableau">
+                <div>
+                    <div>
                         <h5 class="modal-title" style="margin-left:32%;">Gestion de compte</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div v-if="!editMail && !editPassword">
-                        <div class="modal-body">
+                    <div>
                             <ul class="tab-group">
                                 <li class="tab"><a v-on:click="editPassword=true">Mot De Passe</a></li>
-                                <li class="tab"><a v-on:click="getEmail()">Adresse Email</a></li>
                             </ul>
-                        </div>
-                        <div class="modal-footer"></div>
                     </div>
-                    <form @submit="changePassword($event)" v-else-if="editPassword">
-                        <div class="modal-body">
+                    <form @submit="changePassword($event)">
+                        <div>
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
                                 <label>
@@ -41,29 +36,27 @@
                                 <input type="password" v-model="item.confirmPass" required />
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" v-if="editPassword" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" v-if="editPassword" class="btn btn-outline-success mx-auto">Sauvegarder</button>
-                        </div>
+                            <button type="button"  @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
+                            <button type="submit"  class="btn btn-outline-success mx-auto">Sauvegarder</button>
                     </form>
-                    <form @submit="changeEmail($event)" v-else>
-                        <div class="modal-body">
+                    <form @submit="changeEmail($event)">
+                        <div>
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
+                                <ul class ="tab-group"><li class="tab"><a v-on:click="getEmail()">Adresse Email</a></li></ul>
                                 <label>
                                     Adresse Mail<span class="req">*</span>
                                 </label><br>
                                 <input :placeholder="item.oldMail" v-model="item.newMail" required />
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button v-if="editMail" type="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" v-if="editMail" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                        <div>
+                            <button type="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
+                            <button type="submit" class="btn btn-outline-success mx-auto">Sauvegarder</button>
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
+            </div>    
         <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
     </div>
 </template>
@@ -159,37 +152,48 @@ $gray-light: #a0b3b0;
 $white: #ffffff;
 $main: #777c7b;
 $main-dark: darken($main,5%);
+$br: 4px;
 
-.settings .modal-header {
-    padding: 10px 16px;
-    text-align: center;
-    background: #222222a8;
-    color: white;
-}
 
-.settings .modal-content {
-    position: relative;
-    background: rgba($form-bg,.9);
-    margin: auto;
-    padding: 0;
-}
+// .settings .modal-header {
+//     padding: 10px 16px;
+//     text-align: center;
+//     background: #222222a8;
+//     color: white;
+// }
 
-.settings .modal-body {
-    text-align: center;
-    input {
-        width: 60%;
-    }
-}
+// .settings .modal-content {
+//     position: relative;
+//     background: rgba($form-bg,.9);
+//     margin: auto;
+//     padding: 0;
+// }
 
-.settings .modal-footer {
-    min-height: 40px;
-    padding: 10px 16px;
-    background-color:  #222222a8;
-    color: white;
-    button{
-        width: 30%;
-    }
-}
+// .settings .modal-body {
+//     text-align: center;
+//     input {
+//         width: 60%;
+//     }
+// }
+
+// .settings .modal-footer {
+//     min-height: 40px;
+//     padding: 10px 16px;
+//     background-color:  #222222a8;
+//     color: white;
+//     button{
+//         width: 30%;
+//     }
+// }
+
+  .settings .tableau {
+    background: rgba($form-bg, 0.9);
+    padding: 40px;
+    height: 900px;
+    width: 1000px;
+    border-radius: $br;
+    box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
+  }
 
 .settings .field-wrap {
     color: white;

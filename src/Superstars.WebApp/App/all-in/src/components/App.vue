@@ -88,7 +88,6 @@
     </header>
     <router-view></router-view>
     <chat v-if="auth.isConnected"></chat>
-    <settings />
   </div>
 </template>
 <script src="~/lib/signalr/signalr.js"></script>
@@ -103,7 +102,6 @@
   import BackOfficeApiService from '../services/BackOfficeApiService';
   import Vue from 'vue';
   import Chat from './Chat.vue'
-  import Settings from './Settings.vue'
 
   export default {
 
@@ -115,7 +113,6 @@
 
     components: {
       Chat,
-      Settings
     },
 
     computed: {

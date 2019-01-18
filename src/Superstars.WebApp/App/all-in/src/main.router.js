@@ -21,10 +21,13 @@ import CrashTest from './components/CrashTest.vue';
 import Faq from './components/Faq.vue';
 import BackOffice from './components/BackOffice.vue';
 import Transfer from './components/Transfer.vue';
+import Settings from './components/Settings.vue';
+
 
 const routes = [
     { path: '', component: Home },
     { path: '/logout', component: Logout, beforeEnter: requireAuth },
+  //  { path: '/settings', component: Settings, beforeEnter: requireAuth },
     { path: '/play', component: Play, beforeEnter: requireAuth },
     { path: '/yams', component: Yams, beforeEnter: requireAuth },
     { path: '/blackJack', component: BlackJack, beforeEnter: requireAuth },

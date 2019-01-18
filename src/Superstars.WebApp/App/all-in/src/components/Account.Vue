@@ -13,16 +13,16 @@
             <div class="submenu"><button v-on:click=" WalletOn()">Porte monnaie</button></div>
             <div class="submenu"><button v-on:click="ProvablyFairOn()">Provably Fair</button></div>
             <div class="submenu"><button v-on:click="SupportPageOn()">Support</button></div>
-            <div class="submenu"><button v-on:click="Securiter()">Sécurité</button></div>
+            <div class="submenu"><button v-on:click="SecuriterOn()">Sécurité</button></div>
             
         </div>
         <div class="col-md-5" style="margin-left: 3.5%;">
             <div class = "improtedView"> 
                 <transfer v-if="this.isTransferOn == true"/>
                 <wallet v-if="this.isWallet == true"/>
+                <div class="settings"><Settings v-if="this.isSecuriterOn == true"/></div>
                 <div class="provablyFair"> <ProvablyFair v-if="this.isProvablyFair == true"/> </div>
            </div>
-
         </div>
     </div>
 </div>
@@ -33,6 +33,7 @@
 import Wallet from './Wallet.vue'
 import ProvablyFair from './ProvablyFair.vue'
 import Transfer from './Transfer.vue'
+import Settings from './Settings.vue'
 
 
 
@@ -50,8 +51,9 @@ import Transfer from './Transfer.vue'
 
   components: {
          Wallet,
-         Transfer,
-         ProvablyFair
+         Transfer,         
+         ProvablyFair,
+         Settings
     },
 
 
@@ -90,7 +92,7 @@ import Transfer from './Transfer.vue'
          this.isTransferOn = false;
       },
        SecuriterOn() {
-         this.isWallet = true;
+         this.isWallet = false;
          this.isProvablyFair = false;
          this.isSupportPageOn = false;
          this.isSecuriterOn = true;
@@ -116,6 +118,8 @@ import Transfer from './Transfer.vue'
  $body-bg: #c1bdba;
   $form-bg: #13232f;
   $white: #ffffff;
+  $br: 4px;
+
 
   $main: #777c7b;
   $main-light: lighten($main, 5%);
@@ -157,9 +161,10 @@ width: 600px;
     
 ///}
 
-.account .provablyFair {
+.account .provablyFair, .account .settings {
     margin-top: 7.5%;
 }
+
 
 .account .menu {
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
