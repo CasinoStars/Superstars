@@ -4,13 +4,13 @@
         <div class="tableau">
                 <div>
                     <div>
-                                <ul class ="tab-group"><li class="tab"><a v-on:click="getEmail()">Gestion de compte</a></li></ul>
+                                <ul class ="tab-group"><div class="myTitle">Gestion de compte</div></ul>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div>
                             <ul class="tab-group">
-                                <div class="field-wrap"><h3>Changer de mot de passe</h3></div>
+                                <div class="field-wrap" style="margin-top:3%; margin-bottom:3%;"><h3>Changer de mot de passe</h3></div>
                             </ul>
                     </div>
                     <form @submit="changePassword($event)">
@@ -42,7 +42,7 @@
                         <div>
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
-                                <div class="field-wrap"><h3>Changer d'adresse mail</h3></div>
+                                <div class="field-wrap"><h3 style="margin-top:3%;margin-bottom:3%;">Changer d'adresse mail</h3></div>
                                 <label>
                                     Adresse Mail<span class="req">*</span>
                                 </label><br>
@@ -197,7 +197,7 @@ $br: 4px;
     display: table;
     clear: both;
   }
-  li a {
+  .myTitle {
     text-decoration:none;
     background:rgba($gray-light,.25);
     color:$gray-light;
@@ -207,12 +207,11 @@ $br: 4px;
     text-align:center;
     cursor:pointer;
     transition:.5s ease;
-    &:hover {
-      background:$main-dark;
-      color:$white;
-    }
+    color:white;
+
   }
 }
+
 
 .settings .close {
     color: white;
