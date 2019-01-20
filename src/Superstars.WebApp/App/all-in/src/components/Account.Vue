@@ -20,7 +20,7 @@
             <div class = "improtedView"> 
                 <transfer v-if="this.isTransferOn == true"/>
                 <wallet v-if="this.isWallet == true"/>
-                <support v-if="this.isSupportPageOn == true"/>
+                <div class ="support"><support v-if="this.isSupportPageOn == true"/></div>
                 <div class="settings"><Settings v-if="this.isSecuriterOn == true"/></div>
                 <div class="provablyFair"> <ProvablyFair v-if="this.isProvablyFair == true"/> </div>
            </div>
@@ -170,16 +170,13 @@ width: 600px;
      border-radius: 10px;
 
 
-	// background:#545c64;
-
 }
-///.carre > .submenu {
-    
-///}
 
-.account .provablyFair, .account .settings {
+
+.account .provablyFair, .account .settings, .account .support {
     margin-top: 7.5%;
 }
+
 
 
 .account .menu {

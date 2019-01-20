@@ -69,7 +69,7 @@
 }
 
 .support .supportMessage {
-    height: 500px;
+    height: 450px;
 }
 
 .support input {
