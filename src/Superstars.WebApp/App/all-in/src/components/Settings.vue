@@ -35,8 +35,7 @@
                                 <input type="password" v-model="item.confirmPass" required />
                             </div>
                         </div>
-                            <button type="button"  @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit"  class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                            <button type="submit"  class="btn btn-outline-success mx-auto active">Sauvegarder</button>
                     </form>
                     <form @submit="changeEmail($event)">
                         <div>
@@ -50,8 +49,7 @@
                             </div>
                         </div>
                         <div>
-                            <button type="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                            <button type="submit" class="btn btn-outline-success mx-auto active">Sauvegarder</button>
                         </div>
                     </form>
                 </div>
@@ -80,12 +78,6 @@
         methods: {
             ...mapActions(['executeAsyncRequest']),
 
-            cancel() {
-                this.errors = [];
-                this.item = {};
-                this.editPassword = false;
-                this.editMail = false;
-            },
 
             async changePassword(e) {
                 e.preventDefault();

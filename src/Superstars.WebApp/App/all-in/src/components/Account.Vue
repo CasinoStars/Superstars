@@ -5,21 +5,22 @@
         <div class="menu col-md-3">      
             <div class="carre">
                 <img src="../img/LOGO1.png" alt="yams" class="imglogo">  
-                <h5 style="text-align: center; color: white;"> admin</h5> 
+                <h1 style="text-align: center; color: white;"> admin</h1> 
             </div>
                 
-            <div class="submenu" ><button>  Profil </button> </div>
-            <div class="submenu"><button v-on:click=" TransferOn()">Transferts</button></div>
-            <div class="submenu"><button v-on:click=" WalletOn()">Porte monnaie</button></div>
-            <div class="submenu"><button v-on:click="ProvablyFairOn()">Provably Fair</button></div>
-            <div class="submenu"><button v-on:click="SupportPageOn()">Support</button></div>
-            <div class="submenu"><button v-on:click="SecuriterOn()">Sécurité</button></div>
+            <div class="submenu" ><div class="myButton"><button>  Profil </button></div> </div>
+            <div class="submenu"><button class="button button-block" v-on:click=" TransferOn()">Transferts</button></div>
+            <div class="submenu"><button class="button button-block" v-on:click=" WalletOn()">Porte monnaie</button></div>
+            <div class="submenu"><button class="button button-block" v-on:click="ProvablyFairOn()">Provably Fair</button></div>
+            <div class="submenu"><button class="button button-block" v-on:click="SupportPageOn()">Support</button></div>
+            <div class="submenu"><button class="button button-block" v-on:click="SecuriterOn()">Sécurité</button></div>
             
         </div>
         <div class="col-md-5" style="margin-left: 3.5%;">
             <div class = "improtedView"> 
                 <transfer v-if="this.isTransferOn == true"/>
                 <wallet v-if="this.isWallet == true"/>
+                <support v-if="this.isSupportPageOn == true"/>
                 <div class="settings"><Settings v-if="this.isSecuriterOn == true"/></div>
                 <div class="provablyFair"> <ProvablyFair v-if="this.isProvablyFair == true"/> </div>
            </div>
@@ -31,6 +32,7 @@
 <script>
 
 import Wallet from './Wallet.vue'
+import Support from './Support.vue'
 import ProvablyFair from './ProvablyFair.vue'
 import Transfer from './Transfer.vue'
 import Settings from './Settings.vue'
@@ -51,7 +53,8 @@ import Settings from './Settings.vue'
 
   components: {
          Wallet,
-         Transfer,         
+         Transfer,
+         Support,         
          ProvablyFair,
          Settings
     },
@@ -135,16 +138,28 @@ import Settings from './Settings.vue'
 width: 600px;
 }
 
-.account .submenu .button {
+.account .submenu .myButton {
     border-radius: 10px;
+    width: 100%;
+    height: 100%;
 }
+
+ .button-block {
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+    background-color:rgba($form-bg, 0.9);
+    color:white;
+    border-radius: 10px;
+    border-color:lightblue;
+  }
 
 
 .account .submenu {
      box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
-     background: rgba($form-bg, 0.9);
-     padding-top: 3%;
-     opacity: 0.6;
+     background-color: rgba($form-bg, 0.9);
+     //padding-top: 3%;
      text-align: center;
      color: white;
 	 width:100%;
@@ -152,6 +167,9 @@ width: 600px;
      border-style: solid;
      border-width: 2px;   
      border-color: black;
+     border-radius: 10px;
+
+
 	// background:#545c64;
 
 }

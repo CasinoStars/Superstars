@@ -402,7 +402,7 @@
     margin-bottom: 10px;
   }
 
-  .button {
+  .wallet .button {
     border: 0;
     outline: none;
     border-radius: 0;
@@ -422,7 +422,7 @@
     }
   }
 
-  .button-block {
+  .wallet .button-block {
     display: block;
     width: 100%;
   }
