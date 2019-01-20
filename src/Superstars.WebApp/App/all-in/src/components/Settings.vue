@@ -4,13 +4,13 @@
         <div class="tableau">
                 <div>
                     <div>
-                        <h5 class="modal-title" style="margin-left:32%;">Gestion de compte</h5>
+                                <ul class ="tab-group"><li class="tab"><a v-on:click="getEmail()">Gestion de compte</a></li></ul>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div>
                             <ul class="tab-group">
-                                <div class="field-wrap"><a v-on:click="editPassword=true">Mot De Passe</a></div>
+                                <div class="field-wrap"><h3>Changer de mot de passe</h3></div>
                             </ul>
                     </div>
                     <form @submit="changePassword($event)">
@@ -18,10 +18,10 @@
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
                                 <label>
-                                    Mot de Passe Actuel<span class="req">*</span>
+                                    Ancien mot de passe<span class="req">*</span>
                                 </label><br>
                                 <input type="password" v-model="item.oldPass" required />
-                            </div>
+                                </div>
                             <div class="field-wrap">
                                 <label>
                                     Nouveau Mot de Passe<span class="req">*</span>
@@ -42,7 +42,7 @@
                         <div>
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
-                                <ul class ="tab-group"><li class="tab"><a v-on:click="getEmail()">Adresse Email</a></li></ul>
+                                <div class="field-wrap"><h3>Changer d'adresse mail</h3></div>
                                 <label>
                                     Adresse Mail<span class="req">*</span>
                                 </label><br>
@@ -154,36 +154,27 @@ $main-dark: darken($main,5%);
 $br: 4px;
 
 
-// .settings .modal-header {
-//     padding: 10px 16px;
-//     text-align: center;
-//     background: #222222a8;
-//     color: white;
-// }
+  .settings input,
+  textarea {
+    margin-bottom: 2%;
+    margin-top: 1%;
+    font-size: 22px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 5px 10px;
+    background: none;
+    background-image: none;
+    border: 1px solid $gray-light;
+    color: $white;
+    border-radius: 0;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
-// .settings .modal-content {
-//     position: relative;
-//     background: rgba($form-bg,.9);
-//     margin: auto;
-//     padding: 0;
-// }
-
-// .settings .modal-body {
-//     text-align: center;
-//     input {
-//         width: 60%;
-//     }
-// }
-
-// .settings .modal-footer {
-//     min-height: 40px;
-//     padding: 10px 16px;
-//     background-color:  #222222a8;
-//     color: white;
-//     button{
-//         width: 30%;
-//     }
-// }
+    &:focus {
+      outline: 0;
+      border-color: $main;
+    }
+  }
 
   .settings .tableau {
     background: rgba($form-bg, 0.9);
