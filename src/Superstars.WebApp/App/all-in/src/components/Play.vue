@@ -101,34 +101,134 @@
 </script>
 
 <style lang="scss">
-@-webkit-keyframes rotateYams {
-    0% { -webkit-transform: rotate(0deg); }
-    50% { -webkit-transform: rotate(180deg); }
-    100% {-webkit-transform: rotate(360deg); }
-}
-@-webkit-keyframes scaleBJ {
-    0% { -webkit-transform:scale(1.0); }
-    50% { -webkit-transform:scale(1.4); }
-    100% {-webkit-transform:scale(1.0); }
-}
-@-webkit-keyframes shakingCrash {
-	0% { -webkit-transform: translate(2px, 1px) rotate(0deg); }
-	10% { -webkit-transform: translate(-1px, -2px) rotate(-1deg); }
-	20% { -webkit-transform: translate(-3px, 0px) rotate(1deg); }
-	30% { -webkit-transform: translate(0px, 2px) rotate(0deg); }
-	40% { -webkit-transform: translate(1px, -1px) rotate(1deg); }
-	50% { -webkit-transform: translate(-1px, 2px) rotate(-1deg); }
-	60% { -webkit-transform: translate(-3px, 1px) rotate(0deg); }
-	70% { -webkit-transfor: translate(2px, 1px) rotate(-1deg); }
-	80% { -webkit-transform: translate(-1px, -1px) rotate(1deg); }
-	90% { -webkit-transform: translate(2px, 2px) rotate(0deg); }
-	100% { -webkit-transform: translate(1px, -2px) rotate(-1deg); }
-}
-  /* DISPLAY POSITION */
-  .play {
-    margin-top:15%;
-    margin-left:10%;
-    display: inline-flex;
+  @-webkit-keyframes rotateYams {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+
+    50% {
+      -webkit-transform: rotate(180deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes scaleBJ {
+    0% {
+      -webkit-transform: scale(1.0);
+    }
+
+    50% {
+      -webkit-transform: scale(1.4);
+    }
+
+    100% {
+      -webkit-transform: scale(1.0);
+    }
+  }
+
+  @-webkit-keyframes shakingCrash {
+    0% {
+      -webkit-transform: translate(2px, 1px) rotate(0deg);
+    }
+
+    10% {
+      -webkit-transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+      -webkit-transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+      -webkit-transform: translate(0px, 2px) rotate(0deg);
+    }
+
+    40% {
+      -webkit-transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+      -webkit-transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+      -webkit-transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+      -webkit-transfor: translate(2px, 1px) rotate(-1deg);
+    }
+
+    80% {
+      -webkit-transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+      -webkit-transform: translate(2px, 2px) rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }
+
+  @media(max-width: 562px) {
+    .play {
+      text-align: center;
+      display: block;
+    }
+
+    .play .yams .textyams {
+      height: 30%;
+      width: 40%;
+      transition: transform .4s;
+      visibility: visible;
+    }
+
+    .play .textbj {
+      height: 30%;
+      width: 50%;
+      transition: transform .4s;
+    }
+
+    .play .textcrash {
+      height: 30%;
+      width: 40%;
+      transition: transform .4s;
+    }
+  }
+
+  @media(min-width: 562px) {
+    .play {
+      margin-top: 15%;
+      margin-left: 10%;
+      display: inline-flex;
+    }
+
+    .play .yams .textyams {
+      height: 30%;
+      width: 40%;
+      transition: transform .4s;
+      visibility: visible;
+      margin-left: 12%;
+    }
+
+    .play .textbj {
+      height: 30%;
+      width: 50%;
+      transition: transform .4s;
+      margin-left: 7%;
+    }
+
+    .play .textcrash {
+      height: 30%;
+      width: 40%;
+      transition: transform .4s;
+      margin-left: 12%;
+    }
   }
 
   /* YAMS */
@@ -145,17 +245,10 @@
       -webkit-animation-iteration-count: infinite;
       -webkit-animation-timing-function: linear;
     }
+
     .textyams {
       opacity: 0.7;
     }
-  }
-
-  .play .yams .textyams {
-    height: 30%;
-    width: 40%;
-    transition: transform .4s;
-    visibility: visible;
-    margin-left: 12%;
   }
 
   /* BLACK JACK*/
@@ -172,17 +265,10 @@
       -webkit-animation-iteration-count: infinite;
       -webkit-animation-timing-function: linear;
     }
+
     .textbj {
       opacity: 0.7;
     }
-  }
-
-  .play .textbj {
-    height: 30%;
-    width: 50%;
-    transition: transform .4s;
-    margin-left:7%;
-    margin-top:2%;
   }
 
   /* CRASH */
@@ -196,19 +282,13 @@
     .imgcrash {
       -webkit-animation-name: shakingCrash;
       -webkit-animation-duration: 0.8s;
-      -webkit-transform-origin:50% 50%;
+      -webkit-transform-origin: 50% 50%;
       -webkit-animation-iteration-count: infinite;
       -webkit-animation-timing-function: linear;
     }
+
     .textcrash {
       opacity: 0.7;
     }
-  }
-
-  .play .textcrash {
-    height: 30%;
-    width: 40%;
-    transition: transform .4s;
-    margin-left: 12%;
   }
 </style>
