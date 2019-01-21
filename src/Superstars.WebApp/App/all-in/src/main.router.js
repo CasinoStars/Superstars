@@ -21,6 +21,10 @@ import CrashTest from './components/CrashTest.vue';
 import Faq from './components/Faq.vue';
 import BackOffice from './components/BackOffice.vue';
 import Transfer from './components/Transfer.vue';
+import Settings from './components/Settings.vue';
+import Support from './components/Support.vue';
+
+
 
 const routes = [
     { path: '', component: Home },

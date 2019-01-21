@@ -292,12 +292,18 @@
   height: 50%;
 }
 
+
+
 #lastTransaction th, #pendingTrx th {
   padding-top: 4px;
   padding-bottom: 4px;
   text-align: center;
-  background-color: rgba(39, 184, 61, 0.589);
+  background-color: 	rgb(91, 93, 199);
   color: white;
+}
+
+.wallet .button-block:hover {
+  opacity: 1;
 }
 
 #lastTransaction td, #lastTransaction td {
@@ -487,27 +493,27 @@
     margin-bottom: 10px;
   }
 
-  .button {
-    border: 0;
-    outline: none;
-    border-radius: 0;
-    padding: 15px 0;
-    font-size: 2rem;
-    font-weight: $bold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    background: $main;
-    color: $white;
-    transition: all.5s ease;
-    -webkit-appearance: none;
+  // .wallet .button {
+  //   border: 0;
+  //   outline: none;
+  //   border-radius: 0;
+  //   padding: 15px 0;
+  //   font-size: 2rem;
+  //   font-weight: $bold;
+  //   text-transform: uppercase;
+  //   letter-spacing: 0.1em;
+  //   background: $main;
+  //   color: $white;
+  //   transition: all.5s ease;
+  //   -webkit-appearance: none;
 
-    &:hover,
-    &:focus {
-      background: $main-dark;
-    }
-  }
+  //   &:hover,
+  //   &:focus {
+  //     background: $main-dark;
+  //   }
+  // }
 
-  .button-block {
+  .wallet .button-block {
     display: block;
     width: 100%;
   }

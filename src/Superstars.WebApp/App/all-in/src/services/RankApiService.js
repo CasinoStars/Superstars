@@ -12,5 +12,13 @@ class RankApiService{
     async GetPlayerStats(pseudo, moneyTypeId) {
         return await getAsync(`${endpoint}/${pseudo}/${moneyTypeId}/GetPlayerStats`);
     }
+
+    async GetTotalMoneyWagered(moneyTypeId) {
+        return await getAsync(`${endpoint}/${moneyTypeId}/GetTotalMoneyWagered`);
+    }
+
+    async GetNumberOfPlayers() {
+        return await getAsync(`${endpoint}/GetNumberOfPlayers`);
+    }
 }
 export default new RankApiService();

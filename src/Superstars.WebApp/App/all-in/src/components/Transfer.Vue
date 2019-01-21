@@ -35,7 +35,7 @@
     <div class="transaction">         
           <table id="pendingTrx">
            <tr>
-              <th>Transactions en attentes</th>
+              <th>Historique des transfer</th>
             </tr>
             <div class = "pendingTrxList">
               <tr>
@@ -167,7 +167,7 @@
 <style lang="scss">
   // @import "compass/css3";
 
-  $body-bg: #c1bdba;
+  $body-bg: white;
   $form-bg: #13232f;
   $white: #ffffff;
 
@@ -187,6 +187,9 @@
     overflow-y: scroll;
   }
 
+.Transfer .button-block:hover {
+  opacity: 1;
+}
   .Transfer {
     margin-top: 7.5%;
   }
@@ -206,7 +209,7 @@
 
   .Transfer a {
     text-decoration: none;
-    color: $main;
+    color:white;
     transition: 0.5s ease;
 
     &:hover {
@@ -223,23 +226,21 @@
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
   }
 
-  .Transfer .tab-group {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 40px 0;
-
-    &:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
+.Transfer .tab-group {
+  padding:0;
+  margin:0 0 5px 0;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 
     li a {
       display: block;
       text-decoration: none;
       padding: 15px;
       background: rgba($gray-light, 0.25);
-      color: $gray-light;
+      color:white;
       font-size: 20px;
       float: left;
       width: 50%;
@@ -267,7 +268,6 @@
   padding: 1px;
   max-height: 125px;
   font-size: 30px;
-  //font-size: 200%;
   width: 111.7%;
   background-color: white;
 }
@@ -286,8 +286,6 @@
     display: block;
     text-decoration: none;
     padding: 15px;
-    background: rgba($gray-light, 0.25);
-    color: $gray-light;
     font-size: 28px;
     float: left;
     width: 100%;
@@ -302,7 +300,7 @@
     position: absolute;
     transform: translateY(6px);
     left: 13px;
-    color: rgba($white, 0.5);
+    color:white;
     transition: all 0.25s ease;
     -webkit-backface-visibility: hidden;
     pointer-events: none;
@@ -324,9 +322,9 @@
     background: none;
     background-image: none;
     border: 1px solid $gray-light;
-    color: $white;
+    color: white;
     border-radius: 0;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    transition:  box-shadow 0.25s ease;
 
     &:focus {
       outline: 0;
@@ -337,14 +335,16 @@
   .Transfer textarea {
     border: 2px solid $gray-light;
     resize: vertical;
+    
   }
 
   .Transfer .field-wrap {
     position: relative;
     margin-bottom: 10px;
+    color:white;
   }
 
-  .button-block {
+  .Transfer .button-block {
     display: block;
     width: 100%;
   }
