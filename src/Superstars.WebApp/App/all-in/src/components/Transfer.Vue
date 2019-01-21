@@ -25,7 +25,7 @@
           </label><br><br>
           <input type="number" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off" />
         </div><br>
-        <button type="submit" class="btn btn-outline-success btn-lg active">Envoyer</button>
+        <button type="submit" class="button button-block">Envoyer</button>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
     </div>
@@ -187,6 +187,9 @@
     overflow-y: scroll;
   }
 
+.Transfer .button-block:hover {
+  opacity: 1;
+}
   .Transfer {
     margin-top: 7.5%;
   }

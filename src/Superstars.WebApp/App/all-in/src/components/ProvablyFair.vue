@@ -32,7 +32,7 @@
                                     Clef client<span class="req">*</span> 
                                     </span>
                                 </label><br><br>
-                                <input  type="string" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="clientSeeds" required autocomplete="off"/>
+                                <input  type="string" style="margin-bottom:3%" min="0" max="1000000" placeholder="Nouvelle seed client" v-model="clientSeeds" required autocomplete="off"/>
                             </div>
 
                         <button type="submit" class="button button-block">Changer</button>
@@ -321,29 +321,24 @@ textarea {
   
 }
 
-.provablyfair .button {
-  border: 0;
-  outline: none;
-  border-radius: 0;
-  padding: 15px 0;
-  font-size: 2rem;
-  font-weight: $bold;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background: $main;
-  color: $white;
-  transition: all.5s ease;
-  -webkit-appearance: none;
-  &:hover,
-  &:focus {
-    background: $main-dark;
+ .provablyfair .button-block {
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+    background-color:#2695F3;
+    color:white;
+    border-radius: 10px;
+    border-color:black    ;
+    opacity: 0.8;
   }
-}
 
-.provablyfair .button-block {
-  display: block;
-  width: 100%;
-}
+
+   .provablyfair .button-block:hover{
+      opacity: 1;
+      background: #2695F3
+  }
+
 
 .provablyfair .forgot {
   margin-top: -20px;
