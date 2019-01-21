@@ -66,32 +66,26 @@
                 </a>
             </div>
         </div>
-    </div>
+    
     
     <div id="StatsDiv">
         <a id="BankA" class="bankRoll">- BANQUE DU SITE -<br>{{BTCBankCoins.toLocaleString('en')}} <i class="fa fa-btc"></i> | {{fakeBankCoins.toLocaleString('en')}} <i class="fa fa-money"></i> </a>
-        <a id="TotalA" class="bankRoll">- TOTAL PARIÉ -<br> <!--{{numberPlayers.toLocaleString('en')}} JOUEURS | --> {{totalWageredBTC.toLocaleString('en')}} <i class="fa fa-btc"></i></a>
-
+        <a id="TotalA" class="bankRoll">- TOTAL PARIÉ -<br>{{totalWageredBTC.toLocaleString('en')}} <i class="fa fa-btc"></i></a>
     </div>
 
 <!-- Footer -->
 <br><br>
 <footer class="page-footer font-small blue">
 
-        <!-- Footer -->
-        <br><br>
-        <footer class="page-footer font-small blue">
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">Jouer comporte des risques : endettement, isolement, dépendance...  - 
+    <a href="http://www.joueurs-info-service.fr/"> Besoin d'aide ? </a> - 09 74 75 13 13 (FRA)
+  </div>
+  <!-- Copyright -->
 
-            <!-- Copyright -->
-            <div class="footer-copyright text-center py-3">Jouer comporte des risques : endettement, isolement,
-                dépendance... -
-                <a href="http://www.joueurs-info-service.fr/"> Besoin d'aide ? </a> - 09 74 75 13 13 (FRA)
-            </div>
-            <!-- Copyright -->
-
-        </footer>
-        <!-- Footer -->
-    </div>
+</footer>
+<!-- Footer -->
+</div>
 </template>
 
 <script>
@@ -170,13 +164,6 @@
         font-size: 3.7vh;
     }
 }
-@media(min-width: 562px) {
-    .home .bankRoll {
-        font-size: 35px;
-        font-family: 'Courier New', sans-serif;
-        font-variant: small-caps;
-    }
-
     @media(min-width: 562px) {
         .home .bankRoll {
             font-size: 35px;
