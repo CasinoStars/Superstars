@@ -487,25 +487,25 @@
     margin-bottom: 10px;
   }
 
-  .wallet .button {
-    border: 0;
-    outline: none;
-    border-radius: 0;
-    padding: 15px 0;
-    font-size: 2rem;
-    font-weight: $bold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    background: $main;
-    color: $white;
-    transition: all.5s ease;
-    -webkit-appearance: none;
+  // .wallet .button {
+  //   border: 0;
+  //   outline: none;
+  //   border-radius: 0;
+  //   padding: 15px 0;
+  //   font-size: 2rem;
+  //   font-weight: $bold;
+  //   text-transform: uppercase;
+  //   letter-spacing: 0.1em;
+  //   background: $main;
+  //   color: $white;
+  //   transition: all.5s ease;
+  //   -webkit-appearance: none;
 
-    &:hover,
-    &:focus {
-      background: $main-dark;
-    }
-  }
+  //   &:hover,
+  //   &:focus {
+  //     background: $main-dark;
+  //   }
+  // }
 
   .wallet .button-block {
     display: block;

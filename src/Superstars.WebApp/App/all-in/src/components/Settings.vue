@@ -2,7 +2,7 @@
     <div class="settings">
         <!-- Modal Settings -->
         <div class="tableau">
-                <div>
+                <div class="form">
                     <div>
                                 <ul class ="tab-group"><div class="myTitle">Gestion de compte</div></ul>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
