@@ -292,12 +292,18 @@
   height: 50%;
 }
 
+
+
 #lastTransaction th, #pendingTrx th {
   padding-top: 4px;
   padding-bottom: 4px;
   text-align: center;
   background-color: 	rgb(91, 93, 199);
   color: white;
+}
+
+.wallet .button-block:hover {
+  opacity: 1;
 }
 
 #lastTransaction td, #lastTransaction td {

@@ -47,19 +47,17 @@
     </div>
 
     <!-- BLACKJACK TUTO -->
-    <div id="tocenter">
-      <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
-        <p id="tutorialText0"> {{tutorialp0}}</p>
-        <p id="tutorialText1"> {{tutorialp1}}</p>
-        <p id="tutorialText2"> {{tutorialp2}}</p>
-        <p id="tutorialText3"> {{tutorialp3}}</p>
-        <p id="tutorialText4"> {{tutorialp4}}</p>
-        <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
-      </div>
+    <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
+      <p id="tutorialText0"> {{tutorialp0}}</p>
+      <p id="tutorialText1"> {{tutorialp1}}</p>
+      <p id="tutorialText2"> {{tutorialp2}}</p>
+      <p id="tutorialText3"> {{tutorialp3}}</p>
+      <p id="tutorialText4"> {{tutorialp4}}</p>
+      <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
     </div>
 
     <!-- BLACKJACK GAME -->
-    <div class="container" style="margin-top:-1%; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
+    <div class="container" style="margin-top:1%; letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
       <center>
         <div class="row">
           <div class="col">
@@ -489,33 +487,64 @@
     overflow-x: hidden;
   }
 
-  #tutorialRectanglebj {
-    width: 95%;
-    height: 80%;
-    margin-left: 2.5%;
-    margin-top: 5.5%;
-    border-radius: 20px;
-    text-align: center;
-    opacity: 0.99;
-    position: absolute;
-    transition: opacity 1s;
-    z-index: 15;
+  @media(max-width: 562px) {
+    .blackJack #tutorialRectanglebj {
+      width: 95%;
+      //  background: lightgrey;
+      margin-left: 2.5%;
+      margin-top: 9%;
+      border-radius: 20px;
+      text-align: center;
+      opacity: 0.99;
+      position: absolute;
+      transition: opacity 1s;
+      z-index: 15;
+    }
+
+    .blackJack #tutorialRectanglebj>p {
+      color: white;
+      text-transform: uppercase;
+      font-size: 2vh;
+      font-family: 'Courier New', sans-serif;
+      text-align: center;
+      position: relative;
+      margin-top: 2.8%;
+      margin-left: 3%;
+      margin-right: 3%;
+    }
+  }
+
+  @media(min-width: 562px) {
+    .blackJack #tutorialRectanglebj {
+      width: 60%;
+      //  background: lightgrey;
+      margin-left: 20%;
+      margin-top: 9%;
+      border-radius: 20px;
+      text-align: center;
+      opacity: 0.99;
+      position: absolute;
+      transition: opacity 1s;
+      z-index: 15;
+    }
+
+    .blackJack #tutorialRectanglebj>p {
+      color: white;
+      text-transform: uppercase;
+      font-size: 24px;
+      font-family: 'Courier New', sans-serif;
+      text-align: center;
+      position: relative;
+      margin-top: 2.8%;
+      margin-left: 3%;
+      margin-right: 3%;
+    }
   }
 
   #tutorialRectanglebj.fade {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s 2s, opacity 2s linear;
-  }
-
-  .blackJack #tutorialRectanglebj>p {
-    color: white;
-    text-transform: uppercase;
-    font-size: 28px;
-    font-family: 'Courier New', sans-serif;
-    text-align: center;
-    position: relative;
-    margin-top: 3%;
   }
 
   .blackJack #tutorialButton {
@@ -526,7 +555,8 @@
     font-size: 26px;
     border-radius: 3px;
     position: relative;
-    margin-top: 5%;
+    margin-top: 1%;
+    margin-bottom: 3%;
   }
 
   .blackJack .tab-group {
@@ -761,10 +791,6 @@
     font-variant: small-caps;
     color: rgb(0, 0, 0);
     font-size: 28px;
-  }
-
-  #tocenter {
-    display: -webkit-inline-box;
   }
 
   .blackJack #Infos {

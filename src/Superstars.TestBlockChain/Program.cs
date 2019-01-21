@@ -19,7 +19,7 @@ namespace Superstars.Wallet
             //  Console.WriteLine("test");
 
             var network = Network.TestNet;
-            var client = new QBitNinjaClient(Network.TestNet);
+            var client = new QBitNinjaClient("http://webappqbit.azurewebsites.net/");
             // BitcoinSecret key = new Key().GetBitcoinSecret(Network.TestNet);
             var btcS = new BitcoinSecret("cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup");
             var btcS2 = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
