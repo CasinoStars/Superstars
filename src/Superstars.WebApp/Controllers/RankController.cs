@@ -34,6 +34,33 @@ namespace Superstars.WebApp.Controllers
             return (List<RankData>) await _rankGateway.GetPlayerStats(pseudo, moneytypeId);
         }
 
+        [HttpGet("GetNumberOfPlayers")]
+        [AllowAnonymous]
+        public async Task<int> GetNumberOfPlayers()
+        {
+            var names = await _rankGateway.PseudoList();
+            var namesList = names.ToList();
+            return namesList.Count() - 1;
+        }
+
+        [HttpGet("{moneyTypeId}/GetTotalMoneyWagered")]
+        [AllowAnonymous]
+        public async Task<int> GetTotalMoneyWagered(int moneytypeId)
+        {
+            var names = await _rankGateway.PseudoList();
+            var namesList = names.ToList();
+            int totalWagered = 0;
+            foreach (var name in namesList)
+            {
+                var users = await _rankGateway.GetPlayerStats(name, moneytypeId);
+                foreach (var user in users)
+                {
+                    totalWagered += user.TotalBet;
+                }          
+            }
+            return totalWagered;
+        }
+
         [HttpGet("{TrueOrFake}/PlayersProfitSorted")]
         [AllowAnonymous]
         public async Task<IEnumerable<int>> GetPlayersProfitSorted(bool TrueOrFake)

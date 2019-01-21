@@ -55,9 +55,10 @@
         </div>
     </div>
     
-<br>
     <center style="padding-top: 4%;">
         <strong><a class="bankRoll">- BANQUE DU SITE -<br>{{BTCBankCoins.toLocaleString('en')}}<i class="fa fa-btc"></i> | {{fakeBankCoins.toLocaleString('en')}}<i class="fa fa-money"></i> </a></strong>
+        <br><br><br><br>
+        <strong><a class="bankRoll">- LA COMMUNAUTÉ A DÉJA PARLÉ -<br>{{numberPlayers.toLocaleString('en')}} JOUEURS <br>{{totalWageredBTC.toLocaleString('en')}}<i class="fa fa-btc"></i> | {{totalWageredFake.toLocaleString('en')}}<i class="fa fa-money"></i></a></strong>
     </center>
 
 <!-- Footer -->
@@ -80,6 +81,7 @@ import { mapActions } from 'vuex';
 import Vue from 'vue';
 import WalletApiService from '../services/WalletApiService';
 import BackOfficeApiService from '../services/BackOfficeApiService';
+import RankApiService from '../services/RankApiService';
 
 
 export default {
@@ -87,13 +89,19 @@ export default {
   data(){
     return {
       BTCBankCoins: 0,
-      fakeBankCoins: 0
+      fakeBankCoins: 0,
+      totalWageredBTC: 0,
+      totalWageredFake: 0,
+      numberPlayers: 0
+
     }
   },
 
      async created(){
       await this.BTCBank();
       await this.fakeBank();
+      await this.Wagered();
+      await this.GetNumberOfPlayers();
     },
 
     async mounted() {
@@ -101,8 +109,18 @@ export default {
 
      methods: {
     ...mapActions(['executeAsyncRequest']),
+
     async BTCBank() {
       this.BTCBankCoins = await this.executeAsyncRequest(() => WalletApiService.GetBTCBankRoll());
+    },
+    
+    async Wagered() {
+        this.totalWageredBTC = await this.executeAsyncRequest(() => RankApiService.GetTotalMoneyWagered(1));
+        this.totalWageredFake = await this.executeAsyncRequest(() => RankApiService.GetTotalMoneyWagered(0));
+    },
+
+    async GetNumberOfPlayers() {
+        this.numberPlayers = await this.executeAsyncRequest(() => RankApiService.GetNumberOfPlayers());
     },
 
     async fakeBank() {
