@@ -4,10 +4,10 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <router-link class="navbar-brand" to="/" style="font-family: 'Courier New', sans-serif; font-weight: 600px;">ALL`IN</router-link>
         <ul class="nav navbar-nav" v-if="auth.isConnected">
-          <li class="nav-item" id="soldeResponsive">
-            <router-link class="nav-link" to="/wallet" id="borderSolde" style="letter-spacing: 2px; font-size: 12px;">
-             &nbsp; {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" style="font-size: 0.8rem;"></i> ||
-              {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" style="font-size: 0.8rem;"></i> &nbsp;
+          <li class="nav-item" id="borderSolde">
+            <router-link class="nav-link" to="/wallet" id="soldeResponsive" style="letter-spacing: 2px;">
+             &nbsp; {{BTCMoney.toLocaleString('en')}}<i class="fa fa-btc" id="soldeIcon"></i> ||
+              {{fakeMoney.toLocaleString('en')}}<i class="fa fa-money" id="soldeIcon"></i> &nbsp;
             </router-link>
           </li>
         </ul>
@@ -161,17 +161,28 @@
 </script>
 
 <style lang="scss" scoped>
-  @media(max-width: 991px) {
+  @media(max-width: 1109px) {
     #solde {
       display: none;
     }
 
-    #soldeResponsive {}
+    #borderSolde {
+      max-width: 100%;
+    }
+    #borderSolde > #soldeResponsive {
+      font-size:1vh;
+    }
+    .app #soldeIcon {
+      font-size: 1vh;
+    }
   }
 
-  @media(min-width: 991px) {
+  @media(min-width: 1109px) {
     .app #soldeResponsive {
       display: none;
+    }
+    .app #soldeIcon {
+      font-size: 0.8rem;
     }
   }
 

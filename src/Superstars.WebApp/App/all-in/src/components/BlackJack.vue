@@ -1,5 +1,6 @@
 <template>
   <div class="blackJack">
+
     <!-- MODAL FOR BET -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
@@ -73,8 +74,11 @@
     <center style="margin-top:-1%;">
       <a class="txt">Cartes du Dealer</a><br>
       <div v-for="(i, index) of dealercards" :key="index" class="dealercards">
-        <img :src="getCardImage(i)" :id="index" v-if="i != ''">
-        <img src="../img/back.png" :id="index" v-else-if="i == '' && !iaturn">
+        <img :src="getCardImage(i)" :id="index" class="animated slideInDown" v-if="dealercards.length == 1 && !playerBet">
+        <img :src="getCardImage(i)" :id="index" class="animated flipInY" v-else-if="dealercards.length <= 2 && playerBet">
+        <img :src="getCardImage(i)" :id="index" v-else-if="index<dealercards.length -1">
+        <img :src="getCardImage(i)"  v-else class="animated rollIn" :id="index"> 
+        <img src="../img/back.png" :id="index" class="animated slideInDown" v-if="!iaturn">
       </div>
     </center>
 
@@ -87,7 +91,11 @@
     <center style="margin-top:1%;">
       <a class="txt">Votre main</a><br>
       <div v-for="(i, index) of playercards" :key="index" class="playercards">
-        <img :src="getCardImage(i)" :id="index" v-if="i != ''">
+        <img :src="getCardImage(i)" :id="index" class="animated slideInUp" v-if="playercards.length <= 2 && !playerBet">
+        <img :src="getCardImage(i)" :id="index" class="animated flipInY" v-else-if="playercards.length <= 2 && playerBet == true">
+        <img :src="getCardImage(i)" :id="index" v-else-if="index<playercards.length -1">
+        <img :src="getCardImage(i)"  v-else class="animated rollIn" :id="index">
+          
       </div>
     </center>
 
@@ -102,7 +110,8 @@
         <button type="submit" value="stand" class="btn btn-outline-secondary btn-lg" v-if="handvalue < 21 && iaturn == false && gameend == false">S'ARRETER</button>
       </form>
       <form @submit="playdealer($event)">
-        <button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn && !gameend && !dealerplaying">LANCER L'AI</button>
+        <button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn && !gameend && !dealerplaying">LANCER
+          L'AI</button>
       </form>
       <div v-if="!gameend && dealerplaying" class="lds-css ng-scope" style="display:inline;">
         <div style="width:100%;height:100%; display:inline;" class="lds-eclipse">
@@ -210,6 +219,8 @@
       ...mapActions(['executeAsyncRequest']),
       ...mapActions(['RefreshFakeCoins']),
       ...mapActions(['RefreshBTC']),
+
+
 
       OkTutorial() {
         let rectangle = document.getElementById("tutorialRectanglebj");
@@ -334,10 +345,10 @@
         e.preventDefault();
         this.dealerplaying = true;
         await this.CheckWinner();
-        while(this.dealerhandvalue < 17 || this.handvalue > this.dealerhandvalue) {
-        await new Promise(f => setTimeout(f, 1500));
-        await this.playdealersecond();
-        } 
+        while (this.dealerhandvalue < 17 || this.handvalue > this.dealerhandvalue) {
+          await new Promise(f => setTimeout(f, 1500));
+          await this.playdealersecond();
+        }
       },
 
       async playdealersecond() {
@@ -348,14 +359,16 @@
       },
 
       async CheckWinner() {
-          await this.refreshHandValue();
-          await this.refreshCards();
-        if (this.handvalue < this.dealerhandvalue && this.iaturn == true || this.handvalue == this.dealerhandvalue && this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
+        await this.refreshHandValue();
+        await this.refreshCards();
+        if (this.handvalue < this.dealerhandvalue && this.iaturn == true || this.handvalue == this.dealerhandvalue &&
+          this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue >
+          21) {
           if (this.handvalue > 21) {
             this.winnerlooser = 'Vous avez perdu !';
             this.playerwin = 'AI';
           } else if (this.dealerhandvalue > 21) {
-            this.winnerlooser = 'Vous avez gagné ! 2 '
+            this.winnerlooser = 'Vous avez gagné !'
             this.playerwin = 'Player';
           } else if (this.dealerhandvalue == 21) {
             this.winnerlooser = 'BLACKJACK ! Vous avez perdu !'
@@ -430,7 +443,13 @@
 
       async refreshCards() {
         this.playercards = await this.executeAsyncRequest(() => BlackJackApiService.GetPlayerCards());
+        this.playercards = this.playercards.filter((el) => {
+          return el != '';
+        })
         this.dealercards = await this.executeAsyncRequest(() => BlackJackApiService.GetAiCards());
+         this.dealercards = this.dealercards.filter((el) => {
+          return el != '';
+        })
       },
 
       getCardImage(value) {
@@ -461,10 +480,11 @@
   $main-dark: darken($main, 5%);
   $gray-light: #a0b3b0;
 
-.blackJack html {
-  overflow-y: hidden;
-  overflow-x:hidden;
-}
+  .blackJack html {
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+
   #tutorialRectanglebj {
     width: 95%;
     height: 80%;
@@ -731,6 +751,7 @@
       font-size: 15px;
     }
   }
+
   .txt {
     font-family: 'Courier New', sans-serif;
     font-variant: small-caps;
@@ -761,10 +782,12 @@
       height: 136.6px;
       width: 83.3px;
     }
+
     .blackJack .dealercards>img {
-    height: 136.6px;
-    width: 83.3px;
+      height: 136.6px;
+      width: 83.3px;
     }
+
     .blackJack button {
       font-size: 75%;
     }

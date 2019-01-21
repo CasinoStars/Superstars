@@ -482,7 +482,7 @@
 
                 }
                 if (this.multi > +this.definitiveMulti && this.hasPlayed) {
-                    this.lineColor = "black"
+                    this.lineColor = "black";
                     this.isOut = true;
                 }
 
