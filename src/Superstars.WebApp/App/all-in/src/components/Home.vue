@@ -55,11 +55,11 @@
         </div>
     </div>
     
-    <center style="padding-top: 4%;">
-        <strong><a class="bankRoll">- BANQUE DU SITE -<br>{{BTCBankCoins.toLocaleString('en')}}<i class="fa fa-btc"></i> | {{fakeBankCoins.toLocaleString('en')}}<i class="fa fa-money"></i> </a></strong>
-        <br><br><br><br>
-        <strong><a class="bankRoll">- LA COMMUNAUTÉ A DÉJA PARLÉ -<br>{{numberPlayers.toLocaleString('en')}} JOUEURS <br>{{totalWageredBTC.toLocaleString('en')}}<i class="fa fa-btc"></i> | {{totalWageredFake.toLocaleString('en')}}<i class="fa fa-money"></i></a></strong>
-    </center>
+    <div id="StatsDiv">
+        <a id="BankA" class="bankRoll">- BANQUE DU SITE -<br>{{BTCBankCoins.toLocaleString('en')}} <i class="fa fa-btc"></i> | {{fakeBankCoins.toLocaleString('en')}} <i class="fa fa-money"></i> </a>
+        <a id="TotalA" class="bankRoll">- TOTAL PARIÉ -<br> <!--{{numberPlayers.toLocaleString('en')}} JOUEURS | --> {{totalWageredBTC.toLocaleString('en')}} <i class="fa fa-btc"></i></a>
+
+    </div>
 
 <!-- Footer -->
 <br><br>
@@ -139,7 +139,7 @@ export default {
 
 @media(max-width: 562px){
     .home .bankRoll {
-        font-size: 3.8vh;
+        font-size: 3.7vh;
         font-family: 'Courier New', sans-serif;
         font-variant: small-caps;
     }
@@ -148,7 +148,7 @@ export default {
         text-align: center;
         font-family: 'Courier New', sans-serif;
         font-variant: small-caps;
-        font-size: 3.8vh;
+        font-size: 3.7vh;
     }
 }
 @media(min-width: 562px) {
@@ -185,6 +185,22 @@ export default {
 
 .home .carousel .carousel-item img{
     margin-top: 5%; /* Align slide image horizontally center */
+}
+
+.home #StatsDiv {
+    display: inline-flex;
+    text-align: center;
+    font-weight: bold;
+    height: 400px;
+    width: 100%;
+}
+
+.home #TotalA {
+    margin:auto auto auto 20%;
+}
+
+.home #BankA {
+    margin:auto 0 auto auto;
 }
 
 #provablylogo {
