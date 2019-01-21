@@ -1,33 +1,27 @@
 <template>
     <div class="settings">
         <!-- Modal Settings -->
-        <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-hidden="false">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="margin-left:32%;">Gestion de compte</h5>
+        <div class="tableau">
+                <div>
+                    <div>
+                                <ul class ="tab-group"><div class="myTitle">Gestion de compte</div></ul>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div v-if="!editMail && !editPassword">
-                        <div class="modal-body">
+                    <div>
                             <ul class="tab-group">
-                                <li class="tab"><a v-on:click="editPassword=true">Mot De Passe</a></li>
-                                <li class="tab"><a v-on:click="getEmail()">Adresse Email</a></li>
+                                <div class="field-wrap" style="margin-top:3%; margin-bottom:3%;"><h3>Changer de mot de passe</h3></div>
                             </ul>
-                        </div>
-                        <div class="modal-footer"></div>
                     </div>
-                    <form @submit="changePassword($event)" v-else-if="editPassword">
-                        <div class="modal-body">
+                    <form @submit="changePassword($event)">
+                        <div>
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
                                 <label>
-                                    Mot de Passe Actuel<span class="req">*</span>
+                                    Ancien mot de passe<span class="req">*</span>
                                 </label><br>
                                 <input type="password" v-model="item.oldPass" required />
-                            </div>
+                                </div>
                             <div class="field-wrap">
                                 <label>
                                     Nouveau Mot de Passe<span class="req">*</span>
@@ -41,29 +35,25 @@
                                 <input type="password" v-model="item.confirmPass" required />
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" v-if="editPassword" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" v-if="editPassword" class="btn btn-outline-success mx-auto">Sauvegarder</button>
-                        </div>
+                            <button type="submit"  class="btn btn-outline-success mx-auto active">Sauvegarder</button>
                     </form>
-                    <form @submit="changeEmail($event)" v-else>
-                        <div class="modal-body">
+                    <form @submit="changeEmail($event)">
+                        <div>
                             <div class="alert alert-danger" style="text-align: center; opacity: 0.7;" v-for="e of errors" :key="e">{{e}}</div>
                             <div class="field-wrap">
+                                <div class="field-wrap"><h3 style="margin-top:3%;margin-bottom:3%;">Changer d'adresse mail</h3></div>
                                 <label>
                                     Adresse Mail<span class="req">*</span>
                                 </label><br>
                                 <input :placeholder="item.oldMail" v-model="item.newMail" required />
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button v-if="editMail" type="button" @click="cancel()" class="btn btn-outline-light mx-auto">Annuler</button>
-                            <button type="submit" v-if="editMail" class="btn btn-outline-success mx-auto">Sauvegarder</button>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success mx-auto active">Sauvegarder</button>
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
+            </div>    
         <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
     </div>
 </template>
@@ -88,12 +78,6 @@
         methods: {
             ...mapActions(['executeAsyncRequest']),
 
-            cancel() {
-                this.errors = [];
-                this.item = {};
-                this.editPassword = false;
-                this.editMail = false;
-            },
 
             async changePassword(e) {
                 e.preventDefault();
@@ -159,37 +143,39 @@ $gray-light: #a0b3b0;
 $white: #ffffff;
 $main: #777c7b;
 $main-dark: darken($main,5%);
+$br: 4px;
 
-.settings .modal-header {
-    padding: 10px 16px;
-    text-align: center;
-    background: #222222a8;
-    color: white;
-}
 
-.settings .modal-content {
-    position: relative;
-    background: rgba($form-bg,.9);
-    margin: auto;
-    padding: 0;
-}
+  .settings input,
+  textarea {
+    margin-bottom: 2%;
+    margin-top: 1%;
+    font-size: 22px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 5px 10px;
+    background: none;
+    background-image: none;
+    border: 1px solid $gray-light;
+    color: $white;
+    border-radius: 0;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
-.settings .modal-body {
-    text-align: center;
-    input {
-        width: 60%;
+    &:focus {
+      outline: 0;
+      border-color: $main;
     }
-}
+  }
 
-.settings .modal-footer {
-    min-height: 40px;
-    padding: 10px 16px;
-    background-color:  #222222a8;
-    color: white;
-    button{
-        width: 30%;
-    }
-}
+  .settings .tableau {
+    background: rgba($form-bg, 0.9);
+    padding: 40px;
+    height: 900px;
+    width: 1000px;
+    border-radius: $br;
+    box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
+  }
 
 .settings .field-wrap {
     color: white;
@@ -203,7 +189,7 @@ $main-dark: darken($main,5%);
     display: table;
     clear: both;
   }
-  li a {
+  .myTitle {
     text-decoration:none;
     background:rgba($gray-light,.25);
     color:$gray-light;
@@ -213,12 +199,11 @@ $main-dark: darken($main,5%);
     text-align:center;
     cursor:pointer;
     transition:.5s ease;
-    &:hover {
-      background:$main-dark;
-      color:$white;
-    }
+    color:white;
+
   }
 }
+
 
 .settings .close {
     color: white;

@@ -296,7 +296,7 @@
   padding-top: 4px;
   padding-bottom: 4px;
   text-align: center;
-  background-color: rgba(39, 184, 61, 0.589);
+  background-color: 	rgb(91, 93, 199);
   color: white;
 }
 
@@ -487,7 +487,7 @@
     margin-bottom: 10px;
   }
 
-  .button {
+  .wallet .button {
     border: 0;
     outline: none;
     border-radius: 0;
@@ -507,7 +507,7 @@
     }
   }
 
-  .button-block {
+  .wallet .button-block {
     display: block;
     width: 100%;
   }

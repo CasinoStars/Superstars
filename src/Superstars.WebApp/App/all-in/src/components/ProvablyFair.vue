@@ -7,7 +7,7 @@
 
         <!-- Upgrade -->
 
-        <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">    
+        <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">     
 
       <ul class="tab-group">
                 <li style="color: white" class="tab active" v-if="this.view == 'provablyFair'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
@@ -269,6 +269,10 @@ $br: 4px;
   text-align: center;
   color: $white;
   font-weight: $thin;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 .provablyfair label {
