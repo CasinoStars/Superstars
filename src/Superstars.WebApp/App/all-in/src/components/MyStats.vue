@@ -1,59 +1,58 @@
 <template>
   <div class="stats">
-    <br>
-    <br>
-    <div style="text-align: center;font-family: 'Courier New', sans-serif;">
-      <h1 style="font-variant: small-caps; font-size: 45px;">
-        <i class="fa fa-chevron-left" @click="SwapTrueOrFake()" id="chevron"></i>
-        <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
-        <strong v-else>Mes statistiques</strong>
-        <i class="fa fa-chevron-right" @click="SwapTrueOrFake()" id="chevron"></i>
-      </h1>
-      <i v-if="TrueOrFake" class="fa fa-btc" style="font-size: 1.5rem; cursor: pointer"></i>
-      <i v-else class="fa fa-btc" style="font-size: 0.8rem; cursor: pointer"></i>
-      <i v-if="!TrueOrFake" class="fa fa-money" style="font-size: 1.5rem; cursor: pointer"></i>
-      <i v-else class="fa fa-money" style="font-size: 0.8rem; cursor: pointer"></i>
-    </div>
-    <br><br>
+
+    <h1>
+      <i class="fa fa-chevron-left" @click="SwapTrueOrFake()" id="chevron"></i>
+      <strong v-if="$route.query.pseudo">Statistiques de {{queryPseudo}}</strong>
+      <strong v-else>Mes statistiques</strong>
+      <i class="fa fa-chevron-right" @click="SwapTrueOrFake()" id="chevron"></i>
+    </h1>
+
+    <center>
+      <i class="fa fa-btc" id="btc" style="font-size: 1.4rem;" @click="SwapTrueOrFake()"></i>
+      <i class="fa fa-money" id="fake" style="font-size: 0.8rem;" @click="SwapTrueOrFake()"></i>
+    </center>
+
     <div class="table-responsive">
-    <table>
-      <tr>
-        <th>Jeu</th>
-        <th>Profit</th>
-        <th>Mise Total</th>
-        <th>Mise Moyenne</th>
-        <th>Victoire</th>
-        <th>Défaite</th>
-        <th>Egalité</th>
-        <th>Temps moyen</th>
-      </tr>
-      <tr v-for="(e,index) of playerStatsData" :key="index">
-        <td>{{e.gameName}}</td>
-        <td>{{e.profit.toLocaleString('en')}}</td>
-        <td>{{e.totalBet.toLocaleString('en')}}</td>
-        <td v-if="(e.wins+e.losses+e.equality) == 0">0</td>
-        <td v-else>{{(e.totalBet/(e.wins+e.losses+e.equality)).toLocaleString('en')}}</td>
-        <td>{{e.wins.toLocaleString('en')}}</td>
-        <td>{{e.losses.toLocaleString('en')}}</td>
-        <td>{{e.equality.toLocaleString('en')}}</td>
-        <td>{{e.averageTime}}</td>
-      </tr>
-    </table>
+      <table>
+        <tr>
+          <th>Jeu</th>
+          <th>Profit</th>
+          <th>Mise Total</th>
+          <th>Mise Moyenne</th>
+          <th>Victoire</th>
+          <th>Défaite</th>
+          <th>Egalité</th>
+          <th>Temps moyen</th>
+        </tr>
+        <tr v-for="(e,index) of playerStatsData" :key="index">
+          <td>{{e.gameName}}</td>
+          <td>{{e.profit.toLocaleString('en')}}</td>
+          <td>{{e.totalBet.toLocaleString('en')}}</td>
+          <td v-if="(e.wins+e.losses+e.equality) == 0">0</td>
+          <td v-else>{{(e.totalBet/(e.wins+e.losses+e.equality)).toLocaleString('en')}}</td>
+          <td>{{e.wins.toLocaleString('en')}}</td>
+          <td>{{e.losses.toLocaleString('en')}}</td>
+          <td>{{e.equality.toLocaleString('en')}}</td>
+          <td>{{e.averageTime}}</td>
+        </tr>
+      </table>
     </div>
 
-<div class="container">
-    <div class="row">
-      <div class="col-sm">
-        <canvas id="pie-chart" class="chartjs"></canvas>
-      </div>
-      <div class="col-sm">
-        <canvas id="pie-chart2" class="chartjs"></canvas>
-      </div>
-      <div class="col-sm">
-        <canvas id="pie-chart3" class="chartjs"></canvas>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <canvas id="pie-chart" class="chartjs"></canvas>
+        </div>
+        <div class="col-sm">
+          <canvas id="pie-chart2" class="chartjs"></canvas>
+        </div>
+        <div class="col-sm">
+          <canvas id="pie-chart3" class="chartjs"></canvas>
+        </div>
       </div>
     </div>
-</div>
+    
     <router-view :key="$route.fullPath"> </router-view>
   </div>
 </template>
@@ -190,12 +189,19 @@
         return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
       },
 
-      async SwapTrueOrFake(){
+      async SwapTrueOrFake() {
         this.TrueOrFake = !this.TrueOrFake;
-        if(this.TrueOrFake)
+        var iconBc = document.getElementById("btc");
+        var iconMoney = document.getElementById("fake");
+        if (this.TrueOrFake) {
           await this.getPlayerStats(1);
-        else 
+          iconBc.style.fontSize = "1.4rem";
+          iconMoney.style.fontSize = "0.8rem";
+        } else {
           await this.getPlayerStats(0);
+          iconBc.style.fontSize = "0.8rem";
+          iconMoney.style.fontSize = "1.4rem";
+        }
         this.drawDiagram();
       }
     }
@@ -203,29 +209,50 @@
 </script>
 
 <style lang="scss">
-  // #pie-chart {
-  //    width: 10px;
-  //    height: 10px;
-  // }
+  @media(max-width: 562px) {
+    .stats h1 {
+      margin-top: 3%;
+      font-variant: small-caps;
+      font-size: 4vh;
+      text-align: center;
+      font-family: 'Courier New', sans-serif;
+    }
+  }
+
+  @media(min-width: 562px) {
+    .stats h1 {
+      margin-top: 3%;
+      font-variant: small-caps;
+      font-size: 45px;
+      text-align: center;
+      font-family: 'Courier New', sans-serif;
+    }
+  }
 
   .stats {
     overflow-x: hidden;
+  }
+
+  .stats i:hover {
+    cursor: pointer;
   }
 
   .stats #chevron {
     color: gray;
     font-size: 50%;
   }
+
   .stats #chevron:hover {
-    cursor: pointer;
     opacity: 0.5;
   }
+
   .stats .container {
     margin-top: 2%;
-    .row{
-    margin-left: -25%;
-    height: 150%;
-    width: 150%;
+
+    .row {
+      margin-left: -25%;
+      height: 150%;
+      width: 150%;
     }
   }
 
@@ -235,6 +262,7 @@
     border-spacing: 0;
     width: 100%;
     border: 1px solid #ddd;
+    margin-top: 3%;
   }
 
   .stats tr {

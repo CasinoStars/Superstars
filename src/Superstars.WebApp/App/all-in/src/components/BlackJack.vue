@@ -77,7 +77,7 @@
         <img :src="getCardImage(i)" :id="index" class="animated slideInDown" v-if="dealercards.length == 1 && !playerBet">
         <img :src="getCardImage(i)" :id="index" class="animated flipInY" v-else-if="dealercards.length <= 2 && playerBet">
         <img :src="getCardImage(i)" :id="index" v-else-if="index<dealercards.length -1">
-        <img :src="getCardImage(i)"  v-else class="animated rollIn" :id="index"> 
+        <img :src="getCardImage(i)" v-else class="animated rollIn" :id="index">
         <img src="../img/back.png" :id="index" class="animated slideInDown" v-if="!iaturn">
       </div>
     </center>
@@ -94,8 +94,7 @@
         <img :src="getCardImage(i)" :id="index" class="animated slideInUp" v-if="playercards.length <= 2 && !playerBet">
         <img :src="getCardImage(i)" :id="index" class="animated flipInY" v-else-if="playercards.length <= 2 && playerBet == true">
         <img :src="getCardImage(i)" :id="index" v-else-if="index<playercards.length -1">
-        <img :src="getCardImage(i)"  v-else class="animated rollIn" :id="index">
-          
+        <img :src="getCardImage(i)" v-else class="animated rollIn" :id="index">
       </div>
     </center>
 
@@ -113,9 +112,9 @@
         <button type="submit" value="playdealer" class="btn btn-outline-secondary btn-lg" v-if="dealerhandvalue < 21 && iaturn && !gameend && !dealerplaying">LANCER
           L'AI</button>
       </form>
-      <div v-if="!gameend && dealerplaying" class="lds-css ng-scope" style="display:inline;">
-        <div style="width:100%;height:100%; display:inline;" class="lds-eclipse">
-          <div style="display:inline;"></div>
+      <div v-if="!gameend && dealerplaying" class="lds-css ng-scope">
+        <div style="width:100%;height:100%;" class="lds-eclipse">
+          <div></div>
         </div>
       </div>
     </center>
@@ -124,18 +123,14 @@
    <div style="text-align:center;"><button type="submit" value="split" class="btn btn-outline-secondary btn-lg" v-if="hasplitplayer == false && cansplitplayer && iaturn == false && gameend == false && handvalue < 21">SPLIT</button></div>
    </form> -->
 
-    <!-- <form>
-   <div><button type="button" class="btn btn-lg btn-primary" disabled>Primary button</button></div>
-   <div><button type="button" class="btn btn-secondary btn-lg" disabled>Button</button></div>
-   </form> -->
-
-    <!-- v-on:click="showait()" -->
-
-    <router-link to="/play">
-      <br>
-      <div style="text-align:center;"><button style="text-align:center;" class="btn btn-dark" v-if="gameend == true">QUITTER</button></div>
-    </router-link>
-
+    <center v-if="gameend == true">
+      <router-link v-on:click.native="RePlay()" to="">
+        <button class="btn btn-light">REJOUER</button>
+      </router-link>
+      <router-link to="/play">
+        <button class="btn btn-dark">QUITTER</button>
+      </router-link>
+    </center>
 
     <div id="snackbar">{{success}} <i style="color:green" class="fa fa-check"></i></div>
   </div>
@@ -211,7 +206,6 @@
         await this.CheckWinner();
       }
       this.tutorialp0 = "Bienvenue sur le BlackJack !";
-      await this.CheckWinner();
 
     },
 
@@ -447,7 +441,7 @@
           return el != '';
         })
         this.dealercards = await this.executeAsyncRequest(() => BlackJackApiService.GetAiCards());
-         this.dealercards = this.dealercards.filter((el) => {
+        this.dealercards = this.dealercards.filter((el) => {
           return el != '';
         })
       },
@@ -467,7 +461,17 @@
             image = `${value}.png`;
         }
         return require(`../img/${image}`);
-      }
+      },
+
+      async RePlay() {
+        await this.executeAsyncRequest(() => BlackJackApiService.DeleteJackAiPlayer());
+        await this.executeAsyncRequest(() => GameApiService.createGame(1));
+        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackPlayer());
+        await this.executeAsyncRequest(() => BlackJackApiService.CreateJackAiPlayer());
+        await this.executeAsyncRequest(() => BlackJackApiService.InitPlayer());
+        await this.executeAsyncRequest(() => BlackJackApiService.InitIa());
+        this.$router.go(this.$router.history);
+      },
     }
   }
 </script>
@@ -729,8 +733,8 @@
     box-shadow: 0 2px 0 0 #7f8387;
     -webkit-transform-origin: 20px 21px;
     transform-origin: 20px 21px;
-    margin-left: 40%;
     margin-top: 5%;
+    margin-left: 40%;
   }
 
   .blackJack .lds-eclipse {
