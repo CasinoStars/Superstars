@@ -455,31 +455,46 @@
     overflow-y: none;
   }
   
-  .yams #tutorialRectangle {
-    width: 60%;
-    height: 50%;
-    //  background: lightgrey;
-    margin-left: 18.8%;
-    margin-top: -11.8%;
-    border-radius: 20px;
+  @media(max-width: 562px) {
+    .yams #tutorialRectangle {
+      width: 95%;
+      //  background: lightgrey;
+      margin-left: 2.5%;
+      margin-top: -40%;
+      border-radius: 20px;
+      text-align: center;
+      opacity: 0.99;
+      position: absolute;
+      transition: opacity 1s;
+      z-index: 15;
+    }
+      .yams #tutorialRectangle>p {
+    color: white;
+    text-transform: uppercase;
+    font-size: 2vh;
+    font-family: 'Courier New', sans-serif;
     text-align: center;
-    opacity: 0.99;
-    position: absolute;
-    transition: opacity 1s;
-    z-index: 15;
+    position: relative;
+    margin-top: 2.8%;
+    margin-left: 3%;
+    margin-right: 3%;
+  }
   }
 
-.yams #tutorialRectangle.fade {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s 2s, opacity 2s linear;
-}
-
-  .yams #Infos {
-    animation: Infos 2s infinite;
-  }
-
-  .yams #tutorialRectangle>p {
+  @media(min-width: 562px) {
+    .yams #tutorialRectangle {
+      width: 60%;
+      //  background: lightgrey;
+      margin-left: 20%;
+      margin-top: -19%;
+      border-radius: 20px;
+      text-align: center;
+      opacity: 0.99;
+      position: absolute;
+      transition: opacity 1s;
+      z-index: 15;
+    }
+      .yams #tutorialRectangle>p {
     color: white;
     text-transform: uppercase;
     font-size: 24px;
@@ -490,15 +505,15 @@
     margin-left: 3%;
     margin-right: 3%;
   }
+  }
+.yams #tutorialRectangle.fade {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
 
-  #tutorialText {
-    color: white;
-    text-transform: uppercase;
-    font-size: 24px;
-    font-family: 'Courier New', sans-serif;
-    text-align: center;
-    position: relative;
-    margin-top: 5%;
+  .yams #Infos {
+    animation: Infos 2s infinite;
   }
 
   #tutorialButton {
@@ -509,7 +524,8 @@
     font-size: 22px;
     border-radius: 3px;
     position: relative;
-    margin-top: 5%;
+    margin-top: 3%;
+    margin-bottom: 3%;
   }
 
 
