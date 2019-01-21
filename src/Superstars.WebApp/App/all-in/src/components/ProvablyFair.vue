@@ -269,6 +269,10 @@ $br: 4px;
   text-align: center;
   color: $white;
   font-weight: $thin;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 .provablyfair label {
