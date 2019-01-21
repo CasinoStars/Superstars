@@ -144,7 +144,7 @@ width: 600px;
     height: 100%;
 }
 
- .button-block {
+ .submenu .button-block {
     display: block;
     width: 100%;
     height: 100%;
@@ -153,6 +153,25 @@ width: 600px;
     color:white;
     border-radius: 10px;
     border-color:lightblue;
+  }
+
+
+   .submenu  .button-block:hover{
+      opacity: 1;
+      background-color: #2695F3;
+  }
+
+
+    .button-block {
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+    background-color:rgb(77, 179, 77);
+    color:white;
+    border-radius: 10px;
+    border-color:black;
+    opacity: 0.8;
   }
 
 
