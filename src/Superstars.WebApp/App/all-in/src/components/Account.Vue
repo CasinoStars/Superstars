@@ -8,7 +8,7 @@
                 <h1 style="text-align: center; color: white;"> admin</h1> 
             </div>
                 
-            <div class="submenu" ><div class="myButton"><button>  Profil </button></div> </div>
+            <!-- <div class="submenu" ><div class="myButton"><button>  Profil </button></div> </div> -->
             <div class="submenu"><button class="button button-block" v-on:click=" TransferOn()">Transferts</button></div>
             <div class="submenu"><button class="button button-block" v-on:click=" WalletOn()">Porte monnaie</button></div>
             <div class="submenu"><button class="button button-block" v-on:click="ProvablyFairOn()">Provably Fair</button></div>
@@ -173,6 +173,8 @@ width: 600px;
     border-color:black;
     opacity: 0.8;
   }
+
+  
 
 
 .account .submenu {
