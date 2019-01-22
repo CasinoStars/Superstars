@@ -37,7 +37,8 @@
 
                         <button type="submit" class="button button-block">Changer</button>
                     </form>
-
+                    <br>
+                  <a href="https://jsfiddle.net/hloiseau/no3ecyu7/embedded/result">Provably Fair Crash</a>
                 </div><!-- tab-content -->
             </div>
         </div>
