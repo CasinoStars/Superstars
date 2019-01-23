@@ -221,7 +221,7 @@
     }
 
     #statslogo {
-        margin-top: 4%;
+        margin-top: 4.5%;
         margin-left: 4%;
         width: 260px;
         height: 170px;
@@ -234,7 +234,7 @@
     }
 
     #bitcoinlogo {
-        margin-top: 4%;
+        margin-top: 4.5%;
         width: 180px;
         height: 170px;
     }
