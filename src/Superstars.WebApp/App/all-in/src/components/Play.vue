@@ -1,6 +1,7 @@
 <template>
-  <div class="play">
-    <div class="yams">
+<div class="container-fluid">
+  <div class="row play">
+    <div class="col-md-4 yams">
       <router-link v-on:click.native="PlayYams(0)" to="" class="routeryams">
         <img src="../img/LOGO1.png" alt="yams" class="imgyams">
         <br>
@@ -8,7 +9,7 @@
       </router-link>
     </div>
 
-    <div class="blackjack">
+    <div class="col-md-4 blackjack">
       <router-link v-on:click.native="PlayBlackJack(1)" to="" class="routerbj">
         <img src="../img/LOGO3.png" alt="blackjack" class="imgblackjack">
         <br>
@@ -16,13 +17,14 @@
       </router-link>
     </div>
 
-    <div class="crash">
+    <div class="col-md-4 crash">
       <router-link to="/crash" class="routercrash">
         <img src="../img/LOGO5.png" alt="crash" class="imgcrash">
         <br>
         <img src="../img/CrashText.png" alt="textcrash" class="textcrash">
       </router-link>
     </div>
+  </div>
   </div>
 </template>
 
@@ -213,21 +215,21 @@
       width: 40%;
       transition: transform .4s;
       visibility: visible;
-      margin-left: 12%;
+      // margin-left: 12%;
     }
 
     .play .textbj {
       height: 30%;
       width: 50%;
       transition: transform .4s;
-      margin-left: 7%;
+      //margin-left: 7%;
     }
 
     .play .textcrash {
       height: 30%;
       width: 40%;
       transition: transform .4s;
-      margin-left: 12%;
+      //margin-left: 12%;
     }
   }
 
@@ -236,6 +238,18 @@
     transition: transform .4s;
     height: 70%;
     width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .play {
+    text-align: center;
+  }
+  
+  .play > div {
+    display:inline-block;
+    margin:auto;
+    
   }
 
   .play .yams .routeryams:hover {

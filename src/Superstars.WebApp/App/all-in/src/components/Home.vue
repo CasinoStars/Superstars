@@ -214,12 +214,6 @@
     margin:auto 0 auto auto;
 }
 
-#provablylogo {
-    margin-top: 3.5%;
-    width: 180px;
-    height: 230px;
-}
-
     #provablylogo {
         margin-top: 3.5%;
         width: 180px;
@@ -227,7 +221,8 @@
     }
 
     #statslogo {
-        margin-left: 3%;
+        margin-top: 4.5%;
+        margin-left: 4%;
         width: 260px;
         height: 170px;
     }
@@ -239,11 +234,13 @@
     }
 
     #bitcoinlogo {
+        margin-top: 4.5%;
         width: 180px;
         height: 170px;
     }
 
     #leaderboardlogo {
+        margin-top: 4%;
         width: 150px;
         height: 190px;
     }
