@@ -2,15 +2,16 @@
 <div class="bg">
   <br>
   <div style="text-align: center;margin-top 2%;font-family: 'Courier New', sans-serif;">
-      <h1 style="font-variant: small-caps;font-size: 45px;"> <strong> Règles </strong></h1>
-      <br>
+      <h1 style="font-variant: small-caps;font-size: 65px;"> <strong> Règles </strong></h1>
 <center>
 <div>
-<button v-on:click="YamsRules()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">YAMS</button>
-<button v-on:click="BlackJackRules()" class="btn btn dark" style="font-family: 'Courier New', sans-serif;">BLACKJACK</button>
+<br>
+<button v-on:click="YamsRules()" class="btn btn bg-dark" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>YAMS</strong></button>
+<button v-on:click="BlackJackRules()" class="btn btn bg-dark" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>BLACKJACK</strong></button>
 </div>
+<br>
+<!-- <div class="line" style="height: 1px; background-color: black;"></div> -->
 </center>
-      <br>
       <br>
       <h2  id="YamsTitle" style="font-variant: small-caps; font-size: 40px;"> <strong>Le Yams </strong></h2>
   </div>
@@ -31,26 +32,26 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 <div class="text">
 <dl>
 <dt> <strong> Liste des figures, de la plus faible à la plus forte : </strong> </dt>
-
-<dt> Chance : </dt>
+<br>
+<dt> > Chance : </dt>
 <dd> - le joueur n'a pas de figure </dd>
-
-<dt> Brelan : </dt>
+<br>
+<dt> > Brelan : </dt>
 <dd> - le joueur a <strong>3 dés de même valeur</strong> </dd>
-
-<dt> Carré :</dt>
+<br>
+<dt> > Carré :</dt>
 <dd> - le joueur a <strong>4 dés de même valeur</strong> </dd>
-
-<dt> Full : </dt>
-<dd> - le joueur a <strong>3 dés de même valeur + 2 dés de même valeur </strong>; les dés les plus nombreux indiquent la valeur du full( <img src="../img/dice3.png"><img  src="../img/dice3.png"><img  src="../img/dice3.png"><img  src="../img/dice2.png"><img  src="../img/dice2.png"> ) est un full de 3 par 2</dd>
-
-<dt> Petite Suite : </dt>
+<br>
+<dt> > Full : </dt>
+<dd> - le joueur a <strong>3 dés de même valeur + 2 dés de même valeur </strong> : ( <img src="../img/dice3.png"><img  src="../img/dice3.png"><img  src="../img/dice3.png"><img  src="../img/dice2.png"><img  src="../img/dice2.png"> ) est un full de 3 par 2</dd>
+<br>
+<dt> > Petite Suite : </dt>
 <dd> - le joueur a <strong>5 dés qui se suivent</strong> en commencant par le <strong>1</strong>( <img src="../img/dice1.png"><img  src="../img/dice2.png"><img  src="../img/dice3.png"><img  src="../img/dice4.png"><img  src="../img/dice5.png"> )</dd>
-
-<dt> Grande Suite : </dt>
+<br>
+<dt> > Grande Suite : </dt>
 <dd> - le joueur a <strong>5 dés qui se suivent </strong>  en commencant par le <strong>2</strong>( <img src="../img/dice2.png"><img  src="../img/dice3.png"><img  src="../img/dice4.png"><img  src="../img/dice5.png"><img  src="../img/dice6.png"> )</dd>
-
-<dt> Yam’s :</dt>
+<br>
+<dt> > Yam’s :</dt>
 <dd> - le joueur a <strong>5 dés de même valeur</strong> </dd>
 </dl>
 </div>

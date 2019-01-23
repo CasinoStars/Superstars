@@ -4,25 +4,22 @@
     <div class="col-md-4 yams">
       <router-link v-on:click.native="PlayYams(0)" to="" class="routeryams">
         <img src="../img/LOGO1.png" alt="yams" class="imgyams">
-        <br>
-        <img src="../img/YamsText.png" alt="textyams" class="textyams">
       </router-link>
+      <p style="font-family: Bebas; font-size: 5.2vh; text-align: center;"> Yam's </p>
     </div>
 
     <div class="col-md-4 blackjack">
       <router-link v-on:click.native="PlayBlackJack(1)" to="" class="routerbj">
         <img src="../img/LOGO3.png" alt="blackjack" class="imgblackjack">
-        <br>
-        <img src="../img/BlackJackText.png" alt="textbj" class="textbj">
       </router-link>
+      <p style="font-family: Bebas; font-size: 5.2vh; text-align: center;"> BlackJack </p>
     </div>
 
     <div class="col-md-4 crash">
       <router-link to="/crash" class="routercrash">
         <img src="../img/LOGO5.png" alt="crash" class="imgcrash">
-        <br>
-        <img src="../img/CrashText.png" alt="textcrash" class="textcrash">
       </router-link>
+      <p style="font-family: Bebas; font-size: 5.2vh; text-align: center;"> Crash </p>
     </div>
   </div>
   </div>
@@ -103,6 +100,11 @@
 </script>
 
 <style lang="scss">
+
+ @font-face { 
+   font-family: Bebas; src: url('../fonts/BEBAS.ttf');
+   } 
+
   @-webkit-keyframes rotateYams {
     0% {
       -webkit-transform: rotate(0deg);
@@ -183,13 +185,6 @@
       display: block;
     }
 
-    .play .yams .textyams {
-      height: 30%;
-      width: 40%;
-      transition: transform .4s;
-      visibility: visible;
-    }
-
     .play .textbj {
       height: 30%;
       width: 50%;
@@ -205,7 +200,7 @@
 
   @media(min-width: 562px) {
     .play {
-      margin-top: 15%;
+      margin-top: 10%;
       margin-left: 10%;
       display: inline-flex;
     }
@@ -233,6 +228,16 @@
     }
   }
 
+
+  .play {
+    text-align: center;
+  }
+  
+  .play > div {
+    display:inline-block;
+    margin:auto; 
+  }
+
   /* YAMS */
   .play .yams .imgyams {
     transition: transform .4s;
@@ -242,16 +247,10 @@
     margin-right: auto;
   }
 
-  .play {
-    text-align: center;
+  .yams > p {
+    margin-left: -1%;
   }
   
-  .play > div {
-    display:inline-block;
-    margin:auto;
-    
-  }
-
   .play .yams .routeryams:hover {
     .imgyams {
       -webkit-animation-name: rotateYams;
@@ -260,9 +259,6 @@
       -webkit-animation-timing-function: linear;
     }
 
-    .textyams {
-      opacity: 0.7;
-    }
   }
 
   /* BLACK JACK*/
@@ -270,6 +266,10 @@
     transition: transform .4s;
     height: 70%;
     width: 70%;
+  }
+
+  .blackjack > p {
+    margin-left: -1%;
   }
 
   .play .routerbj:hover {
@@ -280,9 +280,6 @@
       -webkit-animation-timing-function: linear;
     }
 
-    .textbj {
-      opacity: 0.7;
-    }
   }
 
   /* CRASH */
@@ -290,6 +287,10 @@
     transition: transform .4s;
     height: 70%;
     width: 70%;
+  }
+
+  .crash > p {
+    margin-left: -1%;
   }
 
   .play .crash .routercrash:hover {
@@ -301,8 +302,5 @@
       -webkit-animation-timing-function: linear;
     }
 
-    .textcrash {
-      opacity: 0.7;
-    }
   }
 </style>
