@@ -195,7 +195,7 @@
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
       this.refreshiaturn();
-
+      await this.CheckWinner();
       if (this.pot == 0 || this.pot == null) {
         this.showModal();
       } else {
@@ -316,6 +316,7 @@
       async stand(e) {
         e.preventDefault();
         this.iaturn = true;
+        await this.CheckWinner();
         await this.StandandFinish();
         await this.refreshCards();
         await this.refreshHandValue();
