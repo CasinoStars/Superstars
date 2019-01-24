@@ -100,7 +100,7 @@ class BlackJackApiService {
 
     async getplayerHandValue() {
         var value = await getAsyncNoJSON(`${endpoint}/getplayerHandValue`);
-        return value;
+        return parseInt(value);
     }
 
     // async getplayerSecondHandValue() {
@@ -110,7 +110,7 @@ class BlackJackApiService {
 
     async getAiHandValue() {
         var value = await getAsyncNoJSON(`${endpoint}/getAiHandValue`);
-        return value;
+        return parseInt(value);      
     }
 
 

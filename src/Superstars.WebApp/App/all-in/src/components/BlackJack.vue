@@ -195,7 +195,7 @@
       this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
 
       this.refreshiaturn();
-      await this.CheckWinner();
+
       if (this.pot == 0 || this.pot == null) {
         this.showModal();
       } else {
@@ -203,6 +203,7 @@
         await this.refreshHandValue();
         await this.CheckWinner();
       }
+
       this.tutorialp0 = "Bienvenue sur le BlackJack !";
 
     },
@@ -294,8 +295,9 @@
             modal.style.display = "none";
             this.pot = await this.executeAsyncRequest(() => GameApiService.getBlackJackPot());
             await this.refreshCards();
-            this.playerBet = true;
             await this.refreshHandValue();
+            await this.CheckWinner();
+            this.playerBet = true;
           } catch (error) {}
         }
       },
@@ -307,6 +309,7 @@
         if (this.handvalue >= 21) {
           this.gameend = true;
         }
+
         this.nbturn = await this.executeAsyncRequest(() => BlackJackApiService.GetTurn());
         await this.refreshCards();
         await this.refreshHandValue();
@@ -354,9 +357,14 @@
       async CheckWinner() {
         await this.refreshHandValue();
         await this.refreshCards();
+        console.log(this.handvalue +" HANDVALUE");
+        console.log(this.dealerhandvalue +" DEALERHANDVALUE");
+        console.log(typeof(this.dealerhandvalue) + " TYPE OF DEALERHANDVALUE");
+        console.log(typeof(this.handvalue) + " TYPE OF HANDVALUE");
+
         if (this.handvalue < this.dealerhandvalue && this.iaturn == true || this.handvalue == this.dealerhandvalue &&
-          this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue >
-          21) {
+          this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
+          
           if (this.handvalue > 21) {
             this.winnerlooser = 'Vous avez perdu !';
             this.playerwin = 'AI';
@@ -380,6 +388,7 @@
             this.playerwin = 'Equality';
             var egalite = true;
           }
+
           this.gameend = true;
           if (this.playerwin == 'AI') {
             if (this.trueBet == 0)

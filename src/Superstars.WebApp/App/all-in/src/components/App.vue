@@ -1,3 +1,4 @@
+
 <template>
   <div class="app">
     <header>
@@ -184,6 +185,10 @@
     .app #soldeIcon {
       font-size: 0.8rem;
     }
+  }
+
+  template {
+    background-color: red;
   }
 
   #borderSolde {
