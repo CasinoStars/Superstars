@@ -10,7 +10,6 @@ namespace CrashGameMath
         public static string ActualHashString { get; set; }
         public static double ActualHashValue { get; set; }
         private static int _playId;
-        private readonly string _salt;
 
         public class Hash
         {
@@ -22,12 +21,11 @@ namespace CrashGameMath
         {
             var createHash = new CreateHashes(playNb, salt);
             _hashList = createHash.HashList();
-            _salt = salt;
         }
 
         public double NextCrashValue()
         {
-            var crashValue = FindCrashValue.FromSha256(_hashList[_playId], _salt);
+            var crashValue = FindCrashValue.FromSha256(_hashList[_playId], "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526");
             ActualHashValue = crashValue;
             ActualHashString = _hashList[_playId];
             _playId++;
@@ -42,7 +40,7 @@ namespace CrashGameMath
             var hashAndValueList = new List<Hash>();
             foreach (var hashString in hashList)
             {
-                var hashAndValue = new Hash {HashString = hashString, HashValue = FindCrashValue.FromSha256(hashString, _salt)};
+                var hashAndValue = new Hash {HashString = hashString, HashValue = FindCrashValue.FromSha256(hashString, "0000000000000000004d6ec16dafe9d8370958664c1dc422f452892264c59526") };
                 hashAndValueList.Add(hashAndValue);
             }
         
