@@ -131,7 +131,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(e, index) of hashList" :key="index" v-on:click="showPlay(e.gameId)">
-                                <td>{{e.crashHash}}</td>
+                                <td class="hash">{{e.crashHash}}</td>
                                 <td class="text-right" style="color: green" v-if="e.crashValue >= 2">{{e.crashValue}}</td>
                                 <td class="text-right" style="color: red" v-else>{{e.crashValue}}</td>
                                 <td>{{e.bet}}</td>
@@ -565,6 +565,75 @@
 
 
 <style lang="scss">
+    $body-bg: #c1bdba;
+    $form-bg: #13232f;
+    $white: #ffffff;
+    $main: #777c7b;
+    $main-dark: darken($main, 5%);
+    $gray-light: #a0b3b0;
+
+    .hash {
+        box-sizing: 25px;
+        text-overflow: ellipsis;
+    }
+
+    ;
+
+    .CrashTest .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 16%;
+        /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba($body-bg, 0.4);
+        /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .CrashTest .modal-content {
+        position: relative;
+        background: rgba($form-bg, .9);
+        margin: auto;
+        padding: 0;
+        width: 80%;
+        color: white;
+        box-shadow: 0 0 100px 50px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    .CrashTest .modal-header {
+        padding: 10px 16px;
+        text-align: center;
+        background: #222222a8;
+        color: white;
+    }
+
+    .CrashTest .modal-body {
+        padding: 20px 16px;
+    }
+
+    .CrashTest .modal-footer {
+        padding: 15px 16px;
+        background-color: #222222a8;
+        color: white;
+    }
+
     .piecontainer {
         width: 700px;
         height: 100%;
