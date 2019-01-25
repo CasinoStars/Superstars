@@ -77,9 +77,9 @@
         </div>
 
         <div class="row">
-            <div class="col-md-auto">
+            <div class="col-md-7">
                 <div class="row">
-                    <div class="col-md-auto">
+                    <div class="col-md-8">
                         <div class="piecontainer" id="pie-container">
                             <canvas id="linechart">
                                 <center v-if="!isWaiting">
@@ -91,7 +91,7 @@
                             </canvas>
                         </div>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="col-md-4">
                         <form @submit="toBet($event)">
                             <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
                             <div class="onoffswitch">
@@ -121,7 +121,7 @@
                         style="margin-left:10px">
                         <thead class="table-header">
                             <tr>
-                                <th>Hash</th>
+                                <th class="hash">Hash</th>
                                 <th class="text-right">X</th>
                                 <th>Mise</th>
                                 <th class="text-right">Multi</th>
@@ -131,7 +131,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(e, index) of hashList" :key="index" v-on:click="showPlay(e.gameId)">
-                                <td class="hash">{{e.crashHash}}</td>
+                                <td class="hash"><input readonly v-model="e.crashHash"></td>
                                 <td class="text-right" style="color: green" v-if="e.crashValue >= 2">{{e.crashValue}}</td>
                                 <td class="text-right" style="color: red" v-else>{{e.crashValue}}</td>
                                 <td>{{e.bet}}</td>
@@ -573,11 +573,9 @@
     $gray-light: #a0b3b0;
 
     .hash {
-        box-sizing: 25px;
-        text-overflow: ellipsis;
-    }
-
-    ;
+        width: 25px !important;
+        text-overflow: ellipsis !important;
+    };
 
     .CrashTest .modal {
         display: none;
@@ -635,7 +633,6 @@
     }
 
     .piecontainer {
-        width: 700px;
         height: 100%;
     }
 
@@ -657,14 +654,10 @@
         font-variant: small-caps;
         font-weight: bold;
     }
-
     .CrashTest th {
         background-color: #343a40;
         color: white;
     }
-
-
-
     .onoffswitch {
         position: relative;
         width: 90px;
