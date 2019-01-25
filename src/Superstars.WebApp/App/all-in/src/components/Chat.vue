@@ -27,17 +27,17 @@
         isChatOpen: false, // to determine whether the chat window should be open or closed
         colors: {
           header: {
-            bg: '#4e8cff',
+            bg: '#373C42',
             text: '#ffffff'
           },
           launcher: {
-            bg: '#4e8cff'
+            bg: '#373C42'
           },
           messageList: {
             bg: '#ffffff'
           },
           sentMessage: {
-            bg: '#4e8cff',
+            bg: '#373C42',
             text: '#ffffff'
           },
           receivedMessage: {
@@ -45,7 +45,7 @@
             text: '#222222'
           },
           userInput: {
-            bg: '#f4f7f9',
+            bg: '#373C42',
             text: '#565867'
           }
         }, // specifies the color scheme for the component
