@@ -179,7 +179,7 @@
             font-size: 30px;
         }
     }
-
+    
     .home .carousel {
         /* background: #212529; */
         opacity: 0.85;
