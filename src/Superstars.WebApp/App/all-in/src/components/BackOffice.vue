@@ -7,6 +7,16 @@
         <i class="fa fa-chevron-right" @click="SwapActionsOrUsers()" id="chevron"></i>
       </h1>
       </div>
+
+    <center>
+      <div v-if="ActionsOrUser == 'Action'" id="blueCircle">
+        <div v-if="ActionsOrUser == 'Action'" style="margin-top: -2px; margin-left:150%;" id="whiteCircle"></div>
+      </div>
+      <div v-if="ActionsOrUser !== 'Action'" id="whiteCircle">
+        <div v-if="ActionsOrUser !== 'Action'" style="margin-top: -2px; margin-left:150%;" id="blueCircle"></div>
+      </div>
+    </center>
+
       <table style="margin-top:3%;" id="actionTable">
       <tr>
         <th>LogID</th>
@@ -30,7 +40,7 @@
       </thead>
       <tbody>
         <tr v-for="(e, index) in usersNames" :key='index'>
-          <td v-if="usersNames[index] != myPseudo">{{usersNames[index]}}</td>
+          <td v-if="usersNames[index] != myPseudo"><a class="link" :href="'statistics?pseudo='+usersNames[index]">{{usersNames[index]}}</a></td>
           <td v-if="usersNames[index] != myPseudo"><i class="fa fa-user-times" @click="DeleteUser(usersNames[index])"> </i></td>
         </tr>
       </tbody>
@@ -52,7 +62,8 @@ export default {
       logs: {},
       ActionsOrUser : 'Action',
       usersNames: [],
-      myPseudo: ''
+      myPseudo: '',
+      TrueOrFake: true
     }
   },
 
@@ -111,15 +122,51 @@ export default {
 </script>
 
 <style lang="scss">
-    .bo tr {
+
+    .bo #blueCircle {
+    background: #f1f3f3;
+    border-radius: 40%;
+    width: 13px;
+    height: 13px;
+    border: 2px solid #0e97d7;
+  }
+
+  .bo #whiteCircle {
+    background: #f1f3f3;
+    border-radius: 40%;
+    width: 13px;
+    height: 13px;
+    border: 2px solid #81888b;
+  }
+
+  .bo #chevron {
+    color: gray;
+    font-size: 50%;
+  }
+
+  .bo #chevron:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .bo a {
+      color: black;
+    }
+
+  .bo a:hover {
+      color: grey;
+      font-size: 120%;
+    }
+
+  .bo tr {
         background-color: #f2f2f2;       
     }
     
-    .bo table {
+  .bo table {
       width: 100%;
     }
 
-.bo td, th {
+  .bo td, th {
         border-bottom: 1px solid #dddddd;
         text-align: left;
         padding: 14px;
@@ -129,8 +176,14 @@ export default {
         font-weight: bold;
     }
 
-.bo th {
+  .bo th {
         background-color: #343a40;
         color: white;
-}
+    }
+
+    .bo i:hover {
+      cursor: pointer;
+      color: red;
+      font-size: 120%;
+    }
 </style>

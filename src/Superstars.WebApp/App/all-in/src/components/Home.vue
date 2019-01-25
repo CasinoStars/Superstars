@@ -112,10 +112,10 @@
         },
 
         async created() {
-            await this.BTCBank();
             await this.fakeBank();
             await this.Wagered();
             await this.GetNumberOfPlayers();
+            await this.BTCBank();
         },
 
         async mounted() {},

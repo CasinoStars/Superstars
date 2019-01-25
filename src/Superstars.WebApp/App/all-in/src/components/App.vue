@@ -1,3 +1,4 @@
+
 <template>
   <div class="app">
     <header>
@@ -125,8 +126,8 @@
     async mounted() {
       this.setIsAdmin();
       if (UserApiService.isConnected && this.isAdmin == false) {
-        await this.RefreshBTC();
         await this.RefreshFakeCoins();
+        await this.RefreshBTC();
       }
 
       UserApiService.registerAuthenticatedCallback(() => this.onAuthenticated());
@@ -184,6 +185,10 @@
     .app #soldeIcon {
       font-size: 0.8rem;
     }
+  }
+
+  template {
+    background-color: red;
   }
 
   #borderSolde {

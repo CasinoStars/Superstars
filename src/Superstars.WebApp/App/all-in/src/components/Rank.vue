@@ -117,16 +117,16 @@
   .rank #blueCircle {
     background: #f1f3f3;
     border-radius: 40%;
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
     border: 2px solid #0e97d7;
   }
 
   .rank #whiteCircle {
     background: #f1f3f3;
     border-radius: 40%;
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
     border: 2px solid #81888b;
   }
 
@@ -146,7 +146,7 @@
 
   .rank tr {
     background-color: #f2f2f2;
-    ;
+    height: 40px;
   }
 
   .rank thead {
@@ -160,6 +160,7 @@
     font-family: 'Courier New', sans-serif;
     font-variant: small-caps;
     font-weight: bold;
+    font-size: 22px;
   }
 
   .rank tbody tr:hover {
