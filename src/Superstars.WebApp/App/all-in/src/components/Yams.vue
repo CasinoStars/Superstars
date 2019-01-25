@@ -62,7 +62,7 @@
 
     <form @submit="onSubmitAI($event)" id="PlayAI">
       <div v-for="(i, index) of iadices" :key="index" class="iadices">
-        <img :src="getDiceIaImage(i, index)">
+        <img :src="getDiceIaImage(i, index)" class="animated bounceIn">
       </div>
     </form>
 
@@ -89,7 +89,7 @@
       <div v-for="(i, index) of dices" :key="index" class="playerdices">
         <input type="checkbox" :id="index+1" :value="index+1" v-model="selected" v-if="nbTurn != 0 && nbTurn < 3">
         <label class="image-checkbox" :for="index+1">
-          <img :src="getDiceImage(i, index)" :id="index">
+          <img :src="getDiceImage(i, index)" class="animated bounceIn" :id="index">
         </label>
       </div>
     </form>

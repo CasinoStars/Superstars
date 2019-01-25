@@ -6,15 +6,15 @@
 <center>
 <div>
 <br>
-<button v-on:click="YamsRules()" class="btn btn bg-dark" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>YAMS</strong></button>
-<button v-on:click="BlackJackRules()" class="btn btn bg-dark" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>BLACKJACK</strong></button>
-<button v-on:click="CrashRules()" class="btn btn bg-dark" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>CRASH</strong></button>
+<button v-on:click="YamsRules()" class="btn btn bg-dark animated bounceIn" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>YAMS</strong></button>
+<button v-on:click="BlackJackRules()" class="btn btn bg-dark animated bounceIn" style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>BLACKJACK</strong></button>
+<button v-on:click="CrashRules()" class="btn btn bg-dark animated bounceIn " style="font-family: 'Courier New', sans-serif; font-size: 25px; color: white; width: 180px; height: 45px;"><strong>CRASH</strong></button>
 </div>
 <br>
 <!-- <div class="line" style="height: 1px; background-color: black;"></div> -->
 </center>
       <br>
-      <h2  id="YamsTitle" style="font-variant: small-caps; font-size: 40px;"> <strong> <dt>Le Yams </dt></strong></h2>
+      <h2  id="YamsTitle" style="font-variant: small-caps; font-size: 40px; margin-top: -1%;"> <strong> <dt>Le Yams </dt></strong></h2>
   </div>
 <br>
 
@@ -61,7 +61,7 @@ Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’e
 
 <!--  BLACKJACK -->
   <div style="text-align: center; font-family: 'Courier New', sans-serif;">
-      <h2 id="bjtitle" style="font-variant: small-caps; font-size: 40px;"> <strong>Le BlackJack </strong></h2>
+      <h2 id="bjtitle" style="font-variant: small-caps; font-size: 40px; margin-top: -2%;"> <strong> <dt> Le BlackJack </dt> </strong></h2>
   </div>
 <br>
   <div id="BlackJackContent">
@@ -83,8 +83,8 @@ Valeur des cartes : <br>
 
 <!-- CRASH -->
 <div style="text-align: center; font-family: 'Courier New', sans-serif;">
-      <h2 id="crashtitle" style="font-variant: small-caps; font-size: 40px;"> <strong>Le jeu du Crash </strong></h2>
-  </div>
+      <h2 id="crashtitle" style="font-variant: small-caps; font-size: 40px; margin-top: -3%;"> <strong> <dt> Le jeu du Crash </dt> </strong></h2>
+</div>
 <br>
   <div id="CrashContent">
 <div class="text">
@@ -94,7 +94,7 @@ La partie consiste à placer un pari et regarder le multiplicateur monter. Vous 
 Mais attention  car la courbe peut s'arrêter à n'importe quel moment et vous aurez tout perdu !
 </p>
 </div>
-<img id="Crashgif" src="../img/CrashGIF.gif" height="700px" width="500px">
+<img id="Crashgif" class="animated bounceIn" src="../img/CrashGIF.gif" height="700px" width="500px">
 </div>
 
 
@@ -171,12 +171,13 @@ export default {
 
 <style>
 
+
 .bg p {
    text-align: justify;
    font-weight: bold;
    margin-right: 4%;
    margin-left: 2%;
-   font-size: 34px;
+   font-size: 35px;
 }
 
 .text {
@@ -206,6 +207,7 @@ margin-right: auto;
 margin-top: 2%;
 margin-bottom: 3%;
 border-radius: 2%;
+box-shadow: 8px 8px 10px #aaa;
 }
 
 #BlackJackContent {
