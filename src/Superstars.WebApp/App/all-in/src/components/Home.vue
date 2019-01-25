@@ -5,10 +5,10 @@
                 <h1>Bienvenue sur ALL`IN</h1>
             </div>
         </header>
-        <div class="warning slide bg-danger" id="baniere" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
+        <!-- <div class="warning slide bg-danger" id="baniere" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
             <h4 style="padding-top:1.5%;">Attention, le casino est actuellement en développement et utilise la <a href="https://en.bitcoin.it/wiki/Testnet"
                     style="color:blue" target="_blank">blockchain test</a></h4>
-        </div>
+        </div> -->
 
         <br>
         <div class="bs-example">
@@ -182,6 +182,8 @@
 
     .home .carousel {
         /* background: #212529; */
+        opacity: 0.85;
+        height: 435px;
     }
 
     .home .carousel .carousel-item {

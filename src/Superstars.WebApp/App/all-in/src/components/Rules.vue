@@ -89,7 +89,7 @@ Valeur des cartes : <br>
   <div id="CrashContent">
 <div class="text">
   <p>
-  Le jeu du Crash est un jeu qui consiste en uner courbe croissante qui peut s'arrêter à n'import quel moment !<br>
+  Le jeu du Crash est un jeu qui consiste en une courbe croissante qui peut s'arrêter à n'importe quel moment !<br>
 La partie consiste à placer un pari et regarder le multiplicateur monter. Vous pouvez sortir votre argent à tout moment et obtenir votre mise multipliée par la valeur du multiplicateur.<br>
 Mais attention  car la courbe peut s'arrêter à n'importe quel moment et vous aurez tout perdu !
 </p>
@@ -171,7 +171,7 @@ export default {
 
 <style>
 
-p {
+.bg p {
    text-align: justify;
    font-weight: bold;
    margin-right: 4%;
