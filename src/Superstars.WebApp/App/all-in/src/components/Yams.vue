@@ -55,7 +55,7 @@
             <h3 style="font-size:150%;">TOUR: {{nbTurn}}</h3>
           </div>
         </div><br>
-        <h3>SCORE DE L'IA: <strong>{{IaScore}}</strong></h3>
+        <h3>SCORE DE L'IA: <strong v-if="iaplayed">{{IaScore}}</strong><strong v-else>0</strong></h3>
         <h3>FIGURE L'IA: <strong>{{IaFigure}}</strong></h3>
       </center>
     </div>
@@ -96,7 +96,7 @@
 
     <center>
       <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%;">
-        <h3>VOTRE SCORE: <strong>{{playerScore}}</strong></h3>
+        <h3>VOTRE SCORE: <strong v-if="played">{{playerScore}}</strong><strong v-else>0</strong></h3>
         <h3>VOTRE FIGURE: <strong>{{playerFigure}}</strong></h3>
       </div>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
@@ -171,7 +171,10 @@
         tutorialp3: '',
         tutorialp4: '',
         queryPseudo: '',
-        wins: 0
+        wins: 0,
+        played: false,
+        iaplayed: false
+
       }
     },
 
@@ -378,6 +381,7 @@
         e.preventDefault();
         while (this.nbTurnIa < 3) {
           this.iaRollDices = true;
+          this.iaplayed = true;
           let arraydice = [this.iadices, this.dices];
           this.nbTurnIa = this.nbTurnIa + 1;
           var dicesAndIndex = await this.executeAsyncRequest(() => YamsApiService.RollIaDices(arraydice)).then(r => r
@@ -405,6 +409,7 @@
       async onSubmit(e) {
         e.preventDefault();
         this.rollDices = true;
+        this.played = true;
         if (this.nbTurn === 0) {
           this.selected = [1, 2, 3, 4, 5];
           await this.executeAsyncRequest(() => YamsApiService.RollDices(this.selected));
