@@ -313,10 +313,10 @@
                 this.initializeChart();
                 var canvas = document.getElementById("linechart");
                 var ctx = canvas.getContext("2d");
-                ctx.font = "50px Arial";
+                ctx.font = "5vh Arial";
                 ctx.strokeStyle = "black";
                 ctx.textAlign = "center";
-                ctx.strokeText("En attente des mises", 100, 200);
+                ctx.strokeText("En attente des mises", canvas.scrollWidth/2, canvas.scrollHeight/2);
                 this.lineColor = "black";
                 this.i = 0
                 this.playersData = [];
@@ -377,9 +377,8 @@
             updateNumber() {
                 var canvas = document.getElementById("linechart");
                 var ctx = canvas.getContext("2d");
-                ctx.font = "70px Arial";
+                ctx.font = "7vh Arial";
                 ctx.textAlign ="center"
-                console.log(canvas.width)
                 ctx.strokeText("X" + this.multi.toFixed(2), canvas.scrollWidth/2, canvas.scrollHeight/2);
             },
 
