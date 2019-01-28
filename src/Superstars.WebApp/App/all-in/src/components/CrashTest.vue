@@ -122,13 +122,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(e, index) of hashList" :key="index" v-on:click="showPlay(e.gameId)">
+                            <tr v-for="(e, index) of hashList" :key="index" >
                                 <td><input class="hash" readonly v-model="e.crashHash"></td>
-                                <td class="text-right" style="color: green" v-if="e.crashValue >= 2">{{e.crashValue}}</td>
-                                <td class="text-right" style="color: red" v-else>{{e.crashValue}}</td>
-                                <td>{{e.bet}}</td>
-                                <td class="text-right">{{e.multi}}</td>
-                                <td>{{profit(e.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
+                                <td v-on:click="showPlay(e.gameId)" class="text-right" style="color: green" v-if="e.crashValue >= 2">{{e.crashValue}}</td>
+                                <td v-on:click="showPlay(e.gameId)" class="text-right" style="color: red" v-else>{{e.crashValue}}</td>
+                                <td v-on:click="showPlay(e.gameId)">{{e.bet}}</td>
+                                <td v-on:click="showPlay(e.gameId)" class="text-right">{{e.multi}}</td>
+                                <td v-on:click="showPlay(e.gameId)">{{profit(e.crashValue, e.bet, e.multi).toLocaleString('en')}}</td>
 
 
                             </tr>
