@@ -121,7 +121,7 @@
                         style="margin-left:10px">
                         <thead class="table-header">
                             <tr>
-                                <th class="hash">Hash</th>
+                                <th>Hash</th>
                                 <th class="text-right">X</th>
                                 <th>Mise</th>
                                 <th class="text-right">Multi</th>
@@ -131,7 +131,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(e, index) of hashList" :key="index" v-on:click="showPlay(e.gameId)">
-                                <td class="hash"><input readonly v-model="e.crashHash"></td>
+                                <td><input class="hash" readonly v-model="e.crashHash"></td>
                                 <td class="text-right" style="color: green" v-if="e.crashValue >= 2">{{e.crashValue}}</td>
                                 <td class="text-right" style="color: red" v-else>{{e.crashValue}}</td>
                                 <td>{{e.bet}}</td>
@@ -315,6 +315,7 @@
                 var ctx = canvas.getContext("2d");
                 ctx.font = "50px Arial";
                 ctx.strokeStyle = "black";
+                ctx.textAlign = "center";
                 ctx.strokeText("En attente des mises", 100, 200);
                 this.lineColor = "black";
                 this.i = 0
@@ -377,7 +378,9 @@
                 var canvas = document.getElementById("linechart");
                 var ctx = canvas.getContext("2d");
                 ctx.font = "70px Arial";
-                ctx.strokeText("X" + this.multi.toFixed(2), 250, 200);
+                ctx.textAlign ="center"
+                console.log(canvas.width)
+                ctx.strokeText("X" + this.multi.toFixed(2), canvas.scrollWidth/2, canvas.scrollHeight/2);
             },
 
 
@@ -497,9 +500,7 @@
                     this.multi = Math.round(this.multi * 100) / 100;
                     this.i++;
                 }, 100);
-
             },
-
             async toBet(e) {
                 e.preventDefault();
                 this.hasPlayed = true;
@@ -574,8 +575,15 @@
     $gray-light: #a0b3b0;
 
     .hash {
-        width: 25px !important;
-        text-overflow: ellipsis !important;
+        //border: 1px solid inherit;
+        border: none;
+        width: 100%;
+        background-color: inherit;
+        border-radius: 1px;
+        font-family: 'Courier New', sans-serif;
+        font-size: 21px;
+        font-variant: small-caps;
+        font-weight: bold;
     };
 
     .CrashTest .modal {
