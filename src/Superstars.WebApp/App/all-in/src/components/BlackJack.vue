@@ -47,13 +47,14 @@
     </div>
 
     <!-- BLACKJACK TUTO -->
-    <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0">
+    <div id="tutorialRectanglebj" class="bg-dark" v-if="playerBet == true && nbturn == 0 && wins == 0 && skipTuto == false">
       <p id="tutorialText0"> {{tutorialp0}}</p>
       <p id="tutorialText1"> {{tutorialp1}}</p>
       <p id="tutorialText2"> {{tutorialp2}}</p>
       <p id="tutorialText3"> {{tutorialp3}}</p>
       <p id="tutorialText4"> {{tutorialp4}}</p>
       <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+      <button class="btn btn-secondary active" id="tutorialButton" v-on:click="SkipTuto()"> Passer </button>
     </div>
 
     <!-- BLACKJACK GAME -->
@@ -152,6 +153,7 @@
         playercards: [],
         dealercards: [],
         handvalue: 0,
+        skipTuto: false,
         dealerhandvalue: 0,
         iaturn: false,
         dealerplaying: false,
@@ -247,6 +249,10 @@
       changeBet(choice) {
         this.realOrFake = choice;
         this.errors = 0;
+      },
+
+      SkipTuto() {
+        this.skipTuto = true;
       },
 
       showModal() {
@@ -565,7 +571,9 @@
     font-size: 26px;
     border-radius: 3px;
     position: relative;
-    margin-top: 1%;
+    margin-right: 3%;
+    margin-left: 3%;
+    margin-top: 3%;
     margin-bottom: 3%;
   }
 

@@ -238,6 +238,7 @@
             ...mapGetters(['BTCMoney']),
             ...mapGetters(['fakeMoney'])
         },
+        
 
         async mounted() {
 
@@ -613,6 +614,11 @@
         -webkit-animation-duration: 0.4s;
         animation-name: animatetop;
         animation-duration: 0.4s
+    }
+
+    
+    .CrashTest .table-body .table-bordered th,.CrashTest .table-bordered td, .CrashTest .table-bordered tr{
+        border : solid 1px  black !important
     }
 
     .CrashTest .modal-header {
