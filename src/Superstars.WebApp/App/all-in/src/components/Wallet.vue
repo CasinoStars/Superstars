@@ -302,7 +302,7 @@
   color: white;
 }
 
-.wallet .button-block:hover {
+.wallet  .button-block:hover {
   opacity: 1;
 }
 
