@@ -8,14 +8,11 @@
         <!-- Upgrade -->
 
         <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">     
-
-      <ul class="tab-group">
-                <li style="color: white" class="tab active" v-if="this.view == 'provablyFair'"><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>
-                <li style="color: white" class="tab" v-else><a v-on:click="ChangeView('provablyFair')">Seeds</a></li>                                
-            </ul>
+          <h1>Provably Fair</h1>
+          <div class="line"></div>
 
             <div style="color: white" v-if="this.view == 'provablyFair'">
-                <div class="tab-content">
+                <div class="tab-content" style="margin-top:8%;">
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef client:</span><br>{{seeds.clientSeed}}<br></h4>
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef Serveur:</span><br>{{seeds.cryptedServerSeed}}<br></h4>
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Nombre de dés générer par le hash:</span><br>{{seeds.nonce}}<br></h4>
@@ -23,7 +20,7 @@
                     
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveur:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br></h4>
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef client:</span><br>{{seeds.previousClientSeed}}<br></h4>
-                    <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveir crypté:</span><br>{{seeds.previousCryptedServerSeed}}<br></h4>
+                    <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveur crypté:</span><br>{{seeds.previousCryptedServerSeed}}<br></h4>
 
                     <form  @submit="UpdateSeeds($event)">
                             <div class="field-wrap">
@@ -330,12 +327,12 @@ textarea {
     color:white;
     border-radius: 10px;
     border-color:black    ;
-    opacity: 0.8;
+    opacity: 1;
   }
 
 
    .provablyfair .button-block:hover{
-      opacity: 1;
+      opacity: 0.8;
       background: #2695F3
   }
 

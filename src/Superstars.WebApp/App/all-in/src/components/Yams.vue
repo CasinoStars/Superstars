@@ -75,13 +75,14 @@
       <div v-if="nbTurnIa == 3 && winOrLose != ''">L'IA À FINI DE JOUER</div>
     </div>
 
-    <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0">
+    <div id="tutorialRectangle" class="bg-dark" v-if="playerBet == true && nbTurn == 0 && wins == 0 && skipTuto == false">
       <p id="tutorialText0"> {{tutorialp0}}</p>
       <p id="tutorialText1"> {{tutorialp1}}</p>
       <p id="tutorialText2"> {{tutorialp2}}</p>
       <p id="tutorialText3"> {{tutorialp3}}</p>
       <p id="tutorialText4"> {{tutorialp4}}</p>
       <button class="btn btn-secondary active" id="tutorialButton" v-on:click="OkTutorial()"> Ok ! </button>
+      <button class="btn btn-secondary active" id="tutorialButton" v-on:click="SkipTuto()"> Passer </button>
     </div>
 
 
@@ -153,6 +154,7 @@
         playerScore: '',
         IaScore: '',
         wait: '',
+        skipTuto : false,
         playerwin: '',
         playerBet: false,
         realOrFake: 'real',
@@ -217,21 +219,25 @@
       OkTutorial() {
         let rectangle = document.getElementById("tutorialRectangle");
         this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
-        if (this.nbSlidesTutorial === 1) {
+        if (this.nbSlidesTutorial === 1 && this.skipTuto == false) {
           document.getElementById("tutorialText0").style.opacity = 0.4;
           this.tutorialp1 = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés.  ";
-        } else if (this.nbSlidesTutorial === 2) {
+        } else if (this.nbSlidesTutorial === 2 && this.skipTuto == false) {
           document.getElementById("tutorialText1").style.opacity = 0.4;
           this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés.  ";
-        } else if (this.nbSlidesTutorial === 3) {
+        } else if (this.nbSlidesTutorial === 3 && this.skipTuto == false) {
           document.getElementById("tutorialText2").style.opacity = 0.4;
           this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  ";
-        } else if (this.nbSlidesTutorial === 4) {
+        } else if (this.nbSlidesTutorial === 4 && this.skipTuto == false) {
           document.getElementById("tutorialText3").style.opacity = 0.4;
           this.tutorialp4 = "  Celui ayant la meilleure figure remporte la partie ! Bonne chance ! ";
-        } else if (this.nbSlidesTutorial > 4) {
+        } else if (this.nbSlidesTutorial > 4 && this.skipTuto == false) {
           rectangle.classList.toggle('fade');
         }
+      },
+
+      SkipTuto() {
+        this.skipTuto = true;
       },
 
       changeBet(choice) {
@@ -528,7 +534,11 @@
     display: inline-block;
     font-size: 22px;
     border-radius: 3px;
+    width: 10%;
+    height: 5%;
     position: relative;
+    margin-right: 3%;
+    margin-left: 3%;
     margin-top: 3%;
     margin-bottom: 3%;
   }

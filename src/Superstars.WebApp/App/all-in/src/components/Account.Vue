@@ -10,7 +10,7 @@
                 
             <!-- <div class="submenu" ><div class="myButton"><button>  Profil </button></div> </div> -->
             <div class="submenu"><button class="button button-block" v-on:click=" TransferOn()">Transferts</button></div>
-            <div class="submenu"><button class="button button-block" v-on:click=" WalletOn()">Porte monnaie</button></div>
+            <div class="submenu"><button class="button button-block" v-on:click=" WalletOn()">Portefeuille</button></div>
             <div class="submenu"><button class="button button-block" v-on:click="ProvablyFairOn()">Provably Fair</button></div>
             <div class="submenu"><button class="button button-block" v-on:click="SupportPageOn()">Support</button></div>
             <div class="submenu"><button class="button button-block" v-on:click="SecuriterOn()">Sécurité</button></div>
@@ -171,7 +171,7 @@ width: 600px;
     color:white;
     border-radius: 10px;
     border-color:black;
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   

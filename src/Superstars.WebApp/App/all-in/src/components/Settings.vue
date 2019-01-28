@@ -4,7 +4,8 @@
         <div class="tableau">
                 <div class="form">
                     <div>
-                                <ul class ="tab-group"><div class="myTitle">Gestion de compte</div></ul>
+                                <h1>Gestion de compte</h1>
+                                <div class="line" style="height:1px;"></div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
