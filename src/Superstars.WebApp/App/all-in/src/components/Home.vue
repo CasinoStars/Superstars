@@ -177,22 +177,22 @@
     
     .home .carousel {
         /* background: #212529; */
-        height: 435px;
+        height: 455px;
+        background-image: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.5) 90%);
     }
 
     .home .carousel .carousel-item {
         height: 450px;
         min-height: 350px;
+        margin-top: -2%;
         /* Prevent carousel from being distorted if for some reason image doesn't load */
     }
-
 
     .home .warning {
         height: 40px;
         min-height: 70px;
         /* Prevent carousel from being distorted if for some reason image doesn't load */
     }
-
 
 .home #StatsDiv {
     display: inline-flex;

@@ -187,8 +187,8 @@
     }
   }
 
-  template {
-    background-color: red;
+  .navbar {
+    background-image: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.2) 90%);
   }
 
   #borderSolde {
