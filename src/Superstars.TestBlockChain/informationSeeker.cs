@@ -117,7 +117,17 @@ namespace Superstars.Wallet
         /// <returns></returns>
         public static async Task<IEnumerable<ICoin>> FindUtxo(BitcoinSecret bitcoinPrivateKey, QBitNinjaClient client)
         {
-            var coinsTask = await client.GetBalance(bitcoinPrivateKey.GetAddress(), true);
+            var coinsTask = new BalanceModel();
+
+            try
+            {
+                coinsTask = await client.GetBalance(bitcoinPrivateKey.GetAddress(), true);
+            } catch
+            {
+                coinsTask = await new QBitNinjaClient(Network.TestNet).GetBalance(bitcoinPrivateKey.GetAddress(), true);
+            }
+ 
+
             var coins = coinsTask;
             return coins.Operations.SelectMany(op => op.ReceivedCoins).ToArray();
         }

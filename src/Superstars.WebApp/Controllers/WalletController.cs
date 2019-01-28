@@ -155,7 +155,7 @@ namespace Superstars.WebApp.Controllers
 
         [HttpGet("TrueBalance")]
         public async Task<int> GetTrueBalance()
-        {
+        {// Network.Testnet
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result1 = await _walletGateway.GetPrivateKey(userId);
             var privateKey = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
@@ -163,8 +163,7 @@ namespace Superstars.WebApp.Controllers
                 privateKey = new BitcoinSecret("cP8jukfzUjzQonsfG4ySwkJF1xbpyn6EPhNhbD4yK8ZR2529cbzm");
             else
                 privateKey =
-                    new BitcoinSecret(
-                        result1.Content.PrivateKey /*"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"*/);
+                    new BitcoinSecret(result1.Content.PrivateKey /*"cTSNviQWYnSDZKHvkjwE2a7sFW47sNoGhR8wjqVPb6RbwqH1pzup"*/);
             var onBlockchain = await informationSeeker.HowMuchCoinInWallet(privateKey, new QBitNinjaClient("http://webappqbit.azurewebsites.net/"));
             var credit = await _walletGateway.GetCredit(userId);
             var realBalance = onBlockchain + credit.Content;
