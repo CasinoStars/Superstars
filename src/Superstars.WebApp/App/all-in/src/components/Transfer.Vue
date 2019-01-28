@@ -8,7 +8,7 @@
       <!-- RealWallet -->
       
       <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-                <h1>Transfer</h1>
+                <h1>Transferts</h1>
                 <div class="line"> </div>
 
       <form style="margin-top:6%;" @submit.prevent="Transfer($event, item.DestinationAccount)">
@@ -36,7 +36,7 @@
     <div class="transaction">         
           <table id="pendingTrx">
            <tr>
-              <th>Historique des transfer</th>
+              <th>Historique des transferts</th>
             </tr>
             <div class = "pendingTrxList">
               <tr>
@@ -309,8 +309,10 @@
    .line {
     margin-top: 6%;
     width: 100%;
-    height: 0.025%;
+    //height: 0.025%;
+    height: 1px;
     background: white;
+
   }
 
   .Transfer input,

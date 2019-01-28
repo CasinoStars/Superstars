@@ -18,7 +18,7 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="text-info">Est-ce que le Casino est intègre ?</h1>
-    <p class="lead">Oui ! Et nous pouvons le prouver ! Obtenez plus de détails dans l'onglet <strong>'Provably-Fair'</strong> de votre profil. </p>
+    <p class="lead">Oui ! Et nous pouvons le prouver ! Obtenez plus de détails dans l'onglet <router-link to=/Account> <strong>'Provably-Fair'</strong></router-link> de votre profil. </p>
   </div>
 </div>
 <div class="jumbotron jumbotron-fluid">

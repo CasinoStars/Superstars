@@ -121,10 +121,11 @@ namespace Superstars.Wallet
 
             try
             {
-                coinsTask = await client.GetBalance(bitcoinPrivateKey.GetAddress(), true);
+                coinsTask = await new QBitNinjaClient(Network.TestNet).GetBalance(bitcoinPrivateKey.GetAddress(), true);
+
             } catch
             {
-                coinsTask = await new QBitNinjaClient(Network.TestNet).GetBalance(bitcoinPrivateKey.GetAddress(), true);
+                coinsTask = await client.GetBalance(bitcoinPrivateKey.GetAddress(), true);
             }
  
 
