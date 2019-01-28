@@ -34,7 +34,7 @@
           <td>{{e.wins.toLocaleString('en')}}</td>
           <td>{{e.losses.toLocaleString('en')}}</td>
           <td>{{e.equality.toLocaleString('en')}}</td>
-          <td>{{e.averageTime}}</td>
+          <td v-if="e.gameName != 'Crash'">{{e.averageTime}}</td><td v-else></td>
         </tr>
       </table>
     </div>

@@ -58,7 +58,6 @@ namespace Superstars.WebApp.Controllers
 
         public async void TransferToPlayer([FromBody] TransferViewModel model)
         {
-
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var receiverData = await _userGateway.FindByName(model.DestinationAccount);
             var userData = await _userGateway.FindById(userId);
