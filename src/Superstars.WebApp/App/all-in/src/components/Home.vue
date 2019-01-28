@@ -9,11 +9,8 @@
             <h4 style="padding-top:1.5%;">Attention, le casino est actuellement en développement et utilise la <a href="https://en.bitcoin.it/wiki/Testnet"
                     style="color:blue" target="_blank">blockchain test</a></h4>
         </div> -->
-
-        <br>
         <div class="bs-example">
             <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel" data-interval=4000>
-                <!-- Carousel indicators -->
                 <ol class="carousel-indicators">
                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                     <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -21,7 +18,7 @@
                     <li data-target="#myCarousel" data-slide-to="3"></li>
                     <li data-target="#myCarousel" data-slide-to="4"></li>
                 </ol>
-                <!-- Wrapper for carousel items -->
+                
                 <div class="carousel-inner" style="text-align: center; font-family: 'Courier New', sans-serif;">
                     <div class="carousel-item active">
                         <img src="../img/../img/provablylogo.png" id="provablylogo">
@@ -54,8 +51,7 @@
                             <h5><strong>Classement général</strong><br>Comparez votre parcours par rapport à vos amis</h5>
                         </div>
                     </div>
-                </div>
-                <!-- Carousel controls -->
+                </div>        
                 <a class="carousel-control-prev left" href="#myCarousel" data-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                     <span class="sr-only">Previous</span>
@@ -74,7 +70,6 @@
     </div>
 
 <!-- Footer -->
-<br><br>
 <footer class="page-footer font-small blue">
 
   <!-- Copyright -->
@@ -204,8 +199,13 @@
     display: inline-flex;
     text-align: center;
     font-weight: bold;
+    margin-top: -5%;
     height: 400px;
     width: 100%;
+}
+
+.page-footer {
+margin-top: -3%;
 }
 
 .home #TotalA {
