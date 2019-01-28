@@ -55,8 +55,8 @@
             <h3 style="font-size:150%;">TOUR: {{nbTurn}}</h3>
           </div>
         </div><br>
-        <h3>SCORE DE L'IA: <strong v-if="iaplayed">{{IaScore}}</strong><strong v-else>0</strong></h3>
-        <h3>FIGURE L'IA: <strong>{{IaFigure}}</strong></h3>
+        <h3>SCORE DE L'IA: <strong v-if="nbTurnIa > 0">{{IaScore}}</strong><strong v-else> ? </strong></h3>
+        <h3>FIGURE L'IA: <strong v-if="nbTurnIa > 0">{{IaFigure}}</strong><strong v-else> ? </strong></h3>
       </center>
     </div>
 
@@ -97,8 +97,8 @@
 
     <center>
       <div style="letter-spacing: 2px; font-family: 'Courier New', sans-serif; margin-top:2%;">
-        <h3>VOTRE SCORE: <strong v-if="played">{{playerScore}}</strong><strong v-else>0</strong></h3>
-        <h3>VOTRE FIGURE: <strong>{{playerFigure}}</strong></h3>
+        <h3>VOTRE SCORE: <strong v-if="nbTurn > 0">{{playerScore}}</strong><strong v-else>?</strong></h3>
+        <h3>VOTRE FIGURE: <strong v-if="nbTurn > 0">{{playerFigure}}</strong><strong v-else>?</strong></h3>
       </div>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn == 0 && playerBet">LANCER</button>
       <button form="PlayPlayer" type="submit" class="btn btn-light" v-if="nbTurn < 3 && nbTurn != 0 && selected != 0">RELANCER</button>

@@ -20,7 +20,7 @@
                     
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveur:</span><br>{{seeds.uncryptedPreviousServerSeed}}<br></h4>
                     <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef client:</span><br>{{seeds.previousClientSeed}}<br></h4>
-                    <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveir crypté:</span><br>{{seeds.previousCryptedServerSeed}}<br></h4>
+                    <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Précedente clef serveur crypté:</span><br>{{seeds.previousCryptedServerSeed}}<br></h4>
 
                     <form  @submit="UpdateSeeds($event)">
                             <div class="field-wrap">

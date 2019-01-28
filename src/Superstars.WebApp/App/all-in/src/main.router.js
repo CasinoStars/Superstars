@@ -41,7 +41,7 @@ const routes = [
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
     { path: '/crash', component: CrashTest},
     { path: '/faq', component: Faq},
-    { path: '/BackOffice',component: BackOffice}
+    { path: '/BackOffice',component: BackOffice, beforeEnter: requireAuth}
 ];
 
 export default new VueRouter({
