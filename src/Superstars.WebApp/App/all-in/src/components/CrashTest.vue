@@ -91,27 +91,20 @@
                             </canvas>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="margin-top:3%;">
                         <form @submit="toBet($event)">
-                            <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MISE <span class="req">*</span></h4>
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
-                                    v-model="moneyType">
-                                <label class="onoffswitch-label" for="myonoffswitch">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                            <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 required v-model="bet" />
-                            <h4 style="color: black; font-family: 'Courier New', sans-serif;"> MULTIPLICATEUR <span
+                            <h4 style="text-align: left; color: black; font-family: 'Courier New', sans-serif;">MISE<span class="req">*</span></h4>
+                            <input type="number" min=1 required v-model="bet" style="width:147px;"/>
+                            <button type="button" @click="moneyType = true" id="BitsMoney" class="btn btn-dark" style="background-color: #e58929; font-size:70%; margin-left: -1px; margin-top:-1.3%;">BITS</button>
+                            <button type="button" @click="moneyType = false" id="AllinMoney" class="btn btn-dark" style="font-size:70%; margin-left: -3px; margin-top:-1.3%;">ALL`IN</button>
+                            <h4 style="text-align: left; color: black; font-family: 'Courier New', sans-serif; margin-top:5%;">MULTIPLICATEUR<span
                                     class="req">*</span></h4>
-                            <input style="margin-top: 10px; margin-bottom: 1%;" type="number" min=1 step=0.01 required
+                            <input type="number" min=1 step=0.01 required
                                 v-model="playerMulti" />
-                            <div style="margin-right: 42%;">
-
-                                <button type="submit" class="btn btn-light" v-if="isWaiting && !hasPlayed">Confirmer</button>
-                                <button type="button" @click="out()" class="btn btn-light" v-else-if="!isWaiting && hasPlayed && !isOut">Sortir</button>
-                                <button disabled type="submit" class="btn btn-light" v-else>Confirmer</button>
+                            <div style="margin-right: 42%; margin-top:3%;">
+                                <button type="submit" class="btn btn-primary" v-if="isWaiting && !hasPlayed">Confirmer</button>
+                                <button type="button" @click="out()" class="btn btn-success" v-else-if="!isWaiting && hasPlayed && !isOut">Sortir</button>
+                                <button disabled type="submit" class="btn btn-primary" v-else>Confirmer</button>
                             </div>
                         </form>
                     </div>
@@ -126,7 +119,6 @@
                                 <th>Mise</th>
                                 <th class="text-right">Multi</th>
                                 <th>Profit</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -239,6 +231,17 @@
             ...mapGetters(['fakeMoney'])
         },
         
+        watch: {
+            moneyType: function () {
+                if(this.moneyType) {
+                    document.getElementById("BitsMoney").style.backgroundColor = "#e58929";
+                    document.getElementById("AllinMoney").style.backgroundColor = "#343a40";
+                } else {
+                    document.getElementById("BitsMoney").style.backgroundColor = "#343a40";
+                    document.getElementById("AllinMoney").style.backgroundColor = "#4a50b4";
+                }
+            }
+        },
 
         async mounted() {
 
