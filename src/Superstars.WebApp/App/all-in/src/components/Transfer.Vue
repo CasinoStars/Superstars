@@ -8,9 +8,10 @@
       <!-- RealWallet -->
       
       <div class="form" style="letter-spacing: 2px; font-family: 'Courier New', sans-serif;">
-                <div class="title">Transfer</div>
+                <h1>Transfer</h1>
+                <div class="line"> </div>
 
-      <form style="margin-top:12%;" @submit.prevent="Transfer($event, item.DestinationAccount)">
+      <form style="margin-top:6%;" @submit.prevent="Transfer($event, item.DestinationAccount)">
 
         <div class="field-wrap">
           <label>
@@ -25,7 +26,7 @@
           </label><br><br>
           <input type="number" placeholder="Montant" v-model="item.AmountToSend" required autocomplete="off" />
         </div><br>
-        <button type="submit" class="button button-block">Envoyer</button>
+        <button type="submit" style="margin-bottom:5%;" class="button button-block">Envoyer</button>
         <div class="alert alert-danger" style="text-align: center; margin-top: 5%" v-if="errors.length > 0">
       <li v-for="e of errors" :key="e">{{e}}</li>
     </div>
@@ -282,18 +283,11 @@
     font-weight: $thin;
   }
 
-    .Transfer .title {
-    display: block;
-    text-decoration: none;
+    .Transfer h1, .provablyfair h1, .settings h1 {
     padding: 15px;
-    font-size: 28px;
-    float: left;
-    width: 100%;
+    font-size: 45px;
     text-align: center;
     color:white;
-    transition: 0.5s ease;
-    background: $main-dark;
-
   }
 
   .Transfer label {
@@ -310,6 +304,13 @@
       margin: 2px;
       color: #1ab188;
     }
+  }
+
+   .line {
+    margin-top: 6%;
+    width: 100%;
+    height: 0.025%;
+    background: white;
   }
 
   .Transfer input,
@@ -336,6 +337,10 @@
     border: 2px solid $gray-light;
     resize: vertical;
     
+  }
+
+  .Transfer h4 {
+    color:white;
   }
 
   .Transfer .field-wrap {
