@@ -35,7 +35,7 @@ const routes = [
     { path: '/wallet', component: Wallet, beforeEnter: requireAuth},
     { path: '/rule', component: Rules},
     { path: '/account', component: Account, beforeEnter: requireAuth},
-    { path: '/statistics', component: Stats, beforeEnter: requireAuth},
+    { path: '/statistics', component: Stats},
     { path: '/playersStats', component: Rank},
     { path: '/Transfer', component: Transfer, beforeEnter: requireAuth},
     { path: '/provablyfair', component: ProvablyFair, beforeEnter: requireAuth},
