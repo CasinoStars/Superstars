@@ -588,6 +588,10 @@
         font-weight: bold;
     };
 
+    .CrashTest .close {
+        color: white;
+    }
+    
     .CrashTest .modal {
         display: none;
         /* Hidden by default */

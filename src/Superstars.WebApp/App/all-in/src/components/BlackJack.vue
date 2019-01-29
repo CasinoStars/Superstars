@@ -184,6 +184,10 @@
       ...mapGetters(['fakeMoney'])
     },
 
+    async created() {
+      this.tutorialp0 = "Bienvenue sur le BlackJack !";
+    },
+
     async mounted() {
       await this.refreshCards();
 
@@ -205,8 +209,6 @@
         await this.refreshHandValue();
         await this.CheckWinner();
       }
-
-      this.tutorialp0 = "Bienvenue sur le BlackJack !";
 
     },
 
@@ -535,7 +537,7 @@
       width: 60%;
       //  background: lightgrey;
       margin-left: 20%;
-      margin-top: 9%;
+      margin-top: 5%;
       border-radius: 20px;
       text-align: center;
       opacity: 0.99;

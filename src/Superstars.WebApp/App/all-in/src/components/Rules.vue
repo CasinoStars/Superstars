@@ -21,9 +21,9 @@
 <div id="YamsContent">
 <div  class="text">
   <p>
-  Le Yahtzee (aussi orthographié Yatzee) ou Yam's est un jeu de société traditionnel de hasard raisonné. <br>
-Le but est d'enchaîner les combinaisons à l'aide de cinq dés pour remporter un maximum de points. Il appartient au domaine public. <br>
-Notre site web vous permet  de jouer une partie de Yam’s contre notre ordinateur.<br>
+  Le Yahtzee (aussi orthographié Yatzee) ou Yam's est un jeu de société traditionnel de hasard raisonné appartenant au domaine public.<br>
+Le but est d'enchaîner les combinaisons à l'aide de cinq dés pour remporter un maximum de points.<br>
+Notre site web vous permet  de jouer une partie de Yam’s contre un ordinateur.<br>
 Chaque joueur lance les dés lorsque vient son tour. Son but est, à l'aide des cinq dés, de réaliser une figure (5 dés identiques (Yam’s), un brelan...). <br>
 Pour réaliser cette figure il a le droit à trois jets de dés et il est à chaque jet, libre de garder tous ses dés, de tous les relancer ou seulement ceux de son choix. <br>
 Le gagnant est celui qui a fait la meilleure figure. En cas d’égalité, c’est la valeur des dés qui décide du gagnant.<br>

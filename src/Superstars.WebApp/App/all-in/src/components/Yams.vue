@@ -224,7 +224,7 @@
           this.tutorialp1 = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés.  ";
         } else if (this.nbSlidesTutorial === 2 && this.skipTuto == false) {
           document.getElementById("tutorialText1").style.opacity = 0.4;
-          this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés.  ";
+          this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés, en cliquant sur les dés que vous souhaitez relancer  ";
         } else if (this.nbSlidesTutorial === 3 && this.skipTuto == false) {
           document.getElementById("tutorialText2").style.opacity = 0.4;
           this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  ";
@@ -471,7 +471,7 @@
       width: 95%;
       //  background: lightgrey;
       margin-left: 2.5%;
-      margin-top: -40%;
+      margin-top: -30%;
       border-radius: 20px;
       text-align: center;
       opacity: 0.99;
@@ -497,7 +497,7 @@
       width: 60%;
       //  background: lightgrey;
       margin-left: 20%;
-      margin-top: -19%;
+      margin-top: -13%;
       border-radius: 20px;
       text-align: center;
       opacity: 0.99;
@@ -517,6 +517,7 @@
     margin-right: 3%;
   }
   }
+
 .yams #tutorialRectangle.fade {
   visibility: hidden;
   opacity: 0;
