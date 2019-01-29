@@ -3,8 +3,8 @@
     <!-- TITLE -->
     <h1>
       <i class="fa fa-chevron-left" @click="SwapTrueOrFake()" id="chevron"></i>
-      <strong v-if="TrueOrFake">Classement En Bits</strong>
-      <strong v-else>Classement En FakeCoins</strong>
+      <strong v-if="TrueOrFake">Classement Bits</strong>
+      <strong v-else>Classement All'in Coins</strong>
       <i class="fa fa-chevron-right" @click="SwapTrueOrFake()" id="chevron"></i>
     </h1>
 
