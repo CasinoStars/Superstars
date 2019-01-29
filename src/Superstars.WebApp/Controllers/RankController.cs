@@ -23,12 +23,14 @@ namespace Superstars.WebApp.Controllers
         }
 
         [HttpGet("{moneyTypeId}/GetPlayersGlobalProfit")]
+        [AllowAnonymous]
         public async Task<IEnumerable<RankData>> GetPlayersGlobalProfit(int moneytypeId)
         {
             return (List<RankData>) await _rankGateway.GetPlayersGlobalProfit(moneytypeId);
         }
 
         [HttpGet("{pseudo}/{moneyTypeId}/GetPlayerStats")]
+        [AllowAnonymous]
         public async Task<IEnumerable<RankData>> GetPlayerStats(string pseudo, int moneytypeId)
         {
             return (List<RankData>) await _rankGateway.GetPlayerStats(pseudo, moneytypeId);

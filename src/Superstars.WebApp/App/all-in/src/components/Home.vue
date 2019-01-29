@@ -150,20 +150,35 @@
         }
     }
 
-@media(max-width: 562px){
-    .home .bankRoll {
+    @media(max-width: 562px){
+        .home .bankRoll {
+            font-size: 3.7vh;
+            font-family: 'Courier New', sans-serif;
+            font-variant: small-caps;
+        }
+        .home h5 {
+            color: white;
+            text-align: center;
+            font-family: 'Courier New', sans-serif;
+            font-variant: small-caps;
+            font-size: 3.7vh;
+        }
+        .home h1 {
+            font-size:3.5vh;
+        }
+        .home #TotalA {
+        display: block;
         font-size: 3.7vh;
-        font-family: 'Courier New', sans-serif;
-        font-variant: small-caps;
+        margin-top: 5%;
+        }
+        .home #StatsDiv {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 5%;
+            margin-bottom: 3%;
+            width: 100%;
+        }
     }
-    .home h5 {
-        color: white;
-        text-align: center;
-        font-family: 'Courier New', sans-serif;
-        font-variant: small-caps;
-        font-size: 3.7vh;
-    }
-}
     @media(min-width: 562px) {
         .home .bankRoll {
             font-size: 35px;
@@ -177,6 +192,18 @@
             font-family: 'Courier New', sans-serif;
             font-variant: small-caps;
             font-size: 30px;
+        }
+        .home #TotalA {
+            margin:auto auto auto 20%;
+            font-size: 35px;
+        }
+        .home #StatsDiv {
+            display: inline-flex;
+            text-align: center;
+            font-weight: bold;
+            margin-top: -5%;
+            height: 400px;
+            width: 100%;
         }
     }
     
@@ -199,21 +226,8 @@
         /* Prevent carousel from being distorted if for some reason image doesn't load */
     }
 
-.home #StatsDiv {
-    display: inline-flex;
-    text-align: center;
-    font-weight: bold;
-    margin-top: -5%;
-    height: 400px;
-    width: 100%;
-}
-
 .page-footer {
 margin-top: 0%;
-}
-
-.home #TotalA {
-    margin:auto auto auto 20%;
 }
 
 .home #BankA {
