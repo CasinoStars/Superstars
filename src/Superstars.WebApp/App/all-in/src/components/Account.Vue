@@ -5,7 +5,7 @@
         <div class="menu col-md-3">      
             <div class="carre">
                 <img src="../img/LOGO1.png" alt="yams" class="imglogo">  
-                <h1 style="text-align: center; color: white;"> admin</h1> 
+                <h1 style="text-align: center; color: white;"> {{auth.pseudo}}</h1> 
             </div>
                 
             <!-- <div class="submenu" ><div class="myButton"><button>  Profil </button></div> </div> -->
@@ -36,6 +36,7 @@ import Support from './Support.vue'
 import ProvablyFair from './ProvablyFair.vue'
 import Transfer from './Transfer.vue'
 import Settings from './Settings.vue'
+import UserApiService from '../services/UserApiService';
 
 
 
@@ -58,9 +59,10 @@ import Settings from './Settings.vue'
          ProvablyFair,
          Settings
     },
-
-
   
+    computed: {
+      auth: () => UserApiService
+    },
 
     methods: {
       handleOpen(key, keyPath) {

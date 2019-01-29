@@ -225,7 +225,7 @@
         this.nbSlidesTutorial = this.nbSlidesTutorial + 1;
         if (this.nbSlidesTutorial == 1) {
           document.getElementById("tutorialText0").style.opacity = 0.5;
-          this.tutorialp1 = "  Vous allez devoir vous approchez le plus près possible de 21 mais sans le dépasser.  ";
+          this.tutorialp1 = "  Vous allez devoir vous approcher le plus près possible de 21 mais sans le dépasser.  ";
         } else if (this.nbSlidesTutorial == 2) {
           document.getElementById("tutorialText1").style.opacity = 0.5;
           this.tutorialp2 =
@@ -365,10 +365,6 @@
       async CheckWinner() {
         await this.refreshHandValue();
         await this.refreshCards();
-        console.log(this.handvalue +" HANDVALUE");
-        console.log(this.dealerhandvalue +" DEALERHANDVALUE");
-        console.log(typeof(this.dealerhandvalue) + " TYPE OF DEALERHANDVALUE");
-        console.log(typeof(this.handvalue) + " TYPE OF HANDVALUE");
 
         if (this.handvalue < this.dealerhandvalue && this.iaturn == true || this.handvalue == this.dealerhandvalue &&
           this.iaturn == true || this.handvalue == 21 || this.handvalue > 21 || this.dealerhandvalue == 21 || this.dealerhandvalue > 21) {
