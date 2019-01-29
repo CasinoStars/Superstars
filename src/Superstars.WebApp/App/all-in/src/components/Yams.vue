@@ -242,6 +242,8 @@
 
       changeBet(choice) {
         this.realOrFake = choice;
+        this.trueBet = 0;
+        this.fakeBet = 0;
         this.errors = 0;
       },
 
