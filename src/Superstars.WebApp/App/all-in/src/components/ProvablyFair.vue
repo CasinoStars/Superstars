@@ -13,7 +13,7 @@
 
       <div style="color: white" v-if="this.view == 'provablyFair'">
         <div class="tab-content" style="margin-top:8%;">
-          <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef client:</span><br>{{seeds.clientSeed}}<br></h4>
+          <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef Client:</span><br>{{seeds.clientSeed}}<br></h4>
           <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Clef Serveur:</span><br>{{seeds.cryptedServerSeed}}<br></h4>
           <h4 style="color: white"><span style="font-weight: bold; font-style: italic;">Nombre de dés générer par le
               hash:</span><br>{{seeds.nonce}}<br></h4>
