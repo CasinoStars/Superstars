@@ -1,8 +1,8 @@
 <template>
     <div class="home">
         <header style="padding:3%;">
-            <div style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
-                <h1>Bienvenue sur ALL`IN</h1>
+            <div style="text-align:center; letter-spacing: 5px; font-family: 'Bebas'; text-shadow: 2px 2px 4px #000000;">
+                <h1>ALL`IN</h1>
             </div>
         </header>
         <!-- <div class="warning slide bg-danger" id="baniere" style="text-align:center; letter-spacing: 1px; font-family: 'Courier New', sans-serif;">
@@ -139,6 +139,11 @@
 </script>
 
 <style lang="css">
+
+ @font-face { 
+   font-family: Bebas; src: url('../fonts/BEBAS.ttf');
+   } 
+
     @media(max-width: 1109px) {
         .home #baniere>h4 {
             font-size: inherit;
@@ -180,6 +185,10 @@
             font-family: 'Courier New', sans-serif;
             font-variant: small-caps;
         }
+        
+        .home h1 {
+            font-size: 65px;
+        }
 
         .home h5 {
             color: white;
@@ -196,7 +205,7 @@
             display: inline-flex;
             text-align: center;
             font-weight: bold;
-            margin-top: -5%;
+            margin-top: -1%;
             height: 400px;
             width: 100%;
         }
@@ -204,8 +213,9 @@
     
     .home .carousel {
         /* background: #212529; */
-        height: 455px;
+        height: 405px;
         background-image: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.5) 90%);
+        margin-top: 2%;
     }
 
     .home .carousel .carousel-item {
@@ -222,7 +232,7 @@
     }
 
 .page-footer {
-margin-top: -3%;
+margin-top: -2.9%;
 }
 
 .home #BankA {
