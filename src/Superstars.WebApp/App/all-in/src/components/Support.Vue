@@ -2,7 +2,7 @@
 <template>
 <div class="support">
     <div class ="form">
-        <center><h1 style="color:white; padding-bottom:4%">Besoin d'aide ? S'il vous plaît contactez nous </h1></center>
+        <center><h1 style="color:white; padding-bottom:4%">Besoin d'aide ? Contactez-nous !  </h1></center>
                                         <div class="line" style="height:1px; margin-top:2%; margin-bottom:5%;"></div>
 
 

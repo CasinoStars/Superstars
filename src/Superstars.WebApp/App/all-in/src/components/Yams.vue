@@ -224,7 +224,7 @@
           this.tutorialp1 = "  Vous allez devoir réaliser la meilleure figure possible avec vos 5 dés.  ";
         } else if (this.nbSlidesTutorial === 2 && this.skipTuto == false) {
           document.getElementById("tutorialText1").style.opacity = 0.4;
-          this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés, en cliquant sur les dés que vous souhaitez relancer  ";
+          this.tutorialp2 = "  Vous disposez de 3 essais pour relancer n'importe lesquels de vos dés, en cliquant sur les dés que vous souhaitez relancer. ";
         } else if (this.nbSlidesTutorial === 3 && this.skipTuto == false) {
           document.getElementById("tutorialText2").style.opacity = 0.4;
           this.tutorialp3 = "  L'ordinateur jouera après vous en suivant ces mêmes règles.  ";

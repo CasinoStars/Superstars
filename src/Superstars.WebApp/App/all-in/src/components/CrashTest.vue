@@ -38,7 +38,7 @@
                                     <td>{{e.userName}}</td>
                                     <td class="text-right">{{e.multi}}</td>
                                     <td class="text-right">{{e.bet.toLocaleString('en')}}</td>
-                                    <td class="text-right" style="color: green" v-if="profit(meta.crashValue, e.bet, e.multi).toLocaleString('en') >= 1">{{profit(meta.crashValue,
+                                    <td class="text-right" style="color: green" v-if="meta.crashValue > e.multi">{{profit(meta.crashValue,
                                         e.bet, e.multi).toLocaleString('en')}}</td>
                                     <td class="text-right" style="color: red" v-else>{{profit(meta.crashValue, e.bet,
                                         e.multi).toLocaleString('en')}}</td>
