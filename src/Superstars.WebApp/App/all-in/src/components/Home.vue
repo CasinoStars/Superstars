@@ -219,7 +219,7 @@
     }
 
     .home .carousel .carousel-item {
-        height: 450px;
+        height: 420px;
         min-height: 350px;
         margin-top: -2%;
         /* Prevent carousel from being distorted if for some reason image doesn't load */
