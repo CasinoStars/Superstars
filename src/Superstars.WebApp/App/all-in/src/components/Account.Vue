@@ -136,8 +136,8 @@ import UserApiService from '../services/UserApiService';
   $bold: 600;
   $br: 4px;
 
-.account .importedView {
-width: 600px;
+.account .improtedView {
+width: 100%;
 }
 
 .account .submenu .myButton {

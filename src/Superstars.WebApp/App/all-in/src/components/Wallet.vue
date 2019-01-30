@@ -338,7 +338,7 @@
     background: rgba($form-bg, 0.9);
     padding: 40px;
     height: 900px;
-    width: 1000px;
+    width: 136%;
     margin: 40px auto;
     border-radius: $br;
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
@@ -394,7 +394,7 @@
     position: absolute;
     transform: translateY(6px);
     left: 13px;
-    color: rgba($white, 0.5);
+    color: $white;
     transition: all 0.25s ease;
     -webkit-backface-visibility: hidden;
     pointer-events: none;
