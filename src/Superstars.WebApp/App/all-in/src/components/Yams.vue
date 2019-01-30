@@ -851,8 +851,8 @@
   }
 
   .yams input[type=checkbox]:checked+label>img {
-    height: 110%;
-    width: 110%;
+    height: 125%;
+    width: 125%;
   }
 
   .yams .playerdices {
