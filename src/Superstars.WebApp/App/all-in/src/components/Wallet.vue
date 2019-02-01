@@ -338,7 +338,7 @@
     background: rgba($form-bg, 0.9);
     padding: 40px;
     height: 900px;
-    width: 136%;
+    width: 1055px;
     margin: 40px auto;
     border-radius: $br;
     box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
